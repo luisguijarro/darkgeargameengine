@@ -72,6 +72,8 @@ namespace dge.G2D
             DefineTransparentColor(new Color4(0f, 0f, 0f, 0f));
             DefineViewMatrix(dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
 
+            GL.glEnable(EnableCap.GL_BLEND);
+            GL.glBlendFunc(BlendingFactor.GL_SRC_ALPHA, BlendingFactor.GL_ONE_MINUS_SRC_ALPHA);
             //GL.glEnable(EnableCap.GL_TEXTURE_2D);
         }
 
