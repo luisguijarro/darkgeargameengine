@@ -55,7 +55,7 @@ showfoot()
 {
     echo ""
     echo "\e[1m\e[38;2;128;128;255m"$barra
-    echo "\e[0m Compilation Finished    \e[1m\e[38;2;255;255;128mWarnings\e[0m: \e[1m\e[38;2;255;255;255m" $1 "\e[0m    \e[1m\e[38;2;255;128;128mErrors\e[0m: \e[1m\e[38;2;255;255;255m$2\e[0m"
+    echo "\e[0m Compilation Finished    \e[1m\e[38;2;255;255;128mWarnings\e[0m: \e[1m\e[38;2;255;255;255m$1 \e[0m    \e[1m\e[38;2;255;128;128mErrors\e[0m: \e[1m\e[38;2;255;255;255m$2\e[0m"
     echo "\e[1m\e[38;2;128;128;255m"$barra"\e[0m"
 }
 
