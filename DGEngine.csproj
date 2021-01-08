@@ -57,9 +57,9 @@
     <Compile Include="SoundSystem\Sound.cs" />
     <Compile Include="SoundSystem\EffectSlot.cs" />
     <Compile Include="SoundSystem\SoundSource3D.cs" />
-    <Compile Include="SoundSystem\LibSndFile/Imports.cs" />
-    <Compile Include="SoundSystem\LibSndFile/Enums.cs" />
-    <Compile Include="SoundSystem\LibSndFile/Structs.cs" />
+    <Compile Include="SoundSystem\LibSndFile\Imports.cs" />
+    <Compile Include="SoundSystem\LibSndFile\Enums.cs" />
+    <Compile Include="SoundSystem\LibSndFile\Structs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
