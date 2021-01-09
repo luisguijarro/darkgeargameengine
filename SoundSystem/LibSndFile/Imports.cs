@@ -22,8 +22,19 @@ namespace dge.SoundSystem
 				return sf_readf_short (sndfile, ptr, frames);
 			}
 		}
-		
-		[DllImport("libsndfile-1.dll", EntryPoint="sf_readf_int")]
+
+        [DllImport("libsndfile-1.dll", EntryPoint = "sf_read_short")]
+        internal static unsafe extern long sf_read_short(IntPtr sndfile, short* data, long items);
+
+        internal static unsafe long sf_read_short(IntPtr sndfile, ref short[] data, long items)
+        {
+            fixed (short* ptr = data)
+            {
+                return sf_read_short(sndfile, ptr, items);
+            }
+        }
+
+        [DllImport("libsndfile-1.dll", EntryPoint="sf_readf_int")]
 		internal static unsafe extern long sf_readf_int (IntPtr sndfile, int* data, long frames);
 
 		internal static unsafe long sf_readf_int (IntPtr sndfile, int[] data, long frames)
@@ -34,7 +45,18 @@ namespace dge.SoundSystem
 			}
 		}
 
-		[DllImport("libsndfile-1.dll", EntryPoint="sf_readf_float")]
+        [DllImport("libsndfile-1.dll", EntryPoint = "sf_read_int")]
+        internal static unsafe extern long sf_read_int(IntPtr sndfile, int* data, long items);
+
+        internal static unsafe long sf_read_int(IntPtr sndfile, int[] data, long items)
+        {
+            fixed (int* ptr = data)
+            {
+                return sf_read_int(sndfile, ptr, items);
+            }
+        }
+
+        [DllImport("libsndfile-1.dll", EntryPoint="sf_readf_float")]
 		internal static unsafe extern long sf_readf_float (IntPtr sndfile, float* data, long frames);
 
 		internal static unsafe long sf_readf_float (IntPtr sndfile, float[] data, long frames)
@@ -45,7 +67,18 @@ namespace dge.SoundSystem
 			}
 		}
 
-		[DllImport("libsndfile-1.dll", EntryPoint="sf_readf_double")]
+        [DllImport("libsndfile-1.dll", EntryPoint = "sf_read_float")]
+        internal static unsafe extern long sf_read_float(IntPtr sndfile, float* data, long items);
+
+        internal static unsafe long sf_read_float(IntPtr sndfile, float[] data, long items)
+        {
+            fixed (float* ptr = data)
+            {
+                return sf_read_float(sndfile, ptr, items);
+            }
+        }
+
+        [DllImport("libsndfile-1.dll", EntryPoint="sf_readf_double")]
 		internal static unsafe extern long sf_readf_double (IntPtr sndfile, double* data, long frames);
 
 		internal static unsafe long sf_readf_double (IntPtr sndfile, double[] data, long frames)
@@ -56,7 +89,18 @@ namespace dge.SoundSystem
 			}
 		}
 
-		[DllImport("libsndfile-1.dll", EntryPoint="sf_error")]
+        [DllImport("libsndfile-1.dll", EntryPoint = "sf_read_double")]
+        internal static unsafe extern long sf_read_double(IntPtr sndfile, double* data, long items);
+
+        internal static unsafe long sf_read_double(IntPtr sndfile, double[] data, long items)
+        {
+            fixed (double* ptr = data)
+            {
+                return sf_read_double(sndfile, ptr, items);
+            }
+        }
+
+        [DllImport("libsndfile-1.dll", EntryPoint="sf_error")]
 		internal static extern Errores sf_error(IntPtr sndfile);
 		
 		[DllImport("libsndfile-1.dll", EntryPoint="sf_error_number")]
