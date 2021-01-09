@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 using dgtk.OpenAL;
 
@@ -23,17 +23,15 @@ namespace dge.SoundSystem
                         return null;
                     }
                     #endif
-                
-                short[] data = new short[sf_info.channels*sf_info.frames];
-                if (Imports.sf_readf_short(ptr_snd, ref data, sf_info.frames) != sf_info.channels*sf_info.frames)
+
+                List<short> l_data = new List<short>();
+                short[] data = new short[4096];
+                long datareaded = 0;
+                while ((datareaded = Imports.sf_read_short(ptr_snd, ref data, 4096)) != 0)
                 {
-                    #if DEBUG
-                    if (ptr_snd == IntPtr.Zero) // Si se ha dado algun error...
-                    {
-                        Console.WriteLine(Imports.sf_error(ptr_snd).ToString()); // Hay que saber cual.
-                        return null;
-                    }
-                    #endif
+                    short[] s_datatemp = new short[datareaded];
+                    Array.Copy(data, s_datatemp, datareaded);
+                    l_data.AddRange(s_datatemp);
                 }
 
                 Sound s_ret = new Sound();
@@ -42,11 +40,8 @@ namespace dge.SoundSystem
 
                 s_ret.IDBuffer = AL.alGenBuffer();
 
-                //IntPtr data_ptr = Marshal.AllocHGlobal(data.Length);
-                //Marshal.Copy(data, 0, data_ptr, data.Length);
-
+                data = l_data.ToArray();
                 AL.alBufferData(s_ret.IDBuffer, alf, data, data.Length*sizeof(short), sf_info.samplerate);
-                //Marshal.FreeHGlobal(data_ptr);
 
                 Imports.sf_close(ptr_snd);
 
