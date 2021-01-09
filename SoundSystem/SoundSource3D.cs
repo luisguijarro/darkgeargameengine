@@ -19,7 +19,7 @@ namespace dge.SoundSystem
 		{
 			AL.alGenSource(out this.id);
 			this.b_doppler = false;
-			this.Bucle = false;
+			this.Loop = false;
 			//this.Slots = new Dictionary<int, AuxEfectSlot>();
 			//this.Situacion += delegate { };
 			//FuncionesSonido.UpdateSnd += FuncionesSonido_UpdateSnd;
@@ -30,7 +30,7 @@ namespace dge.SoundSystem
 			//FuncionesSonido.UpdateSnd -= FuncionesSonido_UpdateSnd;
 		}
 
-		void FuncionesSonido_UpdateSnd(object sender, EventArgs e)
+		void UpdateSnd(object sender, EventArgs e)
 		{
 			//try{this.Situacion(this, new SonidoEventArgs(this.Duracion, this.Tiempo, this.MenosTiempo, this.Estado));}
 			//catch{}
@@ -48,7 +48,7 @@ namespace dge.SoundSystem
 		{
 			AL.alSourceStop(this.id);
 		}
-		public void EstablecerSonido(Sound sound)
+		public void AssignSound(Sound sound)
 		{
 			this.snd = sound; AL.alSourcei(this.id, AL_SourceiParam.AL_BUFFER, (int)sound.IDBuffer);
 		}
@@ -103,7 +103,7 @@ namespace dge.SoundSystem
 		#endregion
 		
 		#region METODOS PRIVADOS:
-		private void ActualizarPos()
+		private void UpdatePos()
 		{
 			AL.alSource3f(this.id, AL_Source3Param.AL_POSITION, x, y, z);
 			AL.alSource3f(this.id, AL_Source3Param.AL_VELOCITY, 0, 0, 0);
@@ -111,37 +111,37 @@ namespace dge.SoundSystem
 		#endregion
 		
 		#region PROPIEDADES:
-		public float PosicionX
+		public float PositionX
 		{
-			set { this.x = value; this.ActualizarPos();}
+			set { this.x = value; this.UpdatePos();}
 			get { return this.x;}
 		}
-		public float PosicionY
+		public float PositionY
 		{
-			set { this.y = value; this.ActualizarPos();}
+			set { this.y = value; this.UpdatePos();}
 			get { return this.y;}
 		}
-		public float PosicionZ
+		public float PositionZ
 		{
-			set { this.z = value; this.ActualizarPos();}
+			set { this.z = value; this.UpdatePos();}
 			get { return this.z;}
 		}
-		public float DistanciaReferencia
+		public float ReferenceDistance
 		{
 			set { AL.alSourcef(this.id, AL_SourcefParam.AL_REFERENCE_DISTANCE, value); }
 			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_REFERENCE_DISTANCE); }
 		}
-		public float DistanciaMaxima
+		public float MaxDistance
 		{
 			set { AL.alSourcef(this.id, AL_SourcefParam.AL_MAX_DISTANCE, value); }
 			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_MAX_DISTANCE); }
 		}
-		public bool Bucle
+		public bool Loop
 		{
 			set { AL.alSourceb(this.id, AL_SourcebParam.AL_LOOPING, value);}
 			get { return AL.alGetSourceb(this.id, AL_SourcebParam.AL_LOOPING); }
 		}
-		public AL_SourceState Estado
+		public AL_SourceState State
 		{
 			get 
 			{ 
@@ -153,17 +153,17 @@ namespace dge.SoundSystem
 			set { AL.alSourcef(this.id, AL_SourcefParam.AL_PITCH, value);}
 			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_PITCH); }
 		}
-		public float Ganancia
+		public float Gain
 		{
 			set { AL.alSourcef(this.id, AL_SourcefParam.AL_GAIN, value);}
 			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_GAIN); }
 		}
-		public float GananciaMaxima
+		public float MaxGain
 		{
 			set { AL.alSourcef(this.id, AL_SourcefParam.AL_MAX_GAIN, value);}
 			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_MAX_GAIN); }
 		}
-		public float GananciaMinima
+		public float MinGain
 		{
 			set { AL.alSourcef(this.id, AL_SourcefParam.AL_MIN_GAIN, value);}
 			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_MIN_GAIN); }
@@ -173,23 +173,23 @@ namespace dge.SoundSystem
 			set { AL.alSourcef(this.id, AL_SourcefParam.AL_ROLLOFF_FACTOR, value); }
 			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_ROLLOFF_FACTOR);}
 		}
-		public DateTime Tiempo
+		public DateTime Time
 		{
 			set { AL.alSourcef(this.id, AL_SourcefParam.AL_SEC_OFFSET, value.Ticks); }
 			get { float ret = AL.alGetSourcef(this.id, AL_SourcefParam.AL_SEC_OFFSET); return new DateTime((TimeSpan.FromSeconds(ret)).Ticks);}
 		}
-		public long TiempoTicks
+		public long TimeTicks
 		{
 			set { AL.alSourcef(this.id, AL_SourcefParam.AL_SEC_OFFSET, (float)TimeSpan.FromTicks(value).TotalSeconds);}
 			get { float ret = AL.alGetSourcef(this.id, AL_SourcefParam.AL_SEC_OFFSET); return (TimeSpan.FromSeconds(ret)).Ticks;}
 		}
-		public DateTime Duracion
+		public DateTime Duration
 		{
 			get { TimeSpan dur = TimeSpan.FromSeconds(this.snd.Duration); return new DateTime(dur.Ticks);}
 		}
-		public DateTime MenosTiempo
+		public DateTime TimeRemaining
 		{
-			get { return new DateTime((this.Duracion.Ticks - this.Tiempo.Ticks));}
+			get { return new DateTime((this.Duration.Ticks - this.Time.Ticks));}
 		}
 		#endregion
 	}
