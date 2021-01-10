@@ -15,7 +15,7 @@ namespace dge.SoundSystem
 		private Sound snd;
 		//private Dictionary<int, AuxEfectSlot> Slots;
 		//public event EventHandler<SonidoEventArgs> Situacion;
-		public SoundSource3D()
+		internal SoundSource3D()
 		{
 			AL.alGenSource(out this.id);
 			this.b_doppler = false;
@@ -35,6 +35,7 @@ namespace dge.SoundSystem
 			//try{this.Situacion(this, new SonidoEventArgs(this.Duracion, this.Tiempo, this.MenosTiempo, this.Estado));}
 			//catch{}
 		}
+		
 		#region METODOS PUBLICOS:
 		public void Play()
 		{
