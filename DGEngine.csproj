@@ -53,7 +53,7 @@
     <Compile Include="G2D\Tools\ImagesTools.cs" />
     <Compile Include="G2D\Tools\glFontTools.cs" />
     <Compile Include="GLSL\Shader.cs" />
-    <Compile Include="SoundSystem\Tools.cs" />
+    <Compile Include="SoundSystem\SndSystem.cs" />
     <Compile Include="SoundSystem\Sound.cs" />
     <Compile Include="SoundSystem\EffectSlot.cs" />
     <Compile Include="SoundSystem\SoundSource3D.cs" />
