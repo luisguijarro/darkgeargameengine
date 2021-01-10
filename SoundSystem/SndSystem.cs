@@ -90,6 +90,21 @@ namespace dge
             }
 
             #endregion
+        
+            #region Sources
+
+            public SoundSource3D CreateSoundSource3D()
+            {
+                this.cntxt.MakeCurrent();
+                return new SoundSource3D();
+            }
+
+            #endregion
+
+            public bool MakeCurrent()
+            {
+                return this.cntxt.MakeCurrent();
+            }
         } 
     }
 }
