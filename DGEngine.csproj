@@ -54,9 +54,12 @@
     <Compile Include="G2D\Tools\glFontTools.cs" />
     <Compile Include="GLSL\Shader.cs" />
     <Compile Include="SoundSystem\SndSystem.cs" />
+    <Compile Include="SoundSystem\Enums.cs" />
     <Compile Include="SoundSystem\Sound.cs" />
     <Compile Include="SoundSystem\EffectSlot.cs" />
     <Compile Include="SoundSystem\SoundSource3D.cs" />
+    <Compile Include="SoundSystem\Effects\I_SoundEffect.cs" />
+    <Compile Include="SoundSystem\Effects\Reverb.cs" />
     <Compile Include="SoundSystem\LibSndFile\Imports.cs" />
     <Compile Include="SoundSystem\LibSndFile\Enums.cs" />
     <Compile Include="SoundSystem\LibSndFile\Structs.cs" />
