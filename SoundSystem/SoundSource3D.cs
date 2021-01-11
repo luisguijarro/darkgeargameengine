@@ -8,17 +8,14 @@ namespace dge.SoundSystem
 	/// </summary>
 	public class SoundSource3D
 	{
-		bool b_doppler;
 		private uint id;
 		private float x, y, z;
-		private float velx, vely, velz;
 		private Sound snd;
 		//private Dictionary<int, AuxEfectSlot> Slots;
 		//public event EventHandler<SonidoEventArgs> Situacion;
 		internal SoundSource3D()
 		{
 			AL.alGenSource(out this.id);
-			this.b_doppler = false;
 			this.Loop = false;
 			//this.Slots = new Dictionary<int, AuxEfectSlot>();
 			//this.Situacion += delegate { };
