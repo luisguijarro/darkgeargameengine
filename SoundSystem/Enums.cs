@@ -14,7 +14,7 @@ namespace dge.SoundSystem
         VocalMorpher = 0x0007,
         PitchShifter = 0x0008,
         RingModulator = 0x0009,
-        Autowah = 0x000A,
+        AutoWah = 0x000A,
         Compressor = 0x000B,
         Equalizer = 0x000C
     }
