@@ -20,6 +20,36 @@ namespace dge.SoundSystem.Effects
         #region Parametros:
 
 
+        public float Edge
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_DISTORTION_EDGE, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_DISTORTION_EDGE); }
+        }
+
+        public float Gain
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_DISTORTION_GAIN, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_DISTORTION_GAIN); }
+        }
+
+        public float Lowpass_Cutoff
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_DISTORTION_LOWPASS_CUTOFF, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_DISTORTION_LOWPASS_CUTOFF); }
+        }
+
+        public float EQ_Center
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_DISTORTION_EQCENTER, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_DISTORTION_EQCENTER); }
+        }
+
+        public float EQ_Bandwidth
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_DISTORTION_EQBANDWIDTH, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_DISTORTION_EQBANDWIDTH); }
+        }
+
 
         #endregion
 
