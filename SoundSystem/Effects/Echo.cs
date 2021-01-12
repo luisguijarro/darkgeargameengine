@@ -19,6 +19,35 @@ namespace dge.SoundSystem.Effects
 
         #region Parametros:
 
+        public float Delay
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_DELAY, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_DELAY); }
+        }
+
+        public float LR_Delay
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_LRDELAY, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_LRDELAY); }
+        }
+
+        public float Damping
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_DAMPING, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_DAMPING); }
+        }
+
+        public float FeedBack
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_FEEDBACK, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_FEEDBACK); }
+        }
+
+        public float Spread
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_SPREAD, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_SPREAD); }
+        }
 
 
         #endregion

@@ -19,7 +19,29 @@ namespace dge.SoundSystem.Effects
 
         #region Parametros:
 
+        public float Attack_Timer
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_ATTACK_TIME, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_ATTACK_TIME); }
+        }
 
+        public float Release_Timer
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_RELEASE_TIME, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_RELEASE_TIME); }
+        }
+
+        public float Resonance
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_RESONANCE, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_RESONANCE); }
+        }
+
+        public float Peak_Gain
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_PEAK_GAIN, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_PEAK_GAIN); }
+        }
 
         #endregion
 

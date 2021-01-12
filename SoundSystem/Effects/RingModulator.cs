@@ -19,7 +19,23 @@ namespace dge.SoundSystem.Effects
 
         #region Parametros:
 
+        public float Frequency
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_RING_MODULATOR_FREQUENCY, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_RING_MODULATOR_FREQUENCY); }
+        }
 
+        public float Highpass_Cutoff
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_RING_MODULATOR_HIGHPASS_CUTOFF, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_RING_MODULATOR_HIGHPASS_CUTOFF); }
+        }
+
+        public int WaveForm
+        {
+            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_RING_MODULATOR_WAVEFORM, (int)value); }
+            get { return EFX.alGetEffecti(this.ui_ID, AL_EffectParam.AL_RING_MODULATOR_WAVEFORM); }
+        }
 
         #endregion
 

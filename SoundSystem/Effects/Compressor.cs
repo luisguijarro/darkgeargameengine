@@ -19,7 +19,11 @@ namespace dge.SoundSystem.Effects
 
         #region Parametros:
 
-
+        public bool OnOff
+        {
+            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_COMPRESSOR_ONOFF, value? 1 : 0); }
+            get { return EFX.alGetEffecti(this.ui_ID, AL_EffectParam.AL_COMPRESSOR_ONOFF) == 1; }
+        }
 
         #endregion
 

@@ -19,7 +19,65 @@ namespace dge.SoundSystem.Effects
 
         #region Parametros:
 
+        public float Low_Gain
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_LOW_GAIN, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_LOW_GAIN); }
+        }
 
+        public float Low_Cutoff
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_LOW_CUTOFF, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_LOW_CUTOFF); }
+        }
+
+        public float Mid1_Gain
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID1_GAIN, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID1_GAIN); }
+        }
+
+        public float Mid1_Center
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID1_CENTER, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID1_CENTER); }
+        }
+
+        public float Mid1_Width
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID1_WIDTH, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID1_WIDTH); }
+        }
+
+        public float Mid2_Gain
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID2_GAIN, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID2_GAIN); }
+        }
+
+        public float Mid2_Center
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID2_CENTER, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID2_CENTER); }
+        }
+
+        public float Mid2_Width
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID2_WIDTH, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_MID2_WIDTH); }
+        }
+
+        public float High_Gain
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_LOW_GAIN, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_LOW_GAIN); }
+        }
+
+        public float High_Cutoff
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_HIGH_CUTOFF, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_EQUALIZER_HIGH_CUTOFF); }
+        }
 
         #endregion
 

@@ -19,6 +19,23 @@ namespace dge.SoundSystem.Effects
 
         #region Parametros:
 
+        public float Frequency
+        {
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_FREQUENCY_SHIFTER_FREQUENCY, value); }
+            get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_FREQUENCY_SHIFTER_FREQUENCY); }
+        }
+
+        public int Left_Direction
+        {
+            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_FREQUENCY_SHIFTER_LEFT_DIRECTION, value); }
+            get { return EFX.alGetEffecti(this.ui_ID, AL_EffectParam.AL_CHORUS_WAVEFORM); }
+        }
+
+        public int Right_Direction
+        {
+            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_FREQUENCY_SHIFTER_RIGHT_DIRECTION, value); }
+            get { return EFX.alGetEffecti(this.ui_ID, AL_EffectParam.AL_FREQUENCY_SHIFTER_RIGHT_DIRECTION); }
+        }
 
 
         #endregion

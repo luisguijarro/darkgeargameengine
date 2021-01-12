@@ -19,7 +19,17 @@ namespace dge.SoundSystem.Effects
 
         #region Parametros:
 
+        public int Coarse_Tune
+        {
+            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_PITCH_SHIFTER_COARSE_TUNE, (int)value); }
+            get { return EFX.alGetEffecti(this.ui_ID, AL_EffectParam.AL_PITCH_SHIFTER_COARSE_TUNE); }
+        }
 
+        public int Fine_Tune
+        {
+            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_PITCH_SHIFTER_FINE_TUNE, (int)value); }
+            get { return EFX.alGetEffecti(this.ui_ID, AL_EffectParam.AL_PITCH_SHIFTER_FINE_TUNE); }
+        }
 
         #endregion
 
