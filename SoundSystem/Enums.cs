@@ -18,4 +18,14 @@ namespace dge.SoundSystem
         Compressor = 0x000B,
         Equalizer = 0x000C
     }
+
+
+    public enum FilterType
+    {
+        Null = 0x0000,
+        LowPass = 0x0001,
+        HighPass = 0x0002,
+        BandPass = 0x0003
+    }
+
 }
