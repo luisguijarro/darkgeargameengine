@@ -58,6 +58,10 @@
     <Compile Include="SoundSystem\Sound.cs" />
     <Compile Include="SoundSystem\EffectSlot.cs" />
     <Compile Include="SoundSystem\SoundSource3D.cs" />
+    <Compile Include="SoundSystem\Filters\I_Filter.cs" />
+    <Compile Include="SoundSystem\Filters\FilterLowPass.cs" />
+    <Compile Include="SoundSystem\Filters\FilterHighPass.cs" />
+    <Compile Include="SoundSystem\Filters\FilterBandPass.cs" />
     <Compile Include="SoundSystem\Effects\I_SoundEffect.cs" />
     <Compile Include="SoundSystem\Effects\Reverb.cs" />
     <Compile Include="SoundSystem\Effects\Chorus.cs" />
