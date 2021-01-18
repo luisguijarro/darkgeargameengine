@@ -5,6 +5,7 @@ namespace dge.SoundSystem.Effects
 {
     public class AutoWah : I_SoundEffect
     {
+        internal EffectSlot slot;
         internal uint ui_ID;
 
         public AutoWah()
@@ -12,6 +13,12 @@ namespace dge.SoundSystem.Effects
             this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
             EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_AUTOWAH);
         }
+
+        private void UpdateEffect2Slot()
+        {
+            slot.AttachEffect(this);
+        }
+
         ~AutoWah()
         {
             dgtk.OpenAL.EFX.alDeleteEffect(this.ui_ID);
@@ -21,25 +28,25 @@ namespace dge.SoundSystem.Effects
 
         public float Attack_Timer
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_ATTACK_TIME, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_ATTACK_TIME, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_ATTACK_TIME); }
         }
 
         public float Release_Timer
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_RELEASE_TIME, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_RELEASE_TIME, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_RELEASE_TIME); }
         }
 
         public float Resonance
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_RESONANCE, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_RESONANCE, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_RESONANCE); }
         }
 
         public float Peak_Gain
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_PEAK_GAIN, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_PEAK_GAIN, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_AUTOWAH_PEAK_GAIN); }
         }
 

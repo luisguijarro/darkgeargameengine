@@ -5,6 +5,7 @@ namespace dge.SoundSystem.Effects
 {
     public class Chorus : I_SoundEffect
     {
+        internal EffectSlot slot;
         internal uint ui_ID;
 
         public Chorus()
@@ -12,6 +13,12 @@ namespace dge.SoundSystem.Effects
             this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
             EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_CHORUS);
         }
+
+        private void UpdateEffect2Slot()
+        {
+            slot.AttachEffect(this);
+        }
+
         ~Chorus()
         {
             dgtk.OpenAL.EFX.alDeleteEffect(this.ui_ID);
@@ -21,37 +28,37 @@ namespace dge.SoundSystem.Effects
 
         public int WaveForm
         {
-            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_CHORUS_WAVEFORM, value); }
+            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_CHORUS_WAVEFORM, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffecti(this.ui_ID, AL_EffectParam.AL_CHORUS_WAVEFORM); }
         }
 
         public int Phase
         {
-            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_CHORUS_PHASE, value); }
+            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_CHORUS_PHASE, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffecti(this.ui_ID, AL_EffectParam.AL_CHORUS_PHASE); }
         }
 
         public float Rate
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_RATE, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_RATE, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_RATE); }
         }
 
         public float Depth
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_DEPTH, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_DEPTH, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_DEPTH); }
         }
 
         public float FeedBack
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_FEEDBACK, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_FEEDBACK, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_FEEDBACK); }
         }
 
         public float Delay
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_DELAY, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_DELAY, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_CHORUS_DELAY); }
         }
 

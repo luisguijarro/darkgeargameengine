@@ -5,6 +5,7 @@ namespace dge.SoundSystem.Effects
 {
     public class Echo : I_SoundEffect
     {
+        internal EffectSlot slot;
         internal uint ui_ID;
 
         public Echo()
@@ -12,6 +13,12 @@ namespace dge.SoundSystem.Effects
             this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
             EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_ECHO);
         }
+
+        private void UpdateEffect2Slot()
+        {
+            slot.AttachEffect(this);
+        }
+
         ~Echo()
         {
             dgtk.OpenAL.EFX.alDeleteEffect(this.ui_ID);
@@ -21,31 +28,31 @@ namespace dge.SoundSystem.Effects
 
         public float Delay
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_DELAY, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_DELAY, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_DELAY); }
         }
 
         public float LR_Delay
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_LRDELAY, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_LRDELAY, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_LRDELAY); }
         }
 
         public float Damping
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_DAMPING, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_DAMPING, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_DAMPING); }
         }
 
         public float FeedBack
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_FEEDBACK, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_FEEDBACK, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_FEEDBACK); }
         }
 
         public float Spread
         {
-            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_SPREAD, value); }
+            set { EFX.alEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_SPREAD, value); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffectf(this.ui_ID, AL_EffectParam.AL_ECHO_SPREAD); }
         }
 

@@ -5,6 +5,7 @@ namespace dge.SoundSystem.Effects
 {
     public class Compressor : I_SoundEffect
     {
+        internal EffectSlot slot;
         internal uint ui_ID;
 
         public Compressor()
@@ -12,6 +13,12 @@ namespace dge.SoundSystem.Effects
             this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
             EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_COMPRESSOR);
         }
+
+        private void UpdateEffect2Slot()
+        {
+            slot.AttachEffect(this);
+        }
+
         ~Compressor()
         {
             dgtk.OpenAL.EFX.alDeleteEffect(this.ui_ID);
@@ -21,7 +28,7 @@ namespace dge.SoundSystem.Effects
 
         public bool OnOff
         {
-            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_COMPRESSOR_ONOFF, value? 1 : 0); }
+            set { EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_COMPRESSOR_ONOFF, value? 1 : 0); this.UpdateEffect2Slot(); }
             get { return EFX.alGetEffecti(this.ui_ID, AL_EffectParam.AL_COMPRESSOR_ONOFF) == 1; }
         }
 
