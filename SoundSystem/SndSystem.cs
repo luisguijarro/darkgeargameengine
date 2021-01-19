@@ -43,14 +43,14 @@ namespace dge
                     data = l_data.ToArray();
                     Imports.sf_close(ptr_snd);
 
-                    Sound s_ret = new Sound();
-                    s_ret.FileName = path;
-                    AL_FORMAT alf = sf_info.channels > 1? AL_FORMAT.AL_FORMAT_STEREO16 : AL_FORMAT.AL_FORMAT_MONO16;
+                    //s_ret.FileName = path;
+                    // AL_FORMAT alf = sf_info.channels > 1? AL_FORMAT.AL_FORMAT_STEREO16 : AL_FORMAT.AL_FORMAT_MONO16;
 
                     this.cntxt.MakeCurrent();
-                    s_ret.IDBuffer = AL.alGenBuffer();
+                    //s_ret.IDBuffer = AL.alGenBuffer(); // Lo metemos en el constructor del Sonido.
 
-                    AL.alBufferData(s_ret.IDBuffer, alf, data, data.Length*sizeof(short), sf_info.samplerate);
+                    Sound s_ret = new Sound(path, (byte)sf_info.channels, data, sf_info.samplerate);
+                    // AL.alBufferData(s_ret.ID, alf, data, data.Length*sizeof(short), sf_info.samplerate); // Lometemos en el constructor de Sound.
 
 
                     return s_ret;
@@ -87,6 +87,11 @@ namespace dge
             {
                 this.cntxt.MakeCurrent();
                 AL.alListenerfv(AL_Listener3vParam.AL_ORIENTATION, new float[]{DirectionX, DirectionY, DirectionZ, UpX, UpY, UpZ});
+            }
+
+            public void SetMetersPerUnit(float meters)
+            {
+                AL.alListenerf(AL_ListenerifParam.AL_METERS_PER_UNIT, meters);
             }
 
             #endregion
