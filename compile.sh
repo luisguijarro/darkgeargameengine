@@ -96,7 +96,22 @@ case "$1" in
     *)
     makedir "./bin"
     makedir "./bin/Release"
-    csc -nologo -unsafe -target:library -reference:./bin/Debug/dgtk.dll -recurse:./*.cs -out:./bin/Release/dge.dll
+    
+    war=0
+    err=0
+    
+    csc -nologo -unsafe -target:library -reference:./bin/Debug/dgtk.dll -recurse:./*.cs -out:./bin/Release/dge.dll | while read -r line; do    
+        case $line in
+        *warning*) echo ${line%%:*}":" "\e[1m\e[38;2;255;255;128mWarning\e[0m:" ${line##*:}
+        war=$(($war+1))
+        echo $war > war.tmp
+        ;;
+        *error*) echo ${line%%:*}":" "\e[1m\e[38;2;255;128;128mError\e[0m:" ${line##*:}
+        err=$(($err+1))
+        echo $err > err.tmp
+        ;;
+        esac
+    done
     break;
     ;;
 esac
