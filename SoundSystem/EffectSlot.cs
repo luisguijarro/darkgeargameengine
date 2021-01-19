@@ -1,5 +1,5 @@
-/*
 using System;
+using System.Collections.Generic;
 using dgtk.OpenAL;
 
 namespace dge.SoundSystem
@@ -9,39 +9,74 @@ namespace dge.SoundSystem
 	/// </summary>
 	public class EffectSlot
 	{
-		private int i_id;
-		private Efectos.Efecto ef;
+		private uint ui_ID;
+		private I_SoundEffect se_effect;
+		private Dictionary<uint, SoundSource3D> SourcesLinked;
+		private Dictionary<uint, I_Filter> FiltersLinked;
 		public EffectSlot()
 		{
-			this.i_id = EFX.alGenAuxiliaryEffectSlots();			
+			this.ui_ID = EFX.alGenAuxiliaryEffectSlot();			
 		}
 		~EffectSlot()
 		{
-			EFX.alDeleteAuxiliaryEffectSlot(this.i_id);
+			EFX.alDeleteAuxiliaryEffectSlot(this.ui_ID);
 		}
-		public void EnlazarEfecto(Efectos.Efecto efecto)
+
+		#region Public Methods
+
+		public void LinkSourceToInput(SoundSource3D source)
 		{
-			this.ef = efecto;
-			EFX.BindEffectToAuxiliarySlot(this.i_id, efecto.ID_Efecto);
-			efecto.Actualizado += delegate(object sender, ENgine.SistemaSonido.Efectos.EfectoActualizadoEventArgs e) 
+			if (!this.SourcesLinked.ContainsKey(source.ID))
 			{
-				FuncionesSonido.EFX.BindEffectToAuxiliarySlot(this.i_id, e.efecto.ID_Efecto);
-			};
-			//FuncionesSonido.EFX.AuxiliaryEffectSlot(this.i_id, EfxAuxiliaryi.EffectslotEffect, efecto.ID_Efecto);
+				this.SourcesLinked.Add(source.ID, source);
+				//OpenAL Code;
+			}
 		}
-		public float GananciaSalida
+
+		public void UnLinkSourceToInput(SoundSource3D source)
 		{
-			set { EFX.alAuxiliaryEffectSlot(this.i_id, EfxAuxiliaryf.EffectslotGain, value);}
-			get { float ret; EFX.alGetAuxiliaryEffectSlot(this.i_id, EfxAuxiliaryf.EffectslotGain, out ret); return ret;}
+			if (this.SourcesLinked.ContainsKey(source.ID))
+			{
+				this.SourcesLinked.Remove(source.ID);
+				//OpenAL Code;
+			}
 		}
-		public Efectos.Efecto EfectoEnlazado
+
+		public void AttachEffect(I_SoundEffect effect)
 		{
-			get { return this.ef;}
+			this.se_effect = effect;
+			Type efxtype = effect.GetType();
+			//OpenAL Code;
+			//effect.slot = this;
+			EFX.alAuxiliaryEffectSloti(this.ui_ID, AL_AuxiliaryEffectSlot.AL_EFFECTSLOT_EFFECT, (int)effect.ID);
 		}
-		public int ID
+
+		#endregion
+		
+		#region PROPERTIES:
+
+		public float Gain
 		{
-			get { return this.i_id; }
+			set { EFX.alAuxiliaryEffectSlotf(this.ui_ID, AL_AuxiliaryEffectSlot.AL_EFFECTSLOT_GAIN, value); }
+			get { return EFX.alGetAuxiliaryEffectSlotf(this.ui_ID, AL_AuxiliaryEffectSlot.AL_EFFECTSLOT_GAIN); }
+		}
+
+		public bool SendAuto
+		{
+			set { EFX.alAuxiliaryEffectSlotf(this.ui_ID, AL_AuxiliaryEffectSlot.AL_EFFECTSLOT_AUXILIARY_SEND_AUTO, value? 1 : 0); }
+			get { return EFX.alGetAuxiliaryEffectSlotf(this.ui_ID, AL_AuxiliaryEffectSlot.AL_EFFECTSLOT_AUXILIARY_SEND_AUTO) == 1; }
+		}
+
+		public I_SoundEffect EffectAttached
+		{
+			get { return this.se_effect; }
+		}
+
+		#endregion
+
+		public uint ID
+		{
+			get { return this.ui_ID; }
 		}
 	}
 }
-*/
