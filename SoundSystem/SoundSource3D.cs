@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using dgtk.OpenAL;
+
 
 namespace dge.SoundSystem
 {
@@ -8,22 +10,21 @@ namespace dge.SoundSystem
 	/// </summary>
 	public class SoundSource3D
 	{
-		private uint id;
+		private uint ui_ID;
 		private float x, y, z;
 		private Sound snd;
-		//private Dictionary<int, AuxEfectSlot> Slots;
-		//public event EventHandler<SonidoEventArgs> Situacion;
+
+		private Dictionary<uint,I_Filter> FiltersLinked;
+		private I_Filter LinkedDirecFilter; // Solo se puede enlazar un filtro en modo directo.
 		internal SoundSource3D()
 		{
-			AL.alGenSource(out this.id);
+			this.ui_ID = AL.alGenSource();
+			this.FiltersLinked = new Dictionary<uint, I_Filter>();
 			this.Loop = false;
-			//this.Slots = new Dictionary<int, AuxEfectSlot>();
-			//this.Situacion += delegate { };
-			//FuncionesSonido.UpdateSnd += FuncionesSonido_UpdateSnd;
 		}
 		~SoundSource3D()
 		{
-			AL.alDeleteSource(ref this.id);
+			AL.alDeleteSource(ref this.ui_ID);
 			//FuncionesSonido.UpdateSnd -= FuncionesSonido_UpdateSnd;
 		}
 
@@ -36,75 +37,75 @@ namespace dge.SoundSystem
 		#region METODOS PUBLICOS:
 		public void Play()
 		{
-			AL.alSourcePlay(this.id);
+			AL.alSourcePlay(this.ui_ID);
 		}
 		public void Pause()
 		{
-			AL.alSourcePause(this.id);
+			AL.alSourcePause(this.ui_ID);
 		}
 		public void Stop()
 		{
-			AL.alSourceStop(this.id);
+			AL.alSourceStop(this.ui_ID);
 		}
 		public void AssignSound(Sound sound)
 		{
-			this.snd = sound; AL.alSourcei(this.id, AL_SourceiParam.AL_BUFFER, (int)sound.IDBuffer);
+			this.snd = sound; AL.alSourcei(this.ui_ID, AL_SourceiParam.AL_BUFFER, (int)sound.ID);
 		}
 		public unsafe bool HaveSound()
 		{
             int[] val = new int[1];
             fixed(int* ptr_val = val)
             {
-                AL.alGetSourcei(this.id, AL_GetSourceiParam.AL_SOURCE_TYPE, ptr_val);
+                AL.alGetSourcei(this.ui_ID, AL_GetSourceiParam.AL_SOURCE_TYPE, ptr_val);
             }
             
 			if ((AL_SourceType)val[0] == AL_SourceType.AL_UNDETERMINED) { return false;}else{return true;}
 		}
-        /*
-		public int CrearSlot()
+
+		public void LinkFilterToSlot(I_Filter filter, EffectSlot slot)
 		{
-			AuxEfectSlot aes = new AuxEfectSlot();
-			this.Slots.Add(aes.ID, aes);
-			AL.Source(this.id, ALSourcei.EfxDirectFilter, aes.ID);
-			FuncionesSonido.EFX.BindSourceToAuxiliarySlot(this.id, (uint)aes.ID, 1, 0);
-			return aes.ID;
-		}
-		public AuxEfectSlot GetSlot(int id)
-		{
-			if (this.Slots.ContainsKey(id))
+			if (this.FiltersLinked.ContainsKey(filter.ID))
 			{
-				return this.Slots[id];
+				//UnLinkFilter(filter);
+				// Actualizar Filtro
 			}
-			throw new Exception("Emisor "+this.id+": No existe Slot con ID "+id+" en este emisor.");
-		}
-		public bool EliminarSlot(int id)
-		{
-			if (this.Slots.ContainsKey(id))
+			else
 			{
-				this.Slots.Remove(id);
-				return true;
+				this.FiltersLinked.Add(filter.ID, filter);
 			}
-			return false;
+
+			//OpenAL Code;
+			AL.alSource3i(this.ui_ID, AL_Source3Param.AL_AUXILIARY_SEND_FILTER, (int)slot.ID, 0, (int)filter.ID);
 		}
-		public void EnlazarEfectoSlot(Efectos.Reverb efecto, AuxEfectSlot slot)
+		
+		public void UnLinkFilterToSlot(I_Filter filter, EffectSlot slot)
 		{
-			slot.EnlazarEfecto(efecto);
-		}
-		public void EnlazarEfectoSlot(Efectos.Reverb efecto, int id_slot)
-		{
-			if (this.Slots.ContainsKey(id_slot))
+			if (this.FiltersLinked.ContainsKey(filter.ID))
 			{
-				this.Slots[id_slot].EnlazarEfecto(efecto);
+				//OpenAL Code;
+				AL.alSource3i(this.ui_ID, AL_Source3Param.AL_AUXILIARY_SEND_FILTER, (int)dgtk.OpenAL.ALEnum.AL_EFFECTSLOT_NULL, 0, (int)dgtk.OpenAL.ALEnum.AL_FILTER_NULL);
 			}
+		}		
+
+		public void LinkDirectFilter (I_Filter filter)
+		{
+			this.LinkedDirecFilter = filter;
+			AL.alSourcei(this.ui_ID, AL_SourceiParam.AL_DIRECT_FILTER, (int)filter.ID);
 		}
-        */
+
+		public void UnlinkDirectFilter ()
+		{
+			this.LinkedDirecFilter = null;
+			AL.alSourcei(this.ui_ID, AL_SourceiParam.AL_DIRECT_FILTER, (int)dgtk.OpenAL.ALEnum.AL_FILTER_NULL);
+		}
+
 		#endregion
 		
 		#region METODOS PRIVADOS:
 		private void UpdatePos()
 		{
-			AL.alSource3f(this.id, AL_Source3Param.AL_POSITION, x, y, z);
-			AL.alSource3f(this.id, AL_Source3Param.AL_VELOCITY, 0, 0, 0);
+			AL.alSource3f(this.ui_ID, AL_Source3Param.AL_POSITION, x, y, z);
+			AL.alSource3f(this.ui_ID, AL_Source3Param.AL_VELOCITY, 0, 0, 0);
 		}
 		#endregion
 		
@@ -126,60 +127,60 @@ namespace dge.SoundSystem
 		}
 		public float ReferenceDistance
 		{
-			set { AL.alSourcef(this.id, AL_SourcefParam.AL_REFERENCE_DISTANCE, value); }
-			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_REFERENCE_DISTANCE); }
+			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_REFERENCE_DISTANCE, value); }
+			get { return AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_REFERENCE_DISTANCE); }
 		}
 		public float MaxDistance
 		{
-			set { AL.alSourcef(this.id, AL_SourcefParam.AL_MAX_DISTANCE, value); }
-			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_MAX_DISTANCE); }
+			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_MAX_DISTANCE, value); }
+			get { return AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_MAX_DISTANCE); }
 		}
 		public bool Loop
 		{
-			set { AL.alSourceb(this.id, AL_SourcebParam.AL_LOOPING, value);}
-			get { return AL.alGetSourceb(this.id, AL_SourcebParam.AL_LOOPING); }
+			set { AL.alSourceb(this.ui_ID, AL_SourcebParam.AL_LOOPING, value);}
+			get { return AL.alGetSourceb(this.ui_ID, AL_SourcebParam.AL_LOOPING); }
 		}
 		public AL_SourceState State
 		{
 			get 
 			{ 
-				return AL.alGetSourceState(this.id);				
+				return AL.alGetSourceState(this.ui_ID);				
 			}
 		}
 		public float pitch
 		{
-			set { AL.alSourcef(this.id, AL_SourcefParam.AL_PITCH, value);}
-			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_PITCH); }
+			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_PITCH, value);}
+			get { return AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_PITCH); }
 		}
 		public float Gain
 		{
-			set { AL.alSourcef(this.id, AL_SourcefParam.AL_GAIN, value);}
-			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_GAIN); }
+			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_GAIN, value);}
+			get { return AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_GAIN); }
 		}
 		public float MaxGain
 		{
-			set { AL.alSourcef(this.id, AL_SourcefParam.AL_MAX_GAIN, value);}
-			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_MAX_GAIN); }
+			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_MAX_GAIN, value);}
+			get { return AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_MAX_GAIN); }
 		}
 		public float MinGain
 		{
-			set { AL.alSourcef(this.id, AL_SourcefParam.AL_MIN_GAIN, value);}
-			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_MIN_GAIN); }
+			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_MIN_GAIN, value);}
+			get { return AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_MIN_GAIN); }
 		}
 		public float RolloffFactor
 		{
-			set { AL.alSourcef(this.id, AL_SourcefParam.AL_ROLLOFF_FACTOR, value); }
-			get { return AL.alGetSourcef(this.id, AL_SourcefParam.AL_ROLLOFF_FACTOR);}
+			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_ROLLOFF_FACTOR, value); }
+			get { return AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_ROLLOFF_FACTOR);}
 		}
 		public DateTime Time
 		{
-			set { AL.alSourcef(this.id, AL_SourcefParam.AL_SEC_OFFSET, value.Ticks); }
-			get { float ret = AL.alGetSourcef(this.id, AL_SourcefParam.AL_SEC_OFFSET); return new DateTime((TimeSpan.FromSeconds(ret)).Ticks);}
+			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET, value.Ticks); }
+			get { float ret = AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET); return new DateTime((TimeSpan.FromSeconds(ret)).Ticks);}
 		}
 		public long TimeTicks
 		{
-			set { AL.alSourcef(this.id, AL_SourcefParam.AL_SEC_OFFSET, (float)TimeSpan.FromTicks(value).TotalSeconds);}
-			get { float ret = AL.alGetSourcef(this.id, AL_SourcefParam.AL_SEC_OFFSET); return (TimeSpan.FromSeconds(ret)).Ticks;}
+			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET, (float)TimeSpan.FromTicks(value).TotalSeconds);}
+			get { float ret = AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET); return (TimeSpan.FromSeconds(ret)).Ticks;}
 		}
 		public DateTime Duration
 		{
@@ -190,5 +191,10 @@ namespace dge.SoundSystem
 			get { return new DateTime((this.Duration.Ticks - this.Time.Ticks));}
 		}
 		#endregion
+
+		public uint ID
+		{
+			get { return this.ui_ID; }
+		}
 	}
 }
