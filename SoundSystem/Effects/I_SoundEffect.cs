@@ -6,5 +6,6 @@ namespace dge.SoundSystem
     {
         SoundEffectType Effect { get; }
         uint ID { get; }
+        //internal EffectSlot slot {get; set;}
     }
 }

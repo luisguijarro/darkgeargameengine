@@ -5,7 +5,6 @@ namespace dge.SoundSystem.Effects
 {
     public class AutoWah : I_SoundEffect
     {
-        internal EffectSlot slot;
         internal uint ui_ID;
 
         public AutoWah()
@@ -16,7 +15,7 @@ namespace dge.SoundSystem.Effects
 
         private void UpdateEffect2Slot()
         {
-            slot.AttachEffect(this);
+            //p_slot.AttachEffect(this);
         }
 
         ~AutoWah()
