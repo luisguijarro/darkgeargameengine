@@ -1,8 +1,49 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace dge
 {    
+    
+    public static class Core
+    {
+        private static OperatingSystem OS;
+        public static OperatingSystem GetOS()
+        {
+            if (OS == OperatingSystem.None)
+            {
+                OS = pGetOS();
+            }
+            return OS;
+        }
+        
+        private static OperatingSystem pGetOS()
+		{
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                return OperatingSystem.Linux;
+            } 
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                return OperatingSystem.MacOS;
+            } 
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return OperatingSystem.Windows;
+            }
+            else
+            {
+                return OperatingSystem.NotSuported;
+            }
+        }
+
+		public enum OperatingSystem
+		{
+			None = 0, Windows, Linux, MacOS, NotSuported
+		}
+
+    }
+
     internal static class Core2D
     {
         internal static Dictionary<int, int> IDS;
