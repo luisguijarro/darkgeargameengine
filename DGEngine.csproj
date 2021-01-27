@@ -1,90 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B4A1C46B-C674-4B77-87D7-C163AF2D53A4}</ProjectGuid>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>    
     <OutputType>Library</OutputType>
-    <RootNamespace>dge</RootNamespace>
+    <TargetFramework>net5.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>dge</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+  </PropertyGroup>    
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoLogo>true</NoLogo>
     <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DebugType>full</DebugType>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoLogo>true</NoLogo>
     <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>false</DefineTrace>
+    <DebugType>none</DebugType>
     <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="dgtk">
-      <HintPath>.\bin\Debug\dgtk.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\darkgeartoolkit\DarkGearToolKit.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="dgWindow.cs" />
-    <Compile Include="Core.cs" />
-    <Compile Include="Tools\FileTools.cs" />
-    <Compile Include="Scene\Scene.cs" />
-    <Compile Include="Scene\SceneNode.cs" />
-    <Compile Include="Scene\i_SceneNode.cs" />
-    <Compile Include="G2D\Drawer.cs" />
-    <Compile Include="G2D\Writer.cs" />
-    <Compile Include="G2D\Surface.cs" />
-    <Compile Include="G2D\structs\tbo.cs" />
-    <Compile Include="G2D\structs\TVertex2D.cs" />
-    <Compile Include="G2D\structs\glFont.cs" />
-    <Compile Include="G2D\structs\glCharacter.cs" />
-    <Compile Include="G2D\ShaderSources\Basic2DShader.cs" />
-    <Compile Include="G2D\Tools\ImagesTools.cs" />
-    <Compile Include="G2D\Tools\glFontTools.cs" />
-    <Compile Include="GLSL\Shader.cs" />
-    <Compile Include="SoundSystem\SndSystem.cs" />
-    <Compile Include="SoundSystem\Enums.cs" />
-    <Compile Include="SoundSystem\Sound.cs" />
-    <Compile Include="SoundSystem\EffectSlot.cs" />
-    <Compile Include="SoundSystem\SoundSource3D.cs" />
-    <Compile Include="SoundSystem\Filters\I_Filter.cs" />
-    <Compile Include="SoundSystem\Filters\FilterLowPass.cs" />
-    <Compile Include="SoundSystem\Filters\FilterHighPass.cs" />
-    <Compile Include="SoundSystem\Filters\FilterBandPass.cs" />
-    <Compile Include="SoundSystem\Effects\I_SoundEffect.cs" />
-    <Compile Include="SoundSystem\Effects\Reverb.cs" />
-    <Compile Include="SoundSystem\Effects\Chorus.cs" />
-    <Compile Include="SoundSystem\Effects\Distortion.cs" />
-    <Compile Include="SoundSystem\Effects\Echo.cs" />
-    <Compile Include="SoundSystem\Effects\Flanger.cs" />
-    <Compile Include="SoundSystem\Effects\FrequencyShifter.cs" />
-    <Compile Include="SoundSystem\Effects\VocalMorpher.cs" />
-    <Compile Include="SoundSystem\Effects\PitchShifter.cs" />
-    <Compile Include="SoundSystem\Effects\RingModulator.cs" />
-    <Compile Include="SoundSystem\Effects\AutoWah.cs" />
-    <Compile Include="SoundSystem\Effects\Compressor.cs" />
-    <Compile Include="SoundSystem\Effects\Equalizer.cs" />
-    <Compile Include="SoundSystem\LibSndFile\Imports.cs" />
-    <Compile Include="SoundSystem\LibSndFile\Enums.cs" />
-    <Compile Include="SoundSystem\LibSndFile\Structs.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="dge.dll.config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="DGEngine.csproj" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+
 </Project>
