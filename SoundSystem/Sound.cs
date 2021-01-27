@@ -57,7 +57,7 @@ namespace dge.SoundSystem
 		{
 			get { return this.s_FileName;}
 		}
-		public int samplerate
+		public int SampleRate
 		{
 			get { return this.i_Rate; }
 		}
