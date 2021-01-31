@@ -3,15 +3,15 @@ using dgtk.OpenAL;
 
 namespace dge.SoundSystem.Effects
 {
-    public class RingModulator : I_SoundEffect
+    public class RingModulator : C_SoundEffect
     {
-        internal EffectSlot slot;
-        internal uint ui_ID;
+        // internal EffectSlot slot;
+        // internal uint ui_ID;
 
-        public RingModulator()
+        public RingModulator() : base (AL_Effect_Type.AL_EFFECT_RING_MODULATOR)
         {
-            this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
-            EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_RING_MODULATOR);
+            // this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
+            // EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_RING_MODULATOR);
         }
 
         private void UpdateEffect2Slot()
@@ -50,10 +50,10 @@ namespace dge.SoundSystem.Effects
         {
             get { return SoundEffectType.RingModulator ;}
         }
-
+/*
         public uint ID
         {
             get { return this.ui_ID;}
-        }
+        }*/
     }
 }

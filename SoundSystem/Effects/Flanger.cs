@@ -3,15 +3,15 @@ using dgtk.OpenAL;
 
 namespace dge.SoundSystem.Effects
 {
-    public class Flanger : I_SoundEffect
+    public class Flanger : C_SoundEffect
     {
-        internal EffectSlot slot;
-        internal uint ui_ID;
+        // internal EffectSlot slot;
+        // internal uint ui_ID;
 
-        public Flanger()
+        public Flanger() : base (AL_Effect_Type.AL_EFFECT_FLANGER)
         {
-            this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
-            EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_FLANGER);
+            // this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
+            // EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_FLANGER);
         }
 
         private void UpdateEffect2Slot()
@@ -70,10 +70,10 @@ namespace dge.SoundSystem.Effects
         {
             get { return SoundEffectType.Flanger ;}
         }
-
+/*
         public uint ID
         {
             get { return this.ui_ID;}
-        }
+        }*/
     }
 }

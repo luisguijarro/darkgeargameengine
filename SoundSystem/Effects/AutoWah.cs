@@ -3,19 +3,20 @@ using dgtk.OpenAL;
 
 namespace dge.SoundSystem.Effects
 {
-    public class AutoWah : I_SoundEffect
+    public class AutoWah : C_SoundEffect
     {
-        internal uint ui_ID;
+        // internal EffectSlot slot {get; set;}
+        // internal uint ui_ID;
 
-        public AutoWah()
+        public AutoWah() : base (AL_Effect_Type.AL_EFFECT_AUTOWAH)
         {
-            this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
-            EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_AUTOWAH);
+            // this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
+            // EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_AUTOWAH);
         }
 
         private void UpdateEffect2Slot()
         {
-            //p_slot.AttachEffect(this);
+            slot.AttachEffect(this);
         }
 
         ~AutoWah()
@@ -55,10 +56,10 @@ namespace dge.SoundSystem.Effects
         {
             get { return SoundEffectType.AutoWah ;}
         }
-
+/*
         public uint ID
         {
             get { return this.ui_ID;}
-        }
+        }*/
     }
 }

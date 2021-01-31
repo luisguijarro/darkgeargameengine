@@ -3,15 +3,15 @@ using dgtk.OpenAL;
 
 namespace dge.SoundSystem.Effects
 {
-    public class Chorus : I_SoundEffect
+    public class Chorus : C_SoundEffect
     {
-        internal EffectSlot slot;
-        internal uint ui_ID;
+        // internal EffectSlot slot;
+        // internal uint ui_ID;
 
-        public Chorus()
+        public Chorus() : base(AL_Effect_Type.AL_EFFECT_CHORUS)
         {
-            this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
-            EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_CHORUS);
+            // this.ui_ID = dgtk.OpenAL.EFX.alGenEffect();
+            // EFX.alEffecti(this.ui_ID, AL_EffectParam.AL_EFFECT_TYPE, (int)AL_Effect_Type.AL_EFFECT_CHORUS);
         }
 
         private void UpdateEffect2Slot()
@@ -68,10 +68,10 @@ namespace dge.SoundSystem.Effects
         {
             get { return SoundEffectType.Chorus ;}
         }
-
+/*
         public uint ID
         {
             get { return this.ui_ID;}
-        }
+        }*/
     }
 }
