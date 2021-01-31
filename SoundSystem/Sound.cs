@@ -53,10 +53,12 @@ namespace dge.SoundSystem
 		{
 			get { return this.l_Duration;}
 		}
+
 		public string FileName
 		{
 			get { return this.s_FileName;}
 		}
+		
 		public int SampleRate
 		{
 			get { return this.i_Rate; }
