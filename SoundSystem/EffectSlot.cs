@@ -10,7 +10,7 @@ namespace dge.SoundSystem
 	public class EffectSlot
 	{
 		private uint ui_ID;
-		private I_SoundEffect se_effect;
+		private C_SoundEffect se_effect;
 		private Dictionary<uint, SoundSource3D> SourcesLinked;
 		private Dictionary<uint, I_Filter> FiltersLinked;
 		public EffectSlot()
@@ -42,7 +42,7 @@ namespace dge.SoundSystem
 			}
 		}
 
-		public void AttachEffect(I_SoundEffect effect)
+		public void AttachEffect(C_SoundEffect effect)
 		{
 			this.se_effect = effect;
 			Type efxtype = effect.GetType();
@@ -67,7 +67,7 @@ namespace dge.SoundSystem
 			get { return EFX.alGetAuxiliaryEffectSlotf(this.ui_ID, AL_AuxiliaryEffectSlot.AL_EFFECTSLOT_AUXILIARY_SEND_AUTO) == 1; }
 		}
 
-		public I_SoundEffect EffectAttached
+		public C_SoundEffect EffectAttached
 		{
 			get { return this.se_effect; }
 		}
