@@ -67,7 +67,7 @@ namespace dge.SoundSystem
 			if (this.FiltersLinked.ContainsKey(filter.ID))
 			{
 				//UnLinkFilter(filter);
-				// Actualizar Filtro
+				// Actualizar Filtro. No hace falta código.
 			}
 			else
 			{
