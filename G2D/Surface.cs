@@ -1,13 +1,14 @@
 using System;
+using dgtk.Graphics;
 
 namespace dge.G2D
 {
     public class Surface
     {
-        private int i_id;
-        private uint i_width;
-        private uint i_height;
-
+        protected uint i_width;
+        protected uint i_height;
+        protected int i_x;
+        protected int i_y;
         
         ///<sumary>
         ///Basic Constructor that make a Surface of 32x32 pixels.
@@ -22,13 +23,8 @@ namespace dge.G2D
         ///</sumary>
         public Surface(uint width, uint height)
         {
-            this.i_id = Core2D.GetID();
             this.i_width = width;
             this.i_height = height;
-        }
-        ~Surface()
-        {
-            Core2D.ReleaseID(this.i_id);
         }
 
         ///<sumary>
