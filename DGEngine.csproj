@@ -1,11 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>    
+  <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>dge</AssemblyName>
-  </PropertyGroup>    
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoLogo>true</NoLogo>
     <Optimize>false</Optimize>
@@ -27,6 +27,52 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <Content Include="G2D\ShaderSources\Basic2DShader.cs" />
+    <Content Include="G2D\structs\dgFont.cs" />
+    <Content Include="G2D\structs\dgCharacter.cs" />
+    <Content Include="G2D\structs\tbo.cs" />
+    <Content Include="G2D\structs\TVertex2D.cs" />
+    <Content Include="G2D\Tools\ImagesTools.cs" />
+    <Content Include="G2D\Tools\dgFontTools.cs" />
+    <Content Include="G2D\Drawer.cs" />
+    <Content Include="G2D\Surface.cs" />
+    <Content Include="G2D\Writer.cs" />
+    <Content Include="GLSL\Shader.cs" />
+    <Content Include="GUI\InteractiveSurface.cs" />
+    <Content Include="GUI\Events\MouseMoveEventArgs.cs" />
+    <Content Include="GUI\Events\MouseDownEventArgs.cs" />
+    <Content Include="GUI\Events\MouseUpEventArgs.cs" />
+    <Content Include="GUI\Events\MouseWheelEventArgs.cs" />
+    <Content Include="Scene\i_SceneNode.cs" />
+    <Content Include="Scene\Scene.cs" />
+    <Content Include="Scene\SceneNode.cs" />
+    <Content Include="SoundSystem\Effects\AutoWah.cs" />
+    <Content Include="SoundSystem\Effects\C_SoundEffect.cs" />
+    <Content Include="SoundSystem\Effects\Chorus.cs" />
+    <Content Include="SoundSystem\Effects\Compressor.cs" />
+    <Content Include="SoundSystem\Effects\Distortion.cs" />
+    <Content Include="SoundSystem\Effects\Echo.cs" />
+    <Content Include="SoundSystem\Effects\Equalizer.cs" />
+    <Content Include="SoundSystem\Effects\Flanger.cs" />
+    <Content Include="SoundSystem\Effects\FrequencyShifter.cs" />
+    <Content Include="SoundSystem\Effects\PitchShifter.cs" />
+    <Content Include="SoundSystem\Effects\Reverb.cs" />
+    <Content Include="SoundSystem\Effects\RingModulator.cs" />
+    <Content Include="SoundSystem\Effects\VocalMorpher.cs" />
+    <Content Include="SoundSystem\Filters\FilterBandPass.cs" />
+    <Content Include="SoundSystem\Filters\FilterHighPass.cs" />
+    <Content Include="SoundSystem\Filters\FilterLowPass.cs" />
+    <Content Include="SoundSystem\Filters\I_Filter.cs" />
+    <Content Include="SoundSystem\LibSndFile\Enums.cs" />
+    <Content Include="SoundSystem\LibSndFile\Imports.cs" />
+    <Content Include="SoundSystem\LibSndFile\Structs.cs" />
+    <Content Include="SoundSystem\EffectSlot.cs" />
+    <Content Include="SoundSystem\Enums.cs" />
+    <Content Include="SoundSystem\SndSystem.cs" />
+    <Content Include="SoundSystem\Sound.cs" />
+    <Content Include="SoundSystem\SoundSource3D.cs" />
+    <Content Include="Tools\FileTools.cs" />
+    <Content Include="Core.cs" />
+    <Content Include="dgWindow.cs" />
   </ItemGroup>
-
 </Project>
