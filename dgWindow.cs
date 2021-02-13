@@ -11,6 +11,7 @@ namespace dge
             sndSystem = new SndSystem(base.OpenALContext);
             this.MakeCurrent();
             G2D.Drawer.Init_2D_Drawer();
+            G2D.Writer.InitGLWriter();
             this.UnMakeCurrent(); //No debería ser necesario.
         }
 
