@@ -38,7 +38,6 @@
     <Content Include="G2D\Surface.cs" />
     <Content Include="G2D\Writer.cs" />
     <Content Include="GLSL\Shader.cs" />
-    <Content Include="GUI\InteractiveSurface.cs" />
     <Content Include="GUI\Events\MouseMoveEventArgs.cs" />
     <Content Include="GUI\Events\MouseDownEventArgs.cs" />
     <Content Include="GUI\Events\MouseUpEventArgs.cs" />
@@ -74,5 +73,6 @@
     <Content Include="Tools\FileTools.cs" />
     <Content Include="Core.cs" />
     <Content Include="dgWindow.cs" />
+    <Content Include="G2D\InteractiveSurface.cs" />
   </ItemGroup>
 </Project>
