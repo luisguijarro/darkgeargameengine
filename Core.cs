@@ -53,7 +53,7 @@ namespace dge
             {
                 IDS = new Dictionary<int, int>();
             }
-            for (int i=0;i<IDS.Count;i++)
+            for (int i=1;i<IDS.Count+1;i++) // El ID minimo es 1, 0 se deja para los objetos no interactivos.
             {
                 if (!IDS.ContainsKey(i))
                 {
@@ -61,7 +61,7 @@ namespace dge
                     return i;
                 }
             }
-            int e = IDS.Count;
+            int e = IDS.Count+1; // El ID minimo es 1, 0 se deja para los objetos no interactivos.
             IDS.Add(e,e);
             return e;
         }
