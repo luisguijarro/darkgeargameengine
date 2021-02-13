@@ -46,14 +46,14 @@ namespace dge
 
     internal static class Core2D
     {
-        internal static Dictionary<int, int> IDS;
-        internal static int GetID() // Otorga un ID a objeto que lo solicita
+        internal static Dictionary<uint, uint> IDS;
+        internal static uint GetID() // Otorga un ID a objeto que lo solicita
         {
             if (IDS == null)
             {
-                IDS = new Dictionary<int, int>();
+                IDS = new Dictionary<uint, uint>();
             }
-            for (int i=1;i<IDS.Count+1;i++) // El ID minimo es 1, 0 se deja para los objetos no interactivos.
+            for (uint i=1;i<IDS.Count+1;i++) // El ID minimo es 1, 0 se deja para los objetos no interactivos.
             {
                 if (!IDS.ContainsKey(i))
                 {
@@ -61,12 +61,12 @@ namespace dge
                     return i;
                 }
             }
-            int e = IDS.Count+1; // El ID minimo es 1, 0 se deja para los objetos no interactivos.
+            uint e = (uint)IDS.Count+1; // El ID minimo es 1, 0 se deja para los objetos no interactivos.
             IDS.Add(e,e);
             return e;
         }
 
-        internal static bool ReleaseID(int id) // Liberia ID de objeto y devuelve si ha tenido exito.
+        internal static bool ReleaseID(uint id) // Liberia ID de objeto y devuelve si ha tenido exito.
         {
             if (IDS == null) { return false; }
             if (IDS.ContainsKey(id))
@@ -77,11 +77,11 @@ namespace dge
             return false;
         }
 
-        internal static byte[] DeIntAByte4(int num) //
+        internal static byte[] DeUIntAByte4(uint num) //
 		{
 			byte[] ret=new byte[4];
 			
-			for(int t=1;t<3;t++)
+			for(uint t=1;t<3;t++)
 			{
 				ret[t]=(byte)(num%256);
 				num=(num-num%256)/256;

@@ -5,7 +5,7 @@ namespace dge.G2D
 {
     public class InteractiveSurface : dge.G2D.Surface
     {
-        private int i_id;
+        private uint ui_id;
         private Color4 idColor;
 
         public event EventHandler<MouseUpEventArgs> MouseUp;
@@ -26,8 +26,8 @@ namespace dge.G2D
         ///</sumary>
         public InteractiveSurface(uint width, uint height)
         {
-            this.i_id = Core2D.GetID(); // Obtenemos ID de la superficie.
-            byte[] colorvalues = Core2D.DeIntAByte4(this.i_id); // Establecemos color de ID de la superficie.
+            this.ui_id = Core2D.GetID(); // Obtenemos ID de la superficie.
+            byte[] colorvalues = Core2D.DeUIntAByte4(this.ui_id); // Establecemos color de ID de la superficie.
             this.idColor = new Color4((byte)colorvalues[0], (byte)colorvalues[1], (byte)colorvalues[2], (byte)colorvalues[3]);
             base.i_width = width;
             base.i_height = height;
@@ -38,11 +38,18 @@ namespace dge.G2D
         }
         ~InteractiveSurface()
         {
-            Core2D.ReleaseID(this.i_id); // Liberamos ID de la superficie.
+            Core2D.ReleaseID(this.ui_id); // Liberamos ID de la superficie.
         }
         internal virtual void DrawID()
         {
             dge.G2D.Drawer.Draw(this.idColor, base.i_x, base.i_y, i_width, i_height, 0); // Pintamos ID de la superficie.
         }
+
+        #region PROPERTIES:
+        public uint ID
+        {
+            get { return this.ui_id; }
+        }
+        #endregion
     }
 }
