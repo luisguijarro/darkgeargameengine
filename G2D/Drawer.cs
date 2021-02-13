@@ -10,14 +10,14 @@ namespace dge.G2D
 {    public static class Drawer
     {
         private static bool b_invert_y;
-
         private static uint VAO; // Vertex Array Object (indice que contiene toda la info del objeto.)
         private static uint VBO; // Vertex Buffer Object (Indice del buffer Que contiene los atributos de vertice.)
         private static uint EBO; // Element Buffer Object (Indice del buffer que contiene la lista de indices de orden de dibujado de los vertices.)
         
         #region Uniforms Ids
-        private static int idUniformTColor;
-        private static int idUniformColor;
+        private static int idUniformTColor; // ID de Uniform de Color transparente.
+        private static int idUniformColor; // ID de Uniform de color multiplicante.    
+        private static int idUniform_texcoords; // ID de Uniform de Coordenadas de Textura Dinamicas.
         private static int idUniform_v_size; // ID de Uniform de Tamaño de superficie de dibujo.
         private static int idUniformMat_View; // ID de Uniform que contiene la matriz de Projección.
         private static int idUniformMat_Per; // ID de Uniform que contiene la matriz de Perspectiva.
@@ -32,10 +32,10 @@ namespace dge.G2D
         internal static void Init_2D_Drawer()
         {
             TVertex2D[] vertices = new TVertex2D[4];
-            vertices[0] = new TVertex2D(new Vector2(0, 0), new Vector2(0,0));
-            vertices[1] = new TVertex2D(new Vector2(0, 1), new Vector2(0,1));
-            vertices[2] = new TVertex2D(new Vector2(1, 1), new Vector2(1,1));
-            vertices[3] = new TVertex2D(new Vector2(1, 0), new Vector2(1,0));
+            vertices[0] = new TVertex2D(1, new Vector2(0, 0), new Vector2(0,0));
+            vertices[1] = new TVertex2D(2, new Vector2(0, 1), new Vector2(0,1));
+            vertices[2] = new TVertex2D(3, new Vector2(1, 1), new Vector2(1,1));
+            vertices[3] = new TVertex2D(4, new Vector2(1, 0), new Vector2(1,0));
 
             UInt32[] indices = new uint[]{0, 1, 2, 3, 0, 2};
 
@@ -50,16 +50,20 @@ namespace dge.G2D
             GL.glBindBuffer(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, EBO);
             GL.glBufferData<UInt32>(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*indices.Length, indices, BufferUsageARB.GL_STATIC_DRAW);
             
-            GL.glVertexAttribPointer(0, 2, VertexAttribPointerType.GL_FLOAT, dgtk.OpenGL.Boolean.GL_FALSE, 4*sizeof(float), new IntPtr(0));
+            GL.glVertexAttribIPointer(0, 1, VertexAttribIType.GL_INT, Marshal.SizeOf(typeof(TVertex2D)), new IntPtr(0)); // ID
             GL.glEnableVertexAttribArray(0);
 
-            GL.glVertexAttribPointer(1, 2, VertexAttribPointerType.GL_FLOAT, dgtk.OpenGL.Boolean.GL_FALSE, 4*sizeof(float), new IntPtr(sizeof(float)*2/*Vector2 tiene dos float*/));
+            GL.glVertexAttribPointer(1, 2, VertexAttribPointerType.GL_FLOAT, dgtk.OpenGL.Boolean.GL_FALSE, Marshal.SizeOf(typeof(TVertex2D)), new IntPtr(sizeof(int))); // Vertex Position
             GL.glEnableVertexAttribArray(1);
+
+            GL.glVertexAttribPointer(2, 2, VertexAttribPointerType.GL_FLOAT, dgtk.OpenGL.Boolean.GL_FALSE, Marshal.SizeOf(typeof(TVertex2D)), new IntPtr((sizeof(float)*2)+sizeof(int)/*Vector2 de posicion tiene dos float +  el uint de ID*/)); // Texcoords.
+            GL.glEnableVertexAttribArray(2);
 
             GL.glBindVertexArray(0);
 
             BasicShader = new Shader(ShadersSources.Basic2Dvs, ShadersSources.Basic2Dfs);
 
+            idUniform_texcoords = GL.glGetUniformLocation(BasicShader.ui_id, "utexcoords");
             idUniform_v_size = GL.glGetUniformLocation(BasicShader.ui_id, "v_size");
             idUniformTColor = GL.glGetUniformLocation(BasicShader.ui_id, "tColor");
             idUniformColor = GL.glGetUniformLocation(BasicShader.ui_id, "Color");
@@ -69,7 +73,7 @@ namespace dge.G2D
             idUniformSilhouette = GL.glGetUniformLocation(BasicShader.ui_id, "Silhouette");
             idUniformTexturePassed = GL.glGetUniformLocation(BasicShader.ui_id, "TexturePassed");
 
-            DefineTransparentColor(new Color4(0f, 0f, 0f, 0f));
+            DefineTransparentColor(new Color4(1f, 0f, 1f, 1f));
             DefineViewMatrix(dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
 
             GL.glEnable(EnableCap.GL_BLEND);
@@ -86,7 +90,7 @@ namespace dge.G2D
         {
             //c4_TransparentColor = color;
             BasicShader.Use();
-            GL.glUniform4f(idUniformTColor, color.R, color.G, color.B, color.A);
+            GL.glUniform3f(idUniformTColor, color.R, color.G, color.B);
         }
 
         /// <sumary>
@@ -221,7 +225,7 @@ namespace dge.G2D
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>        
         public static void Draw(TextureBufferObject tbo, int x, int y, float RotInDegrees, float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
         {
-            DrawGL(tbo.i_ID, new Color4(1f, 1f, 1f, 1f), x, y, tbo.Width, tbo.Height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
+            DrawGL(tbo.ui_ID, new Color4(1f, 1f, 1f, 1f), x, y, tbo.Width, tbo.Height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
         }
 
         /// <sumary>
@@ -239,7 +243,7 @@ namespace dge.G2D
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>        
         public static void Draw(TextureBufferObject tbo, Color4 Color, int x, int y, float RotInDegrees, float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
         {
-            DrawGL(tbo.i_ID, Color, x, y, tbo.Width, tbo.Height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
+            DrawGL(tbo.ui_ID, Color, x, y, tbo.Width, tbo.Height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
         }
 
         /// <sumary>
@@ -263,7 +267,7 @@ namespace dge.G2D
             float tc1X = FlipH ? Texcoord0x : Texcoord1x;
             float tc1Y = FlipV ? Texcoord0y : Texcoord1y;
 
-            DrawGL(tbo.i_ID, new Color4(1f, 1f, 1f, 1f), x, y, tbo.Width, tbo.Height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 0);
+            DrawGL(tbo.ui_ID, new Color4(1f, 1f, 1f, 1f), x, y, tbo.Width, tbo.Height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 0);
         }
 
         /// <sumary>
@@ -288,7 +292,7 @@ namespace dge.G2D
             float tc1X = FlipH ? Texcoord0x : Texcoord1x;
             float tc1Y = FlipV ? Texcoord0y : Texcoord1y;
 
-            DrawGL(tbo.i_ID, Color, x, y, tbo.Width, tbo.Height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 0);
+            DrawGL(tbo.ui_ID, Color, x, y, tbo.Width, tbo.Height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 0);
         }
 
         /// <sumary>
@@ -307,7 +311,7 @@ namespace dge.G2D
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>        
         public static void Draw(TextureBufferObject tbo, int x, int y, uint width, uint height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
         {
-            DrawGL(tbo.i_ID, new Color4(1f, 1f, 1f, 1f), x, y, width, height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
+            DrawGL(tbo.ui_ID, new Color4(1f, 1f, 1f, 1f), x, y, width, height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
         }
 
         /// <sumary>
@@ -327,7 +331,7 @@ namespace dge.G2D
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>        
         public static void Draw(TextureBufferObject tbo, Color4 Color, int x, int y, uint width, uint height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
         {
-            DrawGL(tbo.i_ID, Color, x, y, width, height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
+            DrawGL(tbo.ui_ID, Color, x, y, width, height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
         }
 
         /// <sumary>
@@ -353,7 +357,7 @@ namespace dge.G2D
             float tc1X = FlipH ? Texcoord0x : Texcoord1x;
             float tc1Y = FlipV ? Texcoord0y : Texcoord1y;
 
-            DrawGL(tbo.i_ID, new Color4(1f, 1f, 1f, 1f), x, y, width, height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 0);
+            DrawGL(tbo.ui_ID, new Color4(1f, 1f, 1f, 1f), x, y, width, height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 0);
         }
 
         /// <sumary>
@@ -380,7 +384,7 @@ namespace dge.G2D
             float tc1X = FlipH ? Texcoord0x : Texcoord1x;
             float tc1Y = FlipV ? Texcoord0y : Texcoord1y;
 
-            DrawGL(tbo.i_ID, Color, x, y, width, height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 0);
+            DrawGL(tbo.ui_ID, Color, x, y, width, height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 0);
         }
 
         /// <sumary>
@@ -409,7 +413,7 @@ namespace dge.G2D
         /// <param name="RotInDegrees">Degrees of the rotation.</param>
         public static void DrawSilhouette(Color4 color, TextureBufferObject silhouette, int x, int y, float RotInDegrees)
         {
-            DrawGL(silhouette.i_ID, color, x, y, silhouette.Width, silhouette.Height, RotInDegrees, 0f, 0f, 1f, 1f, 1);
+            DrawGL(silhouette.ui_ID, color, x, y, silhouette.Width, silhouette.Height, RotInDegrees, 0f, 0f, 1f, 1f, 1);
         }
         
         /// <sumary>
@@ -430,7 +434,7 @@ namespace dge.G2D
             float tc1X = FlipH ? 0 : 1;
             float tc1Y = FlipV ? 0 : 1;
 
-            DrawGL(silhouette.i_ID, color, x, y, silhouette.Width, silhouette.Height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 1);
+            DrawGL(silhouette.ui_ID, color, x, y, silhouette.Width, silhouette.Height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 1);
         }
         
         /// <sumary>
@@ -446,7 +450,7 @@ namespace dge.G2D
         /// <param name="RotInDegrees">Degrees of the rotation.</param>
         public static void DrawSilhouette(Color4 color, TextureBufferObject silhouette, int x, int y, uint width, uint height, float RotInDegrees)
         {
-            DrawGL(silhouette.i_ID, color, x, y, width, height, RotInDegrees, 0f, 0f, 1f, 1f, 1);
+            DrawGL(silhouette.ui_ID, color, x, y, width, height, RotInDegrees, 0f, 0f, 1f, 1f, 1);
         }
 
         /// <sumary>
@@ -469,7 +473,7 @@ namespace dge.G2D
             float tc1X = FlipH ? 0 : 1;
             float tc1Y = FlipV ? 0 : 1;
 
-            DrawGL(silhouette.i_ID, color, x, y, width, height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 1);
+            DrawGL(silhouette.ui_ID, color, x, y, width, height, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 1);
         }
 
         #endregion
@@ -480,6 +484,7 @@ namespace dge.G2D
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
 
             BasicShader.Use();
+            //GL.glUniform4fv(idUniform_texcoords, 1, new float[]{0f, 0f, 1f, 1f});
             GL.glUniform2f(idUniform_v_size, width, height);
             GL.glUniform1i(idUniformSilhouette, 0);
             GL.glUniform1i(idUniformTexturePassed, 0);
@@ -499,6 +504,7 @@ namespace dge.G2D
             GL.glEnable(EnableCap.GL_TEXTURE_2D);
             
             BasicShader.Use();
+            GL.glUniform4fv(idUniform_texcoords, 1, new float[]{Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y});
             GL.glUniform2f(idUniform_v_size, width, height);
             GL.glUniform1i(idUniformSilhouette, Silhouette);
             GL.glUniform1i(idUniformTexturePassed, 1);
