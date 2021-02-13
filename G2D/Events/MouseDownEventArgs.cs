@@ -1,12 +1,12 @@
 using System;
 using dgtk.Graphics;
 
-namespace dge.GUI
+namespace dge.G2D
 {
-    public class MouseUpEventArgs : EventArgs
+    public class MouseDownEventArgs : EventArgs
     {
         dgtk.MouseButtons mb_button;
-        public MouseUpEventArgs(dgtk.MouseButtons button)
+        public MouseDownEventArgs(dgtk.MouseButtons button)
         {
             mb_button = button;
         }

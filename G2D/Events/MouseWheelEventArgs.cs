@@ -1,7 +1,7 @@
 using System;
 using dgtk.Graphics;
 
-namespace dge.GUI
+namespace dge.G2D
 {
     public class MouseWheelEventArgs : EventArgs
     {
