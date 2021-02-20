@@ -3,7 +3,7 @@ using System.IO;
 using System.Text;
 using System.Security.Cryptography;
 
-namespace dge
+namespace dge.Tools
 {
 	/// <summary>
 	/// Description of MD5FromFile.
