@@ -37,7 +37,7 @@ namespace dge.G2D
             {
                 dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
                 dge.Core2D.PixelBufferObject_Select = GL.glGenBuffer();
-                Console.WriteLine("Init_IDs_Drawer 0: "+(ErrorCode)GL.glGetError());
+                //Console.WriteLine("Init_IDs_Drawer 0: "+(ErrorCode)GL.glGetError());
 
                 TVertex2D[] vertices = new TVertex2D[4];
                 vertices[0] = new TVertex2D(1, new Vector2(0, 0), new Vector2(0,0));
@@ -86,7 +86,7 @@ namespace dge.G2D
 
                 GL.glEnable(EnableCap.GL_BLEND);
                 GL.glBlendFunc(BlendingFactor.GL_SRC_ALPHA, BlendingFactor.GL_ONE_MINUS_SRC_ALPHA);
-                Console.WriteLine("Init_IDs_Drawer 1: "+(ErrorCode)GL.glGetError());
+                //Console.WriteLine("Init_IDs_Drawer 1: "+(ErrorCode)GL.glGetError());
 
                 dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
                 //GL.glEnable(EnableCap.GL_TEXTURE_2D);
