@@ -5,6 +5,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AssemblyName>dge</AssemblyName>
+    <RootNamespace>dge</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <NoLogo>true</NoLogo>
@@ -69,10 +70,22 @@
     <Content Include="Tools\FileTools.cs" />
     <Content Include="Core.cs" />
     <Content Include="dgWindow.cs" />
-    <Content Include="G2D\InteractiveSurface.cs" />
     <Content Include="G2D\Events\MouseDownEventArgs.cs" />
     <Content Include="G2D\Events\MouseMoveEventArgs.cs" />
     <Content Include="G2D\Events\MouseUpEventArgs.cs" />
     <Content Include="G2D\Events\MouseWheelEventArgs.cs" />
+    <Content Include="G2D\InteractiveSurface.cs" />
+    <Content Include="GUI\GraphicsUserInterface.cs" />
+    <Content Include="GUI\BaseObjects\Control.cs" />
+    <Content Include="G2D\InteractiveSurfaceContainer.cs" />
+    <Content Include="Tools\RenderTools.cs" />
+    <Content Include="GUI\Window.cs" />
+    <Content Include="GUI\BaseObjects\BaseGuiSurface.cs" />
+    <EmbeddedResource Include="images\GuiDefaultTheme.png">
+      <Link>images\GuiDefaultTheme.png</Link>
+    </EmbeddedResource>
+    <Content Include="GUI\button.cs" />
+    <Content Include="GUI\GuiIDsDrawer.cs" />
+    <Content Include="G2D\IDsDrawer.cs" />
   </ItemGroup>
 </Project>
