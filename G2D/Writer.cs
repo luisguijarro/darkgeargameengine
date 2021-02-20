@@ -8,11 +8,13 @@ namespace dge.G2D
 	/// It can contain different fonts with which to write the desired text.
 	/// The fonts must be in GLFont format (* .glf).
 	/// </summary>
-    public static class Writer
+    public class Writer
     {
-        public static Dictionary<string, dgFont> Fonts;
-		public static void InitGLWriter()
+		private dgWindow parentWindow;
+        public Dictionary<string, dgFont> Fonts;
+		internal Writer(dgWindow parent)
 		{
+			this.parentWindow = parent;
 			Fonts = new Dictionary<string, dgFont>();
 		}
 		
@@ -21,7 +23,7 @@ namespace dge.G2D
 		/// </summary>
 		/// <remarks>Load dgFonts.</remarks>
 		/// <param name="filepath">Path of the Font file in dgFont format.</param>
-		public static string LoadFont(string filepath)
+		public string LoadFont(string filepath)
 		{
 			dgFont ft = Tools.LoadDGFont(filepath);
 			Fonts.Add(ft.Name, ft);
@@ -38,7 +40,7 @@ namespace dge.G2D
 		/// <param name="size">Size of the font in pixels.</param>
 		/// <param name="posx">X coord of Origin of the text.</param>
 		/// <param name="posy">Y coord of origin of the text.</param>
-		public static void Write(string fontname, dgtk.Graphics.Color4 color, string text, float fsize, float posx, float posy)
+		public void Write(string fontname, dgtk.Graphics.Color4 color, string text, float fsize, float posx, float posy)
 		{
 			float actualpos = posx;
 			for (int i=0;i<text.Length;i++)
@@ -69,7 +71,7 @@ namespace dge.G2D
 		/// <param name="posx">X coord of Origin of the text.</param>
 		/// <param name="posy">Y coord of origin of the text.</param>
 		/// <param name="BorderColor">Sets the color in which the border will be drawn.</param>
-		public static void Write(string fontname, dgtk.Graphics.Color4 color, string text, float fsize, float posx, float posy, dgtk.Graphics.Color4 BorderColor)
+		public void Write(string fontname, dgtk.Graphics.Color4 color, string text, float fsize, float posx, float posy, dgtk.Graphics.Color4 BorderColor)
 		{
 			float actualpos = posx;
 			for (int i=0;i<text.Length;i++)
@@ -91,18 +93,18 @@ namespace dge.G2D
 			}
 		}
 
-		private static float WriteChar(dgFont font, dgtk.Graphics.Color4 color, char character, float fontsize, float posx, float posy) // Retornamos ancho dle caracter.
+		private float WriteChar(dgFont font, dgtk.Graphics.Color4 color, char character, float fontsize, float posx, float posy) // Retornamos ancho dle caracter.
 		{
 			dgCharacter ch = font.d_characters[character];
 			//PINTAR:
-			Drawer.Draw(font.TBO_Scan0.ID, color, (int)posx, (int)posy, (uint)(ch.ui_width*(fontsize/font.MaxFontSize)), (uint)(ch.ui_height*(fontsize/font.MaxFontSize)), 0f, ch.f_x0, ch.f_y0, ch.f_x1, ch.f_y1);
+			this.parentWindow.Drawer2D.Draw(font.TBO_Scan0.ID, color, (int)posx, (int)posy, (uint)(ch.ui_width*(fontsize/font.MaxFontSize)), (uint)(ch.ui_height*(fontsize/font.MaxFontSize)), 0f, ch.f_x0, ch.f_y0, ch.f_x1, ch.f_y1);
 			return ch.ui_width*(fontsize/font.MaxFontSize);
 		}
-		private static void WriteCharBorder(dgFont font, dgtk.Graphics.Color4 color, char character, float fontsize, float posx, float posy) // Retornamos ancho dle caracter.
+		private void WriteCharBorder(dgFont font, dgtk.Graphics.Color4 color, char character, float fontsize, float posx, float posy) // Retornamos ancho dle caracter.
 		{
 			dgCharacter ch = font.d_characters[character];
 			//PINTAR:
-			Drawer.Draw(font.TBO_Scan1.ID, color, (int)posx, (int)posy, (uint)(ch.ui_width*(fontsize/font.MaxFontSize)), (uint)(ch.ui_height*(fontsize/font.MaxFontSize)), 0f, ch.f_x0, ch.f_y0, ch.f_x1, ch.f_y1);
+			this.parentWindow.Drawer2D.Draw(font.TBO_Scan1.ID, color, (int)posx, (int)posy, (uint)(ch.ui_width*(fontsize/font.MaxFontSize)), (uint)(ch.ui_height*(fontsize/font.MaxFontSize)), 0f, ch.f_x0, ch.f_y0, ch.f_x1, ch.f_y1);
 		}
     }
 }
