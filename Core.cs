@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
+using dgtk.OpenGL;
+
 namespace dge
 {    
     
@@ -46,6 +48,8 @@ namespace dge
 
     internal static class Core2D
     {
+        internal static uint PixelBufferObject_Select; 
+        internal static uint SelectedID;
         internal static Dictionary<uint, uint> IDS;
         internal static uint GetID() // Otorga un ID a objeto que lo solicita
         {
@@ -90,9 +94,53 @@ namespace dge
 			return ret;
 		}
 
-		internal static int DeByte4AInt(byte[] num)
+		internal static uint DeByte4AUInt(byte[] num)
 		{
-			return num[1]+num[2]*256; //+num[2]*256*256; //+num[3]*256*256*256
+			return (uint)(num[1]+num[2]*256); //+num[2]*256*256; //+num[3]*256*256*256
 		}
+
+        internal static void UpdateIdsMap(uint width, uint height, Action renderScene)
+        {
+            dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
+            GL.glBindBuffer(BufferTargetARB.GL_PIXEL_PACK_BUFFER, PixelBufferObject_Select);
+            GL.glBufferData(BufferTargetARB.GL_PIXEL_PACK_BUFFER, (int)(width*height*4), IntPtr.Zero, BufferUsageARB.GL_STREAM_READ);
+            
+            renderScene();
+
+            GL.glReadPixels(0, 0, (int)width, (int)height, PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, IntPtr.Zero);
+            GL.glBindBuffer(BufferTargetARB.GL_PIXEL_PACK_BUFFER, 0);
+            dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
+        }
+
+        internal static unsafe uint SelectID(int mouseX, int mouseY, int width, int height)
+        {
+            dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
+            // Falta generar los bufferes.
+            uint ret = 0;
+            if ((mouseX < width) && (mouseY<height))
+            {
+                GL.glBindBuffer(BufferTargetARB.GL_PIXEL_PACK_BUFFER, PixelBufferObject_Select);
+                IntPtr MapBuffer = GL.glMapBuffer(BufferTargetARB.GL_PIXEL_PACK_BUFFER, BufferAccessARB.GL_READ_ONLY);
+
+                byte* MapPtr = (byte*)(MapBuffer.ToPointer());
+
+                byte[] idcolor = new byte[4];
+                idcolor[0] = MapPtr[((mouseX + ((height-mouseY) * width))*4)];
+				idcolor[1] = MapPtr[((mouseX + ((height-mouseY) * width))*4)+1];
+				idcolor[2] = MapPtr[((mouseX + ((height-mouseY) * width))*4)+2];
+				idcolor[3] = MapPtr[((mouseX + ((height-mouseY) * width))*4)+3];
+
+                ret = DeByte4AUInt(idcolor);
+
+                GL.glUnmapBuffer(BufferTargetARB.GL_PIXEL_PACK_BUFFER);
+                GL.glBindBuffer(BufferTargetARB.GL_PIXEL_PACK_BUFFER, 0);
+            }
+            dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
+            SelectedID = ret;
+            #if DEBUG
+                Console.WriteLine("SelectedID: "+SelectedID);
+            #endif
+            return ret;
+        }
     }
 }
