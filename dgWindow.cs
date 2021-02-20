@@ -5,19 +5,49 @@ namespace dge
 {
     public partial class dgWindow : dgtk.dgtk_Window
     {
+        private G2D.Drawer drawer2D;
+        private G2D.Writer writer2D;
+        private GUI.GraphicsUserInterface gui;
         private SndSystem sndSystem;
         public dgWindow(string Title) : base(1024, 600, Title) // Consuctor Básico.
         {
             sndSystem = new SndSystem(base.OpenALContext);
             this.MakeCurrent();
-            G2D.Drawer.Init_2D_Drawer();
-            G2D.Writer.InitGLWriter();
+            this.drawer2D = new G2D.Drawer();
+            this.writer2D = new G2D.Writer(this);
             this.UnMakeCurrent(); //No debería ser necesario.
+            dge.G2D.IDsDrawer.Init_IDs_Drawer(); // Iniciamos Código de visualizado de Ids.
+            
+        }
+
+        protected override void OnRenderFrame(object sender, dgtk_OnRenderEventArgs e)
+        {
+            base.OnRenderFrame(sender, e);
+            if (this.gui != null)
+            {
+                gui.Draw(this.drawer2D);
+            }
         }
 
         public SndSystem SoundSystem
         {
             get { return this.sndSystem; }
+        }
+
+        public GUI.GraphicsUserInterface GUI
+        {
+            set { this.gui = value; this.gui.ParentWindow = this; }
+            get { return this.gui; }
+        }
+
+        public G2D.Drawer Drawer2D
+        {
+            get { return this.drawer2D; }
+        }
+
+        public G2D.Writer Writer2D
+        {
+            get { return this.writer2D; }
         }
     }
 }
