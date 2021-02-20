@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections.Generic;
 
-using dge.G2D;
+using dge.Tools;
 
 using dgtk.OpenGL;
 
@@ -23,6 +23,18 @@ namespace dge.G2D
                 return d_imageshash[s_hash];
             }
             d_imageshash.Add(s_hash, p_LoadImage(filepath, s_hash));
+            return d_imageshash[s_hash];
+        }
+
+        public static TextureBufferObject LoadImage(Stream stream, string name)
+        {
+            string s_hash = name.GetHashCode().ToString();
+
+            if (d_imageshash.ContainsKey(s_hash))
+            {
+                return d_imageshash[s_hash];
+            }
+            d_imageshash.Add(s_hash, p_LoadImage(stream, s_hash, name));
             return d_imageshash[s_hash];
         }
 
@@ -53,6 +65,27 @@ namespace dge.G2D
             }
             #if DEBUG
             Console.WriteLine("Error: File "+filepath+"not exist.");
+            #endif
+            return tbo_ret;
+        }
+
+        private static TextureBufferObject p_LoadImage(Stream stream, string s_hash, string name)
+        {
+            TextureBufferObject tbo_ret = new TextureBufferObject();
+            if (stream != null)
+			{
+                Bitmap bp = new Bitmap(stream);
+                BitmapData bd = bp.LockBits(new Rectangle(0, 0, bp.Size.Width, bp.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+							
+				tbo_ret = p_LoadImageFromIntPTr(s_hash, bd.Width, bd.Height, bd.Scan0);
+							
+				bp.UnlockBits(bd);
+				bp.Dispose();
+				
+				return tbo_ret;
+            }
+            #if DEBUG
+            Console.WriteLine("Error: " + name + " Stream is Null.");
             #endif
             return tbo_ret;
         }
