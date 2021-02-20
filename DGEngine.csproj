@@ -78,7 +78,6 @@
     <Content Include="GUI\GraphicsUserInterface.cs" />
     <Content Include="GUI\BaseObjects\Control.cs" />
     <Content Include="G2D\InteractiveSurfaceContainer.cs" />
-    <Content Include="Tools\RenderTools.cs" />
     <Content Include="GUI\Window.cs" />
     <Content Include="GUI\BaseObjects\BaseGuiSurface.cs" />
     <EmbeddedResource Include="images\GuiDefaultTheme.png">
