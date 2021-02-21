@@ -9,7 +9,6 @@ using dge.GLSL;
 namespace dge.G2D
 {    public class Drawer
     {
-        internal bool inicialized;
         private bool b_invert_y;
         private uint VAO; // Vertex Array Object (indice que contiene toda la info del objeto.)
         private uint VBO; // Vertex Buffer Object (Indice del buffer Que contiene los atributos de vertice.)
@@ -32,60 +31,56 @@ namespace dge.G2D
 
         internal Drawer()
         {
-            if (!inicialized)
-            {
-                //dge.Core2D.PixelBufferObject_Select = GL.glGenBuffer();
+            //dge.Core2D.PixelBufferObject_Select = GL.glGenBuffer();
 
-                TVertex2D[] vertices = new TVertex2D[4];
-                vertices[0] = new TVertex2D(1, new Vector2(0, 0), new Vector2(0,0));
-                vertices[1] = new TVertex2D(2, new Vector2(0, 1), new Vector2(0,1));
-                vertices[2] = new TVertex2D(3, new Vector2(1, 1), new Vector2(1,1));
-                vertices[3] = new TVertex2D(4, new Vector2(1, 0), new Vector2(1,0));
+            TVertex2D[] vertices = new TVertex2D[4];
+            vertices[0] = new TVertex2D(1, new Vector2(0, 0), new Vector2(0,0));
+            vertices[1] = new TVertex2D(2, new Vector2(0, 1), new Vector2(0,1));
+            vertices[2] = new TVertex2D(3, new Vector2(1, 1), new Vector2(1,1));
+            vertices[3] = new TVertex2D(4, new Vector2(1, 0), new Vector2(1,0));
 
-                UInt32[] indices = new uint[]{0, 1, 2, 3, 0, 2};
+            UInt32[] indices = new uint[]{0, 1, 2, 3, 0, 2};
 
-                VAO = GL.glGenVertexArray(); 
-                VBO = GL.glGenBuffer();
-                EBO = GL.glGenBuffer();
+            VAO = GL.glGenVertexArray(); 
+            VBO = GL.glGenBuffer();
+            EBO = GL.glGenBuffer();
 
-                GL.glBindVertexArray(VAO);
-                GL.glBindBuffer(BufferTargetARB.GL_ARRAY_BUFFER, VBO);
-                GL.glBufferData<TVertex2D>(BufferTargetARB.GL_ARRAY_BUFFER, Marshal.SizeOf(typeof(TVertex2D))*4, vertices, BufferUsageARB.GL_STATIC_DRAW);
+            GL.glBindVertexArray(VAO);
+            GL.glBindBuffer(BufferTargetARB.GL_ARRAY_BUFFER, VBO);
+            GL.glBufferData<TVertex2D>(BufferTargetARB.GL_ARRAY_BUFFER, Marshal.SizeOf(typeof(TVertex2D))*4, vertices, BufferUsageARB.GL_STATIC_DRAW);
 
-                GL.glBindBuffer(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, EBO);
-                GL.glBufferData<UInt32>(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*indices.Length, indices, BufferUsageARB.GL_STATIC_DRAW);
-                
-                GL.glVertexAttribIPointer(0, 1, VertexAttribIType.GL_INT, Marshal.SizeOf(typeof(TVertex2D)), new IntPtr(0)); // ID
-                GL.glEnableVertexAttribArray(0);
+            GL.glBindBuffer(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, EBO);
+            GL.glBufferData<UInt32>(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*indices.Length, indices, BufferUsageARB.GL_STATIC_DRAW);
+            
+            GL.glVertexAttribIPointer(0, 1, VertexAttribIType.GL_INT, Marshal.SizeOf(typeof(TVertex2D)), new IntPtr(0)); // ID
+            GL.glEnableVertexAttribArray(0);
 
-                GL.glVertexAttribPointer(1, 2, VertexAttribPointerType.GL_FLOAT, dgtk.OpenGL.Boolean.GL_FALSE, Marshal.SizeOf(typeof(TVertex2D)), new IntPtr(sizeof(int))); // Vertex Position
-                GL.glEnableVertexAttribArray(1);
+            GL.glVertexAttribPointer(1, 2, VertexAttribPointerType.GL_FLOAT, dgtk.OpenGL.Boolean.GL_FALSE, Marshal.SizeOf(typeof(TVertex2D)), new IntPtr(sizeof(int))); // Vertex Position
+            GL.glEnableVertexAttribArray(1);
 
-                GL.glVertexAttribPointer(2, 2, VertexAttribPointerType.GL_FLOAT, dgtk.OpenGL.Boolean.GL_FALSE, Marshal.SizeOf(typeof(TVertex2D)), new IntPtr((sizeof(float)*2)+sizeof(int)/*Vector2 de posicion tiene dos float +  el uint de ID*/)); // Texcoords.
-                GL.glEnableVertexAttribArray(2);
+            GL.glVertexAttribPointer(2, 2, VertexAttribPointerType.GL_FLOAT, dgtk.OpenGL.Boolean.GL_FALSE, Marshal.SizeOf(typeof(TVertex2D)), new IntPtr((sizeof(float)*2)+sizeof(int)/*Vector2 de posicion tiene dos float +  el uint de ID*/)); // Texcoords.
+            GL.glEnableVertexAttribArray(2);
 
-                GL.glBindVertexArray(0);
+            GL.glBindVertexArray(0);
 
-                BasicShader = new Shader(ShadersSources.Basic2Dvs, ShadersSources.Basic2Dfs);
+            BasicShader = new Shader(ShadersSources.Basic2Dvs, ShadersSources.Basic2Dfs);
 
-                idUniform_texcoords = GL.glGetUniformLocation(BasicShader.ui_id, "utexcoords");
-                idUniform_v_size = GL.glGetUniformLocation(BasicShader.ui_id, "v_size");
-                idUniformTColor = GL.glGetUniformLocation(BasicShader.ui_id, "tColor");
-                idUniformColor = GL.glGetUniformLocation(BasicShader.ui_id, "Color");
-                idUniformMat_View = GL.glGetUniformLocation(BasicShader.ui_id, "view");
-                idUniformMat_Per = GL.glGetUniformLocation(BasicShader.ui_id, "perspective");
-                idUniformMat_Tra = GL.glGetUniformLocation(BasicShader.ui_id, "trasform");
-                idUniformSilhouette = GL.glGetUniformLocation(BasicShader.ui_id, "Silhouette");
-                idUniformTexturePassed = GL.glGetUniformLocation(BasicShader.ui_id, "TexturePassed");
+            idUniform_texcoords = GL.glGetUniformLocation(BasicShader.ui_id, "utexcoords");
+            idUniform_v_size = GL.glGetUniformLocation(BasicShader.ui_id, "v_size");
+            idUniformTColor = GL.glGetUniformLocation(BasicShader.ui_id, "tColor");
+            idUniformColor = GL.glGetUniformLocation(BasicShader.ui_id, "Color");
+            idUniformMat_View = GL.glGetUniformLocation(BasicShader.ui_id, "view");
+            idUniformMat_Per = GL.glGetUniformLocation(BasicShader.ui_id, "perspective");
+            idUniformMat_Tra = GL.glGetUniformLocation(BasicShader.ui_id, "trasform");
+            idUniformSilhouette = GL.glGetUniformLocation(BasicShader.ui_id, "Silhouette");
+            idUniformTexturePassed = GL.glGetUniformLocation(BasicShader.ui_id, "TexturePassed");
 
-                DefineTransparentColor(new Color4(0f, 1f, 0f, 1f));
-                DefineViewMatrix(dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
+            DefineTransparentColor(new Color4(0f, 1f, 0f, 1f));
+            DefineViewMatrix(dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
 
-                GL.glEnable(EnableCap.GL_BLEND);
-                GL.glBlendFunc(BlendingFactor.GL_SRC_ALPHA, BlendingFactor.GL_ONE_MINUS_SRC_ALPHA);
-                //GL.glEnable(EnableCap.GL_TEXTURE_2D);
-                inicialized = true;
-            }
+            GL.glEnable(EnableCap.GL_BLEND);
+            GL.glBlendFunc(BlendingFactor.GL_SRC_ALPHA, BlendingFactor.GL_ONE_MINUS_SRC_ALPHA);
+            //GL.glEnable(EnableCap.GL_TEXTURE_2D);
         }
 
         /// <sumary>
