@@ -122,8 +122,7 @@ namespace dge.GUI
             this.RemoveControl(control.ID); // Eliminar Control Hijo.
         }
 
-
-        internal void Draw(G2D.Drawer drawer)
+        internal void Draw(G2D.GuiDrawer drawer)
         {
             if (this.Update)
             {
