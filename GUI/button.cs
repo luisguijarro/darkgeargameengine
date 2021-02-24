@@ -1,39 +1,57 @@
 using System;
 using dgtk;
+using dgtk.Math;
+using dgtk.Graphics;
 
 namespace dge.GUI
 {
     public class Button : BaseObjects.Control
     {
-        protected bool pulsed;
-        public Button() : base(22,22)
+        protected bool b_pulsed;
+        public Button() : this(22,22)
         {
-            this.pulsed = false;
+            
+        }
+        public Button(uint width, uint height) : base(width,height)
+        {
+            this.setPulsed(false);
 
             float multHor = 1f/(float)GraphicsUserInterface.DefaultThemeTBO.ui_width;
             float multVer = 1f/(float)GraphicsUserInterface.DefaultThemeTBO.ui_height;
 
-            this.f_Texcoord0x = multHor*1f;
-            this.f_Texcoord0y = multVer*1f;
-            this.f_Texcoord1x = multHor*23f;
-            this.f_Texcoord1x = multVer*23f;
+            float f_hor = this.ui_width;
+            float f_ver = this.ui_width;
 
-            //Esto debe ir en el Evento principal.
-            /*this.MouseDown += delegate 
-            { 
-                if (dge.Core2D.SelectedID == this.ui_id) 
-                {
-                    this.MouseDown(this, new bla_bla_bla_args e); = true; 
-                }
-            };*/
-            this.MouseUp += delegate { this.pulsed = false; };
+            this.MarginsFromTheEdge = new Vector4(2,2,2,2);
+            
+            this.Texcoords = new float[]
+            {
+                multHor*2f, multHor*3f, multHor*21f, multHor*23f, 
+                multVer*2f, multVer*3f, multVer*21f, multVer*23f
+            };      
+
+            this.MouseUp += delegate { this.setPulsed(false); };
+        }
+
+        private void setPulsed(bool pulsed)
+        {
+            this.b_pulsed = pulsed;
+            if (this.b_pulsed)
+            {
+                float multHor = 1f/(float)GraphicsUserInterface.DefaultThemeTBO.ui_width;
+                this.tcDisplacement = new Vector2(multHor*24f, 0f);
+            }
+            else
+            {
+                this.tcDisplacement = new Vector2(0,0);
+            }
         }
 
         protected override void MDown(object sender, dgtk_MouseButtonEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
-                this.pulsed = true;
+                this.setPulsed(true);
                 base.MDown(sender, e);
             }
         }
@@ -44,21 +62,8 @@ namespace dge.GUI
             {
                 base.MUp(sender, e);
             }
-            this.pulsed = false;
+            this.setPulsed(false);
         }
 
-        internal override void Draw(G2D.Drawer drawer)
-        {
-            float multHor = 1f/(float)GraphicsUserInterface.DefaultThemeTBO.ui_width;
-            float multVer = 1f/(float)GraphicsUserInterface.DefaultThemeTBO.ui_height;
-            if (pulsed)
-            {
-                base.Draw(drawer, multHor*25f, multVer*1f, multHor*47f, multVer*23f);
-            }
-            else
-            {
-                base.Draw(drawer, multHor*1f, multVer*1f, multHor*23f, multVer*23f);
-            }
-        }
     }
 }
