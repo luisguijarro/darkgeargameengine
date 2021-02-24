@@ -86,5 +86,7 @@
     <Content Include="GUI\button.cs" />
     <Content Include="GUI\GuiIDsDrawer.cs" />
     <Content Include="G2D\IDsDrawer.cs" />
+    <Content Include="G2D\GuiDrawer.cs" />
+    <Content Include="G2D\ShaderSources\BasicGuiShader.cs" />
   </ItemGroup>
 </Project>
