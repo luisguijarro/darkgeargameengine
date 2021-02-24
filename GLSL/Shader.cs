@@ -33,7 +33,7 @@ namespace dge.GLSL
             if (glResult<=0)
             {          
                 string s_log = GL.glGetShaderInfoLog(ui_vs);
-                Console.WriteLine(((ErrorCode)glResult).ToString()+": "+s_log);
+                Console.WriteLine(((ErrorCode)glResult).ToString()+" (vs): "+s_log);
             }
             #endif
 
@@ -45,7 +45,7 @@ namespace dge.GLSL
             if (glResult<=0)
             {          
                 string s_log = GL.glGetShaderInfoLog(ui_fs);
-                Console.WriteLine(((ErrorCode)glResult).ToString()+": "+s_log);
+                Console.WriteLine(((ErrorCode)glResult).ToString()+" (fs): "+s_log);
             }
             #endif
 
@@ -63,7 +63,7 @@ namespace dge.GLSL
                 if (glResult<=0)
                 {          
                     string s_log = GL.glGetShaderInfoLog(ui_gs);
-                    Console.WriteLine(((ErrorCode)glResult).ToString()+": "+s_log);
+                    Console.WriteLine(((ErrorCode)glResult).ToString()+" (gs): "+s_log);
                 }
                 #endif
 
