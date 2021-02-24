@@ -2,16 +2,42 @@ using System;
 using System.Collections.Generic;
 
 using dge.GUI;
+using dge.G2D;
+using dgtk.Math;
+using dgtk.Graphics;
+using dgtk.OpenGL;
 
 namespace dge.GUI.BaseObjects
 {
-    public class BaseGuiSurface : dge.G2D.InteractiveSurfaceContainer
+    public class BaseGuiSurface
     {
+        protected uint ui_id; // ID De objeto 2D.
+        private Color4 idColor; // Color para la selección de ID.
+
+        protected int i_x; // Coordenada X de posición de Objeto
+        protected int i_y; // Coordenada Y de posición de Objeto)
+        protected uint ui_width; // Ancho del Objeto en Pixeles
+        protected uint ui_height; // Alto dle objeto en pixeles.
+
+        #region CONTENIDO:
+        private uint FrameBuffer; // Frame Buffer del renderizado de objetos contenidos.
+        private uint DepthRenderBuffer; // Render Bufer de renderizado de objetos contenidos.
+        internal bool contentUpdate; // Indicador de su se debe o no actualizar el conteido del objeto.
+
+        #endregion
+
+        protected TextureBufferObject textureBufferObject; // Textura base del Objeto. En Versión posterior se trasladará al tema del GUI.
+
+        protected float[] Texcoords; // Coordenadas de textura base para el objeto.
+        protected Vector2 tcDisplacement; // Variación de las coordenadas para eventos visuales como Pulsaciones de un botón.
+
+        protected Vector4 MarginsFromTheEdge; // Margenes desde el borde al relleno del objeto.
+
         private bool b_visible; // ¿Es Visible la ventana?
-        private GraphicsUserInterface gui;
+        private GraphicsUserInterface gui; // GUI al que pertenece.
         private Dictionary<uint, BaseGuiSurface> d_guiSurfaces; // Todos los Controles de la ventana.
         internal List<uint> VisibleSurfaceOrder; // Orden de los Controles de la ventana.
-        private BaseGuiSurface parentGuiSurface;
+        private BaseGuiSurface parentGuiSurface; // Padre cuando es contenido.
         
 		public event EventHandler<dgtk.dgtk_MouseButtonEventArgs> MouseDown; // Evento que se da cuando se pulsa un botón del ratón.
 		public event EventHandler<dgtk.dgtk_MouseButtonEventArgs> MouseUp; // Evento que se da cuando se suelta un botón del ratón.
@@ -26,11 +52,26 @@ namespace dge.GUI.BaseObjects
             
         }
 
-        public BaseGuiSurface(uint witdh, uint height) : base(witdh, height)
+        public BaseGuiSurface(uint width, uint height) //: base(witdh, height)
         {
+            this.ui_id = Core2D.GetID(); // Obtenemos ID de la superficie.
+            byte[] colorvalues = Core2D.DeUIntAByte4(this.ui_id); // Obtenemos color a partir del ID.
+            this.idColor = new Color4((byte)colorvalues[0], (byte)colorvalues[1], (byte)colorvalues[2], (byte)colorvalues[3]); // Establecemos color de ID.
+
+            this.ui_width = width; // Establecemos ancho del objeto.
+            this.ui_height = height; // Establecemos Alto del objeto.
+
+            this.contentUpdate = false; // Por defecto el contenido no actualiza.
+            this.FrameBuffer = GL.glGenFramebuffer(); // Generamos el Frame Buffer de renderizado del contenido.
+            this.DepthRenderBuffer = GL.glGenRenderbuffer(); // Generamos el Render Buffer del renderizado del contenido.
+            this.UpdateFrameAnbdRenderBuffers(); // Actualización de Bufferes de renderizado del contenido.
+
             this.b_visible = true; // El guiSurface es visible por defecto.
-            this.d_guiSurfaces = new Dictionary<uint, BaseGuiSurface>();
-            this.VisibleSurfaceOrder = new List<uint>();
+            this.d_guiSurfaces = new Dictionary<uint, BaseGuiSurface>(); // Lista de objetos Hijo.
+            this.VisibleSurfaceOrder = new List<uint>(); // Lista de objetos hijo visibles.
+
+            this.MarginsFromTheEdge = new Vector4(2, 2, 2, 2); // Margenes entre el borde y los vertices internos.
+
             this.MouseDown += delegate {}; //Inicialización del evento por defecto.
             this.MouseUp += delegate {}; //Inicialización del evento por defecto.
             this.MouseMove += delegate {}; //Inicialización del evento por defecto.
@@ -40,7 +81,32 @@ namespace dge.GUI.BaseObjects
             this.KeyCharReturned += delegate {}; //Inicialización del evento por defecto.
         }
 
-        #region Publics
+        ~BaseGuiSurface()
+        {
+            Core2D.ReleaseID(this.ui_id); // Liberamos ID de la superficie.
+        }
+
+        #region PRIVATES:
+
+        private void UpdateFrameAnbdRenderBuffers()
+        {
+            GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, this.textureBufferObject.ui_ID);
+
+            GL.glTexImage2D(TextureTarget.GL_TEXTURE_2D, 0, InternalFormat.GL_RGBA, (int)this.textureBufferObject.ui_width, (int)this.textureBufferObject.ui_height, 0, PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, new IntPtr(0));
+
+            GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_MAG_FILTER, (int)TextureMagFilter.GL_NEAREST);
+            GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_MIN_FILTER, (int)TextureMagFilter.GL_NEAREST);
+
+            GL.glBindRenderbuffer(RenderbufferTarget.GL_RENDERBUFFER, this.DepthRenderBuffer);
+            GL.glRenderbufferStorage(RenderbufferTarget.GL_RENDERBUFFER, InternalFormat.GL_DEPTH_COMPONENT, (int)this.textureBufferObject.ui_width, (int)this.textureBufferObject.ui_height);
+            GL.glFramebufferRenderbuffer(FramebufferTarget.GL_FRAMEBUFFER, FramebufferAttachment.GL_DEPTH_ATTACHMENT, RenderbufferTarget.GL_RENDERBUFFER, this.DepthRenderBuffer);
+
+            GL.glFramebufferTexture(FramebufferTarget.GL_FRAMEBUFFER, FramebufferAttachment.GL_COLOR_ATTACHMENT0, this.textureBufferObject.ui_ID, 0);
+        }
+
+        #endregion
+
+        #region Protected
 
         protected void AddSurface(BaseGuiSurface surface)
         {
@@ -51,7 +117,7 @@ namespace dge.GUI.BaseObjects
                 if (surface.Visible)
                 {
                     this.VisibleSurfaceOrder.Add(surface.ID); // Si es Visible que se muestre.
-                    this.ContentUpdate = true;
+                    this.contentUpdate = true;
                 }
             }
         }
@@ -65,7 +131,7 @@ namespace dge.GUI.BaseObjects
                 if (this.VisibleSurfaceOrder.Contains(id))
                 {
                     this.VisibleSurfaceOrder.Remove(id); // Sacar de la lista de controles Visibles.
-                    this.ContentUpdate = true;
+                    this.contentUpdate = true;
                 }
             }
         }
@@ -85,18 +151,21 @@ namespace dge.GUI.BaseObjects
             return this.d_guiSurfaces.ContainsKey(surface.ID);
         }
 
-        protected override void DrawContent(G2D.Drawer drawer)
+        internal virtual void DrawID()
         {
-            base.DrawContent(drawer);
+            dge.G2D.IDsDrawer.DrawGL(this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0); // Pintamos ID de la superficie.
+        }
+
+        internal virtual void DrawContent(G2D.GuiDrawer drawer)
+        {
             for (int i=0;i<VisibleSurfaceOrder.Count;i++)
             {
                 this.d_guiSurfaces[VisibleSurfaceOrder[i]].Draw(drawer);
             }
         }
 
-        protected override void DrawContentIDs()
+        protected virtual void DrawContentIDs()
         {
-            base.DrawContentIDs();
             for (int i=0;i<VisibleSurfaceOrder.Count;i++)
             {
                 this.d_guiSurfaces[VisibleSurfaceOrder[i]].DrawID();
@@ -104,6 +173,19 @@ namespace dge.GUI.BaseObjects
         }
 
         #endregion
+
+        internal virtual void Draw(GuiDrawer drawer)
+        {
+            if (this.contentUpdate) 
+            {
+                GL.glBindFramebuffer(FramebufferTarget.GL_FRAMEBUFFER, this.FrameBuffer);
+                GL.glViewport(0, 0, (int)this.textureBufferObject.ui_width, (int)this.textureBufferObject.ui_height);
+                DrawContent(drawer);
+                GL.glBindFramebuffer(FramebufferTarget.GL_FRAMEBUFFER, 0);
+            }
+
+            drawer.DrawGL(GraphicsUserInterface.DefaultThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge.ToArray(), Texcoords, this.tcDisplacement.ToArray(), 0);
+        }
 
         #region Events:
 
@@ -145,6 +227,35 @@ namespace dge.GUI.BaseObjects
         #endregion
 
         #region Properties
+
+        public uint ID
+        {
+            get { return this.ui_id; }
+        }
+
+        public int X
+        {
+            set { this.i_x = value;}
+            get { return this.i_x; }
+        }
+
+        public int Y
+        {
+            set { this.i_y = value;}
+            get { return this.i_y; }
+        }
+
+        public uint Width
+        {
+            set { this.ui_width = value; }
+            get { return this.ui_width; }
+        }
+
+        public uint Height
+        {
+            set { this.ui_height = value; }
+            get { return this.ui_height; }
+        }
 
         internal BaseGuiSurface ParentGuiSurface
         {
