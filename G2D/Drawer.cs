@@ -80,7 +80,6 @@ namespace dge.G2D
 
             GL.glEnable(EnableCap.GL_BLEND);
             GL.glBlendFunc(BlendingFactor.GL_SRC_ALPHA, BlendingFactor.GL_ONE_MINUS_SRC_ALPHA);
-            //GL.glEnable(EnableCap.GL_TEXTURE_2D);
         }
 
         /// <sumary>
