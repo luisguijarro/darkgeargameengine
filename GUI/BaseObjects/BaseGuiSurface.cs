@@ -28,13 +28,14 @@ namespace dge.GUI.BaseObjects
 
         protected TextureBufferObject textureBufferObject; // Textura base del Objeto. En Versión posterior se trasladará al tema del GUI.
 
+        protected TextureBufferObject TBO_InternalObjects; // Textura base para renderizado de Contenido.
+
         protected float[] Texcoords; // Coordenadas de textura base para el objeto.
         protected Vector2 tcDisplacement; // Variación de las coordenadas para eventos visuales como Pulsaciones de un botón.
-
         protected Vector4 MarginsFromTheEdge; // Margenes desde el borde al relleno del objeto.
 
         private bool b_visible; // ¿Es Visible la ventana?
-        private GraphicsUserInterface gui; // GUI al que pertenece.
+        protected GraphicsUserInterface gui; // GUI al que pertenece.
         private Dictionary<uint, BaseGuiSurface> d_guiSurfaces; // Todos los Controles de la ventana.
         internal List<uint> VisibleSurfaceOrder; // Orden de los Controles de la ventana.
         private BaseGuiSurface parentGuiSurface; // Padre cuando es contenido.
@@ -54,6 +55,7 @@ namespace dge.GUI.BaseObjects
 
         public BaseGuiSurface(uint width, uint height) //: base(witdh, height)
         {
+            dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
             this.ui_id = Core2D.GetID(); // Obtenemos ID de la superficie.
             byte[] colorvalues = Core2D.DeUIntAByte4(this.ui_id); // Obtenemos color a partir del ID.
             this.idColor = new Color4((byte)colorvalues[0], (byte)colorvalues[1], (byte)colorvalues[2], (byte)colorvalues[3]); // Establecemos color de ID.
@@ -62,8 +64,11 @@ namespace dge.GUI.BaseObjects
             this.ui_height = height; // Establecemos Alto del objeto.
 
             this.contentUpdate = false; // Por defecto el contenido no actualiza.
+            this.TBO_InternalObjects = new TextureBufferObject("InternalTBO", width, height, GL.glGenTexture(), this.ui_id.GetHashCode().ToString());
             this.FrameBuffer = GL.glGenFramebuffer(); // Generamos el Frame Buffer de renderizado del contenido.
             this.DepthRenderBuffer = GL.glGenRenderbuffer(); // Generamos el Render Buffer del renderizado del contenido.
+
+            dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
             this.UpdateFrameAnbdRenderBuffers(); // Actualización de Bufferes de renderizado del contenido.
 
             this.b_visible = true; // El guiSurface es visible por defecto.
@@ -71,6 +76,12 @@ namespace dge.GUI.BaseObjects
             this.VisibleSurfaceOrder = new List<uint>(); // Lista de objetos hijo visibles.
 
             this.MarginsFromTheEdge = new Vector4(2, 2, 2, 2); // Margenes entre el borde y los vertices internos.
+            this.tcDisplacement = new Vector2(0,0);
+            this.Texcoords = new float[]
+            {
+                0f, 0.33f, 0.66f, 1f, 
+                0f, 0.33f, 0.66f, 1f
+            };
 
             this.MouseDown += delegate {}; //Inicialización del evento por defecto.
             this.MouseUp += delegate {}; //Inicialización del evento por defecto.
@@ -90,18 +101,24 @@ namespace dge.GUI.BaseObjects
 
         private void UpdateFrameAnbdRenderBuffers()
         {
-            GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, this.textureBufferObject.ui_ID);
+            dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
+            this.TBO_InternalObjects.ui_width = this.ui_width; // Actualizamos dimensiones de textura.
+            this.TBO_InternalObjects.ui_height = this.ui_height; // Actualizamos dimensiones de textura.
+            GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, this.TBO_InternalObjects.ui_ID);
 
-            GL.glTexImage2D(TextureTarget.GL_TEXTURE_2D, 0, InternalFormat.GL_RGBA, (int)this.textureBufferObject.ui_width, (int)this.textureBufferObject.ui_height, 0, PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, new IntPtr(0));
+            GL.glTexImage2D(TextureTarget.GL_TEXTURE_2D, 0, InternalFormat.GL_RGBA, (int)this.TBO_InternalObjects.ui_width, (int)this.TBO_InternalObjects.ui_height, 0, PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, new IntPtr(0));
 
             GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_MAG_FILTER, (int)TextureMagFilter.GL_NEAREST);
             GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_MIN_FILTER, (int)TextureMagFilter.GL_NEAREST);
 
+            GL.glBindFramebuffer(FramebufferTarget.GL_FRAMEBUFFER, this.FrameBuffer);
             GL.glBindRenderbuffer(RenderbufferTarget.GL_RENDERBUFFER, this.DepthRenderBuffer);
-            GL.glRenderbufferStorage(RenderbufferTarget.GL_RENDERBUFFER, InternalFormat.GL_DEPTH_COMPONENT, (int)this.textureBufferObject.ui_width, (int)this.textureBufferObject.ui_height);
+            GL.glRenderbufferStorage(RenderbufferTarget.GL_RENDERBUFFER, InternalFormat.GL_DEPTH_COMPONENT, (int)this.TBO_InternalObjects.ui_width, (int)this.TBO_InternalObjects.ui_height);
             GL.glFramebufferRenderbuffer(FramebufferTarget.GL_FRAMEBUFFER, FramebufferAttachment.GL_DEPTH_ATTACHMENT, RenderbufferTarget.GL_RENDERBUFFER, this.DepthRenderBuffer);
 
-            GL.glFramebufferTexture(FramebufferTarget.GL_FRAMEBUFFER, FramebufferAttachment.GL_COLOR_ATTACHMENT0, this.textureBufferObject.ui_ID, 0);
+            GL.glFramebufferTexture(FramebufferTarget.GL_FRAMEBUFFER, FramebufferAttachment.GL_COLOR_ATTACHMENT0, this.TBO_InternalObjects.ui_ID, 0);
+            GL.glBindFramebuffer(FramebufferTarget.GL_FRAMEBUFFER, 0);
+            dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
         }
 
         #endregion
@@ -151,20 +168,15 @@ namespace dge.GUI.BaseObjects
             return this.d_guiSurfaces.ContainsKey(surface.ID);
         }
 
-        internal virtual void DrawID()
-        {
-            dge.G2D.IDsDrawer.DrawGL(this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0); // Pintamos ID de la superficie.
-        }
-
-        internal virtual void DrawContent(G2D.GuiDrawer drawer)
+        internal virtual void DrawContent(G2D.GuiDrawer drawer, G2D.Drawer d2)
         {
             for (int i=0;i<VisibleSurfaceOrder.Count;i++)
             {
-                this.d_guiSurfaces[VisibleSurfaceOrder[i]].Draw(drawer);
+                this.d_guiSurfaces[VisibleSurfaceOrder[i]].Draw(drawer, d2);
             }
         }
 
-        protected virtual void DrawContentIDs()
+        internal virtual void DrawContentIDs()
         {
             for (int i=0;i<VisibleSurfaceOrder.Count;i++)
             {
@@ -174,20 +186,72 @@ namespace dge.GUI.BaseObjects
 
         #endregion
 
-        internal virtual void Draw(GuiDrawer drawer)
+        internal virtual void Draw(GuiDrawer drawer, Drawer d2)
         {
-            if (this.contentUpdate) 
+            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
+                GL.glPushAttrib(AttribMask.GL_VIEWPORT_BIT | AttribMask.GL_COLOR_BUFFER_BIT);
                 GL.glBindFramebuffer(FramebufferTarget.GL_FRAMEBUFFER, this.FrameBuffer);
-                GL.glViewport(0, 0, (int)this.textureBufferObject.ui_width, (int)this.textureBufferObject.ui_height);
-                DrawContent(drawer);
+                //GL.glBufferData(BufferTargetARB.GL_PIXEL_PACK_BUFFER, (int)(this.ui_width*this.ui_height*4), IntPtr.Zero, BufferUsageARB.GL_STREAM_READ);
+            
+                //Console.WriteLine("1:"+(ErrorCode)GL.glGetError());
+                GL.glViewport(0, 0, (int)this.ui_width, (int)this.ui_height);
+                //Console.WriteLine("2:"+(ErrorCode)GL.glGetError());
+                //Console.WriteLine("STATUS1: "+(FramebufferStatus)GL.glCheckFramebufferStatus(FramebufferTarget.GL_FRAMEBUFFER));
+                dgtk.Math.Mat4 m4 = drawer.m4P;
+                drawer.DefinePerspectiveMatrix(0,this.ui_height,this.ui_width, 0);
+                GL.glClearColor(dgtk.Graphics.Color4.Red);
+                GL.glClear(ClearBufferMask.GL_COLOR_BUFFER_BIT);
+                DrawContent(drawer, d2);
+                drawer.DefinePerspectiveMatrix(m4);
+                
+                //Console.WriteLine("STATUS2: "+(FramebufferStatus)GL.glCheckFramebufferStatus(FramebufferTarget.GL_FRAMEBUFFER));
+                //GL.glReadPixels(0, 0, (int)this.ui_width, (int)this.ui_height, PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, IntPtr.Zero);
+                //Console.WriteLine("3:"+(ErrorCode)GL.glGetError());
                 GL.glBindFramebuffer(FramebufferTarget.GL_FRAMEBUFFER, 0);
+                //Console.WriteLine("4:"+(ErrorCode)GL.glGetError());
+                //GL.glViewport(0, 0, (int)this.gui.ParentWindow.Width, (int)this.gui.ParentWindow.Height);
+                GL.glPopAttrib();
+                d2.Draw(this.TBO_InternalObjects.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, 0f, 0f, 1f, 1f);            
             }
 
             drawer.DrawGL(GraphicsUserInterface.DefaultThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge.ToArray(), Texcoords, this.tcDisplacement.ToArray(), 0);
         }
 
-        #region Events:
+        internal virtual void DrawID()
+        {
+            //dge.G2D.IDsDrawer.DrawGL2D(this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0f);
+            dge.G2D.IDsDrawer.DrawGuiGL(GraphicsUserInterface.DefaultThemeTBO.ID, this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge.ToArray(), Texcoords, this.tcDisplacement.ToArray(), 1); // Pintamos ID de la superficie.
+
+            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+            {
+                GL.glPushAttrib(AttribMask.GL_VIEWPORT_BIT | AttribMask.GL_COLOR_BUFFER_BIT);
+                GL.glBindFramebuffer(FramebufferTarget.GL_FRAMEBUFFER, this.FrameBuffer);
+                //GL.glBufferData(BufferTargetARB.GL_PIXEL_PACK_BUFFER, (int)(this.ui_width*this.ui_height*4), IntPtr.Zero, BufferUsageARB.GL_STREAM_READ);
+            
+                //Console.WriteLine("1:"+(ErrorCode)GL.glGetError());
+                GL.glViewport(0, 0, (int)this.ui_width, (int)this.ui_height);
+                //Console.WriteLine("2:"+(ErrorCode)GL.glGetError());
+                //Console.WriteLine("STATUS1: "+(FramebufferStatus)GL.glCheckFramebufferStatus(FramebufferTarget.GL_FRAMEBUFFER));
+                dgtk.Math.Mat4 m4 = dge.G2D.IDsDrawer.m4P;
+                dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0,0,this.ui_width, this.ui_height, true);
+                GL.glClearColor(dgtk.Graphics.Color4.Transparent);
+                GL.glClear(ClearBufferMask.GL_COLOR_BUFFER_BIT);
+                DrawContentIDs();
+                dge.G2D.IDsDrawer.DefinePerspectiveMatrix(m4);
+                
+                //Console.WriteLine("STATUS2: "+(FramebufferStatus)GL.glCheckFramebufferStatus(FramebufferTarget.GL_FRAMEBUFFER));
+                //GL.glReadPixels(0, 0, (int)this.ui_width, (int)this.ui_height, PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, IntPtr.Zero);
+                //Console.WriteLine("3:"+(ErrorCode)GL.glGetError());
+                GL.glBindFramebuffer(FramebufferTarget.GL_FRAMEBUFFER, 0);
+                //Console.WriteLine("4:"+(ErrorCode)GL.glGetError());
+                //GL.glViewport(0, 0, (int)this.gui.ParentWindow.Width, (int)this.gui.ParentWindow.Height);
+                GL.glPopAttrib();
+                dge.G2D.IDsDrawer.DrawGL2D(this.TBO_InternalObjects.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, 0f, 0f, 1f, 1f, 0);            
+            }
+        }
+
+        #region Events:, 0, 0f, 0f, 1f, 1f, 0
 
         protected virtual void MDown(object sender, dgtk.dgtk_MouseButtonEventArgs e)
         {

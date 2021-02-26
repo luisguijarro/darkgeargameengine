@@ -88,5 +88,6 @@
     <Content Include="G2D\IDsDrawer.cs" />
     <Content Include="G2D\GuiDrawer.cs" />
     <Content Include="G2D\ShaderSources\BasicGuiShader.cs" />
+    <Content Include="GUI\GuiTheme.cs" />
   </ItemGroup>
 </Project>

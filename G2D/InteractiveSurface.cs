@@ -35,7 +35,7 @@ namespace dge.G2D
         internal virtual void DrawID()
         {
             //dge.G2D.Drawer.Draw(this.idColor, base.i_x, base.i_y, i_width, i_height, 0); // Pintamos ID de la superficie.
-            dge.G2D.IDsDrawer.DrawGL(this.idColor, base.i_x, base.i_y, base.ui_width, base.ui_height, 0); // Pintamos ID de la superficie.
+            dge.G2D.IDsDrawer.DrawGL2D(this.idColor, base.i_x, base.i_y, base.ui_width, base.ui_height, 0); // Pintamos ID de la superficie.
             //dge.G2D.IDsDrawer.DrawGL(this.textureBufferObject.ID, this.idColor, base.i_x, base.i_y, i_width, i_height, 0, this.f_Texcoord0x, this.f_Texcoord0y, this.f_Texcoord1x, this.f_Texcoord1y, 1); // Pintamos ID de la superficie.
         }
 

@@ -122,18 +122,18 @@ namespace dge.GUI
             this.RemoveControl(control.ID); // Eliminar Control Hijo.
         }
 
-        internal void Draw(G2D.GuiDrawer drawer)
+        internal void Draw(G2D.GuiDrawer drawer, G2D.Drawer d2)
         {
             if (this.Update)
             {
                 for (int i=0;i<VisibleWindowsOrder.Count;i++)
                 {
-                    this.d_Windows[VisibleWindowsOrder[i]].Draw(drawer); // Pintamos Ventanas Visibles.
+                    this.d_Windows[VisibleWindowsOrder[i]].Draw(drawer, d2); // Pintamos Ventanas Visibles.
                 }
 
                 for (int i=0;i<VisibleControlsOrder.Count;i++)
                 {
-                    this.d_Controls[VisibleControlsOrder[i]].Draw(drawer); // Pintamos Controles Visibles.
+                    this.d_Controls[VisibleControlsOrder[i]].Draw(drawer, d2); // Pintamos Controles Visibles.
                 }
             }
         }

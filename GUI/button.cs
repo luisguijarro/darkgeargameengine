@@ -2,6 +2,7 @@ using System;
 using dgtk;
 using dgtk.Math;
 using dgtk.Graphics;
+using dge.G2D;
 
 namespace dge.GUI
 {
@@ -64,6 +65,11 @@ namespace dge.GUI
             }
             this.setPulsed(false);
         }
-
+        /*
+        internal override void Draw(GuiDrawer drawer)
+        {
+            base.Draw(drawer);
+        }
+        */
     }
 }

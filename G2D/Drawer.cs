@@ -113,7 +113,7 @@ namespace dge.G2D
         public void DefinePerspectiveMatrix(float x, float y, float with, float height, bool invert_y)
         {
             b_invert_y = invert_y;
-            dgtk.Math.Mat4 m4 = dgtk.Math.MatrixTools.MakeOrthoPerspectiveMatrix(0, with, invert_y ? height : 0, invert_y ? 0 : height, -100f, 100f);
+            dgtk.Math.Mat4 m4 = dgtk.Math.MatrixTools.MakeOrthoPerspectiveMatrix(x, with, invert_y ? height : y, invert_y ? y : height, -100f, 100f);
             BasicShader.Use();
             GL.glUniformMatrix(idUniformMat_Per, dgtk.OpenGL.Boolean.GL_FALSE, m4);
         }

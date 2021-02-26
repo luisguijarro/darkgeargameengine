@@ -6,10 +6,15 @@ namespace dge.GUI
 {
     public class Window : dge.GUI.BaseObjects.BaseGuiSurface
     {
-        private GraphicsUserInterface gui;
         public Window() : base(480, 270)
         {
-            
+            this.MarginsFromTheEdge = new dgtk.Math.Vector4(2, 22, 2, 2);
+            float mult = (1f/256f);
+            this.Texcoords = new float[]
+            {
+                mult*2f, mult*3, mult*21, mult*23f, 
+                mult*121f, mult*143f, mult*163, mult*165f
+            };
         }
 
 

@@ -28,7 +28,7 @@ namespace dge
             base.OnRenderFrame(sender, e);
             if (this.gui != null)
             {
-                gui.Draw(this.GuiDrawer2D);
+                gui.Draw(this.GuiDrawer2D, this.drawer2D);
             }
         }
 
