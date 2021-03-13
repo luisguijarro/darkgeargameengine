@@ -8,13 +8,21 @@ namespace dge.GUI
 {
     public class GraphicsUserInterface
     {
+        internal GuiTheme gt_ActualGuiTheme;
         private dgWindow parentWindow;
+        internal G2D.GuiDrawer GuiDrawer;
+        internal G2D.Writer Writer;
+        internal G2D.Drawer Drawer;
         internal bool Update;
-        internal static dge.G2D.TextureBufferObject DefaultThemeTBO;
+        //internal static dge.G2D.TextureBufferObject DefaultThemeTBO;
+        //internal static dge.G2D.TextureBufferObject DefaultThemeSltTBO;
         private Dictionary<uint, Window> d_Windows; // Todas las Ventanas del Interface.
         internal List<uint> VisibleWindowsOrder; // Orden de las Ventanas Visibles.
         private Dictionary<uint, BaseObjects.Control> d_Controls; // Todos los Controles fuera de ventanas.
         internal List<uint> VisibleControlsOrder; // Orden de los Controles fuera de ventanas.
+
+        internal uint ui_width; // Para calculos internos de ViewPorts De elementos.
+        internal uint ui_height; // Para calculos internos de ViewPorts De elementos.
 
 		internal event EventHandler<dgtk.dgtk_MouseButtonEventArgs> MouseDown; // Evento que se da cuando se pulsa un botón del ratón.
 		internal event EventHandler<dgtk.dgtk_MouseButtonEventArgs> MouseUp; // Evento que se da cuando se suelta un botón del ratón.
@@ -26,11 +34,11 @@ namespace dge.GUI
 		
         public GraphicsUserInterface()
         {
-            
-
-            if (DefaultThemeTBO.ui_ID<1)
+            if (gt_ActualGuiTheme == null)
             {
-                DefaultThemeTBO = dge.G2D.Tools.LoadImage(Assembly.GetExecutingAssembly().GetManifestResourceStream("dge.images.GuiDefaultTheme.png"), "GuiDefaultTheme");
+                gt_ActualGuiTheme = GuiTheme.DefaultGuiTheme;
+                //DefaultThemeTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultTheme.png"), "GuiDefaultTheme");
+                //DefaultThemeSltTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultThemeSlt.png"), "GuiDefaultThemeSlt");
             }
 
             this.Update = true; //Forzamos para pruebas.
@@ -122,33 +130,29 @@ namespace dge.GUI
             this.RemoveControl(control.ID); // Eliminar Control Hijo.
         }
 
-        internal void Draw(G2D.GuiDrawer drawer, G2D.Drawer d2)
+        internal void Draw()
         {
             if (this.Update)
             {
                 for (int i=0;i<VisibleWindowsOrder.Count;i++)
                 {
-                    this.d_Windows[VisibleWindowsOrder[i]].Draw(drawer, d2); // Pintamos Ventanas Visibles.
+                    this.d_Windows[VisibleWindowsOrder[i]].Draw(); // Pintamos Ventanas Visibles.
                 }
 
                 for (int i=0;i<VisibleControlsOrder.Count;i++)
                 {
-                    this.d_Controls[VisibleControlsOrder[i]].Draw(drawer, d2); // Pintamos Controles Visibles.
+                    this.d_Controls[VisibleControlsOrder[i]].Draw(); // Pintamos Controles Visibles.
                 }
             }
         }
 
         internal void DrawIds()
         {
-            dge.Core2D.UpdateIdsMap((uint)this.parentWindow.Width, (uint)this.parentWindow.Height, this.DrawContentIds); 
+            dge.Core2D.UpdateIdsMap((uint)this.ui_width, (uint)this.ui_height, this.DrawContentIds); 
         }
 
         private void DrawContentIds()
-        {
-            GL.glViewport(0,0,this.parentWindow.Width, this.parentWindow.Height);
-            GL.glClearColor(0f,0f,0f,1f);
-            GL.glClear(ClearBufferMask.GL_COLOR_BUFFER_BIT | ClearBufferMask.GL_DEPTH_BUFFER_BIT);
-            
+        {            
             for (int i=0;i<VisibleWindowsOrder.Count;i++)
             {
                 this.d_Windows[VisibleWindowsOrder[i]].DrawID(); // Pintamos Ventanas Visibles.
@@ -171,7 +175,7 @@ namespace dge.GUI
 
         internal void MUp(object sender, dgtk.dgtk_MouseButtonEventArgs e)
         {
-            this.DrawIds();
+            //this.DrawIds(); // Comentanos de momento
             dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
             this.MouseUp(this, e);
         }
@@ -229,7 +233,15 @@ namespace dge.GUI
                     this.parentWindow.KeyReleased += KReleased;
                     this.parentWindow.KeyCharReturned += KCharReturned;
                 }
+                this.ui_width = (uint)parentWindow.Width;
+                this.ui_height = (uint)parentWindow.Height;
             }
+        }
+
+        public GuiTheme GuiTheme
+        {
+            set { this.gt_ActualGuiTheme = value; }
+            get { return this.gt_ActualGuiTheme; }
         }
     }
 }
