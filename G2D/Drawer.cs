@@ -9,6 +9,7 @@ using dge.GLSL;
 namespace dge.G2D
 {    public class Drawer
     {
+        internal dgtk.Math.Mat4 m4P; // Para Renicios internos de Perspectiva.
         private bool b_invert_y;
         private uint VAO; // Vertex Array Object (indice que contiene toda la info del objeto.)
         private uint VBO; // Vertex Buffer Object (Indice del buffer Que contiene los atributos de vertice.)
@@ -102,7 +103,7 @@ namespace dge.G2D
         public void DefineViewMatrix(dgtk.Math.Mat4 mat)
         {
             BasicShader.Use();
-            GL.glUniformMatrix(idUniformMat_View, dgtk.OpenGL.Boolean.GL_FALSE, mat);
+            GL.glUniformMatrix(this.idUniformMat_View, dgtk.OpenGL.Boolean.GL_FALSE, mat);
         }
 
         /// <sumary>
@@ -113,9 +114,16 @@ namespace dge.G2D
         public void DefinePerspectiveMatrix(float x, float y, float with, float height, bool invert_y)
         {
             b_invert_y = invert_y;
-            dgtk.Math.Mat4 m4 = dgtk.Math.MatrixTools.MakeOrthoPerspectiveMatrix(x, with, invert_y ? height : y, invert_y ? y : height, -100f, 100f);
+            this.m4P = dgtk.Math.MatrixTools.MakeOrthoPerspectiveMatrix(x, with, invert_y ? height : y, invert_y ? y : height, -100f, 100f);
             BasicShader.Use();
-            GL.glUniformMatrix(idUniformMat_Per, dgtk.OpenGL.Boolean.GL_FALSE, m4);
+            GL.glUniformMatrix(this.idUniformMat_Per, dgtk.OpenGL.Boolean.GL_FALSE, m4P);
+        }
+
+        internal void DefinePerspectiveMatrix(dgtk.Math.Mat4 m4)
+        {
+            this.m4P = m4;
+            BasicShader.Use();
+            GL.glUniformMatrix(this.idUniformMat_Per, dgtk.OpenGL.Boolean.GL_FALSE, m4P);
         }
 
         #region Metodos Draw Publicos.
