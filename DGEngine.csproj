@@ -83,11 +83,21 @@
     <EmbeddedResource Include="images\GuiDefaultTheme.png">
       <Link>images\GuiDefaultTheme.png</Link>
     </EmbeddedResource>
-    <Content Include="GUI\button.cs" />
+    <EmbeddedResource Include="images\GuiDefaultThemeSlt.png">
+      <Link>images\GuiDefaultThemeSlt.png</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dgFonts\LinuxLibertine.dgf">
+      <Link>dgFonts\LinuxLibertine.dgf</Link>
+    </EmbeddedResource>
     <Content Include="GUI\GuiIDsDrawer.cs" />
     <Content Include="G2D\IDsDrawer.cs" />
     <Content Include="G2D\GuiDrawer.cs" />
     <Content Include="G2D\ShaderSources\BasicGuiShader.cs" />
     <Content Include="GUI\GuiTheme.cs" />
+    <Content Include="GUI\TrackBar.cs" />
+    <Content Include="GUI\Button.cs" />
+    <Content Include="GUI\Enums.cs" />
+    <Content Include="GUI\TextBox.cs" />
+    <Content Include="GUI\Events\ValueChanged.cs" />
   </ItemGroup>
 </Project>
