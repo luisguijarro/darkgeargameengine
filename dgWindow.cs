@@ -12,15 +12,35 @@ namespace dge
         private SndSystem sndSystem;
         public dgWindow(string Title) : base(1024, 600, Title) // Consuctor Básico.
         {
+            Core.LockObject = base.LockObject;
             sndSystem = new SndSystem(base.OpenALContext);
+
+            dge.G2D.IDsDrawer.Init_IDs_Drawer(); // Iniciamos Código de visualizado de Ids.
+            dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0,0,this.Width, this.Height, true);
+
             this.MakeCurrent();
             this.drawer2D = new G2D.Drawer();
             this.GuiDrawer2D = new G2D.GuiDrawer();
             this.GuiDrawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height);
             this.writer2D = new G2D.Writer(this);
             this.UnMakeCurrent(); //No debería ser necesario.
-            dge.G2D.IDsDrawer.Init_IDs_Drawer(); // Iniciamos Código de visualizado de Ids.
             
+        }
+
+        protected override void OnWindowSizeChange(object sender, dgtk_WinResizeEventArgs e)
+        {
+            base.OnWindowSizeChange(sender, e);
+            if (this.gui != null)
+            {
+                this.gui.ui_width = (uint)e.Width;
+                this.gui.ui_height = (uint)e.Height;
+            }
+            while(this.GuiDrawer2D == null)
+            {}
+            this.GuiDrawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height);  
+            while(this.Drawer2D == null)
+            {}      
+            this.Drawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height, true);
         }
 
         protected override void OnRenderFrame(object sender, dgtk_OnRenderEventArgs e)
@@ -28,7 +48,7 @@ namespace dge
             base.OnRenderFrame(sender, e);
             if (this.gui != null)
             {
-                gui.Draw(this.GuiDrawer2D, this.drawer2D);
+                gui.Draw();
             }
         }
 
@@ -39,7 +59,14 @@ namespace dge
 
         public GUI.GraphicsUserInterface GUI
         {
-            set { this.gui = value; this.gui.ParentWindow = this; }
+            set 
+            { 
+                this.gui = value; 
+                this.gui.ParentWindow = this; 
+                this.gui.GuiDrawer = this.GuiDrawer2D;
+                this.gui.Writer = this.writer2D;
+                this.gui.Drawer = this.drawer2D;
+            }
             get { return this.gui; }
         }
 
