@@ -15,7 +15,7 @@ namespace dge.GUI.BaseObjects
 
         public Control(uint witdh, uint height) : base(witdh, height)
         {
-            this.textureBufferObject = GraphicsUserInterface.DefaultThemeTBO; // Provisional
+            //this.textureBufferObject = this.gui.GuiTheme.ThemeTBO; // Provisional
         }
 
         #region Public Methods:
