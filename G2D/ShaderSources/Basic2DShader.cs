@@ -67,7 +67,14 @@ namespace dge.G2D
                 }
                 else
                 {
-                    finalColor = vec4(Color.xyz, finalColor.w);
+                    if (finalColor.w != 0.0)
+                    {
+                        finalColor = vec4(Color.xyz, 1.0);
+                    }
+                    else
+                    {
+                        finalColor = vec4(0.0, 0.0, 0.0, 0.0);
+                    }
                 }
             }
             else
