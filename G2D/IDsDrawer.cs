@@ -57,6 +57,10 @@ namespace dge.G2D
             if (!inicialized)
             {
                 dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
+                dgtk.OpenGL.GL.glEnable(dgtk.OpenGL.EnableCap.GL_VERTEX_ARRAY);
+                dgtk.OpenGL.GL.glEnableClientState(dgtk.OpenGL.EnableCap.GL_VERTEX_ARRAY);
+                dgtk.OpenGL.GL.glEnable(dgtk.OpenGL.EnableCap.GL_TEXTURE_COORD_ARRAY);
+                dgtk.OpenGL.GL.glEnableClientState(dgtk.OpenGL.EnableCap.GL_TEXTURE_COORD_ARRAY);
                 dge.Core2D.PixelBufferObject_Select = GL.glGenBuffer();
                 //Console.WriteLine("Init_IDs_Drawer 0: "+(ErrorCode)GL.glGetError());
 
@@ -96,13 +100,32 @@ namespace dge.G2D
                 
                 #region VAO 2
 
-                TVertex2D[] vertices2 = new TVertex2D[4];
-                vertices[0] = new TVertex2D(1, new Vector2(0, 0), new Vector2(0,0));
-                vertices[1] = new TVertex2D(2, new Vector2(0, 1), new Vector2(0,1));
-                vertices[2] = new TVertex2D(3, new Vector2(1, 1), new Vector2(1,1));
-                vertices[3] = new TVertex2D(4, new Vector2(1, 0), new Vector2(1,0));
+                TVertex2D[] vertices2 = new TVertex2D[16]
+                {
+                    new TVertex2D(0, new Vector2(0, 0), new Vector2(0,0)),
+                    new TVertex2D(1, new Vector2(0, 0.33f), new Vector2(0, 0.33f)),
+                    new TVertex2D(2, new Vector2(0, 0.66f), new Vector2(0, 0.66f)),
+                    new TVertex2D(3, new Vector2(0, 1), new Vector2(0, 1)),
+                    new TVertex2D(4, new Vector2(0.33f, 0), new Vector2(0.33f, 0)),
+                    new TVertex2D(5, new Vector2(0.33f, 0.33f), new Vector2(0.33f, 0.33f)),
+                    new TVertex2D(6, new Vector2(0.33f, 0.66f), new Vector2(0.33f, 0.66f)),
+                    new TVertex2D(7, new Vector2(0.33f, 1), new Vector2(0.33f, 1)),
+                    new TVertex2D(8, new Vector2(0.66f, 0), new Vector2(0.66f, 0)),
+                    new TVertex2D(9, new Vector2(0.66f, 0.33f), new Vector2(0.66f, 0.33f)),
+                    new TVertex2D(10, new Vector2(0.66f, 0.66f), new Vector2(0.66f, 0.66f)),
+                    new TVertex2D(11, new Vector2(0.66f, 1), new Vector2(0.66f, 1)),
+                    new TVertex2D(12, new Vector2(1, 0), new Vector2(1, 0)),
+                    new TVertex2D(13, new Vector2(1, 0.33f), new Vector2(1, 0.33f)),
+                    new TVertex2D(14, new Vector2(1, 0.66f), new Vector2(1, 0.66f)),
+                    new TVertex2D(15, new Vector2(1, 1), new Vector2(1,1)),
+                };
 
-                UInt32[] indices2 = new uint[]{0, 1, 2, 3, 0, 2};
+                UInt32[] indices2 = new uint[]
+                {
+                    00, 01, 05, 04, 00, 05,    04, 05, 09, 08, 04, 09,    08, 09, 13, 12, 08, 13, //Fila 1 de Dobles Triangulos
+                    01, 02, 06, 05, 01, 06,    05, 06, 10, 09, 05, 10,    09, 10, 14, 13, 09, 14, //Fila 2 de Dobles Triangulos
+                    02, 03, 07, 06, 02, 07,    06, 07, 11, 10, 06, 11,    10, 11, 15, 14, 10, 15  //Fila 3 de Dobles Triangulos
+                };
 
                 VAO2 = GL.glGenVertexArray(); 
                 VBO2 = GL.glGenBuffer();
@@ -110,7 +133,7 @@ namespace dge.G2D
 
                 GL.glBindVertexArray(VAO2);
                 GL.glBindBuffer(BufferTargetARB.GL_ARRAY_BUFFER, VBO2);
-                GL.glBufferData<TVertex2D>(BufferTargetARB.GL_ARRAY_BUFFER, Marshal.SizeOf(typeof(TVertex2D))*4, vertices2, BufferUsageARB.GL_STATIC_DRAW);
+                GL.glBufferData<TVertex2D>(BufferTargetARB.GL_ARRAY_BUFFER, Marshal.SizeOf(typeof(TVertex2D))*16, vertices2, BufferUsageARB.GL_STATIC_DRAW);
 
                 GL.glBindBuffer(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, EBO2);
                 GL.glBufferData<UInt32>(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*indices2.Length, indices2, BufferUsageARB.GL_STATIC_DRAW);
@@ -199,23 +222,25 @@ namespace dge.G2D
 
         internal static void DefinePerspectiveMatrix(dgtk.Math.Mat4 m4)
         {
+            //dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
             m4P = m4;
             BasicShader.Use();
             GL.glUniformMatrix(idUniformMat_Per, dgtk.OpenGL.Boolean.GL_FALSE, m4P);
             BasicGuiShader.Use();
             GL.glUniformMatrix(idUniformMat_Per2, dgtk.OpenGL.Boolean.GL_FALSE, m4P);
+            //dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
         }
 
         public static void DefinePerspectiveMatrix(float x, float y, float with, float height, bool invert_y)
         {
             dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
             b_invert_y = invert_y;
-            m4P = dgtk.Math.MatrixTools.MakeOrthoPerspectiveMatrix(0, with, invert_y ? height : 0, invert_y ? 0 : height, -100f, 100f);
+            m4P = dgtk.Math.MatrixTools.MakeOrthoPerspectiveMatrix(x, with, invert_y ? height : y, invert_y ? y : height, -100f, 100f);
             BasicShader.Use();
             GL.glUniformMatrix(idUniformMat_Per, dgtk.OpenGL.Boolean.GL_FALSE, m4P);
             BasicGuiShader.Use();
-            GL.glUniformMatrix(idUniformMat_Per, dgtk.OpenGL.Boolean.GL_FALSE, m4P);
-            dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
+            GL.glUniformMatrix(idUniformMat_Per2, dgtk.OpenGL.Boolean.GL_FALSE, m4P);
+            //dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
         }
 
         #region Draw2D
@@ -226,22 +251,21 @@ namespace dge.G2D
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
 
             BasicShader.Use();
-            //GL.glUniform4fv(idUniform_texcoords, 1, new float[]{0f, 0f, 1f, 1f});
+            GL.glUniform4fv(idUniform_texcoords, 1, new float[]{0f, 0f, 1f, 1f});
             GL.glUniform2f(idUniform_v_size, width, height);
             GL.glUniform1i(idUniformSilhouette, 0);
             GL.glUniform1i(idUniformTexturePassed, 0);
             GL.glUniformMatrix(idUniformMat_Tra, dgtk.OpenGL.Boolean.GL_FALSE, m4T * m4R); // Transmitimos al Shader la trasformación.
             GL.glUniform4f(idUniformColor, color.R, color.G, color.B, color.A);
             GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, 0);
-            GL.glBindVertexArray(VAO2);
+            GL.glBindVertexArray(VAO);
             GL.glDrawElements(PrimitiveType.GL_TRIANGLES, 6, DrawElementsType.GL_UNSIGNED_INT, new IntPtr(0));
             GL.glBindVertexArray(0);
-            //Console.WriteLine("IDs DrawGL 0: "+(ErrorCode)GL.glGetError());
         }
         
         internal static void DrawGL2D(uint tboID, Color4 color, int x, int y, uint width, uint height, float RotInDegrees, float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, int Silhouette)
         {
-            dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((b_invert_y ? -RotInDegrees : RotInDegrees), new Vector2(width/2f, height/2f));
+            dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((b_invert_y ? -RotInDegrees : RotInDegrees), new Vector2(width / 2f, height / 2f));
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
             
             GL.glEnable(EnableCap.GL_TEXTURE_2D);
@@ -254,34 +278,33 @@ namespace dge.G2D
             GL.glUniformMatrix(idUniformMat_Tra, dgtk.OpenGL.Boolean.GL_FALSE, m4T * m4R ); // Transmitimos al Shader la trasformación.
             GL.glUniform4f(idUniformColor, color.R, color.G, color.B, color.A);
             GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, tboID);
-            GL.glBindVertexArray(VAO2);
+            GL.glBindVertexArray(VAO);
             GL.glDrawElements(PrimitiveType.GL_TRIANGLES, 6, DrawElementsType.GL_UNSIGNED_INT, new IntPtr(0));
             GL.glBindVertexArray(0);
-            //Console.WriteLine("IDs DrawGL 0: "+(ErrorCode)GL.glGetError());
         }
 
         #endregion Draw2D
 
         #region DrawGui
 
-        internal static void DrawGuiGL(uint tboID, Color4 color, int x, int y, uint width, uint height, float RotInDegrees, float[/*4*/]MarginsFromTheEdge, float[/*8*/]TexCoords, float[/*2*/]v2_CoordVariation, int Silhouette)
+        internal static void DrawGuiGL(uint tboID, Color4 color, int x, int y, uint width, uint height, float RotInDegrees, int[/*4*/]MarginsFromTheEdge, float[/*8*/]TexCoords, float[/*2*/]v2_CoordVariation, int Silhouette)
         {
             dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((-RotInDegrees), new Vector2(width/2f, height/2f));
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
             
             GL.glEnable(EnableCap.GL_TEXTURE_2D);
             
-            BasicShader.Use();
+            BasicGuiShader.Use();
             GL.glUniform4fv(idUniform_texcoords2, 2, TexCoords);
             GL.glUniform2fv(idUniformtcDisplacement2, 1, v2_CoordVariation);
-            GL.glUniform4fv(idUniform_MarginsFromTheEdge2, 1, MarginsFromTheEdge);
+            GL.glUniform4iv(idUniform_MarginsFromTheEdge2, 1, MarginsFromTheEdge);
             GL.glUniform2f(idUniform_v_size2, width, height);
             GL.glUniform1i(idUniformSilhouette2, Silhouette);
             GL.glUniform1i(idUniformTexturePassed2, 1);
             GL.glUniformMatrix(idUniformMat_Tra2, dgtk.OpenGL.Boolean.GL_FALSE, m4T * m4R ); // Transmitimos al Shader la trasformación.
             GL.glUniform4f(idUniformColor2, color.R, color.G, color.B, color.A);
             GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, tboID);
-            GL.glBindVertexArray(VAO);
+            GL.glBindVertexArray(VAO2);
             GL.glDrawElements(PrimitiveType.GL_TRIANGLES, 54, DrawElementsType.GL_UNSIGNED_INT, new IntPtr(0));
             GL.glBindVertexArray(0);
         }
