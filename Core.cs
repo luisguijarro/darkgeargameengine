@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -9,6 +10,7 @@ namespace dge
     
     public static class Core
     {
+        internal static object LockObject;
         private static OperatingSystem OS;
         public static OperatingSystem GetOS()
         {
@@ -43,6 +45,11 @@ namespace dge
 		{
 			None = 0, Windows, Linux, MacOS, NotSuported
 		}
+
+        internal static System.IO.Stream LoadEmbeddedResource(string resource)
+        {
+            return Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
+        }
 
     }
 
@@ -101,15 +108,22 @@ namespace dge
 
         internal static void UpdateIdsMap(uint width, uint height, Action renderScene)
         {
-            dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
-            GL.glBindBuffer(BufferTargetARB.GL_PIXEL_PACK_BUFFER, PixelBufferObject_Select);
-            GL.glBufferData(BufferTargetARB.GL_PIXEL_PACK_BUFFER, (int)(width*height*4), IntPtr.Zero, BufferUsageARB.GL_STREAM_READ);
-            
-            renderScene();
+            lock(Core.LockObject)
+            {
+                dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
+                GL.glBindBuffer(BufferTargetARB.GL_PIXEL_PACK_BUFFER, PixelBufferObject_Select);
+                GL.glBufferData(BufferTargetARB.GL_PIXEL_PACK_BUFFER, (int)(width*height*4), IntPtr.Zero, BufferUsageARB.GL_STREAM_READ);
+                
+                GL.glViewport(0,0,(int)width, (int)height);
+                GL.glClearColor(0f,0f,0f,1f);
+                GL.glClear(ClearBufferMask.GL_COLOR_BUFFER_BIT | ClearBufferMask.GL_DEPTH_BUFFER_BIT);
+                
+                renderScene();
 
-            GL.glReadPixels(0, 0, (int)width, (int)height, PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, IntPtr.Zero);
-            GL.glBindBuffer(BufferTargetARB.GL_PIXEL_PACK_BUFFER, 0);
-            dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
+                GL.glReadPixels(0, 0, (int)width, (int)height, PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, IntPtr.Zero);
+                GL.glBindBuffer(BufferTargetARB.GL_PIXEL_PACK_BUFFER, 0);
+                dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
+            }
         }
 
         internal static unsafe uint SelectID(int mouseX, int mouseY, int width, int height)
