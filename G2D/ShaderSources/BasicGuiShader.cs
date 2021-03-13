@@ -12,7 +12,7 @@ namespace dge.G2D
         
         uniform vec4[2] utexcoords;
         uniform vec2 tcDisplacement;
-        uniform vec4 MarginsFromTheEdge;
+        uniform ivec4 MarginsFromTheEdge;
         uniform vec2 v_size;
         uniform mat4 trasform;
         uniform mat4 view;
@@ -101,7 +101,14 @@ namespace dge.G2D
                 }
                 else
                 {
-                    finalColor = vec4(Color.xyz, finalColor.w);
+                    if (finalColor.w != 0.0)
+                    {
+                        finalColor = vec4(Color.xyz, 1.0);
+                    }
+                    else
+                    {
+                        finalColor = vec4(0.0, 0.0, 0.0, 0.0);
+                    }
                 }
             }
             else
