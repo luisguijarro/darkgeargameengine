@@ -11,7 +11,7 @@ namespace dge.G2D
 {
     internal class GuiDrawer
     {
-        internal dgtk.Math.Mat4 m4P;
+        internal dgtk.Math.Mat4 m4P; // Para Renicios internos de Perspectiva.
         private uint VAO; // Vertex Array Object (indice que contiene toda la info del objeto.)
         private uint VBO; // Vertex Buffer Object (Indice del buffer Que contiene los atributos de vertice.)
         private uint EBO; // Element Buffer Object (Indice del buffer que contiene la lista de indices de orden de dibujado de los vertices.)
@@ -131,7 +131,7 @@ namespace dge.G2D
             GL.glUniformMatrix(idUniformMat_Per, dgtk.OpenGL.Boolean.GL_FALSE, this.m4P);
         }
 
-        internal void DrawGL(uint tboID, Color4 color, int x, int y, uint width, uint height, float RotInDegrees, float[/*4*/]MarginsFromTheEdge, float[/*8*/]TexCoords, float[/*2*/]v2_CoordVariation, int Silhouette)
+        internal void DrawGL(uint tboID, Color4 color, int x, int y, uint width, uint height, float RotInDegrees, int[/*4*/]MarginsFromTheEdge, float[/*8*/]TexCoords, float[/*2*/]v2_CoordVariation, int Silhouette)
         {
             dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((-RotInDegrees), new Vector2(width/2f, height/2f));
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
@@ -139,32 +139,18 @@ namespace dge.G2D
             GL.glEnable(EnableCap.GL_TEXTURE_2D);
             
             BasicShader.Use();
-            //Console.WriteLine("2.1:"+(ErrorCode)GL.glGetError());
             GL.glUniform4fv(idUniform_texcoords, 2, TexCoords);
-            //Console.WriteLine("2.2:"+(ErrorCode)GL.glGetError());
             GL.glUniform2fv(idUniformtcDisplacement, 1, v2_CoordVariation);
-            //Console.WriteLine("2.3:"+(ErrorCode)GL.glGetError());
-            GL.glUniform4fv(idUniform_MarginsFromTheEdge, 1, MarginsFromTheEdge);
-            //Console.WriteLine("2.4:"+(ErrorCode)GL.glGetError());
+            GL.glUniform4iv(idUniform_MarginsFromTheEdge, 1, MarginsFromTheEdge);
             GL.glUniform2f(idUniform_v_size, width, height);
-            //Console.WriteLine("2.5:"+(ErrorCode)GL.glGetError());
             GL.glUniform1i(idUniformSilhouette, Silhouette);
-            //Console.WriteLine("2.6:"+(ErrorCode)GL.glGetError());
             GL.glUniform1i(idUniformTexturePassed, 1);
-            //Console.WriteLine("2.7:"+(ErrorCode)GL.glGetError());
             GL.glUniformMatrix(idUniformMat_Tra, dgtk.OpenGL.Boolean.GL_FALSE, m4T * m4R ); // Transmitimos al Shader la trasformación.
-            //Console.WriteLine("2.8:"+(ErrorCode)GL.glGetError());
             GL.glUniform4f(idUniformColor, color.R, color.G, color.B, color.A);
-            //Console.WriteLine("2.9:"+(ErrorCode)GL.glGetError());
             GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, tboID);
-            //Console.WriteLine("2.10:"+(ErrorCode)GL.glGetError());
             GL.glBindVertexArray(VAO);
-            //Console.WriteLine("2.11:"+(ErrorCode)GL.glGetError());
             GL.glDrawElements(PrimitiveType.GL_TRIANGLES, 54, DrawElementsType.GL_UNSIGNED_INT, new IntPtr(0));
-            //Console.WriteLine("2.12:"+(ErrorCode)GL.glGetError());
             GL.glBindVertexArray(0);
-            //Console.WriteLine("2.13:"+(ErrorCode)GL.glGetError());
-            //Console.WriteLine((ErrorCode)GL.glGetError());
         }
     }
 }
