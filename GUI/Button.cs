@@ -30,7 +30,7 @@ namespace dge.GUI
         {
             this.s_text = text;
             this.FontSize = 16;
-            this.font = dge.G2D.Writer.Fonts["Linux Libertine"];
+            this.font = GuiTheme.DefaultGuiTheme.DefaultFont; //dge.G2D.Writer.Fonts["Linux Libertine"];
             this.c4_textColor = dgtk.Graphics.Color4.Black;
             this.c4_textBorderColor = dgtk.Graphics.Color4.Black;
                         

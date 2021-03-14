@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using dgtk.Graphics;
 using dgtk.OpenGL;
 
+using dge.G2D;
+
 namespace dge.GUI
 {
     public class Window : dge.GUI.BaseObjects.BaseGuiSurface
@@ -14,6 +16,7 @@ namespace dge.GUI
         private dgtk.Graphics.Color4 c4_textBorderColor;
         private bool b_textBorder;
         private float f_FontSize;
+        private dgFont font;
 
         protected Button CloseButton;
 
@@ -32,6 +35,7 @@ namespace dge.GUI
             this.c4_textBorderColor = dgtk.Graphics.Color4.Black;
             this.b_textBorder = true;
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.Window_MarginsFromTheEdge;
+            this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
             //float mult = (1f/256f);
             this.Texcoords = GuiTheme.DefaultGuiTheme.Window_Texcoords;
             this.tcFrameOffset  = GuiTheme.DefaultGuiTheme.Window_FrameOffset;
@@ -49,11 +53,11 @@ namespace dge.GUI
         {
             if (this.b_textBorder)
             {
-                this.gui.Writer.Write("Linux Libertine", this.c4_textColor, this.s_text, this.f_FontSize, 4, 2, this.c4_textBorderColor);
+                this.gui.Writer.Write(this.font, this.c4_textColor, this.s_text, this.f_FontSize, 4, 2, this.c4_textBorderColor);
             }
             else
             {
-                this.gui.Writer.Write("Linux Libertine", this.c4_textColor, this.s_text, this.f_FontSize, 4, 0);
+                this.gui.Writer.Write(this.font, this.c4_textColor, this.s_text, this.f_FontSize, 4, 0);
             }
         }
 
