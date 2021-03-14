@@ -19,7 +19,15 @@ namespace dge.G2D
         public static dgFont LoadDGFont(string filepath)
         {
             FileStream fs  = File.Open(filepath, FileMode.Open); // Abrimos fichero
-            BinaryReader br = new BinaryReader(fs); // Asignamos lector Binario.
+            dgFont ret = LoadDGFont(fs, filepath);
+            fs.Close();
+            return ret;
+        }
+        
+        internal static dgFont LoadDGFont(Stream filestream, string filepath)
+        {
+            //FileStream fs  = File.Open(filepath, FileMode.Open); // Abrimos fichero
+            BinaryReader br = new BinaryReader(filestream); // Asignamos lector Binario.
             byte[] FormatHeader = new byte[] {68, 71, 69, 70}; // Definimos cabecera correcta.
             byte[] FileHeaderID = br.ReadBytes(4); // Leemos los primeros 4 Bytes.
             for (int i=0;i<4;i++)
@@ -120,7 +128,6 @@ namespace dge.G2D
             }
 
             br.Close();
-            fs.Close();
 
             dgFont ret = new dgFont(FontName, maxSize, BorderWidth, spaceWidth, Characters, dgCharacters, tbo0, tbo1);
 
