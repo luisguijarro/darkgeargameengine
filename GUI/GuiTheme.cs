@@ -45,7 +45,7 @@ namespace dge.GUI
         #region TextBox:
         internal int[] TextBox_MarginsFromTheEdge; // n=4
         internal float[] TextBox_Texcoords; // n=8
-        internal float[] TextBox_FrameOffset; // n=2
+        //internal float[] TextBox_FrameOffset; // n=2
         internal char TextBox_CursorChar;
         #endregion
         public GuiTheme()
@@ -74,6 +74,7 @@ namespace dge.GUI
 
             ret.ThemeTBO  = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultTheme.png"), "GuiDefaultTheme");
             ret.ThemeSltTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultThemeSlt.png"), "GuiDefaultThemeSlt");
+            ret.DefaultFont = dge.G2D.Tools.LoadDGFont(Core.LoadEmbeddedResource("dge.dgFonts.LinuxLibertine.dgf"), "dge.dgFonts.LinuxLibertine.dgf");
 
             float multHor = 1f/(float)ret.ThemeTBO.ui_width;
             float multVer = 1f/(float)ret.ThemeTBO.ui_height;
