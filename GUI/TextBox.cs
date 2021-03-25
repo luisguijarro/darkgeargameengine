@@ -7,6 +7,7 @@ namespace dge.GUI
 {
     public class TextBox : BaseObjects.Control
     {
+        private bool FirsDraw;
         private bool b_Focus;
         private bool b_editable;
         private string s_text;
@@ -24,6 +25,7 @@ namespace dge.GUI
         }
         public TextBox(uint width, uint height, string text) : base(width, height)
         {
+            this.FirsDraw = true;
             this.b_editable = true;
             this.b_Focus = false;
             this.s_text = text;
@@ -147,6 +149,7 @@ namespace dge.GUI
 
         internal override void Draw()
         {
+            if (this.FirsDraw) { this.updateTextCoords(); this.FirsDraw = false; };
             base.Draw();
             DrawIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], (int)(this.ui_width-(this.MarginsFromTheEdge[0]+(this.MarginsFromTheEdge[2]))), (int)(this.ui_height-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[2])), WriteText);
         }
@@ -162,12 +165,6 @@ namespace dge.GUI
             {
                 this.gui.Writer.Write(this.font, this.c4_textColor, this.s_text, this.f_FontSize, tx_x, tx_y, this.c4_textBorderColor);
             }
-        }
-
-        internal override GraphicsUserInterface GUI
-        {
-            set { base.GUI = value; this.updateTextCoords(); }
-            get { return base.GUI; }
         }
 
         public bool TextBorder
