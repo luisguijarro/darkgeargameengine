@@ -182,11 +182,15 @@ namespace dge.GUI
 
         internal void MMove(object sender, dgtk.dgtk_MouseMoveEventArgs e)
         {
+            //this.DrawIds();
+            //dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
             this.MouseMove(this, e);
         }
 
         internal void MWheel(object sender, dgtk.dgtk_MouseWheelEventArgs e)
         {
+            this.DrawIds();
+            dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
             this.MouseWheel(this, e);
         }
 
