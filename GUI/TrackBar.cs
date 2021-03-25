@@ -1,8 +1,6 @@
 using System;
 using dgtk;
-using dgtk.Math;
 using dgtk.Graphics;
-using dge.G2D;
 
 namespace dge.GUI
 {    
@@ -57,7 +55,7 @@ namespace dge.GUI
         protected override void MMove(object sender, dgtk_MouseMoveEventArgs e)
         {
             base.MMove(sender, e);
-            if (this.b_pulsed)
+            if ((this.b_pulsed) && (Core2D.SelectedID == this.ui_id))
             {
                 if (Orientation == Orientation.Horizontal)
                 {
@@ -159,6 +157,22 @@ namespace dge.GUI
         #endregion
 
         #region VIRTUAL/OVERRIDE METHODS:
+
+        protected override void OnResize()
+        {
+            base.OnResize();
+            if (this.o_Orientation == Orientation.Vertical)
+            {
+                base.Width = (uint)GuiTheme.DefaultGuiTheme.TrackBar_Ver_MaxWidth;
+            }
+            else
+            {
+                base.Height = (uint)GuiTheme.DefaultGuiTheme.TrackBar_Hor_MaxHeight;
+            }
+            this.UpdateShapePos();
+            this.UpdateShape();
+        }
+
         internal override void Draw()
         {
             base.Draw();
@@ -194,42 +208,6 @@ namespace dge.GUI
         #endregion
 
         #region PROPERTIES:
-        public override uint Width 
-        { 
-            get { return base.Width; }
-            set 
-            { 
-                if (this.o_Orientation == Orientation.Vertical)
-                {
-                    base.Width = (uint)GuiTheme.DefaultGuiTheme.TrackBar_Ver_MaxWidth;
-                }
-                else
-                {
-                    base.Width = value; 
-                }
-                this.UpdateShapePos();
-                this.UpdateShape();
-            }
-        }
-
-        public override uint Height
-        { 
-            get { return base.Height; }
-            set 
-            { 
-                if (this.o_Orientation == Orientation.Horizontal)
-                {
-                    base.Height = (uint)GuiTheme.DefaultGuiTheme.TrackBar_Hor_MaxHeight;
-                }
-                else
-                {
-                    base.Height = value; 
-                }
-                this.UpdateShapePos();
-                this.UpdateShape();
-            }
-        }
-
         public Orientation Orientation
         {
             set 
