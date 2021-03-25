@@ -99,5 +99,12 @@
     <Content Include="GUI\Enums.cs" />
     <Content Include="GUI\TextBox.cs" />
     <Content Include="GUI\Events\ValueChanged.cs" />
+    <Content Include="G2D\ShaderSources\BasicWriterShader.cs" />
+    <Content Include="GUI\ProgressBar.cs" />
+    <Content Include="GUI\ContentViewer.cs" />
+    <Content Include="GUI\ScrollBar.cs" />
+    <Content Include="GUI\ListViewer.cs" />
+    <Content Include="GUI\ListViewerElement.cs" />
+    <Content Include="GUI\ListViewerColumn.cs" />
   </ItemGroup>
 </Project>
