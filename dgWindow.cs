@@ -22,7 +22,7 @@ namespace dge
             this.drawer2D = new G2D.Drawer();
             this.GuiDrawer2D = new G2D.GuiDrawer();
             this.GuiDrawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height);
-            this.writer2D = new G2D.Writer(this);
+            this.writer2D = new G2D.Writer();
             this.UnMakeCurrent(); //No debería ser necesario.
             
         }
