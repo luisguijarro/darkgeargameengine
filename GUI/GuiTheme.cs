@@ -48,6 +48,64 @@ namespace dge.GUI
         //internal float[] TextBox_FrameOffset; // n=2
         internal char TextBox_CursorChar;
         #endregion
+
+        #region ProgressBar
+
+        internal int[] ProgressBar_Hor_MarginsFromTheEdge; // n=4
+        internal int[] ProgressBar_Ver_MarginsFromTheEdge; // n=4
+        internal float[] ProgressBar_Hor_Texcoords; // n=8
+        internal float[] ProgressBar_Ver_Texcoords; // n=8
+        internal float[] ProgressBar_Hor_Filling_Texcoords; // n=4
+        internal float[] ProgressBar_Ver_Filling_Texcoords; // n=4
+
+        #endregion
+
+        #region ContentViewer
+
+        internal int[] ContentViewer_MarginsFromTheEdge; // n=4
+        internal float[] ContentViewer_Texcoords; // n=8
+
+        #endregion
+
+        #region ScrollBar
+
+        internal int[] ScrollBar_Hor_Btn1_MarginsFromTheEdge; // n=4
+        internal float[] ScrollBar_Hor_Btn1_Texcoords; // n=8
+        internal float[] ScrollBar_Hor_Btn1_FrameOffset; // n=2
+        internal int[] ScrollBar_Ver_Btn1_MarginsFromTheEdge; // n=4
+        internal float[] ScrollBar_Ver_Btn1_Texcoords; // n=8
+        internal float[] ScrollBar_Ver_Btn1_FrameOffset; // n=2
+        internal int[] ScrollBar_Hor_Btn2_MarginsFromTheEdge; // n=4
+        internal float[] ScrollBar_Hor_Btn2_Texcoords; // n=8
+        internal float[] ScrollBar_Hor_Btn2_FrameOffset; // n=2
+        internal int[] ScrollBar_Ver_Btn2_MarginsFromTheEdge; // n=4
+        internal float[] ScrollBar_Ver_Btn2_Texcoords; // n=8
+        internal float[] ScrollBar_Ver_Btn2_FrameOffset; // n=2
+        internal int[] ScrollBar_Hor_Slider_MarginsFromTheEdge; // n=4
+        internal float[] ScrollBar_Hor_Slider_Texcoords; // n=8
+        internal float[] ScrollBar_Hor_Slider_FrameOffset; // n=2
+        internal int[] ScrollBar_Ver_Slider_MarginsFromTheEdge; // n=4
+        internal float[] ScrollBar_Ver_Slider_Texcoords; // n=8
+        internal float[] ScrollBar_Ver_Slider_FrameOffset; // n=2
+        internal int[] ScrollBar_Hor_Track_MarginsFromTheEdge; // n=4
+        internal float[] ScrollBar_Hor_Track_Texcoords; // n=8
+        internal int[] ScrollBar_Ver_Track_MarginsFromTheEdge; // n=4
+        internal float[] ScrollBar_Ver_Track_Texcoords; // n=8
+        internal int ScrollBar_BarWidth;
+
+        #endregion
+
+        #region ListViewer
+
+        internal int[] ListViewer_MarginsFromTheEdge; // n=4
+        internal float[] ListViewer_Texcoords; // n=8
+        internal int[] ListViewer_Header_MarginsFromTheEdge; // n=4
+        internal float[] ListViewer_Header_Texcoords; // n=8
+        internal float[] ListViewer_Header_FrameOffset; // n=2
+        internal float[] ListViewer_Dibider_Texcoords; // n=4
+
+        #endregion
+
         public GuiTheme()
         {
 
@@ -157,6 +215,128 @@ namespace dge.GUI
             };
             ret.TextBox_CursorChar = '|';
             //ret.TextBox_FrameOffset = new float[]{0f,0f};
+            
+
+            // ProgressBar:______________________________________________________________________
+            ret.ProgressBar_Hor_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ProgressBar_Ver_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ProgressBar_Hor_Texcoords = new float[]
+            {
+                multHor*1f, multHor*3f, multHor*21f, multHor*23f, 
+                multVer*97f, multVer*99f, multVer*117f, multVer*119f
+            };
+            ret.ProgressBar_Ver_Texcoords = new float[]
+            {
+                multHor*1f, multHor*3f, multHor*21f, multHor*23f, 
+                multVer*97f, multVer*99f, multVer*117f, multVer*119f
+            };
+            ret.ProgressBar_Hor_Filling_Texcoords = new float[]
+            {
+                multHor*25f, multVer*97f, multHor*179f, multVer*119f
+            };
+            ret.ProgressBar_Ver_Filling_Texcoords = new float[]
+            {
+                multHor*181f, multVer*1f, multHor*203f, multVer*155f
+            };
+
+
+            // ContentViewer:____________________________________________________________________
+            ret.ContentViewer_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ContentViewer_Texcoords = new float[]
+            {
+                multHor*25f, multHor*27f, multHor*45f, multHor*47f, 
+                multVer*121f, multVer*123f, multVer*141f, multVer*143f
+            };
+
+
+            // ScrollBar Hor:____________________________________________________________________
+            ret.ScrollBar_Hor_Btn1_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ScrollBar_Hor_Btn1_Texcoords = new float[]
+            {
+                multHor*49f, multHor*51f, multHor*69f, multHor*71f, 
+                multVer*73f, multVer*75f, multVer*93f, multVer*95f
+            };
+            ret.ScrollBar_Hor_Btn1_FrameOffset = new float[] {0, multVer*48};
+
+            ret.ScrollBar_Hor_Btn2_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ScrollBar_Hor_Btn2_Texcoords = new float[]
+            {
+                multHor*121f, multHor*123f, multHor*141f, multHor*143f, 
+                multVer*73f, multVer*75f, multVer*93f, multVer*95f
+            };
+            ret.ScrollBar_Hor_Btn2_FrameOffset = new float[] {0, multVer*48};
+
+            ret.ScrollBar_Hor_Slider_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ScrollBar_Hor_Slider_Texcoords = new float[]
+            {
+                multHor*73f, multHor*75f, multHor*93f, multHor*95f, 
+                multVer*73f, multVer*75f, multVer*93f, multVer*95f
+            };
+            ret.ScrollBar_Hor_Slider_FrameOffset = new float[] {0, multVer*48};
+
+            ret.ScrollBar_Hor_Track_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ScrollBar_Hor_Track_Texcoords = new float[]
+            {
+                multHor*97f, multHor*99f, multHor*117f, multHor*119f, 
+                multVer*73f, multVer*75f, multVer*93f, multVer*95f
+            };
+
+
+            // ScrollBar Ver:____________________________________________________________________
+            ret.ScrollBar_Ver_Btn1_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ScrollBar_Ver_Btn1_Texcoords = new float[]
+            {
+                multHor*145f, multHor*147f, multHor*165f, multHor*167f, 
+                multVer*1f, multVer*3f, multVer*21f, multVer*23f
+            };
+            ret.ScrollBar_Ver_Btn1_FrameOffset = new float[] {multHor*60, 0};
+
+            ret.ScrollBar_Ver_Btn2_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ScrollBar_Ver_Btn2_Texcoords = new float[]
+            {
+                multHor*145f, multHor*147f, multHor*165f, multHor*167f, 
+                multVer*73f, multVer*75f, multVer*93f, multVer*95f
+            };
+            ret.ScrollBar_Ver_Btn2_FrameOffset = new float[] {multHor*60, 0};
+
+            ret.ScrollBar_Ver_Slider_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ScrollBar_Ver_Slider_Texcoords = new float[]
+            {
+                multHor*145f, multHor*147f, multHor*165f, multHor*167f, 
+                multVer*25f, multVer*27f, multVer*45f, multVer*47f
+            };
+            ret.ScrollBar_Ver_Slider_FrameOffset = new float[] {multHor*60, 0};
+
+            ret.ScrollBar_Ver_Track_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ScrollBar_Ver_Track_Texcoords = new float[]
+            {
+                multHor*145f, multHor*147f, multHor*165f, multHor*167f, 
+                multVer*49f, multVer*51f, multVer*69f, multVer*71f
+            };
+            ret.ScrollBar_BarWidth = 22;
+
+
+            // ListViewer:_______________________________________________________________________
+            ret.ListViewer_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ListViewer_Texcoords = new float[]
+            {
+                multHor*25f, multHor*27f, multHor*45f, multHor*47f, 
+                multVer*145f, multVer*147f, multVer*165f, multVer*167f
+            };
+            ret.ListViewer_Header_Texcoords = new float[]
+            {
+                multHor*49f, multHor*51f, multHor*69f, multHor*71f, 
+                multVer*145f, multVer*147f, multVer*165f, multVer*167f
+            };
+            ret.ListViewer_Header_FrameOffset = new float[]{23,0};
+            ret.ListViewer_Dibider_Texcoords = new float[]
+            {
+                multHor*97f, multVer*145f,
+                multHor*99f, multVer*147f
+            };
+            ret.ListViewer_Header_MarginsFromTheEdge = new int[] {2, 2, 2, 2};
+
+
 
             return ret;
         }
