@@ -28,9 +28,9 @@ namespace dge.GUI.BaseObjects
 
         //protected TextureBufferObject textureBufferObject; // Textura base del Objeto. En Versión posterior se trasladará al tema del GUI.
 
-        protected float[] Texcoords; // Coordenadas de textura base para el objeto.
-        protected float[] tcFrameOffset; // Variación de las coordenadas para eventos visuales como Pulsaciones de un botón.
-        protected int[] MarginsFromTheEdge; // Margenes desde el borde al relleno del objeto.
+        internal float[] Texcoords; // Coordenadas de textura base para el objeto.
+        internal float[] tcFrameOffset; // Variación de las coordenadas para eventos visuales como Pulsaciones de un botón.
+        internal int[] MarginsFromTheEdge; // Margenes desde el borde al relleno del objeto.
 
         private bool b_visible; // ¿Es Visible la ventana?
         protected GraphicsUserInterface gui; // GUI al que pertenece.
@@ -169,16 +169,19 @@ namespace dge.GUI.BaseObjects
                 GL.glViewport(iv_VP[0]+x, iv_VP[1]+iv_VP[3]/*(int)this.gui.ui_height*/-(int)(y+height), width, height);
 
                 dgtk.Math.Mat4 m4 = this.gui.Drawer.m4P;
-                dgtk.Math.Mat4 m42 = this.gui.GuiDrawer.m4P;
+                dgtk.Math.Mat4 m4g = this.gui.GuiDrawer.m4P;
+                dgtk.Math.Mat4 m4w = this.gui.Writer.m4P;
 
                 this.gui.Drawer.DefinePerspectiveMatrix(0, 0, width, height, true);
                 this.gui.GuiDrawer.DefinePerspectiveMatrix(0, 0, width, height);
+                this.gui.Writer.DefinePerspectiveMatrix(0, 0, width, height, true);
 
                 action();
 
                 GL.glViewport(iv_VP[0], iv_VP[1], iv_VP[2], iv_VP[3]);
                 this.gui.Drawer.DefinePerspectiveMatrix(m4);
-                this.gui.GuiDrawer.DefinePerspectiveMatrix(m42);
+                this.gui.GuiDrawer.DefinePerspectiveMatrix(m4g);
+                this.gui.Writer.DefinePerspectiveMatrix(m4w);
             }
         }
 
@@ -203,8 +206,7 @@ namespace dge.GUI.BaseObjects
         #endregion
 
         internal virtual void Draw()
-        {
-            
+        {            
             if (this.gui != null)
             {
                 this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
@@ -213,23 +215,25 @@ namespace dge.GUI.BaseObjects
                 {
                     DrawIn(this.i_x-(int)this.MarginsFromTheEdge[0], this.i_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContent);
                 }
-            }
-            
+            }            
         }
 
         internal virtual void DrawID()
-        {
-            
-            dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
-           
-            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+        {          
+            if (this.gui != null)
             {
-                this.DrawIdIn(this.i_x-(int)this.MarginsFromTheEdge[0], this.i_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContentIDs);
+            
+                dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
+            
+                if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+                {
+                    this.DrawIdIn(this.i_x-(int)this.MarginsFromTheEdge[0], this.i_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContentIDs);
+                }
             }
             
         }
 
-        #region Events:
+        #region Protected Input Events:
 
         protected virtual void MDown(object sender, dgtk.dgtk_MouseButtonEventArgs e)
         {
@@ -268,6 +272,20 @@ namespace dge.GUI.BaseObjects
 
         #endregion
 
+        #region Protected state Events:
+
+        protected virtual void OnResize()
+        {
+            
+        }
+
+        protected virtual void OnReposition()
+        {
+            
+        }
+
+        #endregion
+
         #region Properties
 
         public uint ID
@@ -275,7 +293,7 @@ namespace dge.GUI.BaseObjects
             get { return this.ui_id; }
         }
 
-        public virtual int X
+        public int X
         {
             set 
             { 
@@ -284,11 +302,12 @@ namespace dge.GUI.BaseObjects
                 {
                     srf.int_x = this.int_x+this.i_x;
                 }
+                this.OnReposition();
             }
             get { return this.i_x; }
         }
 
-        public virtual int Y
+        public int Y
         {
             set 
             { 
@@ -297,19 +316,20 @@ namespace dge.GUI.BaseObjects
                 {
                     srf.int_y = this.int_y+this.i_y;
                 }
+                this.OnReposition();
             }
             get { return this.i_y; }
         }
 
-        public virtual uint Width
+        public uint Width
         {
-            set { this.ui_width = value; }
+            set { this.ui_width = value; this.OnResize(); }
             get { return this.ui_width; }
         }
 
-        public virtual uint Height
+        public uint Height
         {
-            set { this.ui_height = value; }
+            set { this.ui_height = value; this.OnResize(); }
             get { return this.ui_height; }
         }
 
@@ -323,7 +343,7 @@ namespace dge.GUI.BaseObjects
             get { return this.parentGuiSurface; }
         }
 
-        internal virtual GraphicsUserInterface GUI
+        internal /*virtual */GraphicsUserInterface GUI
         {
             set 
             { 
