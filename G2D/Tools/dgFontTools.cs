@@ -269,6 +269,7 @@ namespace dge.G2D
             if (!pixeled)
             {
                 g.CompositingQuality = CompositingQuality.HighQuality; // Definimos calidad del entorno de dibujo.
+                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.SmoothingMode = SmoothingMode.HighQuality; // Definimos calidad del entorno de dibujo.
                 g.TextRenderingHint = TextRenderingHint.AntiAlias; // Definimos calidad del entorno de dibujo.
             }
@@ -285,6 +286,7 @@ namespace dge.G2D
             if (!pixeled)
             {
                 gb.CompositingQuality = CompositingQuality.HighQuality; // Definimos calidad del entorno de dibujo.
+                gb.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 gb.SmoothingMode = SmoothingMode.HighQuality; // Definimos calidad del entorno de dibujo.
                 gb.TextRenderingHint = TextRenderingHint.AntiAlias; // Definimos calidad del entorno de dibujo.
             }
