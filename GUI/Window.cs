@@ -61,6 +61,13 @@ namespace dge.GUI
             }
         }
 
+        protected override void OnReposition()
+        {
+            base.OnReposition();
+            this.CloseButton.int_x = this.int_x+this.i_x;
+            this.CloseButton.int_y = this.int_y+this.i_y;
+        }
+
         internal override void Draw()
         {
             
@@ -118,27 +125,6 @@ namespace dge.GUI
             }
             get { return base.GUI; }
         }
-
-        public override int X
-        {
-            set
-            {
-                base.X = value;
-                this.CloseButton.int_x = this.int_x+value;
-            }
-            get { return base.X; }
-        }
-
-        public override int Y
-        {
-            set
-            {
-                base.Y = value;
-                this.CloseButton.int_y = this.int_y+value;
-            }
-            get { return base.Y; }
-        }
-
         public dgtk.Graphics.Color4 TextColor
         {
             set { this.c4_textColor = value; }
