@@ -8,8 +8,9 @@ namespace dge.GUI
 {
     public class Button : BaseObjects.Control
     {
+        private bool FirsDraw;
         private float tx_x, tx_y; // Coordenadas de texto
-        protected bool b_pulsed;
+        internal bool b_pulsed;
         private string s_text;
         private dgtk.Graphics.Color4 c4_textColor;
         private dgtk.Graphics.Color4 c4_textBorderColor;
@@ -28,15 +29,16 @@ namespace dge.GUI
 
         public Button(uint width, uint height, string text) : base(width,height)
         {
+            this.FirsDraw = true;
             this.s_text = text;
             this.FontSize = 16;
             this.font = GuiTheme.DefaultGuiTheme.DefaultFont; //dge.G2D.Writer.Fonts["Linux Libertine"];
             this.c4_textColor = dgtk.Graphics.Color4.Black;
             this.c4_textBorderColor = dgtk.Graphics.Color4.Black;
                         
-            this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.Button_MarginsFromTheEdge;
-            
+            this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.Button_MarginsFromTheEdge;            
             this.Texcoords = GuiTheme.DefaultGuiTheme.Button_Texcoords;
+            this.tcFrameOffset = GuiTheme.DefaultGuiTheme.Button_FrameOffset;
 
             this.MouseUp += delegate { this.setPulsed(false); };
 
@@ -65,12 +67,12 @@ namespace dge.GUI
             
             if (this.b_pulsed)
             {
-                this.tcFrameOffset = GuiTheme.DefaultGuiTheme.Button_FrameOffset;
+                //this.tcFrameOffset = GuiTheme.DefaultGuiTheme.Button_FrameOffset;
                 this.updateTextCoords(this.f_FontSize-1f);
             }
             else
             {
-                this.tcFrameOffset = new float[]{0,0};
+                //this.tcFrameOffset = new float[]{0,0};
                 this.updateTextCoords(this.f_FontSize);
             }            
         }
@@ -92,6 +94,12 @@ namespace dge.GUI
             }
             this.setPulsed(false);
         }
+
+        protected override void OnResize()
+        {
+            base.OnResize();
+            this.updateTextCoords(this.f_FontSize);
+        }
         
         private void DrawText()
         {
@@ -109,11 +117,17 @@ namespace dge.GUI
         }
 
         internal override void Draw()
-        {
-            base.Draw();
-            //DrawText();
-            //this.updateTextCoords();
-            this.DrawIn(this.i_x+(int)this.MarginsFromTheEdge[0],this.i_y+(int)this.MarginsFromTheEdge[1]/*+(int)this.ui_height*/,(int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
+        {   
+            if (this.FirsDraw) { this.updateTextCoords(this.f_FontSize); this.FirsDraw  =false; };
+            if (this.gui != null)
+            {
+                //base.Draw();
+                this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_pulsed ? this.tcFrameOffset : new float[]{0,0}, 0);
+
+                //DrawText();
+                //this.updateTextCoords();
+                this.DrawIn(this.i_x+(int)this.MarginsFromTheEdge[0],this.i_y+(int)this.MarginsFromTheEdge[1]/*+(int)this.ui_height*/,(int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
+            }
         }
         
         public dgtk.Graphics.Color4 TextColor
@@ -150,24 +164,6 @@ namespace dge.GUI
         {
             set { this.s_text = value; this.updateTextCoords(this.f_FontSize); }
             get { return this.s_text; }
-        }
-
-        public override uint Width
-        {
-            set { base.Width = value; this.updateTextCoords(this.f_FontSize); }
-            get { return base.Width; }
-        }
-
-        public override uint Height 
-        { 
-            set { base.Height = value; this.updateTextCoords(this.f_FontSize); } 
-            get { return base.Height; } 
-        }
-
-        internal override GraphicsUserInterface GUI
-        {
-            set { base.GUI = value; this.updateTextCoords(this.f_FontSize);}
-            get { return base.gui; }
         }
     }
 }
