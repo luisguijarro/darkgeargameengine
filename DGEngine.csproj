@@ -105,6 +105,6 @@
     <Content Include="GUI\ScrollBar.cs" />
     <Content Include="GUI\ListViewer.cs" />
     <Content Include="GUI\ListViewerElement.cs" />
-    <Content Include="GUI\ListViewerColumn.cs" />
+    <Content Include="GUI\ListViewerHeader.cs" />
   </ItemGroup>
 </Project>
