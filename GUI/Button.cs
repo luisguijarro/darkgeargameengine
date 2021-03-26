@@ -130,6 +130,8 @@ namespace dge.GUI
             }
         }
         
+        #region PROPERTIES:
+        
         public dgtk.Graphics.Color4 TextColor
         {
             set { this.c4_textColor = value;  this.updateTextCoords(this.f_FontSize);}
@@ -165,5 +167,7 @@ namespace dge.GUI
             set { this.s_text = value; this.updateTextCoords(this.f_FontSize); }
             get { return this.s_text; }
         }
+
+        #endregion
     }
 }
