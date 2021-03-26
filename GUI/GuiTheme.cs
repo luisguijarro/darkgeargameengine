@@ -103,6 +103,7 @@ namespace dge.GUI
         internal float[] ListViewer_Header_Texcoords; // n=8
         internal float[] ListViewer_Header_FrameOffset; // n=2
         internal float[] ListViewer_Dibider_Texcoords; // n=4
+        internal int ListViewer_Dibider_Width;
 
         #endregion
 
@@ -329,6 +330,7 @@ namespace dge.GUI
                 multVer*145f, multVer*147f, multVer*165f, multVer*167f
             };
             ret.ListViewer_Header_FrameOffset = new float[]{23,0};
+            ret.ListViewer_Dibider_Width = 2;
             ret.ListViewer_Dibider_Texcoords = new float[]
             {
                 multHor*97f, multVer*145f,
