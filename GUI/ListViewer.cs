@@ -14,13 +14,9 @@ namespace dge.GUI
         private TextAlign ta_textAlign;
         private Dictionary<int, ListViewerElement> d_Elements; // ID, Element
         private List<int> l_VisualOrder; // ID
-        private Dictionary<string, ListViewerColumn> d_ListViewerColumns;
+        private Dictionary<string, ListViewerHeader> d_ListViewerColumns;
         private bool b_showColumns;
 
-        internal int[] ListViewer_Header_MarginsFromTheEdge; // n=4
-        internal float[] ListViewer_Header_Texcoords; // n=8
-        internal float[] ListViewer_Header_FrameOffset; // n=2
-        internal float[] ListViewer_Dibider_Texcoords; // n=4
         public ListViewer()
         {
             this.sbVer = new ScrollBar();
@@ -31,16 +27,12 @@ namespace dge.GUI
 
             this.l_VisualOrder = new List<int>();
             this.d_Elements = new Dictionary<int, ListViewerElement>();
-            this.d_ListViewerColumns = new Dictionary<string, ListViewerColumn>();
+            this.d_ListViewerColumns = new Dictionary<string, ListViewerHeader>();
 
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ListViewer_MarginsFromTheEdge;
             this.Texcoords = GuiTheme.DefaultGuiTheme.ListViewer_Texcoords;
             this.tcFrameOffset = new float[] {0,0};
 
-            this.ListViewer_Header_MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ListViewer_Header_MarginsFromTheEdge;
-            this.ListViewer_Header_Texcoords = GuiTheme.DefaultGuiTheme.ListViewer_Header_Texcoords;
-            this.ListViewer_Header_FrameOffset = GuiTheme.DefaultGuiTheme.ListViewer_Header_FrameOffset;
-            this.ListViewer_Dibider_Texcoords = GuiTheme.DefaultGuiTheme.ListViewer_Dibider_Texcoords;
         }
 
         #region PUBLIC:
@@ -78,7 +70,7 @@ namespace dge.GUI
         {
             if (!d_ListViewerColumns.ContainsKey(Column))
             {
-                this.d_ListViewerColumns.Add(Column, new ListViewerColumn(Column));
+                this.d_ListViewerColumns.Add(Column, new ListViewerHeader(Column));
             }
         }
 
