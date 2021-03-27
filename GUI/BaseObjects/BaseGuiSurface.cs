@@ -45,6 +45,7 @@ namespace dge.GUI.BaseObjects
         public event EventHandler<dgtk.dgtk_KeyBoardKeysEventArgs> KeyPulsed; // Evento que se da cuando se pulsa una tecla del teclado.
 		public event EventHandler<dgtk.dgtk_KeyBoardKeysEventArgs> KeyReleased; // Evento que se da cuando se suelta una tecla del teclado.
 		public event EventHandler<dgtk.dgtk_KeyBoardTextEventArgs> KeyCharReturned; // Evento devuelto cuando se pulsa o se suelta una tecla y que devuelve el caracter asociado.
+        public event EventHandler<dgtk.dgtk_ResizeEventArgs> SizeChanged;
 		
         public BaseGuiSurface() : this(160, 90)
         {            
@@ -85,14 +86,21 @@ namespace dge.GUI.BaseObjects
             this.KeyPulsed += delegate {}; //Inicialización del evento por defecto.
             this.KeyReleased += delegate {}; //Inicialización del evento por defecto.
             this.KeyCharReturned += delegate {}; //Inicialización del evento por defecto.
+            this.SizeChanged += ResizeEvent;
         }
 
         ~BaseGuiSurface()
         {
             Core2D.ReleaseID(this.ui_id); // Liberamos ID de la superficie.
+            this.SizeChanged += ResizeEvent;
         }
 
         #region PRIVATES:
+
+        private void ResizeEvent(object sender, dgtk.dgtk_ResizeEventArgs e)
+        {
+            this.OnResize();
+        }
 
         #endregion
 
@@ -323,13 +331,13 @@ namespace dge.GUI.BaseObjects
 
         public uint Width
         {
-            set { this.ui_width = value; this.OnResize(); }
+            set { this.ui_width = value; this.SizeChanged(this, new dgtk.dgtk_ResizeEventArgs((int)this.ui_width, (int)this.ui_height)); }
             get { return this.ui_width; }
         }
 
         public uint Height
         {
-            set { this.ui_height = value; this.OnResize(); }
+            set { this.ui_height = value; this.SizeChanged(this, new dgtk.dgtk_ResizeEventArgs((int)this.ui_width, (int)this.ui_height)); }
             get { return this.ui_height; }
         }
 
