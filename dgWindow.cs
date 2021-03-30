@@ -27,7 +27,7 @@ namespace dge
             
         }
 
-        protected override void OnWindowSizeChange(object sender, dgtk_WinResizeEventArgs e)
+        protected override void OnWindowSizeChange(object sender, dgtk_ResizeEventArgs e)
         {
             base.OnWindowSizeChange(sender, e);
             if (this.gui != null)
