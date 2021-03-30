@@ -329,7 +329,7 @@ namespace dge.GUI
                 multHor*49f, multHor*51f, multHor*69f, multHor*71f, 
                 multVer*145f, multVer*147f, multVer*165f, multVer*167f
             };
-            ret.ListViewer_Header_FrameOffset = new float[]{23,0};
+            ret.ListViewer_Header_FrameOffset = new float[]{multHor*24f,0f};
             ret.ListViewer_Dibider_Width = 2;
             ret.ListViewer_Dibider_Texcoords = new float[]
             {
