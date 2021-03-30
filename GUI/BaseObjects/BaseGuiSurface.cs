@@ -14,10 +14,10 @@ namespace dge.GUI.BaseObjects
         protected uint ui_id; // ID De objeto 2D.
         protected Color4 idColor; // Color para la selección de ID.
 
-        internal int int_x; // Posiciones X e Y heredados.
-        internal int int_y; // Posiciones X e Y heredados.
-        protected int i_x; // Coordenada X de posición de Objeto
-        protected int i_y; // Coordenada Y de posición de Objeto)
+        protected int int_x; // Posiciones X e Y heredados.
+        protected int int_y; // Posiciones X e Y heredados.
+        internal int i_x; // Coordenada X de posición de Objeto
+        internal int i_y; // Coordenada Y de posición de Objeto)
         protected uint ui_width; // Ancho del Objeto en Pixeles
         protected uint ui_height; // Alto dle objeto en pixeles.
 
@@ -34,7 +34,7 @@ namespace dge.GUI.BaseObjects
 
         private bool b_visible; // ¿Es Visible la ventana?
         protected GraphicsUserInterface gui; // GUI al que pertenece.
-        private Dictionary<uint, BaseGuiSurface> d_guiSurfaces; // Todos los Controles de la ventana.
+        protected Dictionary<uint, BaseGuiSurface> d_guiSurfaces; // Todos los Controles de la ventana.
         internal List<uint> VisibleSurfaceOrder; // Orden de los Controles de la ventana.
         private BaseGuiSurface parentGuiSurface; // Padre cuando es contenido.
         
@@ -112,8 +112,8 @@ namespace dge.GUI.BaseObjects
             {
                 surface.parentGuiSurface = this; // Adoptar guiSurface
                 surface.GUI = this.gui; // Asignar mimo GUI.
-                surface.int_x = this.int_x+this.i_x;
-                surface.int_y = this.int_y+this.i_y;
+                surface.intX = this.int_x+this.i_x;
+                surface.intY = this.int_y+this.i_y;
                 this.d_guiSurfaces.Add(surface.ID, surface); // Añadir guiSurface.
                 if (surface.Visible)
                 {
@@ -173,23 +173,52 @@ namespace dge.GUI.BaseObjects
         {
             if (this.gui != null)
             {
-                int[] iv_VP = GL.glGetViewport();
-                GL.glViewport(iv_VP[0]+x, iv_VP[1]+iv_VP[3]/*(int)this.gui.ui_height*/-(int)(y+height), width, height);
+                int[] iv_VP = GL.glGetViewport(); // Conservamos valores de ViewPort Actual.
 
-                dgtk.Math.Mat4 m4 = this.gui.Drawer.m4P;
-                dgtk.Math.Mat4 m4g = this.gui.GuiDrawer.m4P;
-                dgtk.Math.Mat4 m4w = this.gui.Writer.m4P;
+                int mX = 0; // modificador de coordenadas de proyección.
+                int ivp_x = iv_VP[0]+x;
+                if (ivp_x < iv_VP[0])
+                {
+                    ivp_x = iv_VP[0];
+                    mX = x;
+                }
+                int ivp_width = (iv_VP[0]+x+width > iv_VP[0]+iv_VP[2]) ? width-((iv_VP[0]+x+width)-(iv_VP[0]+iv_VP[2])) : width;
+                ivp_width = ivp_width+mX;
 
-                this.gui.Drawer.DefinePerspectiveMatrix(0, 0, width, height, true);
-                this.gui.GuiDrawer.DefinePerspectiveMatrix(0, 0, width, height);
-                this.gui.Writer.DefinePerspectiveMatrix(0, 0, width, height, true);
 
-                action();
+                int mY = 0; // modificador de coordenadas de proyección.
+                int ivp_y = iv_VP[1]+iv_VP[3]-(int)(y+height);
+                int ivp_height = height;
+                if (ivp_y < iv_VP[1])
+                {
+                    ivp_y = iv_VP[1];
+                    ivp_height = height - (iv_VP[1] - (iv_VP[1]+iv_VP[3]-(int)(y+height)));
+                }
+                if ((ivp_y + ivp_height) > iv_VP[1]+iv_VP[3])
+                {
+                    ivp_height = ivp_height - ((ivp_y + ivp_height) - (iv_VP[1]+iv_VP[3]));
+                    mY = y;
+                }
 
-                GL.glViewport(iv_VP[0], iv_VP[1], iv_VP[2], iv_VP[3]);
-                this.gui.Drawer.DefinePerspectiveMatrix(m4);
-                this.gui.GuiDrawer.DefinePerspectiveMatrix(m4g);
-                this.gui.Writer.DefinePerspectiveMatrix(m4w);
+                if ((ivp_width > 0) && (ivp_height > 0)) // Si el ancho y el alto del area a dibujar es mayor que 0
+                {
+                    GL.glViewport(ivp_x, ivp_y, ivp_width, ivp_height); // Establecemos nuevo ViewPort
+
+                    dgtk.Math.Mat4 m4 = this.gui.Drawer.m4P;
+                    dgtk.Math.Mat4 m4g = this.gui.GuiDrawer.m4P;
+                    dgtk.Math.Mat4 m4w = this.gui.Writer.m4P;
+
+                    this.gui.Drawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
+                    this.gui.GuiDrawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY);
+                    this.gui.Writer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
+
+                    action();
+
+                    GL.glViewport(iv_VP[0], iv_VP[1], iv_VP[2], iv_VP[3]); // Restauramos antiguo ViewPort.
+                    this.gui.Drawer.DefinePerspectiveMatrix(m4);
+                    this.gui.GuiDrawer.DefinePerspectiveMatrix(m4g);
+                    this.gui.Writer.DefinePerspectiveMatrix(m4w);
+                }
             }
         }
 
@@ -197,17 +226,47 @@ namespace dge.GUI.BaseObjects
         {
             if (this.gui != null)
             {
-                int[] iv_VP = GL.glGetViewport();
-                GL.glViewport(iv_VP[0]+x, iv_VP[1]+iv_VP[3]/*(int)this.gui.ui_height*/-(int)(y+height), width, height);
+                
+                int[] iv_VP = GL.glGetViewport(); // Conservamos valores de ViewPort Actual.
 
-                dgtk.Math.Mat4 m4 = dge.G2D.IDsDrawer.m4P;
+                int mX = 0; // modificador de coordenadas de proyección.
+                int ivp_x = iv_VP[0]+x;
+                if (ivp_x < iv_VP[0])
+                {
+                    ivp_x = iv_VP[0];
+                    mX = x;
+                }
+                int ivp_width = (iv_VP[0]+x+width > iv_VP[0]+iv_VP[2]) ? width-((iv_VP[0]+x+width)-(iv_VP[0]+iv_VP[2])) : width;
+                ivp_width = ivp_width+mX;
 
-                dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0,0, width, height, true);
 
-                action();
+                int mY = 0; // modificador de coordenadas de proyección.
+                int ivp_y = iv_VP[1]+iv_VP[3]-(int)(y+height);
+                int ivp_height = height;
+                if (ivp_y < iv_VP[1])
+                {
+                    ivp_y = iv_VP[1];
+                    ivp_height = height - (iv_VP[1] - (iv_VP[1]+iv_VP[3]-(int)(y+height)));
+                }
+                if ((ivp_y + ivp_height) > iv_VP[1]+iv_VP[3])
+                {
+                    ivp_height = ivp_height - ((ivp_y + ivp_height) - (iv_VP[1]+iv_VP[3]));
+                    mY = y;
+                }
 
-                GL.glViewport(iv_VP[0], iv_VP[1], iv_VP[2], iv_VP[3]);
-                dge.G2D.IDsDrawer.DefinePerspectiveMatrix(m4);   
+                if ((ivp_width > 0) && (ivp_height > 0)) // Si el ancho y el alto del area a dibujar es mayor que 0
+                {
+                    GL.glViewport(ivp_x, ivp_y, ivp_width, ivp_height);
+
+                    dgtk.Math.Mat4 m4 = dge.G2D.IDsDrawer.m4P;
+
+                    dge.G2D.IDsDrawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
+
+                    action();
+
+                    GL.glViewport(iv_VP[0], iv_VP[1], iv_VP[2], iv_VP[3]);
+                    dge.G2D.IDsDrawer.DefinePerspectiveMatrix(m4);   
+                }
             }
         }
 
@@ -228,17 +287,15 @@ namespace dge.GUI.BaseObjects
 
         internal virtual void DrawID()
         {          
-            if (this.gui != null)
-            {
-            
+            //if (this.gui != null)
+            //{            
                 dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
             
                 if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
                 {
                     this.DrawIdIn(this.i_x-(int)this.MarginsFromTheEdge[0], this.i_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContentIDs);
                 }
-            }
-            
+            //}            
         }
 
         #region Protected Input Events:
@@ -289,7 +346,11 @@ namespace dge.GUI.BaseObjects
 
         protected virtual void OnReposition()
         {
-            
+            foreach(BaseGuiSurface surf in this.d_guiSurfaces.Values)
+            {
+                surf.intX = this.int_x+this.i_x+this.MarginsFromTheEdge[0];
+                surf.intY = this.int_y+this.i_y+this.MarginsFromTheEdge[1];
+            }
         }
 
         #endregion
@@ -308,11 +369,16 @@ namespace dge.GUI.BaseObjects
                 this.i_x = value;
                 foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
                 {
-                    srf.int_x = this.int_x+this.i_x;
+                    srf.intX = this.int_x+this.i_x;
                 }
                 this.OnReposition();
             }
             get { return this.i_x; }
+        }
+
+        internal int intX
+        {
+            set { this.int_x = value; this.OnReposition(); }
         }
 
         public int Y
@@ -322,11 +388,16 @@ namespace dge.GUI.BaseObjects
                 this.i_y = value;
                 foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
                 {
-                    srf.int_y = this.int_y+this.i_y;
+                    srf.intY = this.int_y+this.i_y;
                 }
                 this.OnReposition();
             }
             get { return this.i_y; }
+        }
+
+        internal int intY
+        {
+            set { this.int_y = value; this.OnReposition(); }
         }
 
         public uint Width
