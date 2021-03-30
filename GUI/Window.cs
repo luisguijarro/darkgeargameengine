@@ -42,8 +42,8 @@ namespace dge.GUI
 
             this.CloseButton = new Button(17, 17, "X");
             this.CloseButton.GUI = this.gui;
-            this.CloseButton.int_x = this.i_x+this.int_x;
-            this.CloseButton.int_y = this.i_y+this.int_y;
+            this.CloseButton.intX = this.i_x+this.int_x;
+            this.CloseButton.intY = this.i_y+this.int_y;
             this.CloseButton.X = (int)this.Width-20;
             this.CloseButton.Y = 3;
             this.CloseButton.FontSize = 14;
@@ -63,9 +63,14 @@ namespace dge.GUI
 
         protected override void OnReposition()
         {
-            base.OnReposition();
-            this.CloseButton.int_x = this.int_x+this.i_x;
-            this.CloseButton.int_y = this.int_y+this.i_y;
+            //base.OnReposition();
+            foreach(BaseObjects.BaseGuiSurface surf in this.d_guiSurfaces.Values)
+            {
+                surf.intX = this.int_x+this.i_x+this.MarginsFromTheEdge[0];
+                surf.intY = this.int_y+this.i_y+this.MarginsFromTheEdge[1];
+            }
+            this.CloseButton.intX = this.int_x+this.i_x;
+            this.CloseButton.intY = this.int_y+this.i_y;
         }
 
         internal override void Draw()
@@ -75,7 +80,7 @@ namespace dge.GUI
 
             if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
-                DrawIn(this.i_x+this.int_x+(int)this.MarginsFromTheEdge[0], this.i_y+this.int_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)this.MarginsFromTheEdge[1], DrawContent);
+                DrawIn(this.i_x+this.int_x+(int)this.MarginsFromTheEdge[0], this.i_y+this.int_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContent);
             }
 
             base.DrawIn(this.int_x+this.i_x, this.int_y+this.i_y,(int)this.ui_width, (int)this.MarginsFromTheEdge[1], DrawText);
@@ -104,6 +109,7 @@ namespace dge.GUI
         public void AddControl(BaseObjects.Control control)
         {
             base.AddSurface((BaseObjects.BaseGuiSurface)control);
+            this.OnReposition();
         }
 
         public void RemoveControl(uint id)
