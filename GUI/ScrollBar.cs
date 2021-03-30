@@ -209,6 +209,7 @@ namespace dge.GUI
                 pixelrange = (int)(this.Width-(this.btn1.Width+this.btn2.Width+this.slider.Width));
                 this.i_step = (int)((float)valuerange / (float)pixelrange);
             }
+            if (this.i_step < 1) { this.i_step = 1; }
         }
 
         #endregion
@@ -220,11 +221,11 @@ namespace dge.GUI
             base.OnResize();
             if (this.o_Orientation == Orientation.Horizontal)
             {
-                base.Height = (uint)GuiTheme.DefaultGuiTheme.ScrollBar_BarWidth;
+                /*base.Height*/ this.ui_height = (uint)GuiTheme.DefaultGuiTheme.ScrollBar_BarWidth;
             }
             else
             {
-                base.Width = (uint)GuiTheme.DefaultGuiTheme.ScrollBar_BarWidth;
+                /*base.Width*/ this.ui_width = (uint)GuiTheme.DefaultGuiTheme.ScrollBar_BarWidth;
             }
             this.UpdateSizePos();
             this.UpdateSliderPos();
@@ -240,20 +241,22 @@ namespace dge.GUI
 
         internal override void Draw()
         {
-            if (this.o_Orientation == Orientation.Horizontal)
+            if (this.gui != null)
             {
-                this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x+(int)this.btn1.Height, this.i_y, this.ui_width-(uint)(this.btn1.Width+this.btn2.Width), this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
-            }
-            else
-            {
-                this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y+(int)this.btn1.Height, this.ui_width, this.ui_height-(uint)(this.btn1.Height+this.btn2.Height), 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
-            }
+                if (this.o_Orientation == Orientation.Horizontal)
+                {
+                    this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x+(int)this.btn1.Height, this.i_y, this.ui_width-(uint)(this.btn1.Width+this.btn2.Width), this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
+                }
+                else
+                {
+                    this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y+(int)this.btn1.Height, this.ui_width, this.ui_height-(uint)(this.btn1.Height+this.btn2.Height), 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
+                }
 
-            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
-            {
-                DrawIn(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height, DrawContent);
+                if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+                {
+                    DrawIn(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height, DrawContent);
+                }
             }
-
         }
 
         internal override void DrawID()
