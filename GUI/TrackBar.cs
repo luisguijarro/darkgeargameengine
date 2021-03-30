@@ -163,11 +163,11 @@ namespace dge.GUI
             base.OnResize();
             if (this.o_Orientation == Orientation.Vertical)
             {
-                /*base.Width*/ this.ui_width = (uint)GuiTheme.DefaultGuiTheme.TrackBar_Ver_MaxWidth;
+                this.ui_width = (uint)GuiTheme.DefaultGuiTheme.TrackBar_Ver_MaxWidth;
             }
             else
             {
-                /*base.Height*/ this.ui_height = (uint)GuiTheme.DefaultGuiTheme.TrackBar_Hor_MaxHeight;
+                this.ui_height = (uint)GuiTheme.DefaultGuiTheme.TrackBar_Hor_MaxHeight;
             }
             this.UpdateShapePos();
             this.UpdateShape();
