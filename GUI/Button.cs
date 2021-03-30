@@ -104,8 +104,8 @@ namespace dge.GUI
         private void DrawText()
         {
             float f_fs = this.b_pulsed ? this.f_FontSize-1 : f_FontSize;
-            float px = this.tx_x; //(this.b_pulsed ? tx_x+1f : tx_x);
-            float py = this.tx_y; //(this.b_pulsed ? tx_y+1f : tx_y);
+            float px = this.tx_x;
+            float py = this.tx_y;
             if (this.b_textBorder)
             {
                 this.gui.Writer.Write(this.font, this.c4_textColor, this.s_text, f_fs, px, py, this.c4_textBorderColor);
@@ -125,7 +125,6 @@ namespace dge.GUI
                 this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_pulsed ? this.tcFrameOffset : new float[]{0,0}, 0);
 
                 //DrawText();
-                //this.updateTextCoords();
                 this.DrawIn(this.i_x+(int)this.MarginsFromTheEdge[0],this.i_y+(int)this.MarginsFromTheEdge[1]/*+(int)this.ui_height*/,(int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
             }
         }
