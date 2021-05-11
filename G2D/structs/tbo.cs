@@ -37,5 +37,13 @@ namespace dge.G2D
         {
             get { return this.s_HASHCODE; }
         }
+
+        public static TextureBufferObject Null
+        {
+            get
+            {
+                return new TextureBufferObject("", 0, 0, 0, "");
+            }
+        }
     }
 }
