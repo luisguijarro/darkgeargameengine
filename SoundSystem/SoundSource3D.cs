@@ -16,7 +16,7 @@ namespace dge.SoundSystem
 
 		private Dictionary<uint,I_Filter> FiltersLinked;
 		private I_Filter LinkedDirecFilter; // Solo se puede enlazar un filtro en modo directo.
-		internal SoundSource3D()
+		public SoundSource3D()
 		{
 			this.ui_ID = AL.alGenSource();
 			this.FiltersLinked = new Dictionary<uint, I_Filter>();
