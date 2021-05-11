@@ -106,5 +106,8 @@
     <Content Include="GUI\ListViewer.cs" />
     <Content Include="GUI\ListViewerElement.cs" />
     <Content Include="GUI\ListViewerHeader.cs" />
+    <Content Include="GUI\Dialogs\FileDialog.cs" />
+    <Content Include="SoundSystem\SoundTools.cs" />
+    <Content Include="Scene\Scene2D.cs" />
   </ItemGroup>
 </Project>
