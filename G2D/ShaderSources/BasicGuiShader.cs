@@ -66,8 +66,8 @@ namespace dge.G2D
                     break;
             }
             
-            int trunc_s = int(trunc(vId/4));
-            int trunc_t = int(vId-(trunc(vId/4)*4));
+            int trunc_s = int(trunc(float(vId/4)));
+            int trunc_t = int(vId-(trunc(float(vId/4))*4));
 
             tc = vec2(utexcoords[0][trunc_s] + tcDisplacement.s, utexcoords[1][trunc_t] + tcDisplacement.t);
             
