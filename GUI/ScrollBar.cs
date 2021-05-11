@@ -360,6 +360,11 @@ namespace dge.GUI
             get { return this.i_value; }
         }
 
+        public int StepSize
+        {
+            get { return this.i_step; }
+        }
+
         #endregion
     }
 }
