@@ -9,8 +9,14 @@ namespace dge
         private G2D.GuiDrawer GuiDrawer2D;
         private G2D.Writer writer2D;
         private GUI.GraphicsUserInterface gui;
+        private Scene scn_escene;
         private SndSystem sndSystem;
-        public dgWindow(string Title) : base(1024, 600, Title) // Consuctor Básico.
+        public dgWindow(string Title) : this(1024, 600, Title) // Consuctor Básico.
+        {
+                        
+        }
+
+        public dgWindow(uint width, uint height, string Title) : base(width, height, Title) // Consuctor Básico.
         {
             Core.LockObject = base.LockObject;
             sndSystem = new SndSystem(base.OpenALContext);
@@ -24,7 +30,6 @@ namespace dge
             this.GuiDrawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height);
             this.writer2D = new G2D.Writer();
             this.UnMakeCurrent(); //No debería ser necesario.
-            
         }
 
         protected override void OnWindowSizeChange(object sender, dgtk_ResizeEventArgs e)
@@ -46,6 +51,10 @@ namespace dge
         protected override void OnRenderFrame(object sender, dgtk_OnRenderEventArgs e)
         {
             base.OnRenderFrame(sender, e);
+            if (this.scn_escene != null)
+            {
+                this.scn_escene.InternalDraw();
+            }
             if (this.gui != null)
             {
                 gui.Draw();
@@ -78,6 +87,12 @@ namespace dge
         public G2D.Writer Writer2D
         {
             get { return this.writer2D; }
+        }
+
+        public Scene Scene
+        {
+            set { this.scn_escene = value; this.scn_escene.SetParentWindow(this); }
+            get { return this.scn_escene; }
         }
     }
 }
