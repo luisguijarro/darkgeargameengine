@@ -19,6 +19,7 @@ namespace dge
         public dgWindow(uint width, uint height, string Title) : base(width, height, Title) // Consuctor Básico.
         {
             Core.LockObject = base.LockObject;
+            dge.SoundSystem.SoundTools.InitStaticSoundSystem();
             sndSystem = new SndSystem(base.OpenALContext);
 
             dge.G2D.IDsDrawer.Init_IDs_Drawer(); // Iniciamos Código de visualizado de Ids.
