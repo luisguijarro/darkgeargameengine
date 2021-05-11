@@ -158,6 +158,22 @@ namespace dge.G2D
 		/// <param name="size">Size of the font in pixels.</param>
 		/// <param name="posx">X coord of Origin of the text.</param>
 		/// <param name="posy">Y coord of origin of the text.</param>
+		/// <param name="lineWidth">Max line width of the text.</param>
+		public void Write(string fontname, dgtk.Graphics.Color4 color, string text, float fsize, float posx, float posy, float lineWidth)
+		{
+			this.Write(Fonts[fontname], color, text, fsize, posx, posy, lineWidth);
+		}
+
+		/// <summary>
+		/// Method used by the writer to write text in screen.
+		/// </summary>
+		/// <remarks>Write Text.</remarks>
+		/// <param name="fontname">Name of de Font to Use when Write text.</param>
+		/// <param name="color">Sets the color in which the text will be written.</param>
+		/// <param name="text">Text to Write.</param>
+		/// <param name="size">Size of the font in pixels.</param>
+		/// <param name="posx">X coord of Origin of the text.</param>
+		/// <param name="posy">Y coord of origin of the text.</param>
 		public void Write(dgFont font, dgtk.Graphics.Color4 color, string text, float fsize, float posx, float posy)
 		{
 			float actualpos = posx;
@@ -174,6 +190,54 @@ namespace dge.G2D
 				else
 				{
 					actualpos += WriteChar(font, color, text[i], fsize, actualpos, posy);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Method used by the writer to write text in screen.
+		/// </summary>
+		/// <remarks>Write Text.</remarks>
+		/// <param name="fontname">Name of de Font to Use when Write text.</param>
+		/// <param name="color">Sets the color in which the text will be written.</param>
+		/// <param name="text">Text to Write.</param>
+		/// <param name="size">Size of the font in pixels.</param>
+		/// <param name="posx">X coord of Origin of the text.</param>
+		/// <param name="posy">Y coord of origin of the text.</param>
+		/// <param name="lineWidth">Max line width of the text.</param>
+		public void Write(dgFont font, dgtk.Graphics.Color4 color, string text, float fsize, float posx, float posy, float lineWidth)
+		{
+			string[] s_words = text.Split(' ');
+
+			float tmp_linewidth = 0;
+			float actualpos = posx;
+			int n_lines = 0;
+			for (int w=0;w<s_words.Length;w++)
+			{
+				float word_width = this.MeasureString(font.Name, s_words[w], fsize);
+				if ((tmp_linewidth + word_width) > lineWidth)
+				{
+					tmp_linewidth = 0;
+					actualpos = posx;
+					n_lines++;
+				}
+
+				string word = s_words[w];
+				
+				for (int i=0;i<word.Length;i++)
+				{
+					if (text[i] == ' ')
+					{
+						actualpos += font.f_spaceWidth*(fsize/font.MaxFontSize);
+					}
+					else if (!font.d_characters.ContainsKey(text[i]))
+					{
+						actualpos += font.f_spaceWidth*(fsize/font.MaxFontSize);
+					}
+					else
+					{
+						actualpos += WriteChar(font, color, word[i], fsize, actualpos, posy + (fsize*n_lines));
+					}
 				}
 			}
 		}
