@@ -36,6 +36,7 @@ namespace dge.G2D
 
         public string Name
         {
+            set { this.s_Name = value; }
             get {return this.s_Name;}
         }
 
