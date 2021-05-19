@@ -9,7 +9,6 @@ namespace dge
         protected int i_height;
         protected G2D.Drawer drawer2D;
         protected G2D.Writer writer2D;
-        protected dgtk.Graphics.Color4 c4_BackGroundColor;
 
         public Scene2D(int width, int height, string name) : base(name)
         {
