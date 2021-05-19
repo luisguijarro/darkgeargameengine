@@ -74,7 +74,7 @@ namespace dge.G2D
             TextureBufferObject tbo_ret = new TextureBufferObject();
             if (stream != null)
 			{
-                Bitmap bp = new Bitmap(stream);
+                Bitmap bp = (Bitmap)(Image.FromStream(stream, true, false));
                 BitmapData bd = bp.LockBits(new Rectangle(0, 0, bp.Size.Width, bp.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 							
 				tbo_ret = p_LoadImageFromIntPTr(s_hash, bd.Width, bd.Height, bd.Scan0);
@@ -93,9 +93,6 @@ namespace dge.G2D
         private static unsafe TextureBufferObject p_LoadImageFromIntPTr(string name, int Width, int Height, IntPtr Scan0)
 		{
             bool current = dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
-            TextureBufferObject tbo_ret = new TextureBufferObject(); // Valor a devolver.
-
-            //dgtk.OpenGL.OGL_SharedContext.MakeCurrent(); // Falta el SharedContext
 
             UInt32 idret = 0; //stackalloc uint[1];
             GL.glEnable(EnableCap.GL_TEXTURE_2D);
@@ -117,9 +114,7 @@ namespace dge.G2D
 
             GL.glFlush();
 
-            //dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
-
-            return tbo_ret = new TextureBufferObject(name, (uint)Width, (uint)Height, idret, name);
+            return new TextureBufferObject(name, (uint)Width, (uint)Height, idret, name);
         }
         
 		public static bool SaveImage(TextureBufferObject tbo, string filepath)
