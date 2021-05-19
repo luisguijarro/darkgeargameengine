@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace dge.SoundSystem
@@ -21,17 +22,26 @@ namespace dge.SoundSystem
 	[StructLayout(LayoutKind.Sequential)]
 	internal struct SF_VIRTUAL_IO
     {    
-		internal sf_vio_get_filelen get_filelen ;
-        internal sf_vio_seek seek ;
-        internal sf_vio_read read ;
-        internal sf_vio_write write ;
-        internal sf_vio_tell tell ;
+		public sf_vio_get_filelen get_filelen;
+        public sf_vio_seek seek;
+        public sf_vio_read read;
+        public sf_vio_write write;
+        public sf_vio_tell tell;
     }
 
-	delegate long sf_vio_get_filelen (IntPtr user_data) ;
-	delegate long  sf_vio_seek (long offset, int whence, IntPtr user_data) ;
-	delegate long  sf_vio_read (IntPtr ptr, long count, IntPtr user_data) ;
-	delegate long  sf_vio_write (IntPtr ptr, long count, IntPtr user_data) ;
-	delegate long  sf_vio_tell (IntPtr user_data) ;
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct VIO_DATA
+	{	
+		public long offset;
+		public long Length;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 524288)]
+		public byte[] data;
+	} 
+
+	internal delegate long sf_vio_get_filelen (IntPtr user_data);
+	internal delegate long sf_vio_seek (long offset, Whence whence, IntPtr user_data);
+	internal delegate long sf_vio_read (IntPtr ptr, long count, IntPtr user_data);
+	internal delegate long sf_vio_write (IntPtr ptr, long count, IntPtr user_data);
+	internal delegate long sf_vio_tell (IntPtr user_data);
 
 }
