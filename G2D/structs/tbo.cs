@@ -42,7 +42,7 @@ namespace dge.G2D
         {
             get
             {
-                return new TextureBufferObject("", 0, 0, 0, "");
+                return new TextureBufferObject("", 2, 2, 0, "");
             }
         }
     }
