@@ -11,7 +11,13 @@ namespace dge.SoundSystem
 		internal static extern IntPtr sf_open(string path, OpenMode Mode, ref SF_INFO sfInfo);
 
         [DllImport("libsndfile-1.dll", EntryPoint="sf_open_virtual")]
+        internal static extern IntPtr sf_open_virtual (ref SF_VIRTUAL_IO sfvirtual, OpenMode mode, ref SF_INFO sfinfo, ref VIO_DATA user_data);
+
+        [DllImport("libsndfile-1.dll", EntryPoint="sf_open_virtual")]
         internal static extern IntPtr sf_open_virtual (ref SF_VIRTUAL_IO sfvirtual, OpenMode mode, ref SF_INFO sfinfo, IntPtr user_data);
+
+        [DllImport("libsndfile-1.dll", EntryPoint="sf_open_virtual")]
+        internal static extern IntPtr sf_open_virtual (ref IntPtr sfvirtual, OpenMode mode, ref SF_INFO sfinfo, IntPtr user_data);
 		
 		[DllImport("libsndfile-1.dll", EntryPoint="sf_close")]
 		internal static extern int  sf_close (IntPtr sndfile);
@@ -118,7 +124,13 @@ namespace dge.SoundSystem
 		internal static extern IntPtr sf_open(string path, OpenMode Mode, ref SF_INFO sfInfo);
 
         [DllImport("libsndfile.so.1", EntryPoint="sf_open_virtual")]
+        internal static extern IntPtr sf_open_virtual (ref SF_VIRTUAL_IO sfvirtual, OpenMode mode, ref SF_INFO sfinfo, ref VIO_DATA user_data);
+
+        [DllImport("libsndfile.so.1", EntryPoint="sf_open_virtual")]
         internal static extern IntPtr sf_open_virtual (ref SF_VIRTUAL_IO sfvirtual, OpenMode mode, ref SF_INFO sfinfo, IntPtr user_data);
+		
+        [DllImport("libsndfile.so.1", EntryPoint="sf_open_virtual")]
+        internal static extern IntPtr sf_open_virtual (ref IntPtr sfvirtual, OpenMode mode, ref SF_INFO sfinfo, IntPtr user_data);
 		
 		[DllImport("libsndfile.so.1", EntryPoint="sf_close")]
 		internal static extern int  sf_close (IntPtr sndfile);
