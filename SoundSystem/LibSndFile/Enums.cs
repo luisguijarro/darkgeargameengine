@@ -2,6 +2,13 @@ using System;
 
 namespace dge.SoundSystem
 {
+    enum Whence : int
+    {
+        SEEK_SET = 0,
+        SEEK_CUR = 1,
+        SEEK_END = 2
+    }
+
     enum Errores : int
 	{   
 		SF_ERR_NO_ERROR				= 0,
