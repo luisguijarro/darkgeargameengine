@@ -72,18 +72,39 @@ namespace dge.SoundSystem
         {
             if (bytes.Length > 0) // Existen bytes?
             {
+                byte[] nbytes = new byte[524288];
+                bytes.CopyTo(nbytes, 0);
+
+                VIO_DATA v_data = new VIO_DATA
+                {
+                    offset = 0,
+                    Length = bytes.Length,
+                    data = nbytes
+                };
+
+                IntPtr PtrData = Marshal.AllocHGlobal(Marshal.SizeOf(v_data));
+                Marshal.StructureToPtr(v_data, PtrData, false);
+
                 SF_INFO sf_info = new SF_INFO();
                 sf_info.format = 0;
-                SF_VIRTUAL_IO sf_v_io = new SF_VIRTUAL_IO();
+                SF_VIRTUAL_IO v_io = new SF_VIRTUAL_IO
+                {
+                    get_filelen = sf_vio_get_filelen,
+                    seek = sf_vio_seek,
+                    read = sf_vio_read,
+                    write = sf_vio_write,
+                    tell = sf_vio_tell
+                };
 
-                IntPtr BytesPrt = Marshal.AllocHGlobal(bytes.Length);
-                Marshal.Copy(bytes, 0, BytesPrt, bytes.Length);
+                IntPtr ptr_snd = dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? 
+                ImportsW.sf_open_virtual(ref v_io, OpenMode.SFM_READ, ref sf_info, PtrData) : 
+                ImportsL.sf_open_virtual(ref v_io, OpenMode.SFM_READ, ref sf_info, PtrData);
 
-                IntPtr ptr_snd = dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_open_virtual(ref sf_v_io, OpenMode.SFM_READ, ref sf_info, BytesPrt) : ImportsL.sf_open_virtual(ref sf_v_io, OpenMode.SFM_READ, ref sf_info, BytesPrt);
                     #if DEBUG
                     if (ptr_snd == IntPtr.Zero) // Si se ha dado algun error...
                     {
-                        Console.WriteLine(dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_error(ptr_snd).ToString() : ImportsL.sf_error(ptr_snd).ToString()); // Hay que saber cual.
+                        int error = (int)(dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_error(ptr_snd) : ImportsL.sf_error(ptr_snd));
+                        Console.WriteLine(dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_error_number(error).ToString() : ImportsL.sf_error_number(error).ToString()); // Hay que saber cual.
                         return null;
                     }
                     #endif
@@ -111,7 +132,8 @@ namespace dge.SoundSystem
 
                 Sound s_ret = new Sound(name, (byte)sf_info.channels, data, sf_info.samplerate);
 
-                Marshal.FreeHGlobal(BytesPrt);
+                Marshal.FreeHGlobal(PtrData);
+                
                 return s_ret;
             }
             else
@@ -119,5 +141,67 @@ namespace dge.SoundSystem
                 return null;
             }
         }
+
+        
+        private static long sf_vio_get_filelen (IntPtr user_data)
+        {
+            VIO_DATA vd = (VIO_DATA)Marshal.PtrToStructure(user_data, typeof(VIO_DATA));
+            
+            int length = (int)vd.Length;
+            Marshal.StructureToPtr(vd, user_data, true);
+            return length;
+        }
+        private static long sf_vio_seek (long offset, Whence whence, IntPtr user_data)
+        {
+            VIO_DATA vd = (VIO_DATA)Marshal.PtrToStructure(user_data, typeof(VIO_DATA));
+            switch (whence)
+            {	case Whence.SEEK_SET :
+                    vd.offset = offset ;
+                    break ;
+
+                case Whence.SEEK_CUR :
+                    vd.offset = vd.offset + offset ;
+                    break ;
+
+                case Whence.SEEK_END :
+                    vd.offset = vd.Length + offset ;
+                    break ;
+                default :
+                    break ;
+            } ;
+            Marshal.StructureToPtr(vd, user_data, true);
+            return vd.offset;
+        }
+        private static long sf_vio_read (IntPtr ptr, long count, IntPtr user_data)
+        {
+            VIO_DATA vd = (VIO_DATA)Marshal.PtrToStructure(user_data, typeof(VIO_DATA));
+
+            if (vd.offset + count >= vd.Length)
+            {
+                count = vd.Length - vd.offset;
+            }
+
+            Marshal.Copy(vd.data, (int)vd.offset, ptr, (int)count);
+            
+            vd.offset += count;
+
+            Marshal.StructureToPtr(vd, user_data, true);
+
+            return count;
+        }
+        private static long sf_vio_write (IntPtr ptr, long count, IntPtr user_data)
+        {
+            // FALTA CÓDIGO
+            return count ;
+        }
+        private static long sf_vio_tell (IntPtr user_data)
+        {
+            VIO_DATA vd = (VIO_DATA)Marshal.PtrToStructure(user_data, typeof(VIO_DATA));
+
+            int offset = (int)vd.offset;
+            Marshal.StructureToPtr(vd, user_data, true);
+            return offset;
+        }
+        
     }
 }
