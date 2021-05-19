@@ -137,6 +137,40 @@ namespace dge.G2D
         /// <param name="y">Y coordinate of the position on the screen where the texture to be painted will be placed.</param>
         /// <param name="width">Width of the drawing to be painted on the screen.</param>
         /// <param name="height">Height of the drawing to be painted on screen.</param>
+        /// <param name="RotInDegrees">Degrees of the rotation.</param>      
+        public void Draw(uint TextureID, int x, int y, uint width, uint height, float RotInDegrees)
+        {
+            DrawGL(TextureID, new Color4(1f, 1f, 1f, 1f), x, y, width, height, RotInDegrees, 0, 0, 1, 1, 0);
+        }
+
+
+        /// <sumary>
+        /// Method use to draw Elements.
+        /// </sumary>
+        /// <remarks>DRAW Textures</remarks>
+        /// <param name="TextureID">Integral identifier of the texture to be used.</param>
+        /// <param name="x">X coordinate of the position on the screen where the texture to be painted will be placed.</param>
+        /// <param name="y">Y coordinate of the position on the screen where the texture to be painted will be placed.</param>
+        /// <param name="width">Width of the drawing to be painted on the screen.</param>
+        /// <param name="height">Height of the drawing to be painted on screen.</param>
+        /// <param name="RotInDegrees">Degrees of the rotation.</param>         
+        /// <param name="FlipH">Indicates if The texture is drawn horizontally Flipped.</param>        
+        /// <param name="FlipV">Indicates if The texture is drawn vertically Flipped.</param>    
+        public void Draw(uint TextureID, int x, int y, uint width, uint height, float RotInDegrees, bool FlipH, bool FlipV)
+        {
+            Draw(TextureID, Color4.White, x, y, width, height, RotInDegrees, 0, 0, 1, 1, FlipH, FlipV);
+        }
+
+
+        /// <sumary>
+        /// Method use to draw Elements.
+        /// </sumary>
+        /// <remarks>DRAW Textures</remarks>
+        /// <param name="TextureID">Integral identifier of the texture to be used.</param>
+        /// <param name="x">X coordinate of the position on the screen where the texture to be painted will be placed.</param>
+        /// <param name="y">Y coordinate of the position on the screen where the texture to be painted will be placed.</param>
+        /// <param name="width">Width of the drawing to be painted on the screen.</param>
+        /// <param name="height">Height of the drawing to be painted on screen.</param>
         /// <param name="RotInDegrees">Degrees of the rotation.</param>
         /// <param name="Texcoord0x">The initial X normalized coordinate of the texture fraction check box. 0f by default.</param>
         /// <param name="Texcoord0y">The initial Y normalized coordinate of the texture fraction check box. 0f by default.</param>
@@ -165,6 +199,38 @@ namespace dge.G2D
         public void Draw(uint TextureID, Color4 Color, int x, int y, uint width, uint height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
         {
             DrawGL(TextureID, Color, x, y, width, height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
+        }
+
+        /// <sumary>
+        /// Method use to draw Elements.
+        /// </sumary>
+        /// <remarks>DRAW Textures</remarks>
+        /// <param name="TextureID">Integral identifier of the texture to be used.</param>
+        /// <param name="Color">Color4 to mix with the Texture.</param>
+        /// <param name="x">X coordinate of the position on the screen where the texture to be painted will be placed.</param>
+        /// <param name="y">Y coordinate of the position on the screen where the texture to be painted will be placed.</param>
+        /// <param name="width">Width of the drawing to be painted on the screen.</param>
+        /// <param name="height">Height of the drawing to be painted on screen.</param>
+        /// <param name="RotInDegrees">Degrees of the rotation.</param>       
+        public void Draw(uint TextureID, Color4 Color, int x, int y, uint width, uint height, float RotInDegrees)
+        {
+            DrawGL(TextureID, Color, x, y, width, height, RotInDegrees, 0, 0, 1, 1, 0);
+        }
+
+        /// <sumary>
+        /// Method use to draw Elements.
+        /// </sumary>
+        /// <remarks>DRAW Textures</remarks>
+        /// <param name="TextureID">Integral identifier of the texture to be used.</param>
+        /// <param name="Color">Color4 to mix with the Texture.</param>
+        /// <param name="x">X coordinate of the position on the screen where the texture to be painted will be placed.</param>
+        /// <param name="y">Y coordinate of the position on the screen where the texture to be painted will be placed.</param>
+        /// <param name="width">Width of the drawing to be painted on the screen.</param>
+        /// <param name="height">Height of the drawing to be painted on screen.</param>
+        /// <param name="RotInDegrees">Degrees of the rotation.</param>       
+        public void Draw(uint TextureID, Color4 Color, int x, int y, uint width, uint height, float RotInDegrees, bool FlipH, bool FlipV)
+        {
+            Draw(TextureID, Color, x, y, width, height, RotInDegrees,0, 0, 1, 1, FlipH, FlipV);
         }
 
         /// <sumary>
