@@ -309,6 +309,34 @@ namespace dge.G2D
             GL.glBindVertexArray(0);
         }
 
+        internal static void DrawGuiGL(Color4 color, int x, int y, uint width, uint height, float RotInDegrees)
+        {
+            dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((-RotInDegrees), new Vector2(width/2f, height/2f));
+            dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
+            
+            GL.glEnable(EnableCap.GL_TEXTURE_2D);
+
+            float[] TexCoords = new float[]
+            {
+                0f, 0f, 1f, 1f, 
+                0f, 0f, 1f, 1f
+            };
+            
+            BasicGuiShader.Use();
+            GL.glUniform4fv(idUniform_texcoords2, 2, TexCoords);
+            GL.glUniform2fv(idUniformtcDisplacement2, 1, new float[]{0,0});
+            GL.glUniform4iv(idUniform_MarginsFromTheEdge2, 1, new int[]{0,0,0,0});
+            GL.glUniform2f(idUniform_v_size2, width, height);
+            GL.glUniform1i(idUniformSilhouette2, 0);
+            GL.glUniform1i(idUniformTexturePassed2, 1);
+            GL.glUniformMatrix(idUniformMat_Tra2, dgtk.OpenGL.Boolean.GL_FALSE, m4T * m4R ); // Transmitimos al Shader la trasformación.
+            GL.glUniform4f(idUniformColor2, color.R, color.G, color.B, color.A);
+            GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, 0);
+            GL.glBindVertexArray(VAO2);
+            GL.glDrawElements(PrimitiveType.GL_TRIANGLES, 54, DrawElementsType.GL_UNSIGNED_INT, new IntPtr(0));
+            GL.glBindVertexArray(0);
+        }
+
         #endregion DrawGui
     }
 }
