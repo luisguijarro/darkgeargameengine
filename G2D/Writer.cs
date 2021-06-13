@@ -16,23 +16,23 @@ namespace dge.G2D
     public class Writer
     {
         internal dgtk.Math.Mat4 m4P; // Para Renicios internos de Perspectiva.
-        private bool b_invert_y;
-        private uint VAO; // Vertex Array Object (indice que contiene toda la info del objeto.)
-        private uint VBO; // Vertex Buffer Object (Indice del buffer Que contiene los atributos de vertice.)
-        private uint EBO; // Element Buffer Object (Indice del buffer que contiene la lista de indices de orden de dibujado de los vertices.)
+        //private bool b_invert_y;
+        private readonly uint VAO; // Vertex Array Object (indice que contiene toda la info del objeto.)
+        private readonly uint VBO; // Vertex Buffer Object (Indice del buffer Que contiene los atributos de vertice.)
+        private readonly uint EBO; // Element Buffer Object (Indice del buffer que contiene la lista de indices de orden de dibujado de los vertices.)
 
 		#region Uniforms Ids
-        private int idUniformTColor; // ID de Uniform de Color transparente.
-        private int idUniformColor; // ID de Uniform de color multiplicante.    
-        private int idUniform_texcoords; // ID de Uniform de Coordenadas de Textura Dinamicas.
-        private int idUniform_v_size; // ID de Uniform de Tamaño de superficie de dibujo.
-        private int idUniformMat_View; // ID de Uniform que contiene la matriz de Projección.
-        private int idUniformMat_Per; // ID de Uniform que contiene la matriz de Perspectiva.
-        private int idUniformMat_Tra; // ID de Uniform que contiene la matriz de Perspectiva.
+        //private int idUniformTColor; // ID de Uniform de Color transparente.
+        private readonly int idUniformColor; // ID de Uniform de color multiplicante.    
+        private readonly int idUniform_texcoords; // ID de Uniform de Coordenadas de Textura Dinamicas.
+        private readonly int idUniform_v_size; // ID de Uniform de Tamaño de superficie de dibujo.
+        private readonly int idUniformMat_View; // ID de Uniform que contiene la matriz de Projección.
+        private readonly int idUniformMat_Per; // ID de Uniform que contiene la matriz de Perspectiva.
+        private readonly int idUniformMat_Tra; // ID de Uniform que contiene la matriz de Perspectiva.
 
         #endregion
 
-        private Shader BasicShader;
+        private readonly Shader BasicShader;
 
 		//private dgWindow parentWindow;
         public static Dictionary<string, dgFont> Fonts;
@@ -106,7 +106,7 @@ namespace dge.G2D
         /// <param name="mat">Matrix 4x4 with de perspective information.</param>
         public void DefinePerspectiveMatrix(float x, float y, float with, float height, bool invert_y)
         {
-            b_invert_y = invert_y;
+            //b_invert_y = invert_y;
             this.m4P = dgtk.Math.MatrixTools.MakeOrthoPerspectiveMatrix(x, with, invert_y ? height : y, invert_y ? y : height, -100f, 100f);
             BasicShader.Use();
             GL.glUniformMatrix(this.idUniformMat_Per, dgtk.OpenGL.Boolean.GL_FALSE, m4P);
@@ -214,7 +214,7 @@ namespace dge.G2D
 			int n_lines = 0;
 			for (int w=0;w<s_words.Length;w++)
 			{
-				float word_width = this.MeasureString(font.Name, s_words[w], fsize);
+				float word_width = MeasureString(font.Name, s_words[w], fsize);
 				if ((tmp_linewidth + word_width) > lineWidth)
 				{
 					tmp_linewidth = 0;
@@ -298,10 +298,10 @@ namespace dge.G2D
 		/// <param name="fontname">Name of de Font to Use when Measure text.</param>
 		/// <param name="text">Text to Measure.</param>
 		/// <param name="size">Size of the font in pixels.</param>
-		public float MeasureString(string fontname, string text, float fsize)
+		public static float MeasureString(string fontname, string text, float fsize)
 		{
 			dgFont font = Fonts[fontname];			
-			return this.MeasureString(font, text, fsize);
+			return MeasureString(font, text, fsize);
 		}
 
 		/// <summary>
@@ -311,7 +311,7 @@ namespace dge.G2D
 		/// <param name="font">Font to Use when Measure text.</param>
 		/// <param name="text">Text to Measure.</param>
 		/// <param name="size">Size of the font in pixels.</param>
-		public float MeasureString(dgFont font, string text, float fsize)
+		public static float MeasureString(dgFont font, string text, float fsize)
 		{
 			float retSize = 0;
 			
