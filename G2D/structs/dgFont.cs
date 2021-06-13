@@ -9,8 +9,8 @@ namespace dge.G2D
         internal float f_MaxFontSize;
         internal float f_borderWidth;
         internal float f_spaceWidth;
-		internal TextureBufferObject TBO_Scan0; // Textura con el relleno de la fuente
-		internal TextureBufferObject TBO_Scan1; // Textura con el borde de la fuente
+		public TextureBufferObject TBO_Scan0; // Textura con el relleno de la fuente
+		public TextureBufferObject TBO_Scan1; // Textura con el borde de la fuente
         internal Dictionary<char, dgCharacter> d_characters;
 
         internal dgFont(string name, float max_font_size, float borderWidth, float spaceWidth, char[] charkeys, dgCharacter[] charvalues, TextureBufferObject scan0, TextureBufferObject scan1)
