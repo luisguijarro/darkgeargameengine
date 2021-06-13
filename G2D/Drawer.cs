@@ -11,24 +11,24 @@ namespace dge.G2D
     {
         internal dgtk.Math.Mat4 m4P; // Para Renicios internos de Perspectiva.
         private bool b_invert_y;
-        private uint VAO; // Vertex Array Object (indice que contiene toda la info del objeto.)
-        private uint VBO; // Vertex Buffer Object (Indice del buffer Que contiene los atributos de vertice.)
-        private uint EBO; // Element Buffer Object (Indice del buffer que contiene la lista de indices de orden de dibujado de los vertices.)
+        private readonly uint VAO; // Vertex Array Object (indice que contiene toda la info del objeto.)
+        private readonly uint VBO; // Vertex Buffer Object (Indice del buffer Que contiene los atributos de vertice.)
+        private readonly uint EBO; // Element Buffer Object (Indice del buffer que contiene la lista de indices de orden de dibujado de los vertices.)
         
         #region Uniforms Ids
-        private int idUniformTColor; // ID de Uniform de Color transparente.
-        private int idUniformColor; // ID de Uniform de color multiplicante.    
-        private int idUniform_texcoords; // ID de Uniform de Coordenadas de Textura Dinamicas.
-        private int idUniform_v_size; // ID de Uniform de Tamaño de superficie de dibujo.
-        private int idUniformMat_View; // ID de Uniform que contiene la matriz de Projección.
-        private int idUniformMat_Per; // ID de Uniform que contiene la matriz de Perspectiva.
-        private int idUniformMat_Tra; // ID de Uniform que contiene la matriz de Perspectiva.
-        private int idUniformSilhouette; // ID de Uniform que contiene la matriz de Transformación.
-        private int idUniformTexturePassed; // Id de Uniform que indica si se está pasando textura o no.
+        private readonly int idUniformTColor; // ID de Uniform de Color transparente.
+        private readonly int idUniformColor; // ID de Uniform de color multiplicante.    
+        private readonly int idUniform_texcoords; // ID de Uniform de Coordenadas de Textura Dinamicas.
+        private readonly int idUniform_v_size; // ID de Uniform de Tamaño de superficie de dibujo.
+        private readonly int idUniformMat_View; // ID de Uniform que contiene la matriz de Projección.
+        private readonly int idUniformMat_Per; // ID de Uniform que contiene la matriz de Perspectiva.
+        private readonly int idUniformMat_Tra; // ID de Uniform que contiene la matriz de Perspectiva.
+        private readonly int idUniformSilhouette; // ID de Uniform que contiene la matriz de Transformación.
+        private readonly int idUniformTexturePassed; // Id de Uniform que indica si se está pasando textura o no.
 
         #endregion
 
-        private Shader BasicShader;
+        private readonly Shader BasicShader;
 
         internal Drawer()
         {
@@ -76,7 +76,7 @@ namespace dge.G2D
             idUniformSilhouette = GL.glGetUniformLocation(BasicShader.ui_id, "Silhouette");
             idUniformTexturePassed = GL.glGetUniformLocation(BasicShader.ui_id, "TexturePassed");
 
-            DefineTransparentColor(new Color4(0f, 1f, 0f, 1f));
+            DefineTransparentColor(new Color4(0f, 0.9f, 0f, 1f));
             DefineViewMatrix(dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
 
             GL.glEnable(EnableCap.GL_BLEND);
