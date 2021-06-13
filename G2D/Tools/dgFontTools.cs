@@ -245,6 +245,7 @@ namespace dge.G2D
 
             Bitmap bmp0 = new Bitmap(1, 1);
             Graphics g = Graphics.FromImage(bmp0);
+            g = Graphics.FromImage(bmp0); // Definimos entorno de dibujo para el texto.
             float maxwidth = 0;
             float maxheight = 0;
             StringFormat sf = StringFormat.GenericTypographic;
@@ -266,35 +267,43 @@ namespace dge.G2D
             // Creamos Bitmap Final:
             bmp0 = new Bitmap((int)maxwidth, (int)maxheight); // Creamos Bitmap para el Texto.
             g = Graphics.FromImage(bmp0); // Definimos entorno de dibujo para el texto.
+            g.PageUnit = GraphicsUnit.Pixel;
             if (!pixeled)
             {
                 g.CompositingQuality = CompositingQuality.HighQuality; // Definimos calidad del entorno de dibujo.
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.SmoothingMode = SmoothingMode.HighQuality; // Definimos calidad del entorno de dibujo.
-                g.TextRenderingHint = TextRenderingHint.AntiAlias; // Definimos calidad del entorno de dibujo.
+                g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit; // Definimos calidad del entorno de dibujo.
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
             }
             else
             {
                 g.CompositingQuality = CompositingQuality.AssumeLinear; // Definimos calidad del entorno de dibujo.
+                g.InterpolationMode = InterpolationMode.NearestNeighbor;
                 g.SmoothingMode = SmoothingMode.None; // Definimos calidad del entorno de dibujo.
                 g.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit; // Definimos calidad del entorno de dibujo.
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
             }
             g.Clear(Color.Transparent); // Establecemos alpha como color de fondo.
 
             Bitmap bmpBorde = new Bitmap((int)maxwidth, (int)maxheight); // Creamos Bitmap para el Borde.
             Graphics gb = Graphics.FromImage(bmpBorde); // Definimos entorno de dibujo para el borde.
+            gb.PageUnit = GraphicsUnit.Pixel;
             if (!pixeled)
             {
                 gb.CompositingQuality = CompositingQuality.HighQuality; // Definimos calidad del entorno de dibujo.
                 gb.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 gb.SmoothingMode = SmoothingMode.HighQuality; // Definimos calidad del entorno de dibujo.
-                gb.TextRenderingHint = TextRenderingHint.AntiAlias; // Definimos calidad del entorno de dibujo.
+                gb.TextRenderingHint = TextRenderingHint.AntiAliasGridFit; // Definimos calidad del entorno de dibujo.
+                gb.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
             }
             else
             {
                 gb.CompositingQuality = CompositingQuality.AssumeLinear; // Definimos calidad del entorno de dibujo.
+                gb.InterpolationMode = InterpolationMode.NearestNeighbor;
                 gb.SmoothingMode = SmoothingMode.None; // Definimos calidad del entorno de dibujo.
                 gb.TextRenderingHint = TextRenderingHint.SingleBitPerPixelGridFit; // Definimos calidad del entorno de dibujo.
+                gb.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
             }
 
             gb.Clear(Color.Transparent); // Establecemos alpha como color de fondo.
