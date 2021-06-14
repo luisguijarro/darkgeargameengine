@@ -46,19 +46,19 @@ namespace dge
 			None = 0, Windows, Linux, MacOS, NotSuported
 		}
 
-        internal static System.IO.Stream LoadEmbeddedResource(string resource)
+        public static System.IO.Stream LoadEmbeddedResource(string resource)
         {
             return Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
         }
 
     }
 
-    internal static class Core2D
+    public static class Core2D
     {
         internal static uint PixelBufferObject_Select; 
         internal static uint SelectedID;
         internal static Dictionary<uint, uint> IDS;
-        internal static uint GetID() // Otorga un ID a objeto que lo solicita
+        public static uint GetID() // Otorga un ID a objeto que lo solicita
         {
             if (IDS == null)
             {
@@ -88,11 +88,11 @@ namespace dge
             return false;
         }
 
-        internal static byte[] DeUIntAByte4(uint num) //
+        public static byte[] DeUIntAByte4(uint num) //
 		{
 			byte[] ret=new byte[4];
 			
-			for(uint t=1;t<3;t++)
+			for(uint t=0;t<3;t++)
 			{
 				ret[t]=(byte)(num%256);
 				num=(num-num%256)/256;
@@ -101,9 +101,9 @@ namespace dge
 			return ret;
 		}
 
-		internal static uint DeByte4AUInt(byte[] num)
+		public static uint DeByte4AUInt(byte[] num)
 		{
-			return (uint)(num[1]+num[2]*256); //+num[2]*256*256; //+num[3]*256*256*256
+			return (uint)(num[0]+num[1]*256+num[2]*256*256); //+num[3]*256*256*256
 		}
 
         internal static void UpdateIdsMap(uint width, uint height, Action renderScene)
