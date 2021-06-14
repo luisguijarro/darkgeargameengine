@@ -88,7 +88,7 @@ namespace dge
             return false;
         }
 
-        public static byte[] DeUIntAByte4(uint num) //
+        public static byte[] DeUIntAByte4(uint num) // RGBA - A always must be 255
 		{
 			byte[] ret=new byte[4];
 			
@@ -101,7 +101,7 @@ namespace dge
 			return ret;
 		}
 
-		public static uint DeByte4AUInt(byte[] num)
+		public static uint DeByte4AUInt(byte[] num) // RGBA - A always must be 255
 		{
 			return (uint)(num[0]+num[1]*256+num[2]*256*256); //+num[3]*256*256*256
 		}
