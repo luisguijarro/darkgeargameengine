@@ -2,13 +2,13 @@ using System;
 
 namespace dge.G2D
 {    
-    internal struct dgCharacter
+    public struct dgCharacter
     {
-        internal float f_x0, f_y0, f_x1, f_y1;
-        internal ushort ui_width, ui_height;
-		internal float f_ancho;
-		internal char ch_character;
-        internal dgCharacter(char character, float x0, float y0, float x1, float y1, ushort width, ushort height, float charwidth)
+        public float f_x0, f_y0, f_x1, f_y1;
+        public ushort ui_width, ui_height;
+		public float f_ancho;
+		public char ch_character;
+        public dgCharacter(char character, float x0, float y0, float x1, float y1, ushort width, ushort height, float charwidth)
         {
             this.ch_character = character;
             this.f_x0 = x0;

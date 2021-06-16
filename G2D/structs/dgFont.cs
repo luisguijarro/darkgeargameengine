@@ -11,7 +11,7 @@ namespace dge.G2D
         internal float f_spaceWidth;
 		public TextureBufferObject TBO_Scan0; // Textura con el relleno de la fuente
 		public TextureBufferObject TBO_Scan1; // Textura con el borde de la fuente
-        internal Dictionary<char, dgCharacter> d_characters;
+        public Dictionary<char, dgCharacter> d_characters;
 
         internal dgFont(string name, float max_font_size, float borderWidth, float spaceWidth, char[] charkeys, dgCharacter[] charvalues, TextureBufferObject scan0, TextureBufferObject scan1)
         {
@@ -23,7 +23,7 @@ namespace dge.G2D
             this.TBO_Scan1 = scan1;
             if (charkeys.Length != charvalues.Length)
             {
-                throw new Exception("glFont Constructor Error: The numbar of keys and values is not the same.");
+                throw new Exception("glFont Constructor Error: The number of keys and values is not the same.");
             }
             this.d_characters = new Dictionary<char, dgCharacter>();
             for (int i=0;i<charkeys.Length;i++)
