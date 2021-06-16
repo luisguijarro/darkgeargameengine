@@ -228,10 +228,10 @@ namespace dge.G2D
             
             double cuadrado = Math.Sqrt(Characters.Length);
             int lastposition = 0;
-            int maxlines = (((int)(cuadrado)) * ((int)(cuadrado)) < Characters.Length ? (int)(cuadrado/2)+2: (int)(cuadrado/2));
+            int maxlines = (((int)(cuadrado)) * ((int)(cuadrado)) < Characters.Length ? (int)(cuadrado): (int)(cuadrado));
             for (int i=0;i<maxlines;i++)
             {
-                int Cuantas = (int)cuadrado*2;
+                int Cuantas = (int)cuadrado;//+2;//*2;
                 if (lastposition+(Cuantas)>Characters.Length)
                 {
                     Cuantas = Characters.Length-lastposition;
@@ -246,9 +246,11 @@ namespace dge.G2D
             Bitmap bmp0 = new Bitmap(1, 1);
             Graphics g = Graphics.FromImage(bmp0);
             g = Graphics.FromImage(bmp0); // Definimos entorno de dibujo para el texto.
+            g.PageUnit = GraphicsUnit.Pixel;
             float maxwidth = 0;
             float maxheight = 0;
             StringFormat sf = StringFormat.GenericTypographic;
+            sf.FormatFlags = StringFormatFlags.FitBlackBox;
 
             float spacewidth = g.MeasureString(" ", font, new PointF(0,0), sf).Width; // Definimos ancho del espacio.
             
@@ -313,6 +315,7 @@ namespace dge.G2D
             Dictionary<char, dgCharacter> dgChars = new Dictionary<char, dgCharacter>();
             float proporcionalWidth = 1f/(float)maxwidth;
             float proporcionalHeight = 1f/(float)maxheight;
+            System.Drawing.Drawing2D.GraphicsPath p = new System.Drawing.Drawing2D.GraphicsPath(); // Creamos ruta.
             for (int i=0;i<lines.Count;i++) // Recorremos lineas.
             {
                 float iniX = spacewidth; //Margen izquierda
@@ -321,16 +324,19 @@ namespace dge.G2D
                 {
                     RectangleF rf = new RectangleF(new PointF(iniX, altura), g.MeasureString((lines[i])[c].ToString(), font, new PointF(iniX,altura), sf));
                     
-                    System.Drawing.Drawing2D.GraphicsPath p = new System.Drawing.Drawing2D.GraphicsPath(); // Creamos ruta.
+                    //System.Drawing.Drawing2D.GraphicsPath p = new System.Drawing.Drawing2D.GraphicsPath(); // Creamos ruta.
                     p.AddString(lines[i][c].ToString(), font.FontFamily, 0, font.Size, new PointF(iniX+(BorderWidth*2), altura), sf); // Añadimos letra a la ruta
-                    g.FillPath(new SolidBrush(Color.White), p); // Pintamos letra.
-                    gb.DrawPath(new Pen(new SolidBrush(Color.White), BorderWidth), p); // Pintamos Borde
+                    //g.FillPath(new SolidBrush(Color.White), p); // Pintamos letra.
+                    //gb.DrawPath(new Pen(new SolidBrush(Color.White), BorderWidth), p); // Pintamos Borde
 
                     iniX += rf.Width+spacewidth; //Siguiente caracter con espacio de margen.
                     dgChars.Add(lines[i][c], new dgCharacter(lines[i][c], proporcionalWidth * rf.X, proporcionalHeight * rf.Y, proporcionalWidth * rf.Right, proporcionalHeight * rf.Bottom, (ushort)rf.Width, (ushort)rf.Height, rf.Width));
                 }
                 altura+= alturas[i];
             }
+            g.FillPath(new SolidBrush(Color.White), p); // Pintamos letra.
+            gb.DrawPath(new Pen(new SolidBrush(Color.White), BorderWidth), p); // Pintamos Borde
+
             
             char[] charkeys= new char[dgChars.Count];
             dgChars.Keys.CopyTo(charkeys, 0);
@@ -341,14 +347,14 @@ namespace dge.G2D
 				
             TextureBufferObject tbo0 = dge.G2D.Tools.p_LoadImageFromIntPTr(pfc.Families[0].Name, bmp0.Width, bmp0.Height, bd.Scan0);
             bmp0.UnlockBits(bd);
-            //bmp0.Save("Letras.png");
+            bmp0.Save("Letras.png");
 			bmp0.Dispose();
 
             BitmapData bdB = bmpBorde.LockBits(new Rectangle(0, 0, bmpBorde.Size.Width, bmpBorde.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 				
             TextureBufferObject tboB = dge.G2D.Tools.p_LoadImageFromIntPTr(pfc.Families[0].Name+"_Borde", bmpBorde.Width, bmpBorde.Height, bdB.Scan0);
             bmpBorde.UnlockBits(bdB);
-            //bmpBorde.Save("Borde.png");
+            bmpBorde.Save("Borde.png");
 			bmpBorde.Dispose();
 
             /*
