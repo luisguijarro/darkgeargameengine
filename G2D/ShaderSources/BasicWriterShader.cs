@@ -53,9 +53,11 @@ namespace dge.G2D
         {
             vec4 finalColor = texture(s2Dtexture, tc);
             
-            for (float x=-0.001;x<=0.001;x+=0.001) //X
+            float varx = 1.0/(textureSize(s2Dtexture,0).s/3); // Antes 0.001
+            float vary = 1.0/(textureSize(s2Dtexture,0).t/3); // Antes 0.001
+            for (float x=-varx;x<=varx;x+=varx) //X
             {
-                for (float y=-0.001;y<=0.001;y+=0.001) //Y
+                for (float y=-vary;y<=vary;y+=vary) //Y
                 {
                     vec2 ttc = tc - vec2(x,y);
                     if (ttc != tc)
@@ -64,7 +66,6 @@ namespace dge.G2D
                     }
                 }
             }
-            
             finalColor = vec4(Color.xyz, finalColor.w * Color.w);
             
             FragColor = finalColor;
