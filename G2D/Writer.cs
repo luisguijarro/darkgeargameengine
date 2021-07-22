@@ -330,7 +330,7 @@ namespace dge.G2D
 					}
 					else
 					{
-						retSize += ch.ui_width*(fsize/font.MaxFontSize);
+						retSize += ch.f_width*(fsize/font.MaxFontSize);
 					}
 				}
 			}
@@ -347,7 +347,7 @@ namespace dge.G2D
 			float f_height = ((float)ch.ui_height*(fontsize/font.MaxFontSize));
 			this.WriteCharGL(font.TBO_Scan0.ui_ID, color, posx, posy, f_width, f_height, ch.f_x0, ch.f_y0, ch.f_x1, ch.f_y1);
 			
-			return ch.ui_width*(fontsize/font.MaxFontSize);
+			return ch.f_width*(fontsize/font.MaxFontSize);
 		}
 
 		private void WriteCharBorder(dgFont font, dgtk.Graphics.Color4 color, char character, float fontsize, float posx, float posy) // Retornamos ancho dle caracter.
