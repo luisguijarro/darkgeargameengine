@@ -5,7 +5,6 @@ using dgtk.OpenGL;
 
 namespace dge
 {
-
     public class Scene : Scenenode
     {
         protected string s_name;
@@ -15,7 +14,7 @@ namespace dge
         {
             this.s_name = name;
         }
-        internal void InternalDraw()
+        internal virtual void InternalDraw()
         {
             GL.glClearColor(this.c4_BackGroundColor);
             GL.glClear(ClearBufferMask.GL_ALL);
@@ -28,6 +27,10 @@ namespace dge
         internal virtual void SetParentWindow(dgWindow win)
         {
             parentWin = win;
+        }
+        internal virtual void RemParentWindow()
+        {
+            parentWin = null;
         }
         public string Name
         {
