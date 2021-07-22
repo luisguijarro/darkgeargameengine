@@ -6,7 +6,7 @@ namespace dge.G2D
     {
         public float f_x0, f_y0, f_x1, f_y1;
         public ushort ui_width, ui_height;
-		public float f_ancho;
+		public float f_width;
 		public char ch_character;
         public dgCharacter(char character, float x0, float y0, float x1, float y1, ushort width, ushort height, float charwidth)
         {
@@ -17,7 +17,7 @@ namespace dge.G2D
             this.f_y1 = y1;
             this.ui_width = width;
             this.ui_height = height;
-            this.f_ancho = charwidth;
+            this.f_width = charwidth;
         }
     }
 }
