@@ -144,7 +144,7 @@ namespace dge.G2D
             GL.glUniform4iv(idUniform_MarginsFromTheEdge, 1, new int[]{0, 0, 0, 0});
             GL.glUniform2f(idUniform_v_size, width, height);
             GL.glUniform1i(idUniformSilhouette, 0);
-            GL.glUniform1i(idUniformTexturePassed, 1);
+            GL.glUniform1i(idUniformTexturePassed, 0);
             GL.glUniformMatrix(idUniformMat_Tra, dgtk.OpenGL.Boolean.GL_FALSE, m4T * m4R ); // Transmitimos al Shader la trasformación.
             GL.glUniform4f(idUniformColor, color.R, color.G, color.B, color.A);
             GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, 0);
