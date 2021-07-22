@@ -56,7 +56,7 @@ namespace dge
     public static class Core2D
     {
         internal static uint PixelBufferObject_Select; 
-        internal static uint SelectedID;
+        internal static uint ui_SelectedID;
         internal static Dictionary<uint, uint> IDS;
         public static uint GetID() // Otorga un ID a objeto que lo solicita
         {
@@ -150,11 +150,16 @@ namespace dge
                 GL.glBindBuffer(BufferTargetARB.GL_PIXEL_PACK_BUFFER, 0);
             }
             dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
-            SelectedID = ret;
+            ui_SelectedID = ret;
             #if DEBUG
-                Console.WriteLine("SelectedID: "+SelectedID);
+                Console.WriteLine("ui_SelectedID: "+ui_SelectedID);
             #endif
             return ret;
+        }
+    
+        public static uint SelectedID
+        {
+            get { return ui_SelectedID; }
         }
     }
 }
