@@ -18,10 +18,14 @@ namespace dge.G2D
     {
         public static dgFont LoadDGFont(string filepath)
         {
-            FileStream fs  = File.Open(filepath, FileMode.Open); // Abrimos fichero
-            dgFont ret = LoadDGFont(fs, filepath);
-            fs.Close();
-            return ret;
+            if (File.Exists(filepath))
+            {
+                FileStream fs  = File.Open(filepath, FileMode.Open); // Abrimos fichero
+                dgFont ret = LoadDGFont(fs, filepath);
+                fs.Close();
+                return ret;
+            }
+            throw new Exception("La fuente no carga");
         }
         
         internal static dgFont LoadDGFont(Stream filestream, string filepath)
@@ -154,7 +158,7 @@ namespace dge.G2D
             {
                 char key = Characters[i];
                 bw.Write(key); // Escribimos char
-                bw.Write(font.d_characters[key].f_ancho); // Escribimos el ancho del caracter.
+                bw.Write(font.d_characters[key].f_width); // Escribimos el ancho del caracter.
                 bw.Write(font.d_characters[key].f_x0); // Escribimos Coordenada X0 correspondiente a la Textura.
                 bw.Write(font.d_characters[key].f_y0); // Escribimos Coordenada Y0 correspondiente a la Textura.
                 bw.Write(font.d_characters[key].f_x1); // Escribimos Coordenada X1 correspondiente a la Textura.
@@ -228,7 +232,7 @@ namespace dge.G2D
             
             double cuadrado = Math.Sqrt(Characters.Length);
             int lastposition = 0;
-            int maxlines = (((int)(cuadrado)) * ((int)(cuadrado)) < Characters.Length ? (int)(cuadrado): (int)(cuadrado));
+            int maxlines = (((int)(cuadrado)) * ((int)(cuadrado)) < Characters.Length ? (int)(cuadrado+1): (int)(cuadrado));
             for (int i=0;i<maxlines;i++)
             {
                 int Cuantas = (int)cuadrado;//+2;//*2;
@@ -247,8 +251,8 @@ namespace dge.G2D
             Graphics g = Graphics.FromImage(bmp0);
             g = Graphics.FromImage(bmp0); // Definimos entorno de dibujo para el texto.
             g.PageUnit = GraphicsUnit.Pixel;
-            float maxwidth = 0;
-            float maxheight = 0;
+            float maxwidth = 0; // Ancho máximo calculado.
+            float maxheight = 0; // Altura máxima calculada.
             StringFormat sf = StringFormat.GenericTypographic;
             sf.FormatFlags = StringFormatFlags.FitBlackBox;
 
@@ -257,7 +261,7 @@ namespace dge.G2D
             for (int i=0;i<lines.Count;i++)
             {
                 SizeF tamaño = g.MeasureString(lines[i], font, new PointF(0,0), sf);
-                maxwidth = maxwidth > (tamaño.Width+spacewidth) ? maxwidth : (tamaño.Width+spacewidth); // Dejamos espacio entre caracteres.
+                maxwidth = maxwidth > (tamaño.Width+spacewidth) ? maxwidth : (tamaño.Width+spacewidth); // Dejamos espacio al final de la linea.
                 maxheight+= tamaño.Height;
                 alturas.Add(i, tamaño.Height);
             }
@@ -315,9 +319,10 @@ namespace dge.G2D
             Dictionary<char, dgCharacter> dgChars = new Dictionary<char, dgCharacter>();
             float proporcionalWidth = 1f/(float)maxwidth;
             float proporcionalHeight = 1f/(float)maxheight;
-            System.Drawing.Drawing2D.GraphicsPath p = new System.Drawing.Drawing2D.GraphicsPath(); // Creamos ruta.
+            //System.Drawing.Drawing2D.GraphicsPath p = new System.Drawing.Drawing2D.GraphicsPath(); // Creamos ruta.
             for (int i=0;i<lines.Count;i++) // Recorremos lineas.
             {
+                System.Drawing.Drawing2D.GraphicsPath p = new System.Drawing.Drawing2D.GraphicsPath(); // Creamos ruta.
                 float iniX = spacewidth; //Margen izquierda
                 
                 for (int c=0;c<lines[i].Length;c++) // Recorremos caracteres de la linea
@@ -332,10 +337,11 @@ namespace dge.G2D
                     iniX += rf.Width+spacewidth; //Siguiente caracter con espacio de margen.
                     dgChars.Add(lines[i][c], new dgCharacter(lines[i][c], proporcionalWidth * rf.X, proporcionalHeight * rf.Y, proporcionalWidth * rf.Right, proporcionalHeight * rf.Bottom, (ushort)rf.Width, (ushort)rf.Height, rf.Width));
                 }
+                g.FillPath(new SolidBrush(Color.White), p); // Pintamos letra.
+                gb.DrawPath(new Pen(new SolidBrush(Color.White), BorderWidth), p); // Pintamos Borde
                 altura+= alturas[i];
             }
-            g.FillPath(new SolidBrush(Color.White), p); // Pintamos letra.
-            gb.DrawPath(new Pen(new SolidBrush(Color.White), BorderWidth), p); // Pintamos Borde
+            
 
             
             char[] charkeys= new char[dgChars.Count];
