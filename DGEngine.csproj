@@ -109,5 +109,18 @@
     <Content Include="GUI\Dialogs\FileDialog.cs" />
     <Content Include="SoundSystem\SoundTools.cs" />
     <Content Include="Scene\Scene2D.cs" />
+    <Content Include="GUI\CheckBox.cs" />
+    <Content Include="GUI\Events\MouseMoveEventArgs.cs" />
+    <Content Include="GUI\Events\MouseEnterLeaveEventArgs.cs" />
+    <Content Include="GUI\Events\MouseButtonEventArgs.cs" />
+    <Content Include="GUI\Events\KeyBoardKeysEventArgs.cs" />
+    <Content Include="GUI\Events\MouseWheelEventArgs.cs" />
+    <Content Include="GUI\Events\KeyBoardTextEventArgs.cs" />
+    <Content Include="GUI\Structs\KeyBoard_Status.cs" />
+    <Content Include="GUI\Events\ResizeEventArgs.cs" />
+    <Content Include="GUI\Events\CheckedStateChanged.cs" />
+    <Content Include="GUI\Label.cs" />
+    <Content Include="GUI\Menu.cs" />
+    <Content Include="GUI\MenuItem.cs" />
   </ItemGroup>
 </Project>
