@@ -9,7 +9,7 @@ using dge.GLSL;
 
 namespace dge.G2D
 {
-    internal class GuiDrawer
+    public class GuiDrawer
     {
         internal dgtk.Math.Mat4 m4P; // Para Renicios internos de Perspectiva.
         private uint VAO; // Vertex Array Object (indice que contiene toda la info del objeto.)
@@ -131,7 +131,7 @@ namespace dge.G2D
             GL.glUniformMatrix(idUniformMat_Per, dgtk.OpenGL.Boolean.GL_FALSE, this.m4P);
         }
 
-        internal void DrawGL(Color4 color, int x, int y, uint width, uint height, float RotInDegrees)
+        public void DrawGL(Color4 color, int x, int y, uint width, uint height, float RotInDegrees)
         {
             dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((-RotInDegrees), new Vector2(width/2f, height/2f));
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
@@ -153,7 +153,7 @@ namespace dge.G2D
             GL.glBindVertexArray(0);
         }
 
-        internal void DrawGL(uint tboID, Color4 color, int x, int y, uint width, uint height, float RotInDegrees, int[/*4*/]MarginsFromTheEdge, float[/*8*/]TexCoords, float[/*2*/]v2_CoordVariation, int Silhouette)
+        public void DrawGL(uint tboID, Color4 color, int x, int y, uint width, uint height, float RotInDegrees, int[/*4*/]MarginsFromTheEdge, float[/*8*/]TexCoords, float[/*2*/]v2_CoordVariation, int Silhouette)
         {
             dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((-RotInDegrees), new Vector2(width/2f, height/2f));
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.

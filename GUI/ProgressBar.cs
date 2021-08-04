@@ -34,6 +34,13 @@ namespace dge.GUI
             this.ValueChanged += delegate { };
         }
 
+        protected internal override void UpdateTheme()
+        {
+            this.Texcoords = this.gui.gt_ActualGuiTheme.ProgressBar_Hor_Texcoords;
+            this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.ProgressBar_Hor_MarginsFromTheEdge;
+            this.FillingTexCoords = this.gui.gt_ActualGuiTheme.ProgressBar_Hor_Filling_Texcoords;
+        }
+
         private void UpdateProgres()
         {
             int valuerange = this.MaxValue - this.MinValue;
@@ -69,7 +76,7 @@ namespace dge.GUI
             }
         }
 
-        internal override void Draw()
+        protected override void pDraw()
         {
             if (this.o_Orientation == Orientation.Horizontal)
             {
@@ -79,7 +86,7 @@ namespace dge.GUI
             {
                 this.gui.Drawer.Draw(GuiTheme.DefaultGuiTheme.ThemeTBO.ui_ID, this.X, this.Y + (int)(this.ui_height-this.ProgressWidthHeight), (uint)this.ui_width, (uint)this.ProgressWidthHeight, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
             }
-            base.Draw();
+            base.pDraw();
         }
 
         #region PROPERTIES:
@@ -161,7 +168,7 @@ namespace dge.GUI
                     this.i_value = value;
                 }
                 this.UpdateProgres();
-                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value));
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
             }
             get { return this.i_value; }
         }

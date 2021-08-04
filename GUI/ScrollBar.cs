@@ -41,15 +41,20 @@ namespace dge.GUI
             this.slider.MouseDown += SliderDown;
             this.slider.MouseMove += SliderMove;
 
-            this.UpdateOrientation();
+            this.UpdateOrientation(GuiTheme.DefaultGuiTheme);
             this.UpdateSizePos();
             this.UpdateSliderPos();
             this.UpdateStepSize();
         }
 
+        protected internal override void UpdateTheme()
+        {
+            this.UpdateOrientation(this.gui.gt_ActualGuiTheme);
+        }
+
         #region SubEvents:
 
-        private void Btn1Down(object sender, dgtk_MouseButtonEventArgs e)
+        private void Btn1Down(object sender, MouseButtonEventArgs e)
         {
             if (Core2D.SelectedID == this.btn1.ID)
             {
@@ -57,7 +62,7 @@ namespace dge.GUI
             }
         }
 
-        private void Btn2Down(object sender, dgtk_MouseButtonEventArgs e)
+        private void Btn2Down(object sender, MouseButtonEventArgs e)
         {
             if (Core2D.SelectedID == this.btn2.ID)
             {
@@ -65,7 +70,7 @@ namespace dge.GUI
             }
         }
 
-        private void SliderDown(object sender, dgtk_MouseButtonEventArgs e)
+        private void SliderDown(object sender, MouseButtonEventArgs e)
         {
             if (Core2D.SelectedID == this.slider.ID)
             {
@@ -73,7 +78,7 @@ namespace dge.GUI
                 this.lastPosY = e.Y;
             }
         }
-        private void SliderMove(object sender, dgtk_MouseMoveEventArgs e)
+        private void SliderMove(object sender, MouseMoveEventArgs e)
         {
             if ((this.slider.b_pulsed) && (Core2D.SelectedID == this.slider.ID))
             {
@@ -107,7 +112,7 @@ namespace dge.GUI
                         }
                     }
                 }
-                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value));
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
                 this.lastPosX = e.X;
                 this.lastPosY = e.Y;
             }
@@ -117,43 +122,43 @@ namespace dge.GUI
 
         #region PRIVATE METHODS:
 
-        private void UpdateOrientation()
+        private void UpdateOrientation(GuiTheme theme)
         {
             if (this.o_Orientation == Orientation.Horizontal)
             {
-                this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ScrollBar_Hor_Track_MarginsFromTheEdge;
-                this.Texcoords = GuiTheme.DefaultGuiTheme.ScrollBar_Hor_Track_Texcoords;
+                this.MarginsFromTheEdge = theme.ScrollBar_Hor_Track_MarginsFromTheEdge;
+                this.Texcoords = theme.ScrollBar_Hor_Track_Texcoords;
                 this.tcFrameOffset = new float[] {0,0};
 
-                this.btn1.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ScrollBar_Hor_Btn1_MarginsFromTheEdge;
-                this.btn1.Texcoords = GuiTheme.DefaultGuiTheme.ScrollBar_Hor_Btn1_Texcoords;
-                this.btn1.tcFrameOffset = GuiTheme.DefaultGuiTheme.ScrollBar_Hor_Btn1_FrameOffset;
+                this.btn1.MarginsFromTheEdge = theme.ScrollBar_Hor_Btn1_MarginsFromTheEdge;
+                this.btn1.Texcoords = theme.ScrollBar_Hor_Btn1_Texcoords;
+                this.btn1.tcFrameOffset = theme.ScrollBar_Hor_Btn1_FrameOffset;
 
-                this.slider.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ScrollBar_Hor_Slider_MarginsFromTheEdge;
-                this.slider.Texcoords = GuiTheme.DefaultGuiTheme.ScrollBar_Hor_Slider_Texcoords;
-                this.slider.tcFrameOffset = GuiTheme.DefaultGuiTheme.ScrollBar_Hor_Slider_FrameOffset;
+                this.slider.MarginsFromTheEdge = theme.ScrollBar_Hor_Slider_MarginsFromTheEdge;
+                this.slider.Texcoords = theme.ScrollBar_Hor_Slider_Texcoords;
+                this.slider.tcFrameOffset = theme.ScrollBar_Hor_Slider_FrameOffset;
 
-                this.btn2.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ScrollBar_Hor_Btn2_MarginsFromTheEdge;
-                this.btn2.Texcoords = GuiTheme.DefaultGuiTheme.ScrollBar_Hor_Btn2_Texcoords;
-                this.btn2.tcFrameOffset = GuiTheme.DefaultGuiTheme.ScrollBar_Hor_Btn2_FrameOffset;
+                this.btn2.MarginsFromTheEdge = theme.ScrollBar_Hor_Btn2_MarginsFromTheEdge;
+                this.btn2.Texcoords = theme.ScrollBar_Hor_Btn2_Texcoords;
+                this.btn2.tcFrameOffset = theme.ScrollBar_Hor_Btn2_FrameOffset;
             }
             else
             {
-                this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ScrollBar_Ver_Track_MarginsFromTheEdge;
-                this.Texcoords = GuiTheme.DefaultGuiTheme.ScrollBar_Ver_Track_Texcoords;
+                this.MarginsFromTheEdge = theme.ScrollBar_Ver_Track_MarginsFromTheEdge;
+                this.Texcoords = theme.ScrollBar_Ver_Track_Texcoords;
                 this.tcFrameOffset = new float[] {0,0};
 
-                this.btn1.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ScrollBar_Ver_Btn1_MarginsFromTheEdge;
-                this.btn1.Texcoords = GuiTheme.DefaultGuiTheme.ScrollBar_Ver_Btn1_Texcoords;
-                this.btn1.tcFrameOffset = GuiTheme.DefaultGuiTheme.ScrollBar_Ver_Btn1_FrameOffset;
+                this.btn1.MarginsFromTheEdge = theme.ScrollBar_Ver_Btn1_MarginsFromTheEdge;
+                this.btn1.Texcoords = theme.ScrollBar_Ver_Btn1_Texcoords;
+                this.btn1.tcFrameOffset = theme.ScrollBar_Ver_Btn1_FrameOffset;
 
-                this.slider.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ScrollBar_Ver_Slider_MarginsFromTheEdge;
-                this.slider.Texcoords = GuiTheme.DefaultGuiTheme.ScrollBar_Ver_Slider_Texcoords;
-                this.slider.tcFrameOffset = GuiTheme.DefaultGuiTheme.ScrollBar_Ver_Slider_FrameOffset;
+                this.slider.MarginsFromTheEdge = theme.ScrollBar_Ver_Slider_MarginsFromTheEdge;
+                this.slider.Texcoords = theme.ScrollBar_Ver_Slider_Texcoords;
+                this.slider.tcFrameOffset = theme.ScrollBar_Ver_Slider_FrameOffset;
 
-                this.btn2.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ScrollBar_Ver_Btn2_MarginsFromTheEdge;
-                this.btn2.Texcoords = GuiTheme.DefaultGuiTheme.ScrollBar_Ver_Btn2_Texcoords;
-                this.btn2.tcFrameOffset = GuiTheme.DefaultGuiTheme.ScrollBar_Ver_Btn2_FrameOffset;
+                this.btn2.MarginsFromTheEdge = theme.ScrollBar_Ver_Btn2_MarginsFromTheEdge;
+                this.btn2.Texcoords = theme.ScrollBar_Ver_Btn2_Texcoords;
+                this.btn2.tcFrameOffset = theme.ScrollBar_Ver_Btn2_FrameOffset;
             }
         }
 
@@ -218,7 +223,7 @@ namespace dge.GUI
 
         protected override void OnResize()
         {
-            base.OnResize();
+            //base.OnResize();
             if (this.o_Orientation == Orientation.Horizontal)
             {
                 /*base.Height*/ this.ui_height = (uint)GuiTheme.DefaultGuiTheme.ScrollBar_BarWidth;
@@ -227,6 +232,7 @@ namespace dge.GUI
             {
                 /*base.Width*/ this.ui_width = (uint)GuiTheme.DefaultGuiTheme.ScrollBar_BarWidth;
             }
+            this.SetInternalDrawArea(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height);
             this.UpdateSizePos();
             this.UpdateSliderPos();
             this.UpdateStepSize();
@@ -234,29 +240,30 @@ namespace dge.GUI
 
         protected override void OnReposition()
         {
-            base.OnReposition();
+            //base.OnReposition();
+            this.SetInternalDrawArea(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height);
             this.UpdateSizePos();
             this.UpdateSliderPos();
         }
 
-        internal override void Draw()
+        protected override void pDraw()
         {
-            if (this.gui != null)
-            {
+            //if (this.gui != null)
+            //{
                 if (this.o_Orientation == Orientation.Horizontal)
                 {
-                    this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x+(int)this.btn1.Height, this.i_y, this.ui_width-(uint)(this.btn1.Width+this.btn2.Width), this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
+                    this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x+(int)this.btn1.Height, this.i_y, this.ui_width-(uint)(this.btn1.Width+this.btn2.Width), this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
                 }
                 else
                 {
-                    this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y+(int)this.btn1.Height, this.ui_width, this.ui_height-(uint)(this.btn1.Height+this.btn2.Height), 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
+                    this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y+(int)this.btn1.Height, this.ui_width, this.ui_height-(uint)(this.btn1.Height+this.btn2.Height), 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
                 }
 
                 if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
                 {
                     DrawIn(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height, DrawContent);
                 }
-            }
+            //}
         }
 
         internal override void DrawID()
@@ -281,7 +288,7 @@ namespace dge.GUI
                     this.ui_width = this.ui_height;
                     this.ui_height = temp;
                     this.o_Orientation = value; 
-                    this.UpdateOrientation();
+                    this.UpdateOrientation(this.gui != null ? this.gui.gt_ActualGuiTheme : dge.GUI.GuiTheme.DefaultGuiTheme);
                     this.UpdateSizePos();
                     this.UpdateSliderPos();
                     this.UpdateStepSize();
@@ -353,7 +360,7 @@ namespace dge.GUI
                 {
                     this.i_value = value;
                 }
-                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value));
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
                 this.UpdateSizePos();
                 this.UpdateSliderPos();
             }

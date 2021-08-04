@@ -39,6 +39,16 @@ namespace dge.GUI
             this.updateTextCoords(14);
         }
 
+        protected internal override void UpdateTheme()
+        {
+            this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.ListViewer_Header_MarginsFromTheEdge;
+            this.Texcoords = this.gui.gt_ActualGuiTheme.ListViewer_Header_Texcoords;
+            this.tcFrameOffset = this.gui.gt_ActualGuiTheme.ListViewer_Header_FrameOffset;
+            this.ListViewer_Dibider_Texcoords = this.gui.gt_ActualGuiTheme.ListViewer_Dibider_Texcoords;
+            this.ListViewer_Dibider_Width = this.gui.gt_ActualGuiTheme.ListViewer_Dibider_Width;
+            this.font = this.gui.gt_ActualGuiTheme.DefaultFont;
+        }
+
         #region PRIVATES:
 
         private void updateTextCoords(float fsize)
@@ -47,7 +57,7 @@ namespace dge.GUI
             {
                 if (this.gui.Writer != null)
                 {
-                    this.tx_x = ((this.ui_width/2f) - (this.gui.Writer.MeasureString(this.font, this.s_text, fsize)/2f));
+                    this.tx_x = ((this.ui_width/2f) - (G2D.Writer.MeasureString(this.font, this.s_text, fsize)[0]/2f));
                     this.tx_y = (this.ui_height/2.1f) - (fsize/1.2f);
                 }
             }
@@ -91,7 +101,7 @@ namespace dge.GUI
             return ret;
         }
 
-        protected override void MDown(object sender, dgtk_MouseButtonEventArgs e)
+        protected override void MDown(object sender, MouseButtonEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
@@ -100,7 +110,7 @@ namespace dge.GUI
             }
         }
 
-        protected override void MUp(object sender, dgtk_MouseButtonEventArgs e)
+        protected override void MUp(object sender, MouseButtonEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
@@ -109,7 +119,7 @@ namespace dge.GUI
             this.setPulsed(false, e.X, e.Y);
         }
 
-        protected override void MMove(object sender, dgtk_MouseMoveEventArgs e)
+        protected override void MMove(object sender, MouseMoveEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
@@ -130,19 +140,19 @@ namespace dge.GUI
 
         #region VIRTUAL/OVERRIDE:
 
-        internal override void Draw()
+        protected override void pDraw()
         {   
-            if (this.gui != null)
-            {
+            //if (this.gui != null)
+            //{
                 if (this.FirsDraw) { this.updateTextCoords(this.f_FontSize); this.FirsDraw  =false; };
                 //base.Draw();
-                this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_pulsed ? this.tcFrameOffset : new float[]{0,0}, 0);
+                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_pulsed ? this.tcFrameOffset : new float[]{0,0}, 0);
 
                 //DrawText();
                 this.DrawIn(this.i_x+(int)this.MarginsFromTheEdge[0],this.i_y+(int)this.MarginsFromTheEdge[1],(int)this.ui_width-(int)this.MarginsFromTheEdge[0], (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
 
                 this.gui.Drawer.Draw(this.gui.GuiTheme.ThemeTBO.ID, this.i_x+(int)(this.Width-this.ListViewer_Dibider_Width), 0, (uint)(this.ListViewer_Dibider_Width), this.Height, 0f, this.ListViewer_Dibider_Texcoords[0], this.ListViewer_Dibider_Texcoords[1], this.ListViewer_Dibider_Texcoords[2], this.ListViewer_Dibider_Texcoords[3]);
-            }
+            //}
         }
 
         internal override void DrawID()

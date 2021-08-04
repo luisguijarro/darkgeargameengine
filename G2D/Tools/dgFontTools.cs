@@ -47,6 +47,7 @@ namespace dge.G2D
             float maxSize = br.ReadSingle(); // Leemos 4 Bytes del float que contiene el tamaño máximo de font.
             float BorderWidth = br.ReadSingle(); // Leemos 4 Bytes del float que contiene el grosor del borde de la font.
             float spaceWidth = br.ReadSingle(); // Leemos 4 Bytes del float que contiene el grosor del character spacio de la font.
+            float MaxCharacterHeight = br.ReadSingle(); // Leemos 4 Bytes del float que contiene el alto de los caracteres.
             int CharNumber = br.ReadInt32(); // Leemos 4 bytes correspondientes al número de caracteres incluidos.
             char[] Characters = br.ReadChars(CharNumber); // Leemos los caracteres incluidos.
             dgCharacter[] dgCharacters = new dgCharacter[Characters.Length];
@@ -134,6 +135,7 @@ namespace dge.G2D
             br.Close();
 
             dgFont ret = new dgFont(FontName, maxSize, BorderWidth, spaceWidth, Characters, dgCharacters, tbo0, tbo1);
+            ret.f_MaxCharacterHeight = MaxCharacterHeight;
 
             return ret;
         }
@@ -150,6 +152,7 @@ namespace dge.G2D
             bw.Write(font.f_MaxFontSize); // Escribimos 4 bytes correspondientes al Maximo tamaño Original de la font.
             bw.Write(font.f_borderWidth); // Escribimos 4 bytes correspondientes al grosor del borde de letra.
             bw.Write(font.f_spaceWidth); // Escribimos 4 bytes correspondientes al grosor del borde de letra.
+            bw.Write(font.f_MaxCharacterHeight); // Escribimos 4 bytes correspondientes al alto máximo de caracter.
             bw.Write(font.d_characters.Count); // Escribimos 4 bytes del número de Caracteres incluidos en la font.
             char[] Characters = new char[font.d_characters.Count];
             font.d_characters.Keys.CopyTo(Characters, 0);
@@ -319,6 +322,8 @@ namespace dge.G2D
             Dictionary<char, dgCharacter> dgChars = new Dictionary<char, dgCharacter>();
             float proporcionalWidth = 1f/(float)maxwidth;
             float proporcionalHeight = 1f/(float)maxheight;
+
+            float MaxCharacterHeight = 0;
             //System.Drawing.Drawing2D.GraphicsPath p = new System.Drawing.Drawing2D.GraphicsPath(); // Creamos ruta.
             for (int i=0;i<lines.Count;i++) // Recorremos lineas.
             {
@@ -336,6 +341,7 @@ namespace dge.G2D
 
                     iniX += rf.Width+spacewidth; //Siguiente caracter con espacio de margen.
                     dgChars.Add(lines[i][c], new dgCharacter(lines[i][c], proporcionalWidth * rf.X, proporcionalHeight * rf.Y, proporcionalWidth * rf.Right, proporcionalHeight * rf.Bottom, (ushort)rf.Width, (ushort)rf.Height, rf.Width));
+                    MaxCharacterHeight = (MaxCharacterHeight < rf.Height) ? rf.Height : MaxCharacterHeight;
                 }
                 g.FillPath(new SolidBrush(Color.White), p); // Pintamos letra.
                 gb.DrawPath(new Pen(new SolidBrush(Color.White), BorderWidth), p); // Pintamos Borde
@@ -377,6 +383,7 @@ namespace dge.G2D
             
             
             dgFont dgf_ret = new dgFont(pfc.Families[0].Name, MaxSizeInPixels, BorderWidth, spacewidth, charkeys, dgcArray, tbo0, tboB);
+            dgf_ret.f_MaxCharacterHeight = MaxCharacterHeight;
             
             return dgf_ret;
         }

@@ -47,10 +47,17 @@ namespace dge.GUI
             this.KeyCharReturned -= CharReturned;
         }
 
-        protected override void MDown(object sender, dgtk_MouseButtonEventArgs e)
+        protected internal override void UpdateTheme()
+        {
+            this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.TextBox_MarginsFromTheEdge;            
+            this.Texcoords = this.gui.gt_ActualGuiTheme.TextBox_Texcoords;
+            this.font = this.gui.gt_ActualGuiTheme.DefaultFont;
+        }
+
+        protected override void MDown(object sender, MouseButtonEventArgs e)
         {
             base.MDown(sender, e);
-            if (Core2D.SelectedID == this.ui_id)
+            if ((Core2D.SelectedID == this.ui_id) && this.b_editable)
             {
                 if (!this.b_Focus) 
                 {
@@ -64,15 +71,15 @@ namespace dge.GUI
             }
         }
 
-        private void Key_Pulsed(object sender, dgtk.dgtk_KeyBoardKeysEventArgs e)
+        private void Key_Pulsed(object sender, KeyBoardKeysEventArgs e)
         {
-            if (this.b_Focus)
+            if (this.b_Focus && this.b_editable)
             {
                 string txt1 = this.s_text.Substring(0, this.cursorPos);
                 string txt2 = this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
-                switch (e.KeyStatus.KeyCode) // == dgtk.KeyCode.BackSpace)
+                switch (e.KeyStatus.KeyCode) // == KeyCode.BackSpace)
                 {
-                    case dgtk.KeyCode.BackSpace:
+                    case KeyCode.BackSpace:
                         if (txt1.Length>0)
                         {
                             txt1 =  txt1.Substring(0, txt1.Length-1);
@@ -80,19 +87,19 @@ namespace dge.GUI
                             this.cursorPos--;
                         }
                         break;
-                    case dgtk.KeyCode.LEFT:
+                    case KeyCode.LEFT:
                         if (this.cursorPos>0)
                         {
                             this.cursorPos--;
                         }
                         break;
-                    case dgtk.KeyCode.RIGHT:
+                    case KeyCode.RIGHT:
                         if (this.s_text.Length>this.cursorPos)
                         {
                             this.cursorPos++;
                         }
                         break;
-                    case dgtk.KeyCode.Del:
+                    case KeyCode.Del:
                         if (txt2.Length>0)
                         {
                             txt2 = txt2.Substring(1, txt2.Length-1);
@@ -100,13 +107,13 @@ namespace dge.GUI
                         break;
                 }
                 this.s_text = txt1 + txt2;
-                Console.WriteLine("KeyCode: "+(dgtk.KeyCode)e.KeyStatus.KeyCode);
+                //Console.WriteLine("KeyCode: "+(KeyCode)e.KeyStatus.KeyCode);
             }
         }
 
-        private void CharReturned(object sender, dgtk.dgtk_KeyBoardTextEventArgs e)
+        private void CharReturned(object sender, KeyBoardTextEventArgs e)
         {
-            if (this.b_Focus)
+            if (this.b_Focus && this.b_editable)
             {
                 string txt1 = this.s_text.Substring(0, this.cursorPos);
                 string txt2 = this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
@@ -122,11 +129,11 @@ namespace dge.GUI
             {
                 if (this.gui.Writer != null)
                 {
-                    float txtsize = this.gui.Writer.MeasureString(this.font, this.s_text, this.f_FontSize);
+                    float txtsize = G2D.Writer.MeasureString(this.font, this.s_text, this.f_FontSize)[0];
                     if (this.b_Focus)
                     {
                         string s_txt = this.s_text.Substring(0, this.cursorPos) + GuiTheme.DefaultGuiTheme.TextBox_CursorChar + this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);                        
-                        txtsize = this.gui.Writer.MeasureString(this.font, this.s_text, this.f_FontSize);
+                        txtsize = G2D.Writer.MeasureString(this.font, this.s_text, this.f_FontSize)[0];
                     }
 
                     switch(this.ta_textAlign)
@@ -147,10 +154,10 @@ namespace dge.GUI
             }
         }
 
-        internal override void Draw()
+        protected override void pDraw()
         {
             if (this.FirsDraw) { this.updateTextCoords(); this.FirsDraw = false; };
-            base.Draw();
+            base.pDraw();
             DrawIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], (int)(this.ui_width-(this.MarginsFromTheEdge[0]+(this.MarginsFromTheEdge[2]))), (int)(this.ui_height-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[2])), WriteText);
         }
 

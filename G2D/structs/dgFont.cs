@@ -9,6 +9,7 @@ namespace dge.G2D
         internal float f_MaxFontSize;
         internal float f_borderWidth;
         internal float f_spaceWidth;
+        internal float f_MaxCharacterHeight;
 		public TextureBufferObject TBO_Scan0; // Textura con el relleno de la fuente
 		public TextureBufferObject TBO_Scan1; // Textura con el borde de la fuente
         public Dictionary<char, dgCharacter> d_characters;
@@ -19,6 +20,7 @@ namespace dge.G2D
             this.f_MaxFontSize = max_font_size;
             this.f_borderWidth = borderWidth;
             this.f_spaceWidth = spaceWidth;
+            this.f_MaxCharacterHeight = 0;
             this.TBO_Scan0 = scan0;
             this.TBO_Scan1 = scan1;
             if (charkeys.Length != charvalues.Length)
@@ -43,6 +45,12 @@ namespace dge.G2D
         public float MaxFontSize
         {
             get { return this.f_MaxFontSize; }
+        }
+
+        public float MaxCharacterHeight
+        {
+            set { this.f_MaxCharacterHeight = value; }
+            get { return this.f_MaxCharacterHeight; }
         }
 
         public float BorderWidth

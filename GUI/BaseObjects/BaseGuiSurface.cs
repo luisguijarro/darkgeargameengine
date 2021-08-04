@@ -16,36 +16,40 @@ namespace dge.GUI.BaseObjects
 
         protected int int_x; // Posiciones X e Y heredados.
         protected int int_y; // Posiciones X e Y heredados.
-        internal int i_x; // Coordenada X de posición de Objeto
-        internal int i_y; // Coordenada Y de posición de Objeto)
+        protected internal int i_x; // Coordenada X de posición de Objeto
+        protected internal int i_y; // Coordenada Y de posición de Objeto)
         protected uint ui_width; // Ancho del Objeto en Pixeles
         protected uint ui_height; // Alto dle objeto en pixeles.
 
         #region CONTENIDO:
-        internal bool contentUpdate; // Indicador de su se debe o no actualizar el conteido del objeto.
+        protected internal bool contentUpdate; // Indicador de su se debe o no actualizar el conteido del objeto.
 
         #endregion
 
+        protected bool b_ShowMe;
+
         //protected TextureBufferObject textureBufferObject; // Textura base del Objeto. En Versión posterior se trasladará al tema del GUI.
 
-        internal float[] Texcoords; // Coordenadas de textura base para el objeto.
-        internal float[] tcFrameOffset; // Variación de las coordenadas para eventos visuales como Pulsaciones de un botón.
-        internal int[] MarginsFromTheEdge; // Margenes desde el borde al relleno del objeto.
+        protected internal float[] Texcoords; // Coordenadas de textura base para el objeto.
+        protected internal float[] tcFrameOffset; // Variación de las coordenadas para eventos visuales como Pulsaciones de un botón.
+        protected internal int[] MarginsFromTheEdge; // Margenes desde el borde al relleno del objeto. Left | Top | Right | Bottom
+
+        protected int ida_X, ida_Y, ida_Width, ida_Height; //Coordenadas de dibujado de contenido.
 
         private bool b_visible; // ¿Es Visible la ventana?
         protected GraphicsUserInterface gui; // GUI al que pertenece.
         protected Dictionary<uint, BaseGuiSurface> d_guiSurfaces; // Todos los Controles de la ventana.
-        internal List<uint> VisibleSurfaceOrder; // Orden de los Controles de la ventana.
+        protected internal List<uint> VisibleSurfaceOrder; // Orden de los Controles de la ventana.
         private BaseGuiSurface parentGuiSurface; // Padre cuando es contenido.
         
-		public event EventHandler<dgtk.dgtk_MouseButtonEventArgs> MouseDown; // Evento que se da cuando se pulsa un botón del ratón.
-		public event EventHandler<dgtk.dgtk_MouseButtonEventArgs> MouseUp; // Evento que se da cuando se suelta un botón del ratón.
-		public event EventHandler<dgtk.dgtk_MouseMoveEventArgs> MouseMove; // Evento que se da cuando el ratón se mueve.
-		public event EventHandler<dgtk.dgtk_MouseWheelEventArgs> MouseWheel; // Evento que se da cuando se acciona la rueda del ratón.		
-        public event EventHandler<dgtk.dgtk_KeyBoardKeysEventArgs> KeyPulsed; // Evento que se da cuando se pulsa una tecla del teclado.
-		public event EventHandler<dgtk.dgtk_KeyBoardKeysEventArgs> KeyReleased; // Evento que se da cuando se suelta una tecla del teclado.
-		public event EventHandler<dgtk.dgtk_KeyBoardTextEventArgs> KeyCharReturned; // Evento devuelto cuando se pulsa o se suelta una tecla y que devuelve el caracter asociado.
-        public event EventHandler<dgtk.dgtk_ResizeEventArgs> SizeChanged;
+		public event EventHandler<MouseButtonEventArgs> MouseDown; // Evento que se da cuando se pulsa un botón del ratón.
+		public event EventHandler<MouseButtonEventArgs> MouseUp; // Evento que se da cuando se suelta un botón del ratón.
+		public event EventHandler<MouseMoveEventArgs> MouseMove; // Evento que se da cuando el ratón se mueve.
+		public event EventHandler<MouseWheelEventArgs> MouseWheel; // Evento que se da cuando se acciona la rueda del ratón.		
+        public event EventHandler<KeyBoardKeysEventArgs> KeyPulsed; // Evento que se da cuando se pulsa una tecla del teclado.
+		public event EventHandler<KeyBoardKeysEventArgs> KeyReleased; // Evento que se da cuando se suelta una tecla del teclado.
+		public event EventHandler<KeyBoardTextEventArgs> KeyCharReturned; // Evento devuelto cuando se pulsa o se suelta una tecla y que devuelve el caracter asociado.
+        public event EventHandler<ResizeEventArgs> SizeChanged;
 		
         public BaseGuiSurface() : this(160, 90)
         {            
@@ -54,6 +58,8 @@ namespace dge.GUI.BaseObjects
 
         public BaseGuiSurface(uint width, uint height) //: base(witdh, height)
         {
+            this.MarginsFromTheEdge = new int[] {0,0,0,0};
+            this.b_ShowMe = true;
             dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
             this.ui_id = Core2D.GetID(); // Obtenemos ID de la superficie.
             byte[] colorvalues = Core2D.DeUIntAByte4(this.ui_id); // Obtenemos color a partir del ID.
@@ -70,15 +76,6 @@ namespace dge.GUI.BaseObjects
             this.d_guiSurfaces = new Dictionary<uint, BaseGuiSurface>(); // Lista de objetos Hijo.
             this.VisibleSurfaceOrder = new List<uint>(); // Lista de objetos hijo visibles.
 
-            /*   // Pasamos a obtenerlo del Tema Visual del GUI
-            this.MarginsFromTheEdge = new Vector4(2, 2, 2, 2); // Margenes entre el borde y los vertices internos.
-            this.tcFrameOffset = new Vector2(0,0);
-            this.Texcoords = new float[]
-            {
-                0f, 0.33f, 0.66f, 1f, 
-                0f, 0.33f, 0.66f, 1f
-            };
-            */
             this.MouseDown += delegate {}; //Inicialización del evento por defecto.
             this.MouseUp += delegate {}; //Inicialización del evento por defecto.
             this.MouseMove += delegate {}; //Inicialización del evento por defecto.
@@ -87,6 +84,8 @@ namespace dge.GUI.BaseObjects
             this.KeyReleased += delegate {}; //Inicialización del evento por defecto.
             this.KeyCharReturned += delegate {}; //Inicialización del evento por defecto.
             this.SizeChanged += ResizeEvent;
+
+            this.SetInternalDrawArea(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom));
         }
 
         ~BaseGuiSurface()
@@ -97,7 +96,7 @@ namespace dge.GUI.BaseObjects
 
         #region PRIVATES:
 
-        private void ResizeEvent(object sender, dgtk.dgtk_ResizeEventArgs e)
+        private void ResizeEvent(object sender, ResizeEventArgs e)
         {
             this.OnResize();
         }
@@ -153,26 +152,32 @@ namespace dge.GUI.BaseObjects
             return this.d_guiSurfaces.ContainsKey(surface.ID);
         }
 
-        internal virtual void DrawContent()
+        protected virtual void DrawContent()
         {
-            for (int i=0;i<VisibleSurfaceOrder.Count;i++)
-            {
-                this.d_guiSurfaces[VisibleSurfaceOrder[i]].Draw();
-            }
+            //if (this.gui != null)
+            //{
+                for (int i=0;i<VisibleSurfaceOrder.Count;i++)
+                {
+                    this.d_guiSurfaces[VisibleSurfaceOrder[i]].Draw();
+                }
+            //}
         }
 
         protected virtual void DrawContentIDs()
-        {
-            for (int i=0;i<VisibleSurfaceOrder.Count;i++)
+        {            
+            if (this.gui != null)
             {
-                this.d_guiSurfaces[VisibleSurfaceOrder[i]].DrawID();
+                for (int i=0;i<VisibleSurfaceOrder.Count;i++)
+                {
+                    this.d_guiSurfaces[VisibleSurfaceOrder[i]].DrawID();
+                }
             }
         }
 
         protected void DrawIn(int x, int y, int width, int height, Action action)
         {
-            if (this.gui != null)
-            {
+            //if (this.gui != null)
+            //{
                 int[] iv_VP = GL.glGetViewport(); // Conservamos valores de ViewPort Actual.
 
                 int mX = 0; // modificador de coordenadas de proyección.
@@ -205,21 +210,21 @@ namespace dge.GUI.BaseObjects
                     GL.glViewport(ivp_x, ivp_y, ivp_width, ivp_height); // Establecemos nuevo ViewPort
 
                     dgtk.Math.Mat4 m4 = this.gui.Drawer.m4P;
-                    dgtk.Math.Mat4 m4g = this.gui.GuiDrawer.m4P;
+                    dgtk.Math.Mat4 m4g = this.gui.gd_GuiDrawer.m4P;
                     dgtk.Math.Mat4 m4w = this.gui.Writer.m4P;
 
                     this.gui.Drawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
-                    this.gui.GuiDrawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY);
+                    this.gui.gd_GuiDrawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY);
                     this.gui.Writer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
 
                     action();
 
                     GL.glViewport(iv_VP[0], iv_VP[1], iv_VP[2], iv_VP[3]); // Restauramos antiguo ViewPort.
                     this.gui.Drawer.DefinePerspectiveMatrix(m4);
-                    this.gui.GuiDrawer.DefinePerspectiveMatrix(m4g);
+                    this.gui.gd_GuiDrawer.DefinePerspectiveMatrix(m4g);
                     this.gui.Writer.DefinePerspectiveMatrix(m4w);
                 }
-            }
+            //}
         }
 
         protected void DrawIdIn(int x, int y, int width, int height, Action action)
@@ -272,65 +277,125 @@ namespace dge.GUI.BaseObjects
 
         #endregion
 
-        internal virtual void Draw()
-        {            
+        public void SetInternalDrawArea(int x, int y, int width, int height)
+        {
+            this.ida_X = x;
+            this.ida_Y = y;
+            this.ida_Width = width;
+            this.ida_Height = height;
+        }
+
+        public int[] GetInternalDrawArea()
+        {
+            return new int[] {this.ida_X, this.ida_Y, this.ida_Width, this.ida_Height};
+        }
+
+        protected internal virtual void UpdateTheme()
+        {
+
+        }
+
+        internal void Draw()
+        {   
             if (this.gui != null)
             {
-                this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
-
-                if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+                if (this.b_visible)
                 {
-                    DrawIn(this.i_x-(int)this.MarginsFromTheEdge[0], this.i_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContent);
+                    this.pDraw();
+                    this.pDrawContent();
+                    /*if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+                    {
+                        DrawIn(this.ida_X, this.ida_Y, this.ida_Width, this.ida_Height, DrawContent);
+                    } */
                 }
-            }            
+            }      
+        }
+
+        protected virtual void pDrawContent()
+        {
+            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+            {
+                DrawIn(this.ida_X, this.ida_Y, this.ida_Width, this.ida_Height, DrawContent);
+            } 
+        }
+
+        protected virtual void pDraw()
+        {
+            if (this.b_ShowMe)
+            {
+                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
+            }
         }
 
         internal virtual void DrawID()
-        {          
-            //if (this.gui != null)
-            //{            
-                dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
-            
-                if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+        {
+            if (this.gui != null)
+            { 
+                if (this.b_visible)
                 {
-                    this.DrawIdIn(this.i_x-(int)this.MarginsFromTheEdge[0], this.i_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContentIDs);
+                    this.pDrawID();
+                    this.pDrawContentID();
+                    /*if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+                    {
+                        this.DrawIdIn(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom), DrawContentIDs);
+                    }*/
                 }
-            //}            
+            }
+        }
+
+        protected virtual void pDrawContentID()
+        {
+            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+            {
+                this.DrawIdIn(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom), DrawContentIDs);
+            }
+        }
+
+        protected virtual void pDrawID()
+        {          
+            if (this.b_ShowMe)
+            {
+                dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
+            }
+            else
+            {
+                dge.G2D.IDsDrawer.DrawGuiGL(this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0); // Pintamos ID de la superficie.
+            }
         }
 
         #region Protected Input Events:
 
-        protected virtual void MDown(object sender, dgtk.dgtk_MouseButtonEventArgs e)
+        protected virtual void MDown(object sender, MouseButtonEventArgs e)
         {
             this.MouseDown(this, e);
         }
 
-        protected virtual void MUp(object sender, dgtk.dgtk_MouseButtonEventArgs e)
+        protected virtual void MUp(object sender, MouseButtonEventArgs e)
         {
             this.MouseUp(this, e);
         }
 
-        protected virtual void MMove(object sender, dgtk.dgtk_MouseMoveEventArgs e)
+        protected virtual void MMove(object sender, MouseMoveEventArgs e)
         {
             this.MouseMove(this, e);
         }
 
-        protected virtual void MWheel(object sender, dgtk.dgtk_MouseWheelEventArgs e)
+        protected virtual void MWheel(object sender, MouseWheelEventArgs e)
         {
             this.MouseWheel(this, e);
         }
 
-        protected virtual void KPulsed(object sender, dgtk.dgtk_KeyBoardKeysEventArgs e)
+        protected virtual void KPulsed(object sender, KeyBoardKeysEventArgs e)
         {
             this.KeyPulsed(this, e);
         }
 
-        protected virtual void KReleased(object sender, dgtk.dgtk_KeyBoardKeysEventArgs e)
+        protected virtual void KReleased(object sender, KeyBoardKeysEventArgs e)
         {
             this.KeyReleased(this, e);
         }
 
-        protected virtual void KCharReturned(object sender, dgtk.dgtk_KeyBoardTextEventArgs e)
+        protected virtual void KCharReturned(object sender, KeyBoardTextEventArgs e)
         {
             this.KeyCharReturned(this, e);
         }
@@ -341,11 +406,12 @@ namespace dge.GUI.BaseObjects
 
         protected virtual void OnResize()
         {
-            
+            this.SetInternalDrawArea(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom));
         }
 
         protected virtual void OnReposition()
         {
+            this.SetInternalDrawArea(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom));
             foreach(BaseGuiSurface surf in this.d_guiSurfaces.Values)
             {
                 surf.intX = this.int_x+this.i_x+this.MarginsFromTheEdge[0];
@@ -402,14 +468,34 @@ namespace dge.GUI.BaseObjects
 
         public uint Width
         {
-            set { this.ui_width = value; this.SizeChanged(this, new dgtk.dgtk_ResizeEventArgs((int)this.ui_width, (int)this.ui_height)); }
+            set { this.ui_width = value; this.SizeChanged(this, new ResizeEventArgs((int)this.ui_width, (int)this.ui_height)); }
             get { return this.ui_width; }
         }
 
         public uint Height
         {
-            set { this.ui_height = value; this.SizeChanged(this, new dgtk.dgtk_ResizeEventArgs((int)this.ui_width, (int)this.ui_height)); }
+            set { this.ui_height = value; this.SizeChanged(this, new ResizeEventArgs((int)this.ui_width, (int)this.ui_height)); }
             get { return this.ui_height; }
+        }
+
+        public int MarginTop
+        {
+            get { return this.MarginsFromTheEdge[1]; }
+        }
+
+        public int MarginBottom
+        {
+            get { return this.MarginsFromTheEdge[3]; }
+        }
+
+        public int MarginLeft
+        {
+            get { return this.MarginsFromTheEdge[0]; }
+        }
+
+        public int MarginRight
+        {
+            get { return this.MarginsFromTheEdge[2]; }
         }
 
         internal BaseGuiSurface ParentGuiSurface
@@ -420,6 +506,14 @@ namespace dge.GUI.BaseObjects
                 this.GUI = this.parentGuiSurface.gui;
             }
             get { return this.parentGuiSurface; }
+        }
+
+        protected virtual void OnGuiUpdate()
+        {
+            foreach(BaseGuiSurface surf in this.d_guiSurfaces.Values)
+            { 
+                surf.GUI = this.gui;
+            }
         }
 
         internal /*virtual */GraphicsUserInterface GUI
@@ -448,6 +542,7 @@ namespace dge.GUI.BaseObjects
                     this.gui.KeyReleased += KReleased;
                     this.gui.KeyCharReturned += KCharReturned;
                 }
+                this.OnGuiUpdate();
                 foreach (BaseGuiSurface bgs in d_guiSurfaces.Values)
                 {
                     bgs.GUI = this.gui; // Asignar mismo GUI a los hijos.

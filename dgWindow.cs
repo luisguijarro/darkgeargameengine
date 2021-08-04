@@ -41,9 +41,9 @@ namespace dge
                 this.gui.ui_Width = (uint)e.Width;
                 this.gui.ui_Height = (uint)e.Height;
             }
-            /*while(this.GuiDrawer2D == null)
+            /*while(this.gd_GuiDrawer2D == null)
             {}
-            //this.GuiDrawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height);  
+            //this.gd_GuiDrawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height);  
             while(this.Drawer2D == null)
             {}      
             //this.Drawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height, true);
@@ -76,13 +76,13 @@ namespace dge
                 if (this.gui != null)
                 {
                     this.gui.iParentWindow = null;
-                    this.gui.GuiDrawer = null;
+                    this.gui.gd_GuiDrawer = null;
                     this.gui.Writer = null;
                     this.gui.Drawer = null;
                 }
                 this.gui = value; 
                 this.gui.iParentWindow = this; 
-                this.gui.GuiDrawer = this.GuiDrawer2D;
+                this.gui.gd_GuiDrawer = this.GuiDrawer2D;
                 this.gui.Writer = this.writer2D;
                 this.gui.Drawer = this.drawer2D;
             }

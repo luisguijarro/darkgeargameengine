@@ -4,21 +4,25 @@ using dgtk.Graphics;
 using dgtk.OpenGL;
 
 using dge.G2D;
+using dgtk;
 
 namespace dge.GUI
 {
     public class Window : dge.GUI.BaseObjects.BaseGuiSurface
     {
-        private bool b_ShowTitleBar; //Indica si se muestra o no la barra de título..
+        //private bool b_ShowTitleBar; //Indica si se muestra o no la barra de título..
         private bool b_full_id; //Indica si la parte interactiva del control es igual a toda su superficie.
+        private bool b_TitlePulsed;
+        private int LastMPosX; // ultima posicion del ratçon registrada.
+        private int LastMPosY; // ultima posicion del ratçon registrada.
         private string s_text;
         private dgtk.Graphics.Color4 c4_textColor;
         private dgtk.Graphics.Color4 c4_textBorderColor;
         private bool b_textBorder;
         private float f_FontSize;
         private dgFont font;
-
         protected Button CloseButton;
+        private Menu m_menu;
 
         public Window() : this(480, 270)
         {
@@ -27,8 +31,9 @@ namespace dge.GUI
 
         public Window(uint width, uint height) : base(width, height)
         {
-            this.b_ShowTitleBar = true;
+            //this.b_ShowTitleBar = true;
             this.b_full_id = false;
+            this.b_TitlePulsed = false;
             this.s_text = "Window";
             this.f_FontSize = 16;
             this.c4_textColor = dgtk.Graphics.Color4.Black;
@@ -47,6 +52,58 @@ namespace dge.GUI
             this.CloseButton.X = (int)this.Width-20;
             this.CloseButton.Y = 3;
             this.CloseButton.FontSize = 14;
+        }
+
+        protected internal override void UpdateTheme()
+        {
+            this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.Window_MarginsFromTheEdge;
+            this.font = this.gui.gt_ActualGuiTheme.DefaultFont;
+            this.Texcoords = this.gui.gt_ActualGuiTheme.Window_Texcoords;
+            this.tcFrameOffset  = this.gui.gt_ActualGuiTheme.Window_FrameOffset;
+
+        }
+
+        protected override void MDown(object sender, MouseButtonEventArgs e)
+        {
+            base.MDown(sender, e);
+            if (Core2D.SelectedID == this.ui_id)
+            {
+                int absX = (this.i_x+this.int_x);
+                int absY = (this.i_y+this.int_y);
+                if ((e.X>absX) && (e.X<absX+this.Width))
+                {
+                    if ((e.Y>absY) && (e.Y<absY+this.MarginTop))
+                    {
+                        this.LastMPosX = e.X;
+                        this.LastMPosY = e.Y;
+                        this.b_TitlePulsed = true;
+                    }
+                }
+            }
+        }
+
+        protected override void MUp(object sender, MouseButtonEventArgs e)
+        {
+            base.MUp(sender, e);
+            if (Core2D.SelectedID == this.ui_id)
+            {
+                this.b_TitlePulsed = false;
+            }
+        }
+
+        protected override void MMove(object sender, MouseMoveEventArgs e)
+        {
+            base.MMove(sender, e);
+            if (Core2D.SelectedID == this.ui_id)
+            {
+                if (this.b_TitlePulsed)
+                {
+                    this.X += (e.X-this.LastMPosX);
+                    this.Y += (e.Y-this.LastMPosY);
+                    this.LastMPosX = e.X;
+                    this.LastMPosY = e.Y;
+                }
+            }
         }
 
         private void DrawText()
@@ -73,19 +130,22 @@ namespace dge.GUI
             this.CloseButton.intY = this.int_y+this.i_y;
         }
 
-        internal override void Draw()
+        protected override void pDraw()
         {
             
-            this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x+this.int_x, this.i_y+this.int_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
-
+            this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x+this.int_x, this.i_y+this.int_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
+            /*
             if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
                 DrawIn(this.i_x+this.int_x+(int)this.MarginsFromTheEdge[0], this.i_y+this.int_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContent);
             }
+            */
+            base.DrawIn(this.int_x+this.i_x+this.MarginLeft, this.int_y+this.i_y,(int)this.ui_width-(this.MarginLeft+this.MarginRight), (int)this.MarginsFromTheEdge[1], DrawText);
 
-            base.DrawIn(this.int_x+this.i_x, this.int_y+this.i_y,(int)this.ui_width, (int)this.MarginsFromTheEdge[1], DrawText);
-
-            base.DrawIn(this.int_x+this.i_x, this.int_y+this.i_y,(int)this.ui_width, (int)this.MarginsFromTheEdge[1], this.CloseButton.Draw);
+            if (this.CloseButton.Visible)
+            {
+                base.DrawIn(this.int_x+this.i_x+this.MarginLeft, this.int_y+this.i_y,(int)this.ui_width-(this.MarginLeft+this.MarginRight), (int)this.MarginsFromTheEdge[1], this.CloseButton.Draw);
+            }
         }
 
         private void minidrawId() // Encapsulamos el metodo de pintando para controlar el area en el que se pinta.
@@ -93,16 +153,17 @@ namespace dge.GUI
             dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, 0, (int)(0), this.ui_width, (uint)(this.ui_height), 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
         }
 
-        internal override void DrawID()
+        protected override void pDrawID()
         {
             //Pintamos ID solo en la parte de la barra de título si así está establecido el atributo "this.b_full_id".
+            //base.pDrawID();
             base.DrawIdIn(this.int_x+this.i_x, this.int_y+this.i_y,(int)this.ui_width, (this.b_full_id ? (int)this.ui_height : (int)this.MarginsFromTheEdge[1]), minidrawId);
-            
+            /*
             if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
                 DrawIdIn(this.int_x+this.i_x+(int)this.MarginsFromTheEdge[0], this.int_y+this.i_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContentIDs);
             }
-            
+            */
             base.DrawIdIn(this.int_x+this.i_x, this.int_y+this.i_y,(int)this.ui_width, (int)this.MarginsFromTheEdge[1], this.CloseButton.DrawID);
         }
 
@@ -159,6 +220,21 @@ namespace dge.GUI
         {
             set { this.s_text = value; }
             get { return this.s_text; }
+        }
+
+        public Menu MainMenu
+        {
+            set 
+            { 
+                if (this.m_menu != null)
+                {
+                    this.m_menu.ParentWindow =  null;
+                }
+                this.m_menu = value; 
+                this.m_menu.ParentWindow = this;
+                this.m_menu.GUI = this.gui;
+            }
+            get { return this.m_menu; }
         }
     }
 }

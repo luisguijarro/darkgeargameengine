@@ -207,6 +207,7 @@ namespace dge.G2D
 		/// <param name="lineWidth">Max line width of the text.</param>
 		public void Write(dgFont font, dgtk.Graphics.Color4 color, string text, float fsize, float posx, float posy, float lineWidth)
 		{
+			//Console.WriteLine("Escribir en ancho: "+text);
 			string[] s_words = text.Split(' ');
 
 			float tmp_linewidth = 0;
@@ -214,30 +215,33 @@ namespace dge.G2D
 			int n_lines = 0;
 			for (int w=0;w<s_words.Length;w++)
 			{
-				float word_width = MeasureString(font.Name, s_words[w], fsize);
-				if ((tmp_linewidth + word_width) > lineWidth)
+				if (s_words[w].Length>0)
 				{
-					tmp_linewidth = 0;
-					actualpos = posx;
-					n_lines++;
-				}
+					string s_word = s_words[w];
 
-				string word = s_words[w];
-				
-				for (int i=0;i<word.Length;i++)
-				{
-					if (text[i] == ' ')
+					float[] word_size = MeasureString(font, s_word, fsize);
+					if ((tmp_linewidth + word_size[0]) > lineWidth)
 					{
-						actualpos += font.f_spaceWidth*(fsize/font.MaxFontSize);
-					}
-					else if (!font.d_characters.ContainsKey(text[i]))
-					{
-						actualpos += font.f_spaceWidth*(fsize/font.MaxFontSize);
+						tmp_linewidth = word_size[0] + (font.f_spaceWidth*(fsize/font.MaxFontSize));
+						actualpos = posx;
+						n_lines++;
 					}
 					else
 					{
-						actualpos += WriteChar(font, color, word[i], fsize, actualpos, posy + (fsize*n_lines));
+						tmp_linewidth += word_size[0] + (font.f_spaceWidth*(fsize/font.MaxFontSize)); // Palabra + Espacio.
+					}			
+					
+					for (int i=0;i<s_word.Length;i++)
+					{
+						if (font.d_characters.ContainsKey(s_word[i]))
+						{
+							actualpos += WriteChar(font, color, s_word[i], fsize, actualpos, posy + ((font.MaxCharacterHeight*(fsize/font.MaxFontSize))*n_lines));
+						}
 					}
+				}
+				if (w<s_words.Length-1) // añadimos espacio si no es la ultima palabra.
+				{ 
+					actualpos += font.f_spaceWidth*(fsize/font.MaxFontSize); 
 				}
 			}
 		}
@@ -297,11 +301,26 @@ namespace dge.G2D
 		/// <remarks>Measure Text.</remarks>
 		/// <param name="fontname">Name of de Font to Use when Measure text.</param>
 		/// <param name="text">Text to Measure.</param>
-		/// <param name="size">Size of the font in pixels.</param>
-		public static float MeasureString(string fontname, string text, float fsize)
+		/// <param name="fontsize">Size of the font in pixels.</param>
+		public static float[] MeasureString(string fontname, string text, float fontsize)
 		{
 			dgFont font = Fonts[fontname];			
-			return MeasureString(font, text, fsize);
+			return MeasureString(font, text, fontsize);
+		}
+
+
+		/// <summary>
+		/// Method used by the writer to know de Horizontal Size o a text.
+		/// </summary>
+		/// <remarks>Measure Text.</remarks>
+		/// <param name="fontname">Name of de Font to Use when Measure text.</param>
+		/// <param name="text">Text to Measure.</param>
+		/// <param name="fontsize">Size of the font in pixels.</param>
+		/// <param name="linewidth">Max length for line.</param>
+		public static float[] MeasureString(string fontname, string text, float fontsize, float lineWidth)
+		{
+			dgFont font = Fonts[fontname];			
+			return MeasureString(font, text, fontsize, lineWidth);
 		}
 
 		/// <summary>
@@ -311,37 +330,76 @@ namespace dge.G2D
 		/// <param name="font">Font to Use when Measure text.</param>
 		/// <param name="text">Text to Measure.</param>
 		/// <param name="size">Size of the font in pixels.</param>
-		public static float MeasureString(dgFont font, string text, float fsize)
+		public static float[] MeasureString(dgFont font, string text, float fontsize)
 		{
-			float retSize = 0;
+			float[] retSize = new float[]{0f,0f};
 			
 			for (int i=0;i<text.Length;i++)
 			{
-				if (font.d_characters.ContainsKey(text[i]))
-				{
-					dgCharacter ch = font.d_characters[text[i]];
+				//if (font.d_characters.ContainsKey(text[i]))
+				//{
+					
 					if (text[i] == ' ')
 					{
-						retSize += font.f_spaceWidth*(fsize/font.MaxFontSize);
+						retSize[0] += font.f_spaceWidth*(fontsize/font.MaxFontSize);
 					}
 					else if (!font.d_characters.ContainsKey(text[i]))
 					{
-						retSize += 0; //font.f_spaceWidth*(fsize/font.MaxFontSize);
+						retSize[0] += 0; //font.f_spaceWidth*(fsize/font.MaxFontSize);
 					}
 					else
 					{
-						retSize += ch.f_width*(fsize/font.MaxFontSize);
+						dgCharacter ch = font.d_characters[text[i]];
+						retSize[0] += ch.ui_width/*f_width*/*(fontsize/font.MaxFontSize);
 					}
+				//}
+			}
+			retSize[1] = font.MaxCharacterHeight*(fontsize/font.MaxFontSize);
+			return retSize;
+		}
+
+		/// <summary>
+		/// Method used by the writer to know de Horizontal Size o a text.
+		/// </summary>
+		/// <remarks>Measure Text.</remarks>
+		/// <param name="font">Font to Use when Measure text.</param>
+		/// <param name="text">Text to Measure.</param>
+		/// <param name="size">Size of the font in pixels.</param>
+		/// <param name="linewidth">Max length for line.</param>
+		public static float[] MeasureString(dgFont font, string text, float fontsize, float lineWidth)
+		{
+			//float retSize = 0;
+			
+			string[] s_words = text.Split(' ');
+
+			float tmp_linewidth = 0;
+			int n_lines = 1;
+			//float maxheight = 0f;
+			for (int w=0;w<s_words.Length;w++)
+			{
+				if (s_words[w].Length>0)
+				{
+					float[] word_size = MeasureString(font.Name, s_words[w], fontsize);
+					if ((tmp_linewidth + word_size[0]) > lineWidth)
+					{
+						tmp_linewidth = word_size[0] + (font.f_spaceWidth*(fontsize/font.MaxFontSize));
+						n_lines++;
+					}
+					else
+					{
+						tmp_linewidth += word_size[0] + (font.f_spaceWidth*(fontsize/font.MaxFontSize)); // Palabra + Espacio.
+					}	
+					//maxheight = (maxheight < word_size[1]) ? word_size[1] : maxheight;
 				}
 			}
-			return retSize;
+			
+			return new float[]{lineWidth, (n_lines)*(font.MaxCharacterHeight*(fontsize/font.MaxFontSize))};
 		}
 
 		private float WriteChar(dgFont font, dgtk.Graphics.Color4 color, char character, float fontsize, float posx, float posy) // Retornamos ancho dle caracter.
 		{
 			dgCharacter ch = font.d_characters[character];
 			//PINTAR:
-			//this.parentWindow.Drawer2D.Draw(font.TBO_Scan0.ID, color, (int)posx, (int)posy, (uint)(ch.ui_width*(fontsize/font.MaxFontSize)), (uint)(ch.ui_height*(fontsize/font.MaxFontSize)), 0f, ch.f_x0, ch.f_y0, ch.f_x1, ch.f_y1);
 			
 			float f_width = ((float)ch.ui_width*(fontsize/font.MaxFontSize));
 			float f_height = ((float)ch.ui_height*(fontsize/font.MaxFontSize));

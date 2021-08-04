@@ -48,6 +48,13 @@ namespace dge.GUI
             this.b_showColumns = true;
         }
 
+
+        protected internal override void UpdateTheme()
+        {
+            this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.ListViewer_MarginsFromTheEdge;
+            this.Texcoords = this.gui.gt_ActualGuiTheme.ListViewer_Texcoords;
+        }
+
         #region PUBLIC:
 
         public void AddObject(object @object)
@@ -151,7 +158,7 @@ namespace dge.GUI
 
         #region OVERRIDE:
 
-        protected override void MDown(object sender, dgtk_MouseButtonEventArgs e)
+        protected override void MDown(object sender, MouseButtonEventArgs e)
         {
             base.MDown(sender, e);
             
@@ -163,22 +170,25 @@ namespace dge.GUI
             }
         }
 
-        protected override void MWheel(object sender, dgtk_MouseWheelEventArgs e)
+        protected override void MWheel(object sender, MouseWheelEventArgs e)
         {
             base.MWheel(sender, e);
             if (Core2D.SelectedID==this.ui_id)
             {
-                this.sbVer.Value -= (int)((this.Height / (this.l_ObjectsElements.Count*2)) * (e.Delta > 0? 1 : -1));
+                if (this.l_ObjectsElements.Count > 0)
+                {
+                    this.sbVer.Value -= (int)((this.Height / (this.l_ObjectsElements.Count*2)) * (e.Delta > 0? 1 : -1));
+                }
             }
         }
 
-        internal override void Draw()
+        protected override void pDraw()
         {
             if (this.gui != null)
             {
                 uint framewidth = this.sbVer.Visible ? this.Width-this.sbVer.Width : this.Width;
                 uint frameHeight = this.sbHor.Visible ? this.Height-this.sbHor.Height : this.Height;
-                this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, framewidth, frameHeight, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
+                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, framewidth, frameHeight, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
                 
                 if (this.l_ObjectsElements.Count>0)
                 {
@@ -277,7 +287,7 @@ namespace dge.GUI
             this.sbVer.MaxValue = (int)System.Math.Max(((this.l_ObjectsElements.Count*(this.f_FontSize+4))-efectiveHeight), 0);
         }
 
-        private void UpdateColumns(object sender, dgtk.dgtk_ResizeEventArgs e)
+        private void UpdateColumns(object sender, ResizeEventArgs e)
         {
             int total_width = 0;
             total_width = this.UpdateColumnPos();

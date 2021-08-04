@@ -7,115 +7,152 @@ namespace dge.GUI
 {
     public class GuiTheme
     {
-        internal dge.G2D.TextureBufferObject ThemeTBO; // TBO Visual
-        internal dge.G2D.TextureBufferObject ThemeSltTBO; // TBO de siluetas para ID.
+        internal dge.G2D.TextureBufferObject tbo_ThemeTBO; // TBO Visual
+        internal dge.G2D.TextureBufferObject tbo_ThemeSltTBO; // TBO de siluetas para ID.
 
-        internal dgFont DefaultFont;
+        public dgFont DefaultFont;
 
         #region Ventanas:
-        internal int[] Window_MarginsFromTheEdge; // n=4
-        internal float[] Window_Texcoords; // n=8
-        internal float[] Window_FrameOffset; //n=2
+        public int[] Window_MarginsFromTheEdge; // n=4
+        public float[] Window_Texcoords; // n=8
+        public float[] Window_FrameOffset; //n=2
         #endregion
 
-        #region Botones:
-        internal int[] Button_MarginsFromTheEdge; // n=4
-        internal float[] Button_Texcoords; // n=8
-        internal float[] Button_FrameOffset; // n=2
+        #region Button:
+        public int[] Button_MarginsFromTheEdge; // n=4
+        public float[] Button_Texcoords; // n=8
+        public float[] Button_FrameOffset; // n=2
         #endregion
 
         #region TrackBar:
-        internal int[] TrackBar_Hor_MarginsFromTheEdge; // n=4
-        internal int[] TrackBar_Ver_MarginsFromTheEdge; // n=4
-        internal float[] TrackBar_Hor_Texcoords; // n=8
-        internal float[] TrackBar_Ver_Texcoords; // n=8
-        internal float[] TrackBar_Square_Hor_Slider_Texcoords; // n=4
-        internal float[] TrackBar_Square_Ver_Slider_Texcoords; // n=4
-        internal float[] TrackBar_Arrow_Up_Slider_Texcoords; // n=4
-        internal float[] TrackBar_Arrow_Down_Slider_Texcoords; // n=4
-        internal float[] TrackBar_Arrow_Left_Slider_Texcoords; // n=4
-        internal float[] TrackBar_Arrow_Right_Slider_Texcoords; // n=4
-        internal float[] TrackBar_FrameOffset; // n=2
-        internal int[] TrackBar_Slider_Size; // (Ancho, Alto)Hor, (Ancho, Alto)Ver
-        internal int TrackBar_Slider_PosMargin;
-        internal int TrackBar_Hor_MaxHeight;
-        internal int TrackBar_Ver_MaxWidth;
+        public int[] TrackBar_Hor_MarginsFromTheEdge; // n=4
+        public int[] TrackBar_Ver_MarginsFromTheEdge; // n=4
+        public float[] TrackBar_Hor_Texcoords; // n=8
+        public float[] TrackBar_Ver_Texcoords; // n=8
+        public float[] TrackBar_Square_Hor_Slider_Texcoords; // n=4
+        public float[] TrackBar_Square_Ver_Slider_Texcoords; // n=4
+        public float[] TrackBar_Arrow_Up_Slider_Texcoords; // n=4
+        public float[] TrackBar_Arrow_Down_Slider_Texcoords; // n=4
+        public float[] TrackBar_Arrow_Left_Slider_Texcoords; // n=4
+        public float[] TrackBar_Arrow_Right_Slider_Texcoords; // n=4
+        public float[] TrackBar_FrameOffset; // n=2
+        public int[] TrackBar_Slider_Size; // (Ancho, Alto)Hor, (Ancho, Alto)Ver
+        public int TrackBar_Slider_PosMargin;
+        public int TrackBar_Hor_MaxHeight;
+        public int TrackBar_Ver_MaxWidth;
         #endregion
 
         #region TextBox:
-        internal int[] TextBox_MarginsFromTheEdge; // n=4
-        internal float[] TextBox_Texcoords; // n=8
-        //internal float[] TextBox_FrameOffset; // n=2
-        internal char TextBox_CursorChar;
+        public int[] TextBox_MarginsFromTheEdge; // n=4
+        public float[] TextBox_Texcoords; // n=8
+        //public float[] TextBox_FrameOffset; // n=2
+        public char TextBox_CursorChar;
         #endregion
 
         #region ProgressBar
 
-        internal int[] ProgressBar_Hor_MarginsFromTheEdge; // n=4
-        internal int[] ProgressBar_Ver_MarginsFromTheEdge; // n=4
-        internal float[] ProgressBar_Hor_Texcoords; // n=8
-        internal float[] ProgressBar_Ver_Texcoords; // n=8
-        internal float[] ProgressBar_Hor_Filling_Texcoords; // n=4
-        internal float[] ProgressBar_Ver_Filling_Texcoords; // n=4
+        public int[] ProgressBar_Hor_MarginsFromTheEdge; // n=4
+        public int[] ProgressBar_Ver_MarginsFromTheEdge; // n=4
+        public float[] ProgressBar_Hor_Texcoords; // n=8
+        public float[] ProgressBar_Ver_Texcoords; // n=8
+        public float[] ProgressBar_Hor_Filling_Texcoords; // n=4
+        public float[] ProgressBar_Ver_Filling_Texcoords; // n=4
 
         #endregion
 
         #region ContentViewer
 
-        internal int[] ContentViewer_MarginsFromTheEdge; // n=4
-        internal float[] ContentViewer_Texcoords; // n=8
+        public int[] ContentViewer_MarginsFromTheEdge; // n=4
+        public float[] ContentViewer_Texcoords; // n=8
 
         #endregion
 
         #region ScrollBar
 
-        internal int[] ScrollBar_Hor_Btn1_MarginsFromTheEdge; // n=4
-        internal float[] ScrollBar_Hor_Btn1_Texcoords; // n=8
-        internal float[] ScrollBar_Hor_Btn1_FrameOffset; // n=2
-        internal int[] ScrollBar_Ver_Btn1_MarginsFromTheEdge; // n=4
-        internal float[] ScrollBar_Ver_Btn1_Texcoords; // n=8
-        internal float[] ScrollBar_Ver_Btn1_FrameOffset; // n=2
-        internal int[] ScrollBar_Hor_Btn2_MarginsFromTheEdge; // n=4
-        internal float[] ScrollBar_Hor_Btn2_Texcoords; // n=8
-        internal float[] ScrollBar_Hor_Btn2_FrameOffset; // n=2
-        internal int[] ScrollBar_Ver_Btn2_MarginsFromTheEdge; // n=4
-        internal float[] ScrollBar_Ver_Btn2_Texcoords; // n=8
-        internal float[] ScrollBar_Ver_Btn2_FrameOffset; // n=2
-        internal int[] ScrollBar_Hor_Slider_MarginsFromTheEdge; // n=4
-        internal float[] ScrollBar_Hor_Slider_Texcoords; // n=8
-        internal float[] ScrollBar_Hor_Slider_FrameOffset; // n=2
-        internal int[] ScrollBar_Ver_Slider_MarginsFromTheEdge; // n=4
-        internal float[] ScrollBar_Ver_Slider_Texcoords; // n=8
-        internal float[] ScrollBar_Ver_Slider_FrameOffset; // n=2
-        internal int[] ScrollBar_Hor_Track_MarginsFromTheEdge; // n=4
-        internal float[] ScrollBar_Hor_Track_Texcoords; // n=8
-        internal int[] ScrollBar_Ver_Track_MarginsFromTheEdge; // n=4
-        internal float[] ScrollBar_Ver_Track_Texcoords; // n=8
-        internal int ScrollBar_BarWidth;
+        public int[] ScrollBar_Hor_Btn1_MarginsFromTheEdge; // n=4
+        public float[] ScrollBar_Hor_Btn1_Texcoords; // n=8
+        public float[] ScrollBar_Hor_Btn1_FrameOffset; // n=2
+        public int[] ScrollBar_Ver_Btn1_MarginsFromTheEdge; // n=4
+        public float[] ScrollBar_Ver_Btn1_Texcoords; // n=8
+        public float[] ScrollBar_Ver_Btn1_FrameOffset; // n=2
+        public int[] ScrollBar_Hor_Btn2_MarginsFromTheEdge; // n=4
+        public float[] ScrollBar_Hor_Btn2_Texcoords; // n=8
+        public float[] ScrollBar_Hor_Btn2_FrameOffset; // n=2
+        public int[] ScrollBar_Ver_Btn2_MarginsFromTheEdge; // n=4
+        public float[] ScrollBar_Ver_Btn2_Texcoords; // n=8
+        public float[] ScrollBar_Ver_Btn2_FrameOffset; // n=2
+        public int[] ScrollBar_Hor_Slider_MarginsFromTheEdge; // n=4
+        public float[] ScrollBar_Hor_Slider_Texcoords; // n=8
+        public float[] ScrollBar_Hor_Slider_FrameOffset; // n=2
+        public int[] ScrollBar_Ver_Slider_MarginsFromTheEdge; // n=4
+        public float[] ScrollBar_Ver_Slider_Texcoords; // n=8
+        public float[] ScrollBar_Ver_Slider_FrameOffset; // n=2
+        public int[] ScrollBar_Hor_Track_MarginsFromTheEdge; // n=4
+        public float[] ScrollBar_Hor_Track_Texcoords; // n=8
+        public int[] ScrollBar_Ver_Track_MarginsFromTheEdge; // n=4
+        public float[] ScrollBar_Ver_Track_Texcoords; // n=8
+        public int ScrollBar_BarWidth;
 
         #endregion
 
         #region ListViewer
 
-        internal int[] ListViewer_MarginsFromTheEdge; // n=4
-        internal float[] ListViewer_Texcoords; // n=8
-        internal int[] ListViewer_Header_MarginsFromTheEdge; // n=4
-        internal float[] ListViewer_Header_Texcoords; // n=8
-        internal float[] ListViewer_Header_FrameOffset; // n=2
-        internal float[] ListViewer_Dibider_Texcoords; // n=4
-        internal int ListViewer_Dibider_Width;
+        public int[] ListViewer_MarginsFromTheEdge; // n=4
+        public float[] ListViewer_Texcoords; // n=8
+        public int[] ListViewer_Header_MarginsFromTheEdge; // n=4
+        public float[] ListViewer_Header_Texcoords; // n=8
+        public float[] ListViewer_Header_FrameOffset; // n=2
+        public float[] ListViewer_Dibider_Texcoords; // n=4
+        public int ListViewer_Dibider_Width;
 
         #endregion
+
+
+        #region CheckBox:
+        public int[] CheckBox_MarginsFromTheEdge; // n=4
+        public float[] CheckBox_Texcoords; // n=8
+        public float[] CheckBox_FrameOffset; // n=2
+        #endregion
+
+        #region Menu:
+        public int[] Menu_MarginsFromTheEdge; // n=4
+        public float[] Menu_Texcoords; // n=8
+        public float[] Menu_FrameOffset; // n=2
+        #endregion
+
+        #region TabPage
+        public int[] TabPage_MarginsFromTheEdge_Hor; // n=4
+        public int[] TabPage_MarginsFromTheEdge_Ver; // n=4
+        public float[] TabPage_Texcoords_Hor; // n=8
+        public float[] TabPage_Texcoords_Ver; // n=8
+        public float[] TabPage_FrameOffset_Hor; // n=2
+        public float[] TabPage_FrameOffset_Ver; // n=2
+        public float[] TabPage_X_Texcoords; // n=4
+        public float[] TabPage_X_FrameOffset; // n=2
+        public float[] TabPage_Plus_Texcoords; // n=4
+        public float[] TabPage_Plus_FrameOffset; // n=2
+        #endregion
+
 
         public GuiTheme()
         {
 
         }
 
+        public dge.G2D.TextureBufferObject ThemeTBO // TBO Visual
+        {
+            get { return this.tbo_ThemeTBO; }
+        }
+
+        public dge.G2D.TextureBufferObject ThemeSltTBO // TBO de siluetas para ID.
+        {
+            get { return this.tbo_ThemeSltTBO; }
+        }
+
         #region STATIC for DefaultTheme:
 
         private static GuiTheme p_DefaultGuiTheme;
-        internal static GuiTheme DefaultGuiTheme
+        public static GuiTheme DefaultGuiTheme
         {
             get
             {
@@ -131,12 +168,12 @@ namespace dge.GUI
         {
             GuiTheme ret = new GuiTheme();
 
-            ret.ThemeTBO  = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultTheme.png"), "GuiDefaultTheme");
-            ret.ThemeSltTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultThemeSlt.png"), "GuiDefaultThemeSlt");
+            ret.tbo_ThemeTBO  = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultTheme.png"), "GuiDefaultTheme");
+            ret.tbo_ThemeSltTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultThemeSlt.png"), "GuiDefaultThemeSlt");
             ret.DefaultFont = dge.G2D.Tools.LoadDGFont(Core.LoadEmbeddedResource("dge.dgFonts.LinuxLibertine.dgf"), "dge.dgFonts.LinuxLibertine.dgf");
 
-            float multHor = 1f/(float)ret.ThemeTBO.ui_width;
-            float multVer = 1f/(float)ret.ThemeTBO.ui_height;
+            float multHor = 1f/(float)ret.tbo_ThemeTBO.ui_width;
+            float multVer = 1f/(float)ret.tbo_ThemeTBO.ui_height;
 
             // Window:__________________________________________________________________________
             ret.Window_MarginsFromTheEdge = new int[]{2, 22, 2, 2};
@@ -182,23 +219,23 @@ namespace dge.GUI
             };
             ret.TrackBar_Arrow_Up_Slider_Texcoords = new float[]
             {
-                multHor*54f, multHor*66f,
-                multVer*60f, multVer*42f
+                multHor*57f, multHor*64f,
+                multVer*29f, multVer*43f
             };
             ret.TrackBar_Arrow_Down_Slider_Texcoords = new float[]
             {
-                multHor*78f, multHor*90f,
-                multVer*60f, multVer*42f
+                multHor*81f, multHor*88f,
+                multVer*29f, multVer*43f
             };
             ret.TrackBar_Arrow_Left_Slider_Texcoords = new float[]
             {
-                multHor*53f, multHor*66f,
-                multVer*54f, multVer*66f
+                multHor*53f, multHor*67f,
+                multVer*57f, multVer*64f
             };
             ret.TrackBar_Arrow_Right_Slider_Texcoords = new float[]
             {
                 multHor*77f, multHor*90f,
-                multVer*54f, multVer*66f
+                multVer*57f, multVer*64f
             };
             ret.TrackBar_Slider_Size = new int[]{ 7, 14, 14, 7 };
             ret.TrackBar_Slider_PosMargin = 4;
@@ -339,6 +376,44 @@ namespace dge.GUI
             ret.ListViewer_Header_MarginsFromTheEdge = new int[] {2, 2, 2, 2};
 
 
+            // CheckBox:__________________________________________________________________________
+            ret.CheckBox_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.CheckBox_Texcoords = new float[]
+            {
+                multHor*1f, multHor*3f, multHor*21f, multHor*23f, 
+                multVer*49f, multVer*51f, multVer*69f, multVer*71f
+            };
+            ret.CheckBox_FrameOffset = new float[]{multHor*24f, 0f};
+
+
+            // Menu:__________________________________________________________________________
+            ret.Menu_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.Menu_Texcoords = new float[]
+            {
+                multHor*1f, multHor*3f, multHor*21f, multHor*23f, 
+                multVer*169f, multVer*171f, multVer*189f, multVer*191f
+            };
+            ret.Menu_FrameOffset = new float[]{multHor*24f, 0f};
+
+            // TabPage:__________________________________________________________________________
+            ret.TabPage_MarginsFromTheEdge_Hor = new int[]{4, 2, 4, 2};
+            ret.TabPage_MarginsFromTheEdge_Ver = new int[]{2, 4, 2, 4};
+            ret.TabPage_Texcoords_Hor = new float[]
+            {
+                multHor*49f, multHor*53f, multHor*66f, multHor*71f, 
+                multVer*169f, multVer*173f, multVer*188f, multVer*191f
+            };
+            ret.TabPage_Texcoords_Ver = new float[]
+            {
+                multHor*49f, multHor*53f, multHor*66f, multHor*71f, 
+                multVer*193f, multVer*197f, multVer*212f, multVer*215f
+            };
+            ret.TabPage_FrameOffset_Hor = new float[]{multHor*24f, 0f};
+            ret.TabPage_FrameOffset_Ver = new float[]{multHor*24f, 0f};
+            ret.TabPage_X_Texcoords = new float[] {multHor*97f, multVer*173f, multHor*106f, multVer*182f};
+            ret.TabPage_X_FrameOffset = new float[]{multHor*11f, 0f};
+            ret.TabPage_Plus_Texcoords = new float[] {multHor*97f, multVer*197f, multHor*106f, multVer*206f};
+            ret.TabPage_Plus_FrameOffset = new float[]{multHor*11f, 0f};
 
             return ret;
         }

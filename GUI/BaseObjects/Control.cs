@@ -21,26 +21,23 @@ namespace dge.GUI.BaseObjects
         #region Public Methods:
 
 
-        public void AddSubControl(Control control)
+        public virtual void AddSubControl(Control control)
         {
            base.AddSurface((BaseGuiSurface) control);
         }
 
 
-        public void RemoveSubControl(uint id)
+        public virtual void RemoveSubControl(uint id)
         {
             base.RemoveSurface(id);
         }
 
-        public void RemoveSubControl(Control control)
+        public virtual void RemoveSubControl(Control control)
         {
             this.RemoveSubControl(control.ui_id); // Eliminar Control Hijo.
         }
 
         #endregion
-
-
-
 
         #region PROPERTIES:
 
