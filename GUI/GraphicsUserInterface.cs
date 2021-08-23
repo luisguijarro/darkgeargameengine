@@ -21,6 +21,7 @@ namespace dge.GUI
         private readonly Dictionary<uint, BaseObjects.Control> d_Controls; // Todos los Controles fuera de ventanas.
         internal List<uint> VisibleControlsOrder; // Orden de los Controles fuera de ventanas.
         internal Dictionary<string,Menu> m_menu;
+        internal List<string> l_menus;
 
         private uint ui_width; // Para calculos internos de ViewPorts De elementos.
         private uint ui_height; // Para calculos internos de ViewPorts De elementos.
@@ -46,6 +47,7 @@ namespace dge.GUI
                 this.UpdateTheme();
             }
             this.m_menu = new Dictionary<string, Menu>();
+            this.l_menus = new List<string>();
             this.Update = true; //Forzamos para pruebas.
             this.d_Windows = new Dictionary<uint, Window>();
             this.VisibleWindowsOrder = new List<uint>();
@@ -152,16 +154,48 @@ namespace dge.GUI
             return null;
         }
 
-        public void AddMenu(string MenuText)
+        public void AddMenu(string MenuName)
         {
-            this.m_menu.Add(MenuText, new Menu(MenuText));
-            this.m_menu[MenuText].GUI = this;
+            if (!this.m_menu.ContainsKey(MenuName))
+            {
+                this.m_menu.Add(MenuName, new Menu(MenuName));
+                this.m_menu[MenuName].GUI = this;
+                this.l_menus.Add(MenuName);
+                this.ReorderMenus();
+            }
         }
 
-        public void RemoveMenu(string MenuText)
+        public void AddMenu(Menu menu)
         {
-            this.m_menu[MenuText].GUI = null;
-            this.m_menu.Remove(MenuText);
+            if (!this.m_menu.ContainsValue(menu))
+            {
+                this.m_menu.Add(menu.Name, menu);
+                this.m_menu[menu.Name].GUI = this;
+                this.l_menus.Add(menu.Name);
+                this.ReorderMenus();
+            }
+        }
+
+        public void RemoveMenu(string MenuName)
+        {
+            if (this.m_menu.ContainsKey(MenuName))
+            {
+                this.m_menu[MenuName].GUI = null;
+                this.m_menu.Remove(MenuName);
+                this.l_menus.Remove(MenuName);
+                this.ReorderMenus();
+            }
+        }
+
+        private void ReorderMenus()
+        {
+            int posx = 0;
+            for (int i=0;i<this.l_menus.Count;i++)
+            {
+                this.m_menu[this.l_menus[i]].X = posx;
+                this.m_menu[this.l_menus[i]].RepositionMenus();
+                posx+=(int)this.m_menu[this.l_menus[i]].Width;
+            }
         }
 
         public Menu GetMenu(string MenuName)
@@ -191,7 +225,7 @@ namespace dge.GUI
                 }
             }
             //GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
-            if (this.m_menu != null)
+            if (this.m_menu.Count > 0)
             {
                 this.DrawMenu();
             }
