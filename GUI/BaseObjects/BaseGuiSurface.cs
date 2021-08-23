@@ -39,8 +39,9 @@ namespace dge.GUI.BaseObjects
         private bool b_visible; // ¿Es Visible la ventana?
         protected GraphicsUserInterface gui; // GUI al que pertenece.
         protected Dictionary<uint, BaseGuiSurface> d_guiSurfaces; // Todos los Controles de la ventana.
+        //protected Dictionary<string, uint> d_guiSurfacesIdByName; // Todos los Controles de la ventana.
         protected internal List<uint> VisibleSurfaceOrder; // Orden de los Controles de la ventana.
-        private BaseGuiSurface parentGuiSurface; // Padre cuando es contenido.
+        protected BaseGuiSurface parentGuiSurface; // Padre cuando es contenido.
         
 		public event EventHandler<MouseButtonEventArgs> MouseDown; // Evento que se da cuando se pulsa un botón del ratón.
 		public event EventHandler<MouseButtonEventArgs> MouseUp; // Evento que se da cuando se suelta un botón del ratón.
@@ -74,6 +75,7 @@ namespace dge.GUI.BaseObjects
 
             this.b_visible = true; // El guiSurface es visible por defecto.
             this.d_guiSurfaces = new Dictionary<uint, BaseGuiSurface>(); // Lista de objetos Hijo.
+            //this.d_guiSurfacesIdByName = new Dictionary<string, uint>(); // Lista de Ids porNombre de Objeto.
             this.VisibleSurfaceOrder = new List<uint>(); // Lista de objetos hijo visibles.
 
             this.MouseDown += delegate {}; //Inicialización del evento por defecto.
@@ -510,10 +512,10 @@ namespace dge.GUI.BaseObjects
 
         protected virtual void OnGuiUpdate()
         {
-            foreach(BaseGuiSurface surf in this.d_guiSurfaces.Values)
+            /*foreach(BaseGuiSurface surf in this.d_guiSurfaces.Values)
             { 
                 surf.GUI = this.gui;
-            }
+            }*/
         }
 
         internal /*virtual */GraphicsUserInterface GUI
@@ -542,11 +544,11 @@ namespace dge.GUI.BaseObjects
                     this.gui.KeyReleased += KReleased;
                     this.gui.KeyCharReturned += KCharReturned;
                 }
-                this.OnGuiUpdate();
                 foreach (BaseGuiSurface bgs in d_guiSurfaces.Values)
                 {
                     bgs.GUI = this.gui; // Asignar mismo GUI a los hijos.
                 }
+                if (this.gui!= null) { this.OnGuiUpdate(); }
             }
             get { return this.gui; }
         }
