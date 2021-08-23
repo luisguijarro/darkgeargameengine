@@ -39,7 +39,6 @@ namespace dge.GUI.BaseObjects
         private bool b_visible; // ¿Es Visible la ventana?
         protected GraphicsUserInterface gui; // GUI al que pertenece.
         protected Dictionary<uint, BaseGuiSurface> d_guiSurfaces; // Todos los Controles de la ventana.
-        //protected Dictionary<string, uint> d_guiSurfacesIdByName; // Todos los Controles de la ventana.
         protected internal List<uint> VisibleSurfaceOrder; // Orden de los Controles de la ventana.
         protected BaseGuiSurface parentGuiSurface; // Padre cuando es contenido.
         
@@ -75,7 +74,6 @@ namespace dge.GUI.BaseObjects
 
             this.b_visible = true; // El guiSurface es visible por defecto.
             this.d_guiSurfaces = new Dictionary<uint, BaseGuiSurface>(); // Lista de objetos Hijo.
-            //this.d_guiSurfacesIdByName = new Dictionary<string, uint>(); // Lista de Ids porNombre de Objeto.
             this.VisibleSurfaceOrder = new List<uint>(); // Lista de objetos hijo visibles.
 
             this.MouseDown += delegate {}; //Inicialización del evento por defecto.
