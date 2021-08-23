@@ -5,27 +5,60 @@ using dge.GUI.BaseObjects;
 
 namespace dge.GUI
 {
-    public class MenuItem : BaseObjects.Control
+    public class MenuItem : BaseObjects.BaseGuiSurface
     {
         protected dge.G2D.dgFont font;
         protected float f_fontSize;
         protected string s_text;
-        internal bool b_opened;
+        internal bool b_textBorder;
+        private dgtk.Graphics.Color4 c4_textColor;
+        private dgtk.Graphics.Color4 c4_textBorderColor;
+        protected string s_name;
+        protected bool b_opened;
         protected float tx_x, tx_y; // Coordenadas de texto
+        protected Dictionary<string, uint> d_IdByName;
         public MenuItem(string text) : base()
         {
             this.s_text = text;
+            this.s_name = text;
+            this.b_opened = false;
+            this.d_IdByName = new Dictionary<string, uint>();
+            this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.Menu_MarginsFromTheEdge;            
+            this.Texcoords = GuiTheme.DefaultGuiTheme.Menu_Texcoords;
+            this.tcFrameOffset = new float[]{0f,0f}; //GuiTheme.DefaultGuiTheme.Menu_FrameOffset;
+
+            this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
+            this.f_fontSize = 12;
+            this.c4_textColor = dgtk.Graphics.Color4.Black;
+            this.c4_textBorderColor = dgtk.Graphics.Color4.Black;
+
+            this.UpdateSizeFromText();
         }
 
         #region METODOS PUBLIC:
 
-
-        public virtual void AddSubControl(Control control)
+        public virtual void Add(string menuName)
         {
-            if (control.GetType() == typeof(MenuItem))
+            this.Add(new MenuItem(menuName));       
+        }
+
+        public virtual void Add(MenuItem menu)
+        {
+            if (menu.GetType() == typeof(MenuItem))
             {
-                base.AddSurface((BaseGuiSurface) control);
-            }           
+                base.AddSurface((BaseGuiSurface) menu);
+                this.d_IdByName.Add(menu.s_name, menu.ui_id);
+            }   
+            this.RepositionMenus();        
+        }
+
+        public virtual MenuItem GetItem(string itemName)
+        {
+            if (this.d_IdByName.ContainsKey(itemName))
+            {
+                return (MenuItem)this.d_guiSurfaces[this.d_IdByName[itemName]];
+            }
+            return null;
         }
 
         #endregion
@@ -36,16 +69,80 @@ namespace dge.GUI
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
-                this.b_opened = !this.b_opened!;
-                base.MUp(sender, e);
+                if ((this.b_opened) && (this.d_guiSurfaces.Count<=0))
+                {
+                    this.Opened = false;
+                    this.CloseParents();
+                    base.MUp(sender, e);
+                }                
             }
             else
-            {
-                this.b_opened = false;
+            {                
+                this.Opened = this.IsChildID(dge.Core2D.SelectedID);
             }
         }
 
+        protected override void MDown(object sender, MouseButtonEventArgs e)
+        {
+            if (dge.Core2D.SelectedID == this.ui_id)
+            {
+                this.Opened = !this.Opened;
+            }
+            else
+            {                
+                this.Opened = this.IsChildID(dge.Core2D.SelectedID);
+            }
+            
+        }
+
         #endregion
+
+        protected virtual void CloseParents()
+        {
+            ((MenuItem)this.parentGuiSurface).Opened = false;
+            ((MenuItem)this.parentGuiSurface).CloseParents();
+        }
+
+        protected bool IsChildID(uint id)
+        {
+            if ((id == this.ui_id)) // && (this.d_guiSurfaces.Count>0))
+            {
+                return true;
+            }
+            else
+            {
+                if (this.d_guiSurfaces.Count>0)
+                {
+                    foreach(MenuItem mi in this.d_guiSurfaces.Values)
+                    {
+                        if (mi.IsChildID(id))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    return false;
+                }               
+            }
+            return false;
+        }
+
+        protected override void OnGuiUpdate()
+        {
+            this.UpdateSizeFromText();
+        }
+
+        protected override void pDraw()
+        {
+            base.pDraw();
+            if (this.gui != null)
+            {
+                //DrawText();
+                this.DrawIn(this.X+(int)this.MarginLeft,this.Y+(int)this.MarginTop,(int)this.ui_width, (int)this.ui_height, DrawText);
+            }
+        }
 
         protected override void pDrawContent()
         {
@@ -82,7 +179,19 @@ namespace dge.GUI
             }
         }
 
-        protected virtual void UpdateSizeFromText()
+        protected virtual void DrawText()
+        {
+            if (this.b_textBorder)
+            {
+                this.gui.Writer.Write(this.font, this.c4_textColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y, this.c4_textBorderColor);
+            }
+            else
+            {
+                this.gui.Writer.Write(this.font, this.c4_textColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y);
+            }
+        }
+
+        internal virtual void UpdateSizeFromText()
         {
             if (this.gui == null)
             {
@@ -126,6 +235,31 @@ namespace dge.GUI
         {
             set { this.s_text = value; }
             get { return this.s_text; }
+        }
+
+        public string Name
+        {
+            set { this.s_name = value; }
+            get { return this.s_name; }
+        }
+
+        protected virtual bool Opened
+        {
+            set
+            {
+                this.b_opened = value;
+                if (this.b_opened)
+                {
+                    this.tcFrameOffset = GuiTheme.DefaultGuiTheme.Menu_FrameOffset;
+                }
+                else
+                {
+                    this.tcFrameOffset = new float[]{0f,0f};
+                    //
+                }
+                // = this.b_opened;
+            }
+            get { return this.b_opened; }
         }
 
         #endregion
