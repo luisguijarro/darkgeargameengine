@@ -228,10 +228,10 @@ namespace dge.GUI
             { 
                 if (this.m_menu != null)
                 {
-                    this.m_menu.ParentWindow =  null;
+                    this.m_menu.ParentGuiSurface = null;
                 }
                 this.m_menu = value; 
-                this.m_menu.ParentWindow = this;
+                this.m_menu.ParentGuiSurface = this;
                 this.m_menu.GUI = this.gui;
             }
             get { return this.m_menu; }
