@@ -9,7 +9,7 @@ namespace dge.GUI
     {
         public Menu(string Text) : base(Text)
         {
-
+            this.IsMain = true;;
         }
 
         protected override void UpdateTextCoords()
@@ -33,23 +33,32 @@ namespace dge.GUI
         internal override void RepositionMenus()
         {
             this.UpdateSizeFromText();
-            uint maxwidth = this.Width;
+            /*uint*/ this.maxwidth = this.Width;
+            this.maxheight=0;
             for (int i=0;i<this.VisibleSurfaceOrder.Count;i++)
             {
                 //((MenuItem)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]]).Text = ((MenuItem)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]]).Text;
                 ((MenuItem)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]]).UpdateSizeFromText();
                 uint tmpwidth = this.d_guiSurfaces[this.VisibleSurfaceOrder[i]].Width;
-                maxwidth = tmpwidth > maxwidth ? tmpwidth : maxwidth;
+                this.maxwidth = tmpwidth > this.maxwidth ? tmpwidth : this.maxwidth;
             }
             for (int i=0;i<this.VisibleSurfaceOrder.Count;i++)
             {
                 MenuItem item = (MenuItem)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]];
-                item.X = (int)(this.X);
-                item.Y = (int)((this.Height*(i+1)));
-                item.Width = maxwidth;
+                item.X = (int)(this.X+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[0]);
+                item.Y = (int)((this.Height*(i+1)))+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[1];
+                item.Width = this.maxwidth;
+                this.maxheight+=item.Height;
                 item.RepositionMenus();
             }
         }
+
+
+        protected override void pDrawBorder()
+        {
+            this.gui.gd_GuiDrawer.DrawGL(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO.ID, dgtk.Graphics.Color4.White, (int)(this.X), (int)(this.Y+this.Height), (uint)(maxwidth+(this.gui.gt_ActualGuiTheme.Menu_BordersWidths[0]+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[2])), (uint)(maxheight+(this.gui.gt_ActualGuiTheme.Menu_BordersWidths[1]+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[3])), 0f, this.gui.gt_ActualGuiTheme.Menu_BordersWidths, this.gui.gt_ActualGuiTheme.Menu_Border_Texcoords, new float[]{0f,0f}, 0);
+        }
+
 
         protected override bool Opened
         {
