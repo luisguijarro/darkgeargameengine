@@ -117,7 +117,11 @@ namespace dge.GUI
         #region Menu:
         public int[] Menu_MarginsFromTheEdge; // n=4
         public float[] Menu_Texcoords; // n=8
+        public int[] Menu_BordersWidths; // n=4
+        public float[] Menu_Border_Texcoords; // n=8
         public float[] Menu_FrameOffset; // n=2
+        public float[] Menu_Opened_icon_Texcoords; // n=4
+        public float[] Menu_Closed_icon_Texcoords; // n=4
         #endregion
 
         #region TabPage
@@ -131,6 +135,15 @@ namespace dge.GUI
         public float[] TabPage_X_FrameOffset; // n=2
         public float[] TabPage_Plus_Texcoords; // n=4
         public float[] TabPage_Plus_FrameOffset; // n=2
+        #endregion
+
+        #region Panel
+
+        public int[] Panel_MarginsFromTheEdge; // n=4
+        public float[] Panel_Texcoords; // n=8
+        public float[] Panel_BorderInFrameOffset; // n=2
+        public float[] Panel_BorderOutFrameOffset; // n=2
+
         #endregion
 
 
@@ -393,7 +406,15 @@ namespace dge.GUI
                 multHor*1f, multHor*3f, multHor*21f, multHor*23f, 
                 multVer*169f, multVer*171f, multVer*189f, multVer*191f
             };
+            ret.Menu_BordersWidths = new int[]{2, 2, 2, 2};
+            ret.Menu_Border_Texcoords = new float[]
+            {
+                multHor*73f, multHor*75f, multHor*93f, multHor*95f, 
+                multVer*217f, multVer*219f, multVer*237f, multVer*239f
+            };
             ret.Menu_FrameOffset = new float[]{multHor*24f, 0f};
+            ret.Menu_Opened_icon_Texcoords = new float[] {multHor*49f, multVer*217, multHor*71f, multVer*239};
+            ret.Menu_Closed_icon_Texcoords = new float[] {multHor*25f, multVer*217f, multHor*47f, multVer*239f};
 
             // TabPage:__________________________________________________________________________
             ret.TabPage_MarginsFromTheEdge_Hor = new int[]{4, 2, 4, 2};
@@ -414,6 +435,17 @@ namespace dge.GUI
             ret.TabPage_X_FrameOffset = new float[]{multHor*11f, 0f};
             ret.TabPage_Plus_Texcoords = new float[] {multHor*97f, multVer*197f, multHor*106f, multVer*206f};
             ret.TabPage_Plus_FrameOffset = new float[]{multHor*11f, 0f};
+
+            // Panel:__________________________________________________________________________
+            ret.Panel_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.Panel_Texcoords = new float[]
+            {
+                multHor*1f, multHor*3f, multHor*21f, multHor*23f, 
+                multVer*193f, multVer*195f, multVer*213f, multVer*215f
+            };
+            ret.Panel_BorderInFrameOffset = new float[]{multHor*24f, 0f};
+            ret.Panel_BorderOutFrameOffset = new float[]{0f, multVer*24f};
+
 
             return ret;
         }
