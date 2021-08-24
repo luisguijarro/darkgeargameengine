@@ -23,8 +23,8 @@ namespace dge.GUI
         internal Dictionary<string,Menu> m_menu;
         internal List<string> l_menus;
 
-        private uint ui_width; // Para calculos internos de ViewPorts De elementos.
-        private uint ui_height; // Para calculos internos de ViewPorts De elementos.
+        protected uint ui_width; // Para calculos internos de ViewPorts De elementos.
+        protected uint ui_height; // Para calculos internos de ViewPorts De elementos.
 
         private int mheight; // Alto MainMenu.
 
@@ -363,7 +363,7 @@ namespace dge.GUI
             get { return this.gt_ActualGuiTheme; }
         }
         
-        internal uint ui_Width // Para calculos internos de ViewPorts De elementos.
+        public uint Width // Para calculos internos de ViewPorts De elementos.
         {
             set
             {
@@ -375,7 +375,7 @@ namespace dge.GUI
             get { return this.ui_width;}
         }
         
-        internal uint ui_Height // Para calculos internos de ViewPorts De elementos.
+        public uint Height // Para calculos internos de ViewPorts De elementos.
         {
             set
             {
