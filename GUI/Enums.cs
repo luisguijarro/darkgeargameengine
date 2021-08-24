@@ -2,6 +2,11 @@ using System;
 
 namespace dge.GUI
 { 
+	public enum BorderStyle
+	{
+		None=0, In=1, Out=2
+	}
+	
     public enum Orientation
     {
         Horizontal = 0, Vertical = 1
