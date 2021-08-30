@@ -136,6 +136,12 @@ namespace dge.GUI
         protected override void OnGuiUpdate()
         {
             this.UpdateSizeFromText();
+            // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            {
+                this.font = this.gui.GuiTheme.DefaultFont;
+            }   
+            this.RepositionMenus();  
         }
 
         protected override void pDraw()
