@@ -15,6 +15,7 @@ namespace dge.GUI
 
         public Color4 Default_BackgroundColor;
         public Color4 DefaultTextColor;
+        public Color4 DefaultTextBorderColor;
         public Color4 DefaultDisableTextColor;
 
         #region Ventanas:
@@ -196,6 +197,7 @@ namespace dge.GUI
             ret.DefaultFont = dge.G2D.Tools.LoadDGFont(Core.LoadEmbeddedResource("dge.dgFonts.LinuxLibertine.dgf"), "dge.dgFonts.LinuxLibertine.dgf");
             ret.Default_BackgroundColor = new Color4(83,83,83,255);
             ret.DefaultTextColor = Color4.Black;
+            ret.DefaultTextBorderColor = Color4.Black;
             ret.DefaultDisableTextColor = Color4.Gray;
 
             float multHor = 1f/(float)ret.tbo_ThemeTBO.ui_width;
