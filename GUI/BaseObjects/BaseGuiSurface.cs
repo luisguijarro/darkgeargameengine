@@ -604,7 +604,15 @@ namespace dge.GUI.BaseObjects
 
         public bool Enable
         {
-            set { this.b_IsEnable = value; this.OnEnableChange(); }
+            set 
+            { 
+                this.b_IsEnable = value; 
+                this.OnEnableChange();
+                foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
+                {
+                    srf.Enable = value;
+                }
+            }
             get { return this.b_IsEnable; }
         }
 
