@@ -31,7 +31,12 @@ namespace dge.GUI
 
         protected internal override void UpdateTheme()
         {
-            this.font = this.gui.gt_ActualGuiTheme.DefaultFont;
+            //this.font = this.gui.gt_ActualGuiTheme.DefaultFont;
+            // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            {
+                this.font = this.gui.GuiTheme.DefaultFont;
+            }     
         }
 
         private void DrawText()
