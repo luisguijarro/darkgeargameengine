@@ -51,7 +51,11 @@ namespace dge.GUI
         {
             this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.TextBox_MarginsFromTheEdge;            
             this.Texcoords = this.gui.gt_ActualGuiTheme.TextBox_Texcoords;
-            this.font = this.gui.gt_ActualGuiTheme.DefaultFont;
+            // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            {
+                this.font = this.gui.GuiTheme.DefaultFont;
+            }     
         }
 
         protected override void MDown(object sender, MouseButtonEventArgs e)
