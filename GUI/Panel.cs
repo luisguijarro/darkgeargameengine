@@ -23,6 +23,16 @@ namespace dge.GUI
             this.sb_Ver.Visible = false;            
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                this.sb_Hor.Dispose();
+                this.sb_Ver.Dispose();
+            }
+        }
+
         private void UpdateBorder()
         {
             switch(this.bs_border)
