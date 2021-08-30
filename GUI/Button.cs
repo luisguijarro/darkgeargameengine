@@ -59,6 +59,11 @@ namespace dge.GUI
             this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.Button_MarginsFromTheEdge;            
             this.Texcoords = this.gui.gt_ActualGuiTheme.Button_Texcoords;
             this.tcFrameOffset = this.gui.gt_ActualGuiTheme.Button_FrameOffset;
+            // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            {
+                this.font = this.gui.GuiTheme.DefaultFont;
+            }     
         }
 
         private void updateTextCoords(float fsize)
