@@ -10,7 +10,7 @@ namespace dge.GUI
     public class TabControl : BaseObjects.Control
     {
         private Orientation barOrientation;
-        private int i_TabBarWidth;
+        //private int i_TabBarWidth;
         private Dictionary<string,uint> d_Name_Id;
         private List<uint> l_ClosersIDs;
         private dgFont font;
