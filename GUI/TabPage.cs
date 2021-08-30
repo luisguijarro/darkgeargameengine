@@ -6,11 +6,11 @@ namespace dge.GUI
     public class TabPage : BaseObjects.Control
     {
         string s_name;
-        internal Button Xbutton;
+        //internal Button Xbutton;
         internal uint X_ButtonID;
         internal Color4 X_ColorID;
         private bool X_Pressed;
-        private float[] XB_Texcoords;
+        //private float[] XB_Texcoords;
         internal uint ui_TabWidth;
         internal int i_TabX;
         private Color4 c4_MouseOnX_Color;
