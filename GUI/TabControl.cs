@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 using dgtk.Graphics;
 using dge.G2D;
-using dgtk.Graphics;
 
 namespace dge.GUI
 {
