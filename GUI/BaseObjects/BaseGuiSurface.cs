@@ -14,6 +14,8 @@ namespace dge.GUI.BaseObjects
         protected uint ui_id; // ID De objeto 2D.
         internal protected Color4 idColor; // Color para la selección de ID.
 
+        protected bool b_IsEnable;
+
         protected int int_x; // Posiciones X e Y heredados.
         protected int int_y; // Posiciones X e Y heredados.
         protected internal int i_x; // Coordenada X de posición de Objeto
@@ -60,6 +62,7 @@ namespace dge.GUI.BaseObjects
         {
             this.MarginsFromTheEdge = new int[] {0,0,0,0};
             this.b_ShowMe = true;
+            this.b_IsEnable = true; // Habilitado por defecto.
             dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
             this.ui_id = Core2D.GetID(); // Obtenemos ID de la superficie.
             byte[] colorvalues = Core2D.DeUIntAByte4(this.ui_id); // Obtenemos color a partir del ID.
@@ -124,6 +127,11 @@ namespace dge.GUI.BaseObjects
         #endregion
 
         #region Protected
+
+        protected virtual void OnEnableChange()
+        {
+
+        }
 
         protected void AddSurface(BaseGuiSurface surface)
         {
@@ -392,39 +400,98 @@ namespace dge.GUI.BaseObjects
 
         #region Protected Input Events:
 
-        protected virtual void MDown(object sender, MouseButtonEventArgs e)
+        protected virtual void OnMDown(object sender, MouseButtonEventArgs e)
         {
             this.MouseDown(this, e);
         }
 
-        protected virtual void MUp(object sender, MouseButtonEventArgs e)
+        protected virtual void OnMUp(object sender, MouseButtonEventArgs e)
         {
             this.MouseUp(this, e);
         }
 
-        protected virtual void MMove(object sender, MouseMoveEventArgs e)
+        protected virtual void OnMMove(object sender, MouseMoveEventArgs e)
         {
             this.MouseMove(this, e);
         }
 
-        protected virtual void MWheel(object sender, MouseWheelEventArgs e)
+        protected virtual void OnMWheel(object sender, MouseWheelEventArgs e)
         {
             this.MouseWheel(this, e);
         }
 
-        protected virtual void KPulsed(object sender, KeyBoardKeysEventArgs e)
+        protected virtual void OnKPulsed(object sender, KeyBoardKeysEventArgs e)
         {
             this.KeyPulsed(this, e);
         }
 
-        protected virtual void KReleased(object sender, KeyBoardKeysEventArgs e)
+        protected virtual void OnKReleased(object sender, KeyBoardKeysEventArgs e)
         {
             this.KeyReleased(this, e);
         }
 
-        protected virtual void KCharReturned(object sender, KeyBoardTextEventArgs e)
+        protected virtual void OnKCharReturned(object sender, KeyBoardTextEventArgs e)
         {
             this.KeyCharReturned(this, e);
+        }
+
+        #endregion
+
+        #region Private Input Events:
+        private void MDown(object sender, MouseButtonEventArgs e)
+        {
+            if (this.b_IsEnable)
+            {
+                this.OnMDown(this, e);
+            }
+        }
+
+        private void MUp(object sender, MouseButtonEventArgs e)
+        {            
+            if (this.b_IsEnable)
+            {
+                this.OnMUp(this, e);
+            }
+        }
+
+        private void MMove(object sender, MouseMoveEventArgs e)
+        {
+            if (this.b_IsEnable)
+            {
+                this.OnMMove(this, e);
+            }
+        }
+
+        private void MWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (this.b_IsEnable)
+            {
+                this.OnMWheel(this, e);
+            }
+        }
+
+        private void KPulsed(object sender, KeyBoardKeysEventArgs e)
+        {
+            if (this.b_IsEnable)
+            {
+                this.OnKPulsed(this, e);
+            }
+        }
+
+        private void KReleased(object sender, KeyBoardKeysEventArgs e)
+        {
+            if (this.b_IsEnable)
+            {
+                this.OnKReleased(this, e);
+            }
+        }
+
+        private void KCharReturned(object sender, KeyBoardTextEventArgs e)
+        {
+            if (this.b_IsEnable)
+            {
+                this.OnKCharReturned(this, e);
+            }
         }
 
         #endregion
@@ -533,6 +600,12 @@ namespace dge.GUI.BaseObjects
                 this.GUI = this.parentGuiSurface.gui;
             }
             get { return this.parentGuiSurface; }
+        }
+
+        public bool Enable
+        {
+            set { this.b_IsEnable = value; this.OnEnableChange(); }
+            get { return this.b_IsEnable; }
         }
 
         protected virtual void OnGuiUpdate()
