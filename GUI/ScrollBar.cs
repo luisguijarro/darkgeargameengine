@@ -14,9 +14,9 @@ namespace dge.GUI
         private int i_MinValue;
         private int i_step;
         private Orientation o_Orientation;
-        private Button btn1;
-        private Button btn2;
-        private Button slider;
+        private readonly Button btn1;
+        private readonly Button btn2;
+        private readonly Button slider;
         public event EventHandler<IntValueChangedEventArgs> ValueChanged;
         public ScrollBar() : base(22, 150)
         {
@@ -45,6 +45,21 @@ namespace dge.GUI
             this.UpdateSizePos();
             this.UpdateSliderPos();
             this.UpdateStepSize();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                this.btn1.MouseDown -= Btn1Down;
+                this.btn2.MouseDown -= Btn2Down;
+                this.slider.MouseDown -= SliderDown;
+                this.slider.MouseMove -= SliderMove;
+                this.btn1.Dispose();
+                this.btn2.Dispose();
+                this.slider.Dispose();
+            }
         }
 
         protected internal override void UpdateTheme()
