@@ -1,6 +1,7 @@
 using System;
 using dgtk.Math;
 
+using dgtk.Graphics;
 using dge.G2D;
 
 namespace dge.GUI
@@ -11,6 +12,8 @@ namespace dge.GUI
         internal dge.G2D.TextureBufferObject tbo_ThemeSltTBO; // TBO de siluetas para ID.
 
         public dgFont DefaultFont;
+
+        public Color4 Default_BackgroundColor;
 
         #region Ventanas:
         public int[] Window_MarginsFromTheEdge; // n=4
@@ -133,8 +136,13 @@ namespace dge.GUI
         public float[] TabPage_FrameOffset_Ver; // n=2
         public float[] TabPage_X_Texcoords; // n=4
         public float[] TabPage_X_FrameOffset; // n=2
+        public int[] TabPage_X_Size; // n=2
+        public Color4 TabPage_X_MouseOnColor;
         public float[] TabPage_Plus_Texcoords; // n=4
         public float[] TabPage_Plus_FrameOffset; // n=2
+        public int[] TabPage_Plus_Size; // n=2
+        public int[] TabPage_Surface_MarginsFromTheEdge; // n=4
+        public float[] TabPage_Surface_Texcoords; // n=8
         #endregion
 
         #region Panel
@@ -184,6 +192,7 @@ namespace dge.GUI
             ret.tbo_ThemeTBO  = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultTheme.png"), "GuiDefaultTheme");
             ret.tbo_ThemeSltTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultThemeSlt.png"), "GuiDefaultThemeSlt");
             ret.DefaultFont = dge.G2D.Tools.LoadDGFont(Core.LoadEmbeddedResource("dge.dgFonts.LinuxLibertine.dgf"), "dge.dgFonts.LinuxLibertine.dgf");
+            ret.Default_BackgroundColor = new Color4(83,83,83,255);
 
             float multHor = 1f/(float)ret.tbo_ThemeTBO.ui_width;
             float multVer = 1f/(float)ret.tbo_ThemeTBO.ui_height;
@@ -417,24 +426,33 @@ namespace dge.GUI
             ret.Menu_Closed_icon_Texcoords = new float[] {multHor*25f, multVer*217f, multHor*47f, multVer*239f};
 
             // TabPage:__________________________________________________________________________
-            ret.TabPage_MarginsFromTheEdge_Hor = new int[]{4, 2, 4, 2};
-            ret.TabPage_MarginsFromTheEdge_Ver = new int[]{2, 4, 2, 4};
+            ret.TabPage_MarginsFromTheEdge_Hor = new int[]{4, 4, 6, 2};
+            ret.TabPage_MarginsFromTheEdge_Ver = new int[]{4, 4, 2, 6};
             ret.TabPage_Texcoords_Hor = new float[]
             {
-                multHor*49f, multHor*53f, multHor*66f, multHor*71f, 
-                multVer*169f, multVer*173f, multVer*188f, multVer*191f
+                multHor*49f, multHor*53f, multHor*64f, multHor*71f, 
+                multVer*169f, multVer*173f, multVer*189f, multVer*191f
             };
             ret.TabPage_Texcoords_Ver = new float[]
             {
                 multHor*49f, multHor*53f, multHor*66f, multHor*71f, 
-                multVer*193f, multVer*197f, multVer*212f, multVer*215f
+                multVer*193f, multVer*197f, multVer*210f, multVer*215f
             };
             ret.TabPage_FrameOffset_Hor = new float[]{multHor*24f, 0f};
             ret.TabPage_FrameOffset_Ver = new float[]{multHor*24f, 0f};
             ret.TabPage_X_Texcoords = new float[] {multHor*97f, multVer*173f, multHor*106f, multVer*182f};
             ret.TabPage_X_FrameOffset = new float[]{multHor*11f, 0f};
+            ret.TabPage_X_Size = new int[]{11, 11};
+            ret.TabPage_X_MouseOnColor = new Color4(255,180,180,255);
             ret.TabPage_Plus_Texcoords = new float[] {multHor*97f, multVer*197f, multHor*106f, multVer*206f};
             ret.TabPage_Plus_FrameOffset = new float[]{multHor*11f, 0f};
+            ret.TabPage_X_Size = new int[]{11, 11};
+            ret.TabPage_Surface_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.TabPage_Surface_Texcoords = new float[]
+            {
+                multHor*97f, multHor*99f, multHor*117f, multHor*119f, 
+                multVer*217f, multVer*219f, multVer*237f, multVer*239f
+            };
 
             // Panel:__________________________________________________________________________
             ret.Panel_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
