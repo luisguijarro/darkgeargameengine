@@ -124,5 +124,6 @@
     <Content Include="GUI\MenuItem.cs" />
     <Content Include="GUI\TabControl.cs" />
     <Content Include="GUI\TabPage.cs" />
+    <Content Include="GUI\Panel.cs" />
   </ItemGroup>
 </Project>
