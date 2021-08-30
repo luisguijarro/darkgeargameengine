@@ -48,11 +48,31 @@ namespace dge.GUI
             this.b_showColumns = true;
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                this.sbVer.Dispose();
+                this.sbHor.Dispose();
+                this.l_VisualOrder.Clear();
+                this.l_VisualOrder = null;
+                this.l_ObjectsElements.Clear();
+                this.l_ObjectsElements = null;
+                this.d_ListViewerColumns.Clear();
+                this.d_ListViewerColumns = null;
+            }
+        }
 
         protected internal override void UpdateTheme()
         {
             this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.ListViewer_MarginsFromTheEdge;
             this.Texcoords = this.gui.gt_ActualGuiTheme.ListViewer_Texcoords;
+            // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            {
+                this.font = this.gui.GuiTheme.DefaultFont;
+            }     
         }
 
         #region PUBLIC:
