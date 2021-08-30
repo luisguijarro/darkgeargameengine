@@ -45,11 +45,11 @@ namespace dge.GUI
             float py = this.tx_y;
             if (this.b_textBorder)
             {
-                this.gui.Writer.Write(this.font, this.c4_forecolor, this.s_text, f_fs, px, py, this.c4_bordercolor);
+                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_forecolor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, f_fs, px, py, (this.b_IsEnable) ? this.c4_bordercolor : this.gui.GuiTheme.DefaultDisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, this.c4_forecolor, this.s_text, f_fs, px, py);
+                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_forecolor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, f_fs, px, py);
             }
         }
 
