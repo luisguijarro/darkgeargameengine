@@ -26,6 +26,7 @@ namespace dge.GUI
             this.s_text = text;
             this.s_name = text;
             this.b_opened = false;
+            this.b_textBorder = false;
             this.d_IdByName = new Dictionary<string, uint>();
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.Menu_MarginsFromTheEdge;            
             this.Texcoords = GuiTheme.DefaultGuiTheme.Menu_Texcoords;
@@ -284,6 +285,12 @@ namespace dge.GUI
         {
             set { this.s_name = value; }
             get { return this.s_name; }
+        }
+
+        public bool DrawTextBorder
+        {
+            set { this.b_textBorder = value; }
+            get { return this.b_textBorder; }
         }
 
         protected virtual bool Opened
