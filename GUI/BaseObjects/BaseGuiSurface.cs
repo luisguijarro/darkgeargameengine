@@ -9,10 +9,10 @@ using dgtk.OpenGL;
 
 namespace dge.GUI.BaseObjects
 {
-    public class BaseGuiSurface
+    public class BaseGuiSurface : IDisposable
     {
         protected uint ui_id; // ID De objeto 2D.
-        protected Color4 idColor; // Color para la selección de ID.
+        internal protected Color4 idColor; // Color para la selección de ID.
 
         protected int int_x; // Posiciones X e Y heredados.
         protected int int_y; // Posiciones X e Y heredados.
@@ -88,10 +88,30 @@ namespace dge.GUI.BaseObjects
             this.SetInternalDrawArea(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom));
         }
 
-        ~BaseGuiSurface()
+        public void Dispose()
         {
-            Core2D.ReleaseID(this.ui_id); // Liberamos ID de la superficie.
-            this.SizeChanged += ResizeEvent;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.SizeChanged -= ResizeEvent;
+                Core2D.ReleaseID(this.ui_id);
+                #if DEBUG
+                    Console.WriteLine("Liberamos ID de Superficie de GUI.");
+                #endif
+                foreach(BaseGuiSurface bgs in this.d_guiSurfaces.Values)
+                {
+                    bgs.Dispose();
+                }
+                this.d_guiSurfaces.Clear();
+                this.d_guiSurfaces = null;
+                this.VisibleSurfaceOrder.Clear();
+                this.VisibleSurfaceOrder = null;
+            }
         }
 
         #region PRIVATES:
@@ -224,6 +244,10 @@ namespace dge.GUI.BaseObjects
                     this.gui.gd_GuiDrawer.DefinePerspectiveMatrix(m4g);
                     this.gui.Writer.DefinePerspectiveMatrix(m4w);
                 }
+                else
+                {
+                     //Console.WriteLine("¿Que me estás contando?");
+                }
             //}
         }
 
@@ -275,9 +299,7 @@ namespace dge.GUI.BaseObjects
             }
         }
 
-        #endregion
-
-        public void SetInternalDrawArea(int x, int y, int width, int height)
+        protected void SetInternalDrawArea(int x, int y, int width, int height)
         {
             this.ida_X = x;
             this.ida_Y = y;
@@ -285,7 +307,7 @@ namespace dge.GUI.BaseObjects
             this.ida_Height = height;
         }
 
-        public int[] GetInternalDrawArea()
+        protected int[] GetInternalDrawArea()
         {
             return new int[] {this.ida_X, this.ida_Y, this.ida_Width, this.ida_Height};
         }
@@ -293,22 +315,6 @@ namespace dge.GUI.BaseObjects
         protected internal virtual void UpdateTheme()
         {
 
-        }
-
-        internal void Draw()
-        {   
-            if (this.gui != null)
-            {
-                if (this.b_visible)
-                {
-                    this.pDraw();
-                    this.pDrawContent();
-                    /*if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
-                    {
-                        DrawIn(this.ida_X, this.ida_Y, this.ida_Width, this.ida_Height, DrawContent);
-                    } */
-                }
-            }      
         }
 
         protected virtual void pDrawContent()
@@ -324,22 +330,6 @@ namespace dge.GUI.BaseObjects
             if (this.b_ShowMe)
             {
                 this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
-            }
-        }
-
-        internal virtual void DrawID()
-        {
-            if (this.gui != null)
-            { 
-                if (this.b_visible)
-                {
-                    this.pDrawID();
-                    this.pDrawContentID();
-                    /*if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
-                    {
-                        this.DrawIdIn(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom), DrawContentIDs);
-                    }*/
-                }
             }
         }
 
@@ -360,6 +350,43 @@ namespace dge.GUI.BaseObjects
             else
             {
                 dge.G2D.IDsDrawer.DrawGuiGL(this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0); // Pintamos ID de la superficie.
+            }
+        }
+
+        #endregion
+
+        internal void Draw()
+        {   
+            if (this.gui != null)
+            {
+                if (this.b_visible)
+                {
+                    //lock(this.gui)
+                    //{
+                        this.pDraw();
+                        this.pDrawContent();
+                        /*if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+                        {
+                            DrawIn(this.ida_X, this.ida_Y, this.ida_Width, this.ida_Height, DrawContent);
+                        } */
+                    //}
+                }
+            }      
+        }
+
+        internal virtual void DrawID()
+        {
+            if (this.gui != null)
+            { 
+                if (this.b_visible)
+                {
+                    this.pDrawID();
+                    this.pDrawContentID();
+                    /*if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+                    {
+                        this.DrawIdIn(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom), DrawContentIDs);
+                    }*/
+                }
             }
         }
 
