@@ -58,10 +58,10 @@ namespace dge.GUI
             }     
         }
 
-        protected override void MDown(object sender, MouseButtonEventArgs e)
+        protected override void OnMDown(object sender, MouseButtonEventArgs e)
         {
-            base.MDown(sender, e);
-            if ((Core2D.SelectedID == this.ui_id) && this.b_editable)
+            base.OnMDown(sender, e);
+            if ((Core2D.SelectedID == this.ui_id) && this.b_editable && this.b_IsEnable)
             {
                 if (!this.b_Focus) 
                 {
@@ -77,7 +77,7 @@ namespace dge.GUI
 
         private void Key_Pulsed(object sender, KeyBoardKeysEventArgs e)
         {
-            if (this.b_Focus && this.b_editable)
+            if (this.b_Focus && this.b_editable && this.b_IsEnable)
             {
                 string txt1 = this.s_text.Substring(0, this.cursorPos);
                 string txt2 = this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
@@ -117,7 +117,7 @@ namespace dge.GUI
 
         private void CharReturned(object sender, KeyBoardTextEventArgs e)
         {
-            if (this.b_Focus && this.b_editable)
+            if (this.b_Focus && this.b_editable && this.b_IsEnable)
             {
                 string txt1 = this.s_text.Substring(0, this.cursorPos);
                 string txt2 = this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
@@ -170,11 +170,11 @@ namespace dge.GUI
             if (this.b_Focus)
             {
                 string s_txt = this.s_text.Substring(0, this.cursorPos) + GuiTheme.DefaultGuiTheme.TextBox_CursorChar + this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
-                this.gui.Writer.Write(this.font, this.c4_textColor, s_txt, this.f_FontSize, tx_x, tx_y, this.c4_textBorderColor);
+                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, s_txt, this.f_FontSize, tx_x, tx_y, (this.b_IsEnable) ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, this.c4_textColor, this.s_text, this.f_FontSize, tx_x, tx_y, this.c4_textBorderColor);
+                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, this.f_FontSize, tx_x, tx_y, (this.b_IsEnable) ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
             }
         }
 

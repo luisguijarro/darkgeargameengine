@@ -40,18 +40,18 @@ namespace dge.GUI
         }
 
 
-        protected override void MDown(object sender, MouseButtonEventArgs e)
+        protected override void OnMDown(object sender, MouseButtonEventArgs e)
         {
-            base.MDown(sender, e);
+            base.OnMDown(sender, e);
             if (Core2D.SelectedID == this.X_ButtonID)
             {
                 this.X_Pressed = true;
             }
         }
 
-        protected override void MUp(object sender, MouseButtonEventArgs e)
+        protected override void OnMUp(object sender, MouseButtonEventArgs e)
         {
-            base.MUp(sender, e);
+            base.OnMUp(sender, e);
             this.X_Pressed = false;
             if (Core2D.SelectedID == this.X_ButtonID)
             {                                                                                                                                      
@@ -60,7 +60,7 @@ namespace dge.GUI
             }
         }
 
-        protected override void MMove(object sender, MouseMoveEventArgs e)
+        protected override void OnMMove(object sender, MouseMoveEventArgs e)
         {
             //base.MMove(sender, e);
             this.b_MouseOnX = (Core2D.SelectedID == this.X_ButtonID);

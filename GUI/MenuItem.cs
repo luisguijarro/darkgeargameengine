@@ -70,7 +70,7 @@ namespace dge.GUI
 
         #region EVENTOS:
 
-        protected override void MUp(object sender, MouseButtonEventArgs e)
+        protected override void OnMUp(object sender, MouseButtonEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
@@ -78,7 +78,7 @@ namespace dge.GUI
                 {
                     this.Opened = false;
                     this.CloseParents();
-                    base.MUp(sender, e);
+                    base.OnMUp(sender, e);
                 }                
             }
             else
@@ -87,7 +87,7 @@ namespace dge.GUI
             }
         }
 
-        protected override void MDown(object sender, MouseButtonEventArgs e)
+        protected override void OnMDown(object sender, MouseButtonEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
@@ -159,7 +159,7 @@ namespace dge.GUI
         {
             if (this.b_opened)
             {
-                this.pDrawBorder();
+                if (this.VisibleSurfaceOrder.Count > 0) {this.pDrawBorder(); }
                 for (int i=0;i<this.VisibleSurfaceOrder.Count;i++)
                 {
                     this.d_guiSurfaces[this.VisibleSurfaceOrder[i]].Draw();
@@ -200,11 +200,11 @@ namespace dge.GUI
         {
             if (this.b_textBorder)
             {
-                this.gui.Writer.Write(this.font, this.c4_textColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y, this.c4_textBorderColor);
+                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y, (this.b_IsEnable) ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, this.c4_textColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y);
+                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y);
             }
             if (!this.IsMain) { this.DrawOpenCloseIcon(); }
         }

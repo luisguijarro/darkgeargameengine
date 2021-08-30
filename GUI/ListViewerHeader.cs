@@ -106,29 +106,29 @@ namespace dge.GUI
             return ret;
         }
 
-        protected override void MDown(object sender, MouseButtonEventArgs e)
+        protected override void OnMDown(object sender, MouseButtonEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
                 this.setPulsed(true, e.X, e.Y);
-                base.MDown(sender, e);
+                base.OnMDown(sender, e);
             }
         }
 
-        protected override void MUp(object sender, MouseButtonEventArgs e)
+        protected override void OnMUp(object sender, MouseButtonEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
-                base.MUp(sender, e);
+                base.OnMUp(sender, e);
             }
             this.setPulsed(false, e.X, e.Y);
         }
 
-        protected override void MMove(object sender, MouseMoveEventArgs e)
+        protected override void OnMMove(object sender, MouseMoveEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
-                base.MMove(sender, e);
+                base.OnMMove(sender, e);
                 if (this.b_Dibider_pulsed)
                 {
                     int i_diference = (e.X-this.lastPosX);

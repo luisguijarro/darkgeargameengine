@@ -28,13 +28,13 @@ namespace dge.GUI
             this.tcFrameOffset = this.gui.gt_ActualGuiTheme.CheckBox_FrameOffset;
         }
 
-        protected override void MDown(object sender, MouseButtonEventArgs e)
+        protected override void OnMDown(object sender, MouseButtonEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
                 this.b_Checked = !this.b_Checked;
                 this.CheckedStateChanged(this, new CheckedStateChanged(this.b_Checked));
-                base.MDown(sender, e);
+                base.OnMDown(sender, e);
             }
         }
 

@@ -63,9 +63,9 @@ namespace dge.GUI
 
         }
 
-        protected override void MDown(object sender, MouseButtonEventArgs e)
+        protected override void OnMDown(object sender, MouseButtonEventArgs e)
         {
-            base.MDown(sender, e);
+            base.OnMDown(sender, e);
             if (Core2D.SelectedID == this.ui_id)
             {
                 int absX = (this.i_x+this.int_x);
@@ -82,18 +82,18 @@ namespace dge.GUI
             }
         }
 
-        protected override void MUp(object sender, MouseButtonEventArgs e)
+        protected override void OnMUp(object sender, MouseButtonEventArgs e)
         {
-            base.MUp(sender, e);
+            base.OnMUp(sender, e);
             if (Core2D.SelectedID == this.ui_id)
             {
                 this.b_TitlePulsed = false;
             }
         }
 
-        protected override void MMove(object sender, MouseMoveEventArgs e)
+        protected override void OnMMove(object sender, MouseMoveEventArgs e)
         {
-            base.MMove(sender, e);
+            base.OnMMove(sender, e);
             if (Core2D.SelectedID == this.ui_id)
             {
                 if (this.b_TitlePulsed)

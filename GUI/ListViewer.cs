@@ -178,9 +178,9 @@ namespace dge.GUI
 
         #region OVERRIDE:
 
-        protected override void MDown(object sender, MouseButtonEventArgs e)
+        protected override void OnMDown(object sender, MouseButtonEventArgs e)
         {
-            base.MDown(sender, e);
+            base.OnMDown(sender, e);
             
             if (Core2D.SelectedID == this.ui_id)
             {
@@ -190,9 +190,9 @@ namespace dge.GUI
             }
         }
 
-        protected override void MWheel(object sender, MouseWheelEventArgs e)
+        protected override void OnMWheel(object sender, MouseWheelEventArgs e)
         {
-            base.MWheel(sender, e);
+            base.OnMWheel(sender, e);
             if (Core2D.SelectedID==this.ui_id)
             {
                 if (this.l_ObjectsElements.Count > 0)

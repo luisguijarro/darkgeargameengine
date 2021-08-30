@@ -94,20 +94,20 @@ namespace dge.GUI
             }            
         }
 
-        protected override void MDown(object sender, MouseButtonEventArgs e)
+        protected override void OnMDown(object sender, MouseButtonEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
                 this.setPulsed(true);
-                base.MDown(sender, e);
+                base.OnMDown(sender, e);
             }
         }
 
-        protected override void MUp(object sender, MouseButtonEventArgs e)
+        protected override void OnMUp(object sender, MouseButtonEventArgs e)
         {
             if (dge.Core2D.SelectedID == this.ui_id)
             {
-                base.MUp(sender, e);
+                base.OnMUp(sender, e);
             }
             this.setPulsed(false);
         }
