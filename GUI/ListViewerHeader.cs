@@ -46,7 +46,12 @@ namespace dge.GUI
             this.tcFrameOffset = this.gui.gt_ActualGuiTheme.ListViewer_Header_FrameOffset;
             this.ListViewer_Dibider_Texcoords = this.gui.gt_ActualGuiTheme.ListViewer_Dibider_Texcoords;
             this.ListViewer_Dibider_Width = this.gui.gt_ActualGuiTheme.ListViewer_Dibider_Width;
-            this.font = this.gui.gt_ActualGuiTheme.DefaultFont;
+            //this.font = this.gui.gt_ActualGuiTheme.DefaultFont;
+            // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            {
+                this.font = this.gui.GuiTheme.DefaultFont;
+            }     
         }
 
         #region PRIVATES:
