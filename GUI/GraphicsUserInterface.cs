@@ -62,6 +62,7 @@ namespace dge.GUI
             this.KeyCharReturned += delegate {}; //Inicialización del evento por defecto.
             this.Resized += delegate {}; //Inicialización del evento por defecto.
         }
+
         ~GraphicsUserInterface()
         {
             if (this.parentWindow != null)
@@ -211,7 +212,10 @@ namespace dge.GUI
         
         internal void Draw()
         {
-            GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
+            GL.glViewport(0, 0, (int)this.ui_width, (this.m_menu.Count>0) ? (int)(this.ui_height-this.m_menu[this.l_menus[0]].Height) : (int)this.ui_height);
+            this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.ui_width, ((this.m_menu.Count>0) ? (uint)(this.ui_height-this.m_menu[this.l_menus[0]].Height) : this.ui_height));
+            //GL.glClearColor(Color4.Red);
+            //GL.glClear(ClearBufferMask.GL_ALL);
             if (this.Update)
             {
                 for (int i=0;i<VisibleWindowsOrder.Count;i++)
@@ -224,9 +228,12 @@ namespace dge.GUI
                     this.d_Controls[VisibleControlsOrder[i]].Draw(); // Pintamos Controles Visibles.
                 }
             }
+            //GL.glClearColor(Color4.Black);
             //GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
             if (this.m_menu.Count > 0)
             {
+                GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
+                this.UpdatePerspective(0, 0, this.ui_width, this.ui_height);
                 this.DrawMenu();
             }
         }
@@ -238,33 +245,56 @@ namespace dge.GUI
 
         private void DrawMenu()
         {
-            //mheight = (int)(this.gt_ActualGuiTheme.DefaultFont.MaxCharacterHeight*(12/this.gt_ActualGuiTheme.DefaultFont.MaxFontSize));
-            this.gd_GuiDrawer.DrawGL(Color4.Gray, 0, 0, (uint)this.ParentWindow.Width, (uint)(mheight), 0);
+            this.gd_GuiDrawer.DrawGL(Color4.Gray, 0, 0, (uint)this.ParentWindow.Width, (uint)this.mheight, 0);
             foreach (string key in this.m_menu.Keys)
             {
                 this.m_menu[key].Draw();
             }
         }
 
-        private void DrawContentIds()
-        {            
-            for (int i=0;i<VisibleWindowsOrder.Count;i++)
+        private void DrawMenuID()
+        {
+            this.gd_GuiDrawer.DrawGL(Color4.Gray, 0, 0, (uint)this.ParentWindow.Width, (uint)this.mheight, 0);
+            foreach (string key in this.m_menu.Keys)
             {
-                this.d_Windows[VisibleWindowsOrder[i]].DrawID(); // Pintamos Ventanas Visibles.
-            }
-
-            for (int i=0;i<VisibleControlsOrder.Count;i++)
-            {
-                this.d_Controls[VisibleControlsOrder[i]].DrawID(); // Pintamos Controles Visibles.
-            }
-            if (this.m_menu.Count > 0) 
-            { 
-                foreach (string key in this.m_menu.Keys)
-                {
-                    this.m_menu[key].DrawID(); 
-                }
+                this.m_menu[key].DrawID();
             }
         }
+
+        private void DrawContentIds()
+        {     
+            GL.glViewport(0, 0, (int)this.ui_width, (this.m_menu.Count>0) ? (int)(this.ui_height-this.m_menu[this.l_menus[0]].Height) : (int)this.ui_height);
+            this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.ui_width, ((this.m_menu.Count>0) ? (uint)(this.ui_height-this.m_menu[this.l_menus[0]].Height) : this.ui_height));
+            //GL.glClearColor(Color4.Red);
+            //GL.glClear(ClearBufferMask.GL_ALL);
+            if (this.Update)
+            {
+                for (int i=0;i<VisibleWindowsOrder.Count;i++)
+                {
+                    this.d_Windows[VisibleWindowsOrder[i]].DrawID(); // Pintamos Ventanas Visibles.
+                }
+
+                for (int i=0;i<VisibleControlsOrder.Count;i++)
+                {
+                    this.d_Controls[VisibleControlsOrder[i]].DrawID(); // Pintamos Controles Visibles.
+                }
+            }
+            //GL.glClearColor(Color4.Black);
+            //GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
+            if (this.m_menu.Count > 0)
+            {
+                GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
+                this.UpdatePerspective(0, 0, this.ui_width, this.ui_height);
+                this.DrawMenuID();
+            } 
+        }
+
+        private void UpdatePerspective(int x, int y, uint uwidth, uint uheight)
+        {
+            this.gd_GuiDrawer.DefinePerspectiveMatrix(0,0,(float)uwidth, (float)uheight);
+            this.Writer.DefinePerspectiveMatrix(0,0,(float)uwidth, (float)uheight, true);
+        }
+        
 
         #region Events:
 
@@ -285,7 +315,14 @@ namespace dge.GUI
         internal void MMove(object sender, dgtk.dgtk_MouseMoveEventArgs e)
         {
             //this.DrawIds();
-            //dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
+            if ((e.X_inScreen>this.parentWindow.X) && (e.X_inScreen<(this.parentWindow.X+this.parentWindow.Width)))
+            {
+                if ((e.Y_inScreen>this.parentWindow.Y) && (e.Y_inScreen<(this.parentWindow.Y+this.parentWindow.Height)))
+                {
+                    this.DrawIds();
+                    dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
+                }
+            }
             this.MouseMove(this, new MouseMoveEventArgs(e.X, e.Y, e.X_inScreen, e.Y_inScreen));
         }
 
@@ -314,10 +351,10 @@ namespace dge.GUI
         internal void WResized(object sender, dgtk.dgtk_ResizeEventArgs e)
         {
             this.Resized(this, new ResizeEventArgs(e.Width, e.Height));
-            this.OnResized(this, e);
+            this.OnResized(this, new ResizeEventArgs(e.Width, e.Height));
         }
 
-        protected virtual void OnResized(object sender, dgtk.dgtk_ResizeEventArgs e)
+        protected virtual void OnResized(object sender, ResizeEventArgs e)
         {
 
         }
@@ -352,17 +389,17 @@ namespace dge.GUI
                     this.parentWindow.KeyCharReturned += KCharReturned;
                     this.parentWindow.WindowSizeChange += WResized;
                 }
-                this.ui_width = (uint)parentWindow.Width;
-                this.ui_height = (uint)parentWindow.Height;
             }
         }
+
+        #region PROPERTIES:
 
         public GuiTheme GuiTheme
         {
             set { this.gt_ActualGuiTheme = value; this.UpdateTheme(); }
             get { return this.gt_ActualGuiTheme; }
         }
-        
+
         public uint Width // Para calculos internos de ViewPorts De elementos.
         {
             set
@@ -371,6 +408,7 @@ namespace dge.GUI
                 //Meter definir perspectiva;
                 this.gd_GuiDrawer.DefinePerspectiveMatrix(0,0,this.ui_width, this.ui_height);
                 this.Writer.DefinePerspectiveMatrix(0,0,this.ui_width, this.ui_height, true);
+                this.OnResized(this, new ResizeEventArgs((int)this.ui_width, (int)this.ui_height));
             }
             get { return this.ui_width;}
         }
@@ -383,8 +421,13 @@ namespace dge.GUI
                 //Meter definir perspectiva;
                 this.gd_GuiDrawer.DefinePerspectiveMatrix(0,0,this.ui_width, this.ui_height);
                 this.Writer.DefinePerspectiveMatrix(0,0,this.ui_width, this.ui_height, true);
+                this.OnResized(this, new ResizeEventArgs((int)this.ui_width, (int)this.ui_height));
             }
-            get { return this.ui_height;}
+            get 
+            { 
+                //return this.ui_height;
+                return ((this.m_menu.Count>0) ? (uint)(this.ui_height-this.m_menu[this.l_menus[0]].Height) : this.ui_height);
+            }
         }
         
         public dgWindow ParentWindow
@@ -396,5 +439,7 @@ namespace dge.GUI
         {
             get { return this.gd_GuiDrawer; }
         }
+    
+        #endregion
     }
 }
