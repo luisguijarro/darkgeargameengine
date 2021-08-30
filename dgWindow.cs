@@ -38,8 +38,8 @@ namespace dge
             base.OnWindowSizeChange(sender, e);
             if (this.gui != null)
             {
-                this.gui.ui_Width = (uint)e.Width;
-                this.gui.ui_Height = (uint)e.Height;
+                this.gui.Width = (uint)e.Width;
+                this.gui.Height = (uint)e.Height;
             }
             /*while(this.gd_GuiDrawer2D == null)
             {}
@@ -85,6 +85,8 @@ namespace dge
                 this.gui.gd_GuiDrawer = this.GuiDrawer2D;
                 this.gui.Writer = this.writer2D;
                 this.gui.Drawer = this.drawer2D;
+                this.gui.Width = (uint)this.Width;
+                this.gui.Height = (uint)this.Height;
             }
             get { return this.gui; }
         }
