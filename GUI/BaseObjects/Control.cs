@@ -13,7 +13,7 @@ namespace dge.GUI.BaseObjects
             
         }
 
-        public Control(uint witdh, uint height) : base(witdh, height)
+        public Control(int witdh, int height) : base(witdh, height)
         {
             //this.textureBufferObject = this.gui.GuiTheme.ThemeTBO; // Provisional
         }

@@ -24,14 +24,16 @@ namespace dge.GUI
         protected Button CloseButton;
         private Menu m_menu;
 
-        public Window() : this(480, 270)
+        public Window() : this(0, 0, 480, 270)
         {
 
         }
 
-        public Window(uint width, uint height) : base(width, height)
+        public Window(int x, int y, int width, int height) : base(width, height)
         {
-            //this.b_ShowTitleBar = true;
+            this.i_x = x;
+            this.i_y = y;
+            
             this.b_full_id = false;
             this.b_TitlePulsed = false;
             this.s_text = "Window";
@@ -41,7 +43,7 @@ namespace dge.GUI
             this.b_textBorder = true;
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.Window_MarginsFromTheEdge;
             this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
-            //float mult = (1f/256f);
+            
             this.Texcoords = GuiTheme.DefaultGuiTheme.Window_Texcoords;
             this.tcFrameOffset  = GuiTheme.DefaultGuiTheme.Window_FrameOffset;
 
@@ -49,7 +51,7 @@ namespace dge.GUI
             this.CloseButton.GUI = this.gui;
             this.CloseButton.intX = this.i_x+this.int_x;
             this.CloseButton.intY = this.i_y+this.int_y;
-            this.CloseButton.X = (int)this.Width-20;
+            this.CloseButton.X = this.Width-20;
             this.CloseButton.Y = 3;
             this.CloseButton.FontSize = 14;
         }
@@ -68,8 +70,8 @@ namespace dge.GUI
             base.OnMDown(sender, e);
             if (Core2D.SelectedID == this.ui_id)
             {
-                int absX = (this.i_x+this.int_x);
-                int absY = (this.i_y+this.int_y);
+                int absX = this.i_x+this.int_x;
+                int absY = this.i_y+this.int_y;
                 if ((e.X>absX) && (e.X<absX+this.Width))
                 {
                     if ((e.Y>absY) && (e.Y<absY+this.MarginTop))
@@ -98,8 +100,8 @@ namespace dge.GUI
             {
                 if (this.b_TitlePulsed)
                 {
-                    this.X += (e.X-this.LastMPosX);
-                    this.Y += (e.Y-this.LastMPosY);
+                    this.X += e.X-this.LastMPosX;
+                    this.Y += e.Y-this.LastMPosY;
                     this.LastMPosX = e.X;
                     this.LastMPosY = e.Y;
                 }
@@ -120,7 +122,6 @@ namespace dge.GUI
 
         protected override void OnReposition()
         {
-            //base.OnReposition();
             foreach(BaseObjects.BaseGuiSurface surf in this.d_guiSurfaces.Values)
             {
                 surf.intX = this.int_x+this.i_x+this.MarginsFromTheEdge[0];
@@ -133,38 +134,27 @@ namespace dge.GUI
         protected override void pDraw()
         {
             
-            this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x+this.int_x, this.i_y+this.int_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
-            /*
-            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
-            {
-                DrawIn(this.i_x+this.int_x+(int)this.MarginsFromTheEdge[0], this.i_y+this.int_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContent);
-            }
-            */
-            base.DrawIn(this.int_x+this.i_x+this.MarginLeft, this.int_y+this.i_y,(int)this.ui_width-(this.MarginLeft+this.MarginRight), (int)this.MarginsFromTheEdge[1], DrawText);
+            this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x+this.int_x, this.i_y+this.int_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
+            
+            base.DrawIn(this.int_x+this.i_x+this.MarginLeft, this.int_y+this.i_y,(int)this.i_width-(this.MarginLeft+this.MarginRight), this.MarginsFromTheEdge[1], DrawText);
 
             if (this.CloseButton.Visible)
             {
-                base.DrawIn(this.int_x+this.i_x+this.MarginLeft, this.int_y+this.i_y,(int)this.ui_width-(this.MarginLeft+this.MarginRight), (int)this.MarginsFromTheEdge[1], this.CloseButton.Draw);
+                base.DrawIn(this.int_x+this.i_x+this.MarginLeft, this.int_y+this.i_y,(int)this.i_width-(this.MarginLeft+this.MarginRight), this.MarginsFromTheEdge[1], this.CloseButton.Draw);
             }
         }
 
         private void minidrawId() // Encapsulamos el metodo de pintando para controlar el area en el que se pinta.
         {
-            dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, 0, (int)(0), this.ui_width, (uint)(this.ui_height), 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
+            dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, 0, 0, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
         }
 
         protected override void pDrawID()
         {
             //Pintamos ID solo en la parte de la barra de título si así está establecido el atributo "this.b_full_id".
-            //base.pDrawID();
-            base.DrawIdIn(this.int_x+this.i_x, this.int_y+this.i_y,(int)this.ui_width, (this.b_full_id ? (int)this.ui_height : (int)this.MarginsFromTheEdge[1]), minidrawId);
-            /*
-            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
-            {
-                DrawIdIn(this.int_x+this.i_x+(int)this.MarginsFromTheEdge[0], this.int_y+this.i_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContentIDs);
-            }
-            */
-            base.DrawIdIn(this.int_x+this.i_x, this.int_y+this.i_y,(int)this.ui_width, (int)this.MarginsFromTheEdge[1], this.CloseButton.DrawID);
+            base.DrawIdIn(this.int_x+this.i_x, this.int_y+this.i_y,this.i_width, this.b_full_id ? this.i_height : this.MarginsFromTheEdge[1], minidrawId);
+            
+            base.DrawIdIn(this.int_x+this.i_x, this.int_y+this.i_y,this.i_width, this.MarginsFromTheEdge[1], this.CloseButton.DrawID);
         }
 
         public void AddControl(BaseObjects.Control control)

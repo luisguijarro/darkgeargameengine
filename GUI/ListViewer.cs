@@ -158,7 +158,7 @@ namespace dge.GUI
         {
             if (this.d_ListViewerColumns.ContainsKey(column))
             {
-                this.d_ListViewerColumns[column].Width = (uint)(width > GuiTheme.DefaultGuiTheme.ListViewer_Dibider_Width ? width : GuiTheme.DefaultGuiTheme.ListViewer_Dibider_Width);
+                this.d_ListViewerColumns[column].Width = (width > GuiTheme.DefaultGuiTheme.ListViewer_Dibider_Width) ? width : GuiTheme.DefaultGuiTheme.ListViewer_Dibider_Width;
                 this.UpdateColumnPos();
             }
         }
@@ -184,7 +184,7 @@ namespace dge.GUI
             
             if (Core2D.SelectedID == this.ui_id)
             {
-                int posX = e.X-(this.int_x+this.i_x);
+                int posX = e.X - (this.int_x+this.i_x);
                 int posY = e.Y - (this.int_y+this.i_y+this.MarginsFromTheEdge[1]+(this.b_showColumns ? (int)(this.f_FontSize + 4) : 0));
                 this.SelectItem(posX, posY);
             }
@@ -197,7 +197,7 @@ namespace dge.GUI
             {
                 if (this.l_ObjectsElements.Count > 0)
                 {
-                    this.sbVer.Value -= (int)((this.Height / (this.l_ObjectsElements.Count*2)) * (e.Delta > 0? 1 : -1));
+                    this.sbVer.Value -= (this.Height / (this.l_ObjectsElements.Count*2) * (e.Delta > 0? 1 : -1));
                 }
             }
         }
@@ -206,21 +206,21 @@ namespace dge.GUI
         {
             if (this.gui != null)
             {
-                uint framewidth = this.sbVer.Visible ? this.Width-this.sbVer.Width : this.Width;
-                uint frameHeight = this.sbHor.Visible ? this.Height-this.sbHor.Height : this.Height;
+                int framewidth = this.sbVer.Visible ? this.Width-this.sbVer.Width : this.Width;
+                int frameHeight = this.sbHor.Visible ? this.Height-this.sbHor.Height : this.Height;
                 this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, framewidth, frameHeight, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
                 
                 if (this.l_ObjectsElements.Count>0)
                 {
-                    DrawIn(this.i_x+(int)this.MarginsFromTheEdge[0], this.i_y+(int)this.MarginsFromTheEdge[1], (int)framewidth-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)frameHeight-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), this.DrawElements);
+                    DrawIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], framewidth-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), frameHeight-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), this.DrawElements);
                 }
                 if (this.d_ListViewerColumns.Count > 0)
                 {
-                    DrawIn(this.i_x+(int)this.MarginsFromTheEdge[0], this.i_y+(int)this.MarginsFromTheEdge[1], (int)framewidth-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)frameHeight-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawColumnHeaders);
+                    DrawIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], framewidth-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), frameHeight-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawColumnHeaders);
                 }
-                if ((this.sbVer.Visible) || (this.sbHor.Visible))
+                if (this.sbVer.Visible || this.sbHor.Visible)
                 {
-                    DrawIn(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height, DrawScrollBar);
+                    DrawIn(this.i_x, this.i_y, this.i_width, this.i_height, DrawScrollBar);
                 }
             }
         }
@@ -229,19 +229,19 @@ namespace dge.GUI
         {
             if (this.gui != null)
             {
-                uint framewidth = this.sbVer.Visible ? this.Width-this.sbVer.Width : this.Width;
-                uint frameHeight = this.sbHor.Visible ? this.Height-this.sbHor.Height : this.Height;
-                bool showcols = (this.b_showColumns && this.d_ListViewerColumns.Count >0);
+                int framewidth = this.sbVer.Visible ? this.Width-this.sbVer.Width : this.Width;
+                int frameHeight = this.sbHor.Visible ? this.Height-this.sbHor.Height : this.Height;
+                bool showcols = this.b_showColumns && this.d_ListViewerColumns.Count >0;
 
-                dge.G2D.IDsDrawer.DrawGL2D(this.idColor, this.i_x, this.i_y + (int)(showcols ? this.f_FontSize+4 : 0), framewidth, frameHeight - (uint)(showcols ? this.f_FontSize+4 : 0), 0); // Pintamos ID de la superficie.
+                dge.G2D.IDsDrawer.DrawGL2D(this.idColor, this.i_x, this.i_y + (int)(showcols ? this.f_FontSize+4 : 0), framewidth, frameHeight - (int)(showcols ? this.f_FontSize+4 : 0), 0); // Pintamos ID de la superficie.
                 
                 if (this.d_ListViewerColumns.Count > 0)
                 {
-                    DrawIdIn(this.i_x+(int)this.MarginsFromTheEdge[0], this.i_y+(int)this.MarginsFromTheEdge[1], (int)framewidth-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)frameHeight-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawColumnHeadersID);
+                    DrawIdIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], framewidth-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), frameHeight-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawColumnHeadersID);
                 }
-                if ((this.sbVer.Visible) || (this.sbHor.Visible))
+                if (this.sbVer.Visible || this.sbHor.Visible)
                 {
-                    DrawIdIn(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height, DrawScrollBarID);
+                    DrawIdIn(this.i_x, this.i_y, (int)this.i_width, (int)this.i_height, DrawScrollBarID);
                 }
             }
         }
@@ -350,7 +350,7 @@ namespace dge.GUI
                 Type objType = this.l_ObjectsElements[i].GetType();
                 if (i==this.i_selectedIndex)
                 {
-                    this.gui.Drawer.Draw(Color4.Blue, 0, posy, (uint)(this.Width-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]+this.sbVer.Width)), (uint)(this.f_FontSize+4), 0);
+                    this.gui.Drawer.Draw(Color4.Blue, 0, posy, this.Width-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]+this.sbVer.Width), (int)(this.f_FontSize+4), 0);
                 }
                 if (this.d_ListViewerColumns.Count > 0)
                 {

@@ -95,7 +95,7 @@ namespace dge.GUI
         }
         private void SliderMove(object sender, MouseMoveEventArgs e)
         {
-            if ((this.slider.b_pulsed) && (Core2D.SelectedID == this.slider.ID))
+            if (this.slider.b_pulsed && (Core2D.SelectedID == this.slider.ID))
             {
                 if (this.o_Orientation == Orientation.Vertical)
                 {
@@ -105,7 +105,7 @@ namespace dge.GUI
                         if ((this.slider.Y + i_diference) <= this.btn2.Y-this.slider.Height)
                         {
                             this.slider.Y += i_diference;
-                            int pixelrange = (int)(this.Height-(this.btn1.Height+this.btn2.Height+this.slider.Height));
+                            int pixelrange = this.Height-(this.btn1.Height+this.btn2.Height+this.slider.Height);
                             int valuerange = this.i_MaxValue-this.i_MinValue;
                             float mult = (float)valuerange / (float)pixelrange;
                             this.i_value = (int)((this.slider.Y-this.btn1.Height) * mult);
@@ -120,7 +120,7 @@ namespace dge.GUI
                         if ((this.slider.X + i_diference) <= this.btn2.X-this.slider.Width)
                         {
                             this.slider.X += i_diference;
-                            int pixelrange = (int)(this.Width-(this.btn1.Width+this.btn2.Width+this.slider.Width));
+                            int pixelrange = this.Width-(this.btn1.Width+this.btn2.Width+this.slider.Width);
                             int valuerange = this.i_MaxValue-this.i_MinValue;
                             float mult = (float)valuerange / (float)pixelrange;
                             this.i_value = (int)((this.slider.X-this.btn1.Width) * mult);
@@ -221,12 +221,12 @@ namespace dge.GUI
             int valuerange = this.i_MaxValue - this.i_MinValue;
             if (this.o_Orientation == Orientation.Vertical)
             {
-                pixelrange = (int)(this.Height-(this.btn1.Height+this.btn2.Height+this.slider.Height));
+                pixelrange = this.Height-(this.btn1.Height+this.btn2.Height+this.slider.Height);
                 this.i_step = (int)((float)valuerange / (float)pixelrange);
             }
             else
             {
-                pixelrange = (int)(this.Width-(this.btn1.Width+this.btn2.Width+this.slider.Width));
+                pixelrange = this.Width-(this.btn1.Width+this.btn2.Width+this.slider.Width);
                 this.i_step = (int)((float)valuerange / (float)pixelrange);
             }
             if (this.i_step < 1) { this.i_step = 1; }
@@ -238,16 +238,15 @@ namespace dge.GUI
 
         protected override void OnResize()
         {
-            //base.OnResize();
             if (this.o_Orientation == Orientation.Horizontal)
             {
-                /*base.Height*/ this.ui_height = (uint)GuiTheme.DefaultGuiTheme.ScrollBar_BarWidth;
+                this.i_height = GuiTheme.DefaultGuiTheme.ScrollBar_BarWidth;
             }
             else
             {
-                /*base.Width*/ this.ui_width = (uint)GuiTheme.DefaultGuiTheme.ScrollBar_BarWidth;
+                this.i_width = GuiTheme.DefaultGuiTheme.ScrollBar_BarWidth;
             }
-            this.SetInternalDrawArea(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height);
+            this.SetInternalDrawArea(this.i_x, this.i_y, this.i_width, this.i_height);
             this.UpdateSizePos();
             this.UpdateSliderPos();
             this.UpdateStepSize();
@@ -255,37 +254,33 @@ namespace dge.GUI
 
         protected override void OnReposition()
         {
-            //base.OnReposition();
-            this.SetInternalDrawArea(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height);
+            this.SetInternalDrawArea(this.i_x, this.i_y, this.i_width, this.i_height);
             this.UpdateSizePos();
             this.UpdateSliderPos();
         }
 
         protected override void pDraw()
         {
-            //if (this.gui != null)
-            //{
-                if (this.o_Orientation == Orientation.Horizontal)
-                {
-                    this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x+(int)this.btn1.Height, this.i_y, this.ui_width-(uint)(this.btn1.Width+this.btn2.Width), this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
-                }
-                else
-                {
-                    this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y+(int)this.btn1.Height, this.ui_width, this.ui_height-(uint)(this.btn1.Height+this.btn2.Height), 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
-                }
+            if (this.o_Orientation == Orientation.Horizontal)
+            {
+                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x+this.btn1.Height, this.i_y, this.i_width-(this.btn1.Width+this.btn2.Width), this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
+            }
+            else
+            {
+                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y+this.btn1.Height, this.i_width, this.i_height-(int)(this.btn1.Height+this.btn2.Height), 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
+            }
 
-                if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
-                {
-                    DrawIn(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height, DrawContent);
-                }
-            //}
+            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+            {
+                DrawIn(this.i_x, this.i_y, this.i_width, this.i_height, DrawContent);
+            }
         }
 
         internal override void DrawID()
         {
             if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
-                this.DrawIdIn(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height, DrawContentIDs);
+                this.DrawIdIn(this.i_x, this.i_y, this.i_width, this.i_height, DrawContentIDs);
             }
         }
 
@@ -299,9 +294,9 @@ namespace dge.GUI
             { 
                 if (this.o_Orientation != value)
                 {
-                    uint temp = this.ui_width;
-                    this.ui_width = this.ui_height;
-                    this.ui_height = temp;
+                    int temp = this.i_width;
+                    this.i_width = this.i_height;
+                    this.i_height = temp;
                     this.o_Orientation = value; 
                     this.UpdateOrientation(this.gui != null ? this.gui.gt_ActualGuiTheme : dge.GUI.GuiTheme.DefaultGuiTheme);
                     this.UpdateSizePos();

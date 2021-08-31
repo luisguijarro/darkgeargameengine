@@ -19,7 +19,7 @@ namespace dge.GUI
         {
 
         }
-        public ProgressBar(uint width, uint height) : base(width, height)
+        public ProgressBar(int width, int height) : base(width, height)
         {
             this.o_Orientation = Orientation.Horizontal;
             this.Texcoords = GuiTheme.DefaultGuiTheme.ProgressBar_Hor_Texcoords;
@@ -46,8 +46,8 @@ namespace dge.GUI
             int valuerange = this.MaxValue - this.MinValue;
             if (this.o_Orientation == Orientation.Horizontal)
             {
-                int pixelrange = (int)this.Width;
-                float mult = ((float)pixelrange/(float)valuerange);
+                int pixelrange = this.Width;
+                float mult = (float)pixelrange/(float)valuerange;
                 this.ProgressWidthHeight = (int)(mult*this.i_value);
                 this.Texcoords = GuiTheme.DefaultGuiTheme.ProgressBar_Hor_Texcoords;
                 float ValueRangeOfTexCoords = GuiTheme.DefaultGuiTheme.ProgressBar_Hor_Filling_Texcoords[2] - GuiTheme.DefaultGuiTheme.ProgressBar_Hor_Filling_Texcoords[0];
@@ -61,15 +61,15 @@ namespace dge.GUI
             }
             else
             {
-                int pixelrange = (int)this.Height;
-                float mult = ((float)pixelrange/(float)valuerange);
+                int pixelrange = this.Height;
+                float mult = (float)pixelrange/(float)valuerange;
                 this.ProgressWidthHeight = (int)(mult*this.i_value);
                 this.Texcoords = GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Texcoords;
                 float ValueRangeOfTexCoords = GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[3] - GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[1];
                 this.FillingTexCoords = new float[]
                 {
                     GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[0],
-                    GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[1]+ (ValueRangeOfTexCoords/this.MaxValue) * (this.MaxValue-this.i_value),
+                    GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[1] + (ValueRangeOfTexCoords/this.MaxValue) * (this.MaxValue-this.i_value),
                     GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[2],
                     GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[3]
                 };
@@ -80,11 +80,11 @@ namespace dge.GUI
         {
             if (this.o_Orientation == Orientation.Horizontal)
             {
-                this.gui.Drawer.Draw(GuiTheme.DefaultGuiTheme.ThemeTBO.ui_ID, this.X, this.Y, (uint)this.ProgressWidthHeight, this.ui_height, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
+                this.gui.Drawer.Draw(GuiTheme.DefaultGuiTheme.ThemeTBO.ui_ID, this.X, this.Y, this.ProgressWidthHeight, this.i_height, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
             }
             else
             {
-                this.gui.Drawer.Draw(GuiTheme.DefaultGuiTheme.ThemeTBO.ui_ID, this.X, this.Y + (int)(this.ui_height-this.ProgressWidthHeight), (uint)this.ui_width, (uint)this.ProgressWidthHeight, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
+                this.gui.Drawer.Draw(GuiTheme.DefaultGuiTheme.ThemeTBO.ui_ID, this.X, this.Y + (this.i_height-this.ProgressWidthHeight), this.i_width, this.ProgressWidthHeight, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
             }
             base.pDraw();
         }
@@ -97,9 +97,9 @@ namespace dge.GUI
             { 
                 if (this.o_Orientation != value)
                 {
-                    uint temp = this.ui_width;
-                    this.ui_width = this.ui_height;
-                    this.ui_height = temp;
+                    int temp = this.i_width;
+                    this.i_width = this.i_height;
+                    this.i_height = temp;
                 }
                 this.o_Orientation = value; 
                 this.UpdateProgres();

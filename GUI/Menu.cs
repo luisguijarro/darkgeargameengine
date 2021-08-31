@@ -20,7 +20,7 @@ namespace dge.GUI
                 if (this.gui.Writer != null)
                 {
                     this.tx_x = this.MarginLeft;
-                    this.tx_y = (this.ui_height/2.0f) - (this.f_fontSize/1.2f);
+                    this.tx_y = (this.i_height/2.0f) - (this.f_fontSize/1.2f);
                 }
             }
             this.OnReposition();
@@ -33,20 +33,19 @@ namespace dge.GUI
         internal override void RepositionMenus()
         {
             this.UpdateSizeFromText();
-            /*uint*/ this.maxwidth = this.Width;
+            this.maxwidth = this.Width;
             this.maxheight=0;
             for (int i=0;i<this.VisibleSurfaceOrder.Count;i++)
             {
-                //((MenuItem)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]]).Text = ((MenuItem)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]]).Text;
                 ((MenuItem)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]]).UpdateSizeFromText();
-                uint tmpwidth = this.d_guiSurfaces[this.VisibleSurfaceOrder[i]].Width;
+                int tmpwidth = this.d_guiSurfaces[this.VisibleSurfaceOrder[i]].Width;
                 this.maxwidth = tmpwidth > this.maxwidth ? tmpwidth : this.maxwidth;
             }
             for (int i=0;i<this.VisibleSurfaceOrder.Count;i++)
             {
                 MenuItem item = (MenuItem)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]];
-                item.X = (int)(this.X+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[0]);
-                item.Y = (int)((this.Height*(i+1)))+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[1];
+                item.X = this.X+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[0];
+                item.Y = (this.Height*(i+1))+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[1];
                 item.Width = this.maxwidth;
                 this.maxheight+=item.Height;
                 item.RepositionMenus();
@@ -56,7 +55,7 @@ namespace dge.GUI
 
         protected override void pDrawBorder()
         {
-            this.gui.gd_GuiDrawer.DrawGL(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO.ID, dgtk.Graphics.Color4.White, (int)(this.X), (int)(this.Y+this.Height), (uint)(maxwidth+(this.gui.gt_ActualGuiTheme.Menu_BordersWidths[0]+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[2])), (uint)(maxheight+(this.gui.gt_ActualGuiTheme.Menu_BordersWidths[1]+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[3])), 0f, this.gui.gt_ActualGuiTheme.Menu_BordersWidths, this.gui.gt_ActualGuiTheme.Menu_Border_Texcoords, new float[]{0f,0f}, 0);
+            this.gui.gd_GuiDrawer.DrawGL(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO.ID, dgtk.Graphics.Color4.White, this.X, this.Y+this.Height, maxwidth+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[0]+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[2], maxheight+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[1]+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[3], 0f, this.gui.gt_ActualGuiTheme.Menu_BordersWidths, this.gui.gt_ActualGuiTheme.Menu_Border_Texcoords, new float[]{0f,0f}, 0);
         }
 
 

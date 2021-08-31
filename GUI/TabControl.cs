@@ -17,7 +17,7 @@ namespace dge.GUI
         private Color4 c4_BackgroundColor;
         private int totalTabsWidth;
         private uint ActiveTabID;
-        private uint tabsHeigth;
+        private int tabsHeigth;
         private int TabDisplacement; // modificador de coordenadas cuando Las Tabs no caben.
         private bool b_ClosableTabs;
         
@@ -25,7 +25,7 @@ namespace dge.GUI
         {
 
         }
-        public TabControl(uint width, uint height) : base(width, height)
+        public TabControl(int width, int height) : base(width, height)
         {
             this.Visible=true;
             this.TabDisplacement=0;
@@ -83,22 +83,27 @@ namespace dge.GUI
                 {
                     //Desplazar Tabs.
                     int tempdisplace = this.TabDisplacement;
-                    int DispCant = (int)(this.totalTabsWidth/20f);
-                    if (DispCant > this.ui_width) { DispCant = (int)this.ui_width; }
+                    int DispCant = (int)(this.totalTabsWidth/this.i_width);
+                    if (DispCant > this.i_width) { DispCant = (int)this.i_width; }
                     
-                    tempdisplace += (int)(DispCant*e.Delta);
+                    tempdisplace += (int)(DispCant*(e.Delta*3));
+                    
                     if ((tempdisplace <= 0) && (tempdisplace>=(this.Width-this.totalTabsWidth)))
                     {
                         this.TabDisplacement = tempdisplace;
                     }
-                    /*else //Control de posicio final e inicial.
+                    else //Control de posicio final e inicial.
                     {
+                        if (tempdisplace > 0)
+                        {
+                            this.TabDisplacement = 0;
+                        }
                         if (tempdisplace<(this.Width-this.totalTabsWidth))
                         {
-                            this.TabDisplacement = (int)(this.ui_width-this.totalTabsWidth);
+                            this.TabDisplacement = this.Width-this.totalTabsWidth;
                         }
                     }
-                    */
+                    
                     //Console.WriteLine("Tab Displacement: "+this.TabDisplacement);
                     Console.WriteLine("Delta: "+e.Delta);
                 }
@@ -139,11 +144,11 @@ namespace dge.GUI
                     tmp_width += (uint)(this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0]+this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[2]);
                     tmp_width += (this.b_ClosableTabs) ? (uint)this.gui.GuiTheme.TabPage_X_Size[0] : 0;
                     */
-                    this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.TabDisplacement + tp.i_TabX, 0, /*tmp_width*/ tp.ui_TabWidth, this.tabsHeigth, 0, this.MarginsFromTheEdge, Texcoords, (tp.ID == this.ActiveTabID) ? this.gui.GuiTheme.TabPage_FrameOffset_Hor : this.tcFrameOffset, 0);
+                    this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.TabDisplacement + tp.i_TabX, 0, /*tmp_width*/ tp.i_TabWidth, this.tabsHeigth, 0, this.MarginsFromTheEdge, Texcoords, (tp.ID == this.ActiveTabID) ? this.gui.GuiTheme.TabPage_FrameOffset_Hor : this.tcFrameOffset, 0);
                     this.gui.Writer.Write(this.gui.GuiTheme.DefaultFont, Color4.Black, tp.Name, this.f_fontsize, this.TabDisplacement + this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0] + tp.i_TabX, 0);
                     if (this.b_ClosableTabs) 
                     { 
-                        tp.Draw_X_Button((int)(this.TabDisplacement + tp.i_TabX + /*tmp_width*/ tp.ui_TabWidth)-this.MarginRight, (int)(this.MarginTop/2f));
+                        tp.Draw_X_Button((int)(this.TabDisplacement + tp.i_TabX + /*tmp_width*/ tp.i_TabWidth)-this.MarginRight, (int)(this.MarginTop/2f));
                     }
                     //this.totalTabsWidth += (int)tmp_width+this.MarginLeft;
                 }
@@ -172,10 +177,10 @@ namespace dge.GUI
                     */
                     //this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, totalTabsWidth, 0, tmp_width, this.tabsHeigth, 0, this.MarginsFromTheEdge, Texcoords, (this.VisibleSurfaceOrder[i] == this.ActiveTabID) ? this.gui.GuiTheme.TabPage_FrameOffset_Hor : this.tcFrameOffset, 0);
                     //this.gui.Writer.Write(this.gui.GuiTheme.DefaultFont, Color4.Black, tp.Name, this.f_fontsize, this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0]+totalTabsWidth, 0);
-                    dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, tp.idColor, this.TabDisplacement + tp.i_TabX, 0, /*tmp_width*/ tp.ui_TabWidth, this.tabsHeigth, 0, this.MarginsFromTheEdge, Texcoords, (tp.ID == this.ActiveTabID) ? this.gui.GuiTheme.TabPage_FrameOffset_Hor : this.tcFrameOffset, 1); // Pintamos ID de la superficie.
+                    dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, tp.idColor, this.TabDisplacement + tp.i_TabX, 0, /*tmp_width*/ tp.i_TabWidth, this.tabsHeigth, 0, this.MarginsFromTheEdge, Texcoords, (tp.ID == this.ActiveTabID) ? this.gui.GuiTheme.TabPage_FrameOffset_Hor : this.tcFrameOffset, 1); // Pintamos ID de la superficie.
                     if (this.b_ClosableTabs) 
                     { 
-                        tp.Draw_X_Button_ID((int)(this.TabDisplacement + tp.i_TabX + /*tmp_width*/ tp.ui_TabWidth)-this.MarginRight, (int)(this.MarginTop/2f));
+                        tp.Draw_X_Button_ID((int)(this.TabDisplacement + tp.i_TabX + /*tmp_width*/ tp.i_TabWidth)-this.MarginRight, (int)(this.MarginTop/2f));
                     }
                     //totalTabsWidth += (int)tmp_width+this.MarginLeft;
                 }
@@ -194,12 +199,12 @@ namespace dge.GUI
                 if (this.barOrientation == Orientation.Horizontal)
                 {
                     TabPage tp = (TabPage)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]];
-                    uint tmp_width = (uint)(Math.Ceiling(dge.G2D.Writer.MeasureString(this.font, tp.Name, this.f_fontsize)[0]));
-                    tmp_width += (uint)(this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0]+this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[2]);
-                    tmp_width += (this.b_ClosableTabs) ? (uint)(this.gui.GuiTheme.TabPage_X_Size[0] + this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0]) : 0;
-                    tp.ui_TabWidth = tmp_width;
+                    int tmp_width = (int)Math.Ceiling(dge.G2D.Writer.MeasureString(this.font, tp.Name, this.f_fontsize)[0]);
+                    tmp_width += this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0]+this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[2];
+                    tmp_width += this.b_ClosableTabs ? (this.gui.GuiTheme.TabPage_X_Size[0] + this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0]) : 0;
+                    tp.i_TabWidth = tmp_width;
                     tp.i_TabX = this.totalTabsWidth;
-                    this.totalTabsWidth += (int)tmp_width+this.MarginLeft;
+                    this.totalTabsWidth += tmp_width+this.MarginLeft;
                 }
                 else
                 {
@@ -210,7 +215,7 @@ namespace dge.GUI
 
         private void CalculateTabDisplacement()
         {
-            if (this.totalTabsWidth <= this.ui_width)
+            if (this.totalTabsWidth <= this.i_width)
             {
                 this.TabDisplacement = 0;
             }
@@ -218,9 +223,9 @@ namespace dge.GUI
             {
                 // Aquí viene lo chungo,
                 int WWD = this.totalTabsWidth+this.TabDisplacement;
-                if (this.ui_width > WWD)
+                if (this.i_width > WWD)
                 {
-                    this.TabDisplacement -=  WWD-(int)this.ui_width;
+                    this.TabDisplacement -=  WWD-this.i_width;
                 }
             }
         }
@@ -275,18 +280,18 @@ namespace dge.GUI
             foreach (BaseObjects.BaseGuiSurface value in this.d_guiSurfaces.Values)
             {
                 value.Width = this.Width;
-                value.Height = this.Height-(this.tabsHeigth-(uint)this.MarginBottom+1);
+                value.Height = (int)(this.Height-(this.tabsHeigth-(uint)this.MarginBottom));
             }
             this.CalculateTabDisplacement();
         }
 
         private void UpdateTabsHeight()
         {
-            this.tabsHeigth = (uint)Math.Ceiling(this.font.MaxCharacterHeight*(this.f_fontsize/this.font.MaxFontSize));
+            this.tabsHeigth = (int)Math.Ceiling(this.font.MaxCharacterHeight*(this.f_fontsize/this.font.MaxFontSize));
             foreach (BaseObjects.BaseGuiSurface value in this.d_guiSurfaces.Values)
             {
                 value.Width = this.Width;
-                value.Height = this.Height-(this.tabsHeigth-(uint)this.MarginBottom+1);
+                value.Height = (int)(this.Height-(this.tabsHeigth-(uint)this.MarginBottom+1));
             }
         }
 
@@ -294,12 +299,12 @@ namespace dge.GUI
         {
             if (this.b_ShowMe)
             {
-                this.gui.GuiDrawer.DrawGL(c4_BackgroundColor,this.i_x, this.i_y, (uint)this.Width, this.Height, 0f);
+                this.gui.GuiDrawer.DrawGL(c4_BackgroundColor,this.i_x, this.i_y, this.Width, this.Height, 0f);
                 
                 if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
                 {
                     this.DrawActiveTab();
-                    this.DrawIn(this.i_x,this.i_y+1,(int)this.ui_width, (int)this.ui_height, DrawTabBar);
+                    this.DrawIn(this.i_x,this.i_y+1,(int)this.i_width, (int)this.i_height, DrawTabBar);
                 }
                 //this.DrawTabBar();
             }
@@ -309,15 +314,13 @@ namespace dge.GUI
         {
             if (this.b_ShowMe)
             {
-                dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
+                dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
 
                 if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
                 {
                     this.DrawActiveTabIDs();
-                    this.DrawIdIn(this.i_x,this.i_y+1,(int)this.ui_width, (int)this.ui_height, DrawTabBarIDs);
+                    this.DrawIdIn(this.i_x,this.i_y+1,(int)this.i_width, (int)this.i_height, DrawTabBarIDs);
                 }
-                //this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
-                //this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.Default_BackgroundColor, this.i_x, this.i_y, this.ui_width, this.ui_height,0f);
             }
         }
 
@@ -332,9 +335,9 @@ namespace dge.GUI
                 this.d_Name_Id.Add(TabName, tp.ID);
                 this.ActiveTabID = tp.ID;
                 tp.X = this.X;
-                tp.Y = this.Y+(int)this.tabsHeigth-this.MarginBottom;
+                tp.Y = 1 + this.Y+(int)this.tabsHeigth-this.MarginBottom;
                 tp.Width = this.Width;
-                tp.Height = this.Height-(this.tabsHeigth-(uint)this.MarginBottom);
+                tp.Height = (int)(this.Height-(this.tabsHeigth-this.MarginBottom));
                 this.l_ClosersIDs.Add(tp.X_ButtonID);
                 base.AddSurface((BaseObjects.BaseGuiSurface)tp);
 
@@ -349,14 +352,14 @@ namespace dge.GUI
                 this.d_Name_Id.Add(TabName, page.ID);
                 this.ActiveTabID = page.ID;
                 page.X = this.X;
-                page.Y = this.Y+(int)this.tabsHeigth-this.MarginBottom;
+                page.Y = 1 + this.Y+this.tabsHeigth-this.MarginBottom;
                 page.Width = this.Width;
-                page.Height = this.Height-(this.tabsHeigth-(uint)this.MarginBottom);
+                page.Height = this.Height-(this.tabsHeigth-this.MarginBottom);
                 this.l_ClosersIDs.Add(page.X_ButtonID);
                 base.AddSurface((BaseObjects.BaseGuiSurface)page);
 
                 this.CalculateTotalTabsWidth();
-                this.TabDisplacement = (int)((this.totalTabsWidth>this.Width) ? this.Width-this.totalTabsWidth : 0);
+                this.TabDisplacement = (this.totalTabsWidth>this.Width) ? this.Width-this.totalTabsWidth : 0;
             }
         }
         public void RemoveTabPage(string TabName)

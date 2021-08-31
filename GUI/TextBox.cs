@@ -23,7 +23,7 @@ namespace dge.GUI
         {
 
         }
-        public TextBox(uint width, uint height, string text) : base(width, height)
+        public TextBox(int width, int height, string text) : base(width, height)
         {
             this.FirsDraw = true;
             this.b_editable = true;
@@ -87,7 +87,6 @@ namespace dge.GUI
                         if (txt1.Length>0)
                         {
                             txt1 =  txt1.Substring(0, txt1.Length-1);
-                            //this.s_text = txt1 + txt2;
                             this.cursorPos--;
                         }
                         break;
@@ -111,7 +110,6 @@ namespace dge.GUI
                         break;
                 }
                 this.s_text = txt1 + txt2;
-                //Console.WriteLine("KeyCode: "+(KeyCode)e.KeyStatus.KeyCode);
             }
         }
 
@@ -143,17 +141,17 @@ namespace dge.GUI
                     switch(this.ta_textAlign)
                     {
                         case TextAlign.Left:
-                            this.tx_x = (this.MarginsFromTheEdge[0] * 2);
+                            this.tx_x = this.MarginsFromTheEdge[0] * 2;
                             break;
                         case TextAlign.Center:
-                            this.tx_x = ((this.ui_width/2f) - (txtsize/2f));
+                            this.tx_x = (this.i_width/2f) - (txtsize/2f);
                             break;
                         case TextAlign.Right:
-                            this.tx_x = (this.ui_width-(this.MarginsFromTheEdge[2]*2)) - txtsize;
+                            this.tx_x = this.i_width-(this.MarginsFromTheEdge[2]*2) - txtsize;
                             break;
                     }
 
-                    this.tx_y = (this.ui_height/2.1f) - (this.f_FontSize/1.2f);
+                    this.tx_y = (this.i_height/2.1f) - (this.f_FontSize/1.2f);
                 }
             }
         }
@@ -162,7 +160,7 @@ namespace dge.GUI
         {
             if (this.FirsDraw) { this.updateTextCoords(); this.FirsDraw = false; };
             base.pDraw();
-            DrawIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], (int)(this.ui_width-(this.MarginsFromTheEdge[0]+(this.MarginsFromTheEdge[2]))), (int)(this.ui_height-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[2])), WriteText);
+            DrawIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], this.i_width-this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2], this.i_height-this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[2], WriteText);
         }
 
         private void WriteText()
@@ -170,11 +168,11 @@ namespace dge.GUI
             if (this.b_Focus)
             {
                 string s_txt = this.s_text.Substring(0, this.cursorPos) + GuiTheme.DefaultGuiTheme.TextBox_CursorChar + this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
-                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, s_txt, this.f_FontSize, tx_x, tx_y, (this.b_IsEnable) ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, s_txt, this.f_FontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, this.f_FontSize, tx_x, tx_y, (this.b_IsEnable) ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, this.f_FontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
             }
         }
 

@@ -15,7 +15,7 @@ namespace dge.GUI
 
         }
 
-        public ContentViewer(uint width, uint height) : base(width, height)
+        public ContentViewer(int width, int height) : base(width, height)
         {            
             this.sm_scalemode = ScaleMode.Zoom;
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ContentViewer_MarginsFromTheEdge;            
@@ -43,17 +43,17 @@ namespace dge.GUI
                     if (this.tbo_internal.Width > this.tbo_internal.Height)
                     {
                         float rate = this.tbo_internal.Width/this.tbo_internal.Height;
-                        this.gui.Drawer.Draw(this.tbo_internal.ui_ID, this.X+this.MarginLeft, this.Y+this.MarginTop, (uint)(this.ui_width - (this.MarginLeft+this.MarginRight)), (uint)((this.ui_height - (this.MarginTop+this.MarginBottom))/rate), 0f, 0f, 0f, 1f, 1f);
+                        this.gui.Drawer.Draw(this.tbo_internal.ui_ID, this.X+this.MarginLeft, this.Y+this.MarginTop, this.i_width - (this.MarginLeft+this.MarginRight), this.i_height - (int)((this.MarginTop+this.MarginBottom)/rate), 0f, 0f, 0f, 1f, 1f);
                     }
                     else
                     {
                         float rate = this.tbo_internal.Height/this.tbo_internal.Width;
-                        this.gui.Drawer.Draw(this.tbo_internal.ui_ID, this.X+this.MarginLeft, this.Y+this.MarginTop, (uint)((this.ui_width - (this.MarginLeft+this.MarginRight))/rate), (uint)(this.ui_height - (this.MarginTop+this.MarginBottom)), 0f, 0f, 0f, 1f, 1f);
+                        this.gui.Drawer.Draw(this.tbo_internal.ui_ID, this.X+this.MarginLeft, this.Y+this.MarginTop, (int)((this.i_width - (this.MarginLeft+this.MarginRight))/rate), this.i_height - (this.MarginTop+this.MarginBottom), 0f, 0f, 0f, 1f, 1f);
                     }
                 }
                 else
                 {
-                    this.gui.Drawer.Draw(this.tbo_internal.ui_ID, this.X+this.MarginLeft, this.Y+this.MarginTop, (uint)((this.ui_width - (this.MarginLeft+this.MarginRight))), (uint)(this.ui_height - (this.MarginTop+this.MarginBottom)), 0f, 0f, 0f, 1f, 1f);
+                    this.gui.Drawer.Draw(this.tbo_internal.ui_ID, this.X+this.MarginLeft, this.Y+this.MarginTop, (this.i_width - (this.MarginLeft+this.MarginRight)), this.i_height - (this.MarginTop+this.MarginBottom), 0f, 0f, 0f, 1f, 1f);
                 }
             }
             base.pDraw();

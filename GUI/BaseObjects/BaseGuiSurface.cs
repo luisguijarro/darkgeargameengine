@@ -20,8 +20,8 @@ namespace dge.GUI.BaseObjects
         protected int int_y; // Posiciones X e Y heredados.
         protected internal int i_x; // Coordenada X de posición de Objeto
         protected internal int i_y; // Coordenada Y de posición de Objeto)
-        protected uint ui_width; // Ancho del Objeto en Pixeles
-        protected uint ui_height; // Alto dle objeto en pixeles.
+        protected int i_width; // Ancho del Objeto en Pixeles
+        protected int i_height; // Alto dle objeto en pixeles.
 
         #region CONTENIDO:
         protected internal bool contentUpdate; // Indicador de su se debe o no actualizar el conteido del objeto.
@@ -38,7 +38,7 @@ namespace dge.GUI.BaseObjects
 
         protected int ida_X, ida_Y, ida_Width, ida_Height; //Coordenadas de dibujado de contenido.
 
-        private bool b_visible; // ¿Es Visible la ventana?
+        protected bool b_visible; // ¿Es Visible la ventana?
         protected GraphicsUserInterface gui; // GUI al que pertenece.
         protected Dictionary<uint, BaseGuiSurface> d_guiSurfaces; // Todos los Controles de la ventana.
         protected internal List<uint> VisibleSurfaceOrder; // Orden de los Controles de la ventana.
@@ -58,7 +58,7 @@ namespace dge.GUI.BaseObjects
             
         }
 
-        public BaseGuiSurface(uint width, uint height) //: base(witdh, height)
+        public BaseGuiSurface(int width, int height) //: base(witdh, height)
         {
             this.MarginsFromTheEdge = new int[] {0,0,0,0};
             this.b_ShowMe = true;
@@ -68,8 +68,8 @@ namespace dge.GUI.BaseObjects
             byte[] colorvalues = Core2D.DeUIntAByte4(this.ui_id); // Obtenemos color a partir del ID.
             this.idColor = new Color4((byte)colorvalues[0], (byte)colorvalues[1], (byte)colorvalues[2], (byte)colorvalues[3]); // Establecemos color de ID.
 
-            this.ui_width = width; // Establecemos ancho del objeto.
-            this.ui_height = height; // Establecemos Alto del objeto.
+            this.i_width = width; // Establecemos ancho del objeto.
+            this.i_height = height; // Establecemos Alto del objeto.
 
             this.contentUpdate = false; // Por defecto el contenido no actualiza.
 
@@ -88,7 +88,7 @@ namespace dge.GUI.BaseObjects
             this.KeyCharReturned += delegate {}; //Inicialización del evento por defecto.
             this.SizeChanged += ResizeEvent;
 
-            this.SetInternalDrawArea(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom));
+            this.SetInternalDrawArea(this.i_x+this.MarginLeft, this.i_y+this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-this.MarginTop+this.MarginBottom);
         }
 
         public void Dispose()
@@ -337,7 +337,7 @@ namespace dge.GUI.BaseObjects
         {
             if (this.b_ShowMe)
             {
-                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
+                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 0);
             }
         }
 
@@ -345,7 +345,7 @@ namespace dge.GUI.BaseObjects
         {
             if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
-                this.DrawIdIn(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom), DrawContentIDs);
+                this.DrawIdIn(this.i_x+this.MarginLeft, this.i_y+this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom), DrawContentIDs);
             }
         }
 
@@ -353,11 +353,11 @@ namespace dge.GUI.BaseObjects
         {          
             if (this.b_ShowMe)
             {
-                dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
+                dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
             }
             else
             {
-                dge.G2D.IDsDrawer.DrawGuiGL(this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0); // Pintamos ID de la superficie.
+                dge.G2D.IDsDrawer.DrawGuiGL(this.idColor, this.i_x, this.i_y, this.i_width, this.i_height, 0); // Pintamos ID de la superficie.
             }
         }
 
@@ -369,15 +369,8 @@ namespace dge.GUI.BaseObjects
             {
                 if (this.b_visible)
                 {
-                    //lock(this.gui)
-                    //{
-                        this.pDraw();
-                        this.pDrawContent();
-                        /*if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
-                        {
-                            DrawIn(this.ida_X, this.ida_Y, this.ida_Width, this.ida_Height, DrawContent);
-                        } */
-                    //}
+                    this.pDraw();
+                    this.pDrawContent();
                 }
             }      
         }
@@ -386,14 +379,10 @@ namespace dge.GUI.BaseObjects
         {
             if (this.gui != null)
             { 
-                if (this.b_visible)
+                if (this.b_visible && this.b_IsEnable)
                 {
                     this.pDrawID();
                     this.pDrawContentID();
-                    /*if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
-                    {
-                        this.DrawIdIn(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom), DrawContentIDs);
-                    }*/
                 }
             }
         }
@@ -500,12 +489,12 @@ namespace dge.GUI.BaseObjects
 
         protected virtual void OnResize()
         {
-            this.SetInternalDrawArea(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom));
+            this.SetInternalDrawArea(this.i_x+this.MarginLeft, this.i_y+this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom));
         }
 
         protected virtual void OnReposition()
         {
-            this.SetInternalDrawArea(this.i_x+(int)this.MarginLeft, this.i_y+(int)this.MarginTop, (int)this.ui_width-(int)(this.MarginLeft+this.MarginRight), (int)this.ui_height-(int)(this.MarginTop+this.MarginBottom));
+            this.SetInternalDrawArea(this.i_x+this.MarginLeft, this.i_y+this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom));
             foreach(BaseGuiSurface surf in this.d_guiSurfaces.Values)
             {
                 surf.intX = this.int_x+this.i_x+this.MarginsFromTheEdge[0];
@@ -560,16 +549,21 @@ namespace dge.GUI.BaseObjects
             set { this.int_y = value; this.OnReposition(); }
         }
 
-        public uint Width
+        public int Width
         {
-            set { this.ui_width = value; this.SizeChanged(this, new ResizeEventArgs((int)this.ui_width, (int)this.ui_height)); }
-            get { return this.ui_width; }
+            set { this.i_width = value; this.SizeChanged(this, new ResizeEventArgs(this.i_width, this.i_height)); }
+            get { return this.i_width; }
         }
 
-        public uint Height
+        public int Height
         {
-            set { this.ui_height = value; this.SizeChanged(this, new ResizeEventArgs((int)this.ui_width, (int)this.ui_height)); }
-            get { return this.ui_height; }
+            set { this.i_height = value; this.SizeChanged(this, new ResizeEventArgs(this.i_width, this.i_height)); }
+            get { return this.i_height; }
+        }
+
+        public Size Size
+        {
+            get { return new Size(this.i_width, this.i_height); }
         }
 
         public int MarginTop
@@ -659,7 +653,7 @@ namespace dge.GUI.BaseObjects
             get { return this.gui; }
         }
 
-        public bool Visible
+        public virtual bool Visible
         {
             set 
             { 

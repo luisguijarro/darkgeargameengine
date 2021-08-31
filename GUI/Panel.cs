@@ -70,11 +70,11 @@ namespace dge.GUI
         {
             this.sb_Ver.X = (int)(this.X+this.Height-this.sb_Ver.Width+this.MarginTop);
             this.sb_Ver.Y = this.Y;
-            this.sb_Ver.Height = (uint)(this.Height-(this.MarginTop+this.MarginBottom));
+            this.sb_Ver.Height = (int)(this.Height-(this.MarginTop+this.MarginBottom));
 
             this.sb_Hor.X = (int)this.X+this.MarginLeft;
             this.sb_Hor.Y = (int)(this.Y+this.Height-this.sb_Hor.Height-this.MarginBottom);
-            this.sb_Hor.Width = (uint)((int)this.Height- (int)(this.MarginLeft + this.MarginRight + (int)((this.sb_Ver.Visible) ? this.sb_Ver.Width : 0)));
+            this.sb_Hor.Width = (int)((int)this.Height- (int)(this.MarginLeft + this.MarginRight + (int)((this.sb_Ver.Visible) ? this.sb_Ver.Width : 0)));
         }
 
         private void UpdateScrollBars()

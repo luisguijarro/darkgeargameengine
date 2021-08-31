@@ -18,8 +18,8 @@ namespace dge.GUI
         protected float tx_x, tx_y; // Coordenadas de texto
         protected Dictionary<string, uint> d_IdByName;
         protected bool IsMain;
-        protected uint maxwidth; // Maxima anchura de los subelementos. Se emplea en el pintado del marco.
-        protected uint maxheight; // Maxima altura de los subelementos. Se emplea en el pintado del marco.
+        protected int maxwidth; // Maxima anchura de los subelementos. Se emplea en el pintado del marco.
+        protected int maxheight; // Maxima altura de los subelementos. Se emplea en el pintado del marco.
         public MenuItem(string text) : base()
         {
             this.IsMain = false;
@@ -30,7 +30,7 @@ namespace dge.GUI
             this.d_IdByName = new Dictionary<string, uint>();
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.Menu_MarginsFromTheEdge;            
             this.Texcoords = GuiTheme.DefaultGuiTheme.Menu_Texcoords;
-            this.tcFrameOffset = new float[]{0f,0f}; //GuiTheme.DefaultGuiTheme.Menu_FrameOffset;
+            this.tcFrameOffset = new float[]{0f,0f};
 
             this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
             this.f_fontSize = 12;
@@ -110,7 +110,7 @@ namespace dge.GUI
 
         protected bool IsChildID(uint id)
         {
-            if ((id == this.ui_id)) // && (this.d_guiSurfaces.Count>0))
+            if (id == this.ui_id)
             {
                 return true;
             }
@@ -150,8 +150,7 @@ namespace dge.GUI
             base.pDraw();
             if (this.gui != null)
             {
-                //DrawText();
-                this.DrawIn(this.X+(int)this.MarginLeft,this.Y+(int)this.MarginTop,(int)this.ui_width, (int)this.ui_height, DrawText);
+                this.DrawIn(this.X+this.MarginLeft,this.Y+this.MarginTop,this.i_width, this.i_height, DrawText);
             }
         }
 
@@ -169,7 +168,7 @@ namespace dge.GUI
 
         protected virtual void pDrawBorder()
         {
-            this.gui.gd_GuiDrawer.DrawGL(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO.ID, dgtk.Graphics.Color4.White, (int)(this.X+this.Width+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[2]), this.Y, (uint)(maxwidth+(this.gui.gt_ActualGuiTheme.Menu_BordersWidths[0]+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[2])), (uint)(maxheight+(this.gui.gt_ActualGuiTheme.Menu_BordersWidths[1]+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[3])), 0f, this.gui.gt_ActualGuiTheme.Menu_BordersWidths, this.gui.gt_ActualGuiTheme.Menu_Border_Texcoords, new float[]{0f,0f}, 0);
+            this.gui.gd_GuiDrawer.DrawGL(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO.ID, dgtk.Graphics.Color4.White, this.X+this.Width+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[2], this.Y, maxwidth+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[0]+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[2], maxheight+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[1]+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[3], 0f, this.gui.gt_ActualGuiTheme.Menu_BordersWidths, this.gui.gt_ActualGuiTheme.Menu_Border_Texcoords, new float[]{0f,0f}, 0);
         }
 
         protected override void pDrawContentID()
@@ -190,8 +189,8 @@ namespace dge.GUI
                 if (this.gui.Writer != null)
                 {
                     float tWidth = G2D.Writer.MeasureString(this.font, " "+this.s_text+" ", this.f_fontSize)[0]; //Obtenemos tamaño de texto.
-                    this.tx_x = ((this.ui_width/2f) - (tWidth/2f));
-                    this.tx_y = (this.ui_height/2.0f) - (this.f_fontSize/1.2f);
+                    this.tx_x = (this.i_width/2f) - (tWidth/2f);
+                    this.tx_y = (this.i_height/2.0f) - (this.f_fontSize/1.2f);
                 }
             }
         }
@@ -200,11 +199,11 @@ namespace dge.GUI
         {
             if (this.b_textBorder)
             {
-                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y, (this.b_IsEnable) ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y);
             }
             if (!this.IsMain) { this.DrawOpenCloseIcon(); }
         }
@@ -215,7 +214,7 @@ namespace dge.GUI
             {
                 if (this.b_opened)
                 {
-                    this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, (int)(this.Width-(this.Height+this.MarginRight)), -this.MarginTop, this.Height, this.Height, 0f, 
+                    this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.Width-this.Height+this.MarginRight, -this.MarginTop, this.Height, this.Height, 0f, 
                     this.gui.gt_ActualGuiTheme.Menu_Opened_icon_Texcoords[0],
                     this.gui.gt_ActualGuiTheme.Menu_Opened_icon_Texcoords[1],
                     this.gui.gt_ActualGuiTheme.Menu_Opened_icon_Texcoords[2],
@@ -223,7 +222,7 @@ namespace dge.GUI
                 }
                 else
                 {
-                    this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, (int)(this.Width-(this.Height+this.MarginRight)), -this.MarginTop, this.Height, this.Height, 0f, 
+                    this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.Width-this.Height+this.MarginRight, -this.MarginTop, this.Height, this.Height, 0f, 
                     this.gui.gt_ActualGuiTheme.Menu_Closed_icon_Texcoords[0],
                     this.gui.gt_ActualGuiTheme.Menu_Closed_icon_Texcoords[1],
                     this.gui.gt_ActualGuiTheme.Menu_Closed_icon_Texcoords[2],
@@ -247,8 +246,8 @@ namespace dge.GUI
             }
             float[] textSize = dge.G2D.Writer.MeasureString(this.font, " " + this.s_text + " ", this.f_fontSize);
             float iconsize = ((this.d_guiSurfaces.Count>0) && !this.IsMain) ? textSize[1] : 0;
-            this.ui_width = (uint)(textSize[0]+(this.MarginLeft+this.MarginRight)+iconsize);
-            this.ui_height = (uint)(textSize[1]+(this.MarginTop+this.MarginBottom));
+            this.i_width = (int)(textSize[0]+(this.MarginLeft+this.MarginRight)+iconsize);
+            this.i_height = (int)(textSize[1]+(this.MarginTop+this.MarginBottom));
 
             this.UpdateTextCoords();
         }
@@ -259,15 +258,15 @@ namespace dge.GUI
             this.maxheight=0;
             for (int i=0;i<this.VisibleSurfaceOrder.Count;i++)
             {
-                ((MenuItem)(this.d_guiSurfaces[this.VisibleSurfaceOrder[i]])).Text = ((MenuItem)(this.d_guiSurfaces[this.VisibleSurfaceOrder[i]])).Text;
-                uint tmpwidth = this.d_guiSurfaces[this.VisibleSurfaceOrder[i]].Width;
+                ((MenuItem)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]]).Text = ((MenuItem)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]]).Text;
+                int tmpwidth = this.d_guiSurfaces[this.VisibleSurfaceOrder[i]].Width;
                 this.maxwidth = (tmpwidth > this.maxwidth) ? tmpwidth : this.maxwidth;
             }
             for (int i=0;i<this.VisibleSurfaceOrder.Count;i++)
             {
-                MenuItem item = (MenuItem)(this.d_guiSurfaces[this.VisibleSurfaceOrder[i]]);
+                MenuItem item = (MenuItem)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]];
                 item.X = (int)(this.X+this.Width+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[0]+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[2]);
-                item.Y = (int)(this.Height*(i))+this.Y+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[1];
+                item.Y = (int)(this.Height*i)+this.Y+this.gui.gt_ActualGuiTheme.Menu_BordersWidths[1];
                 item.Width = this.maxwidth;
                 this.maxheight+=item.Height;
             }

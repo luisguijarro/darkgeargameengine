@@ -19,7 +19,7 @@ namespace dge.GUI
             
         }
 
-        public Label(uint width, uint height, string text) : base(width, height)
+        public Label(int width, int height, string text) : base(width, height)
         {
             this.FirsDraw = true;
             this.s_text = text;
@@ -31,7 +31,6 @@ namespace dge.GUI
 
         protected internal override void UpdateTheme()
         {
-            //this.font = this.gui.gt_ActualGuiTheme.DefaultFont;
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
             if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
             {
@@ -45,11 +44,11 @@ namespace dge.GUI
             float py = this.tx_y;
             if (this.b_textBorder)
             {
-                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_forecolor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, f_fs, px, py, (this.b_IsEnable) ? this.c4_bordercolor : this.gui.GuiTheme.DefaultDisableTextColor);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_forecolor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, f_fs, px, py, this.b_IsEnable ? this.c4_bordercolor : this.gui.GuiTheme.DefaultDisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_forecolor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, f_fs, px, py);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_forecolor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, f_fs, px, py);
             }
         }
 
@@ -59,8 +58,8 @@ namespace dge.GUI
             {
                 if (this.gui.Writer != null)
                 {
-                    this.tx_x = ((this.ui_width/2f) - (dge.G2D.Writer.MeasureString(this.font, this.s_text, fsize)[0]/2f));
-                    this.tx_y = (this.ui_height/2.1f) - (fsize/1.2f);
+                    this.tx_x = (this.i_width/2f) - (dge.G2D.Writer.MeasureString(this.font, this.s_text, fsize)[0]/2f);
+                    this.tx_y = (this.i_height/2.1f) - (fsize/1.2f);
                 }
             }
         }
@@ -71,8 +70,7 @@ namespace dge.GUI
             if (this.FirsDraw) { this.UpdateTextCoords(this.f_fs); this.FirsDraw  =false; };
             if (this.gui != null)
             {
-                //DrawText();this.f_fontSize
-                this.DrawIn(this.i_x+(int)this.MarginsFromTheEdge[0],this.i_y+(int)this.MarginsFromTheEdge[1]/*+(int)this.ui_height*/,(int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
+                this.DrawIn(this.i_x+this.MarginsFromTheEdge[0],this.i_y+this.MarginsFromTheEdge[1],this.i_width-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), this.i_height-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
             }
         }
         
@@ -80,7 +78,7 @@ namespace dge.GUI
         {
             if (this.b_ShowMe)
             {
-                this.gui.gd_GuiDrawer.DrawGL(this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0f);
+                this.gui.gd_GuiDrawer.DrawGL(this.idColor, this.i_x, this.i_y, this.i_width, this.i_height, 0f);
             }
         }
 

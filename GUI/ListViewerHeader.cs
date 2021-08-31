@@ -46,7 +46,6 @@ namespace dge.GUI
             this.tcFrameOffset = this.gui.gt_ActualGuiTheme.ListViewer_Header_FrameOffset;
             this.ListViewer_Dibider_Texcoords = this.gui.gt_ActualGuiTheme.ListViewer_Dibider_Texcoords;
             this.ListViewer_Dibider_Width = this.gui.gt_ActualGuiTheme.ListViewer_Dibider_Width;
-            //this.font = this.gui.gt_ActualGuiTheme.DefaultFont;
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
             if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
             {
@@ -62,8 +61,8 @@ namespace dge.GUI
             {
                 if (this.gui.Writer != null)
                 {
-                    this.tx_x = ((this.ui_width/2f) - (G2D.Writer.MeasureString(this.font, this.s_text, fsize)[0]/2f));
-                    this.tx_y = (this.ui_height/2.1f) - (fsize/1.2f);
+                    this.tx_x = (this.i_width/2f) - (G2D.Writer.MeasureString(this.font, this.s_text, fsize)[0]/2f);
+                    this.tx_y = (this.i_height/2.1f) - (fsize/1.2f);
                 }
             }
         }
@@ -76,11 +75,10 @@ namespace dge.GUI
             
             if (this.b_pulsed)
             {
-                if (this.MouseIn((int)(this.int_x+this.i_x+(this.Width-(this.ListViewer_Dibider_Width*2))), this.int_y+this.i_y, this.ListViewer_Dibider_Width*2, (int)this.Height, mouseX, mouseY))
+                if (this.MouseIn(this.int_x+this.i_x+(this.Width-(this.ListViewer_Dibider_Width*2)), this.int_y+this.i_y, this.ListViewer_Dibider_Width*2, this.Height, mouseX, mouseY))
                 {
                     this.b_pulsed = false;
                     this.b_Dibider_pulsed = true;
-                    //this.updateTextCoords(this.f_FontSize); // ¿Es necesario?
                 }
                 else
                 {
@@ -132,9 +130,9 @@ namespace dge.GUI
                 if (this.b_Dibider_pulsed)
                 {
                     int i_diference = (e.X-this.lastPosX);
-                    if ((this.ui_width + i_diference) > this.ListViewer_Dibider_Width+2)
+                    if ((this.i_width + i_diference) > this.ListViewer_Dibider_Width+2)
                     {
-                        this.Width = (uint)(this.ui_width +i_diference); // Se llama a la propiedad para lanzar evento Resize
+                        this.Width = this.i_width +i_diference; // Se llama a la propiedad para lanzar evento Resize
                     }
                     this.lastPosX = e.X;
                 }
@@ -146,25 +144,19 @@ namespace dge.GUI
         #region VIRTUAL/OVERRIDE:
 
         protected override void pDraw()
-        {   
-            //if (this.gui != null)
-            //{
-                if (this.FirsDraw) { this.updateTextCoords(this.f_FontSize); this.FirsDraw  =false; };
-                //base.Draw();
-                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_pulsed ? this.tcFrameOffset : new float[]{0,0}, 0);
+        {
+            if (this.FirsDraw) { this.updateTextCoords(this.f_FontSize); this.FirsDraw  =false; };
+            
+            this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_pulsed ? this.tcFrameOffset : new float[]{0,0}, 0);
 
-                //DrawText();
-                this.DrawIn(this.i_x+(int)this.MarginsFromTheEdge[0],this.i_y+(int)this.MarginsFromTheEdge[1],(int)this.ui_width-(int)this.MarginsFromTheEdge[0], (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
+            this.DrawIn(this.i_x+this.MarginsFromTheEdge[0],this.i_y+this.MarginsFromTheEdge[1],this.i_width-this.MarginsFromTheEdge[0], this.i_height-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
 
-                this.gui.Drawer.Draw(this.gui.GuiTheme.ThemeTBO.ID, this.i_x+(int)(this.Width-this.ListViewer_Dibider_Width), 0, (uint)(this.ListViewer_Dibider_Width), this.Height, 0f, this.ListViewer_Dibider_Texcoords[0], this.ListViewer_Dibider_Texcoords[1], this.ListViewer_Dibider_Texcoords[2], this.ListViewer_Dibider_Texcoords[3]);
-            //}
+            this.gui.Drawer.Draw(this.gui.GuiTheme.ThemeTBO.ID, this.i_x+(this.Width-this.ListViewer_Dibider_Width), 0, this.ListViewer_Dibider_Width, this.Height, 0f, this.ListViewer_Dibider_Texcoords[0], this.ListViewer_Dibider_Texcoords[1], this.ListViewer_Dibider_Texcoords[2], this.ListViewer_Dibider_Texcoords[3]);
         }
 
         internal override void DrawID()
         {
             base.DrawID();
-            //dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeTBO.ID, this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, new float[]{0,0}, 1);
-            //this.gui.DrawIds.DrawID(this.gui.GuiTheme.ThemeTBO.ID, this.idColor, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_pulsed ? this.tcFrameOffset : new float[]{0,0}, 1);
         }
 
         private void DrawText()

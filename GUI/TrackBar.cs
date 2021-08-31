@@ -66,10 +66,10 @@ namespace dge.GUI
             {
                 if (Orientation == Orientation.Horizontal)
                 {
-                    if (((this.i_Slide_XPos + e.X-lastX) >= 0) && ((this.i_Slide_XPos + e.X-lastX) <= this.ui_width-this.i_TrackBar_Slider_Size[0]))
+                    if (((this.i_Slide_XPos + e.X-lastX) >= 0) && ((this.i_Slide_XPos + e.X-lastX) <= this.i_width-this.i_TrackBar_Slider_Size[0]))
                     {
                         this.i_Slide_XPos += e.X-lastX;
-                        int pixelrange = (int)this.ui_width-this.i_TrackBar_Slider_Size[0];
+                        int pixelrange = (int)this.i_width-this.i_TrackBar_Slider_Size[0];
                         int valuerange = this.i_MaxValue-this.i_MinValue;
                         float mult = (float)valuerange / (float)pixelrange;
                         if (!this.b_InvertRange)
@@ -85,10 +85,10 @@ namespace dge.GUI
                 }
                 else
                 {
-                    if (((this.i_Slide_YPos + e.Y-lastY) >= 0) && ((this.i_Slide_YPos + e.Y-lastY) <= this.ui_height-this.i_TrackBar_Slider_Size[1]))
+                    if (((this.i_Slide_YPos + e.Y-lastY) >= 0) && ((this.i_Slide_YPos + e.Y-lastY) <= this.i_height-this.i_TrackBar_Slider_Size[1]))
                     {
                         this.i_Slide_YPos += e.Y-lastY;
-                        int pixelrange = (int)this.ui_height-this.i_TrackBar_Slider_Size[1];
+                        int pixelrange = this.i_height-this.i_TrackBar_Slider_Size[1];
                         int valuerange = this.i_MaxValue-this.i_MinValue;
                         float mult = (float)valuerange / (float)pixelrange;
                         if (!this.b_InvertRange)
@@ -113,7 +113,7 @@ namespace dge.GUI
         {
             if (this.o_Orientation == Orientation.Horizontal)
             {
-                int pixelrange = (int)this.ui_width-this.i_TrackBar_Slider_Size[0];
+                int pixelrange = this.i_width-this.i_TrackBar_Slider_Size[0];
                 int valuerange = this.i_MaxValue-this.i_MinValue;
                 float mult = (float)pixelrange / (float)valuerange;
                 if (!this.b_InvertRange)
@@ -128,7 +128,7 @@ namespace dge.GUI
             }
             else
             {
-                int pixelrange = (int)this.ui_height-this.i_TrackBar_Slider_Size[1];
+                int pixelrange = this.i_height-this.i_TrackBar_Slider_Size[1];
                 int valuerange = this.i_MaxValue-this.i_MinValue;
                 float mult = (float)pixelrange / (float)valuerange;
                 if (!this.b_InvertRange)
@@ -198,11 +198,11 @@ namespace dge.GUI
             base.OnResize();
             if (this.o_Orientation == Orientation.Vertical)
             {
-                this.ui_width = (uint)GuiTheme.DefaultGuiTheme.TrackBar_Ver_MaxWidth;
+                this.i_width = GuiTheme.DefaultGuiTheme.TrackBar_Ver_MaxWidth;
             }
             else
             {
-                this.ui_height = (uint)GuiTheme.DefaultGuiTheme.TrackBar_Hor_MaxHeight;
+                this.i_height = GuiTheme.DefaultGuiTheme.TrackBar_Hor_MaxHeight;
             }
             this.UpdateShapePos(this.gui != null? this.gui.gt_ActualGuiTheme : GuiTheme.DefaultGuiTheme);
             this.UpdateShape(this.gui != null? this.gui.gt_ActualGuiTheme : GuiTheme.DefaultGuiTheme);
@@ -211,29 +211,28 @@ namespace dge.GUI
         protected override void pDraw()
         {
             base.pDraw();
-            base.DrawIn(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height, DrawSliderShape);
+            base.DrawIn(this.i_x, this.i_y, this.i_width, this.i_height, DrawSliderShape);
         }
         internal override void DrawID()
         {
-            //base.DrawID();
-            dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, new Color4(0f,0f,0f,0f), this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos sin ID de la superficie.
+            dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, new Color4(0f,0f,0f,0f), this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos sin ID de la superficie.
            
             if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
-                this.DrawIdIn(this.i_x-(int)this.MarginsFromTheEdge[0], this.i_y+(int)this.MarginsFromTheEdge[1], (int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawContentIDs);
+                this.DrawIdIn(this.i_x-this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], this.i_width-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), this.i_height-this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3], DrawContentIDs);
             }
 
-            base.DrawIdIn(this.i_x, this.i_y, (int)this.ui_width, (int)this.ui_height, DrawSliderIDShape);
+            base.DrawIdIn(this.i_x, this.i_y, this.i_width, this.i_height, DrawSliderIDShape);
         }
 
         private void DrawSliderShape()
         {
-            this.gui.Drawer.Draw(GuiTheme.DefaultGuiTheme.ThemeTBO.ID, this.i_Slide_XPos, this.i_Slide_YPos, (uint)this.i_TrackBar_Slider_Size[0], (uint)this.i_TrackBar_Slider_Size[1], 0f, this.Slider_Texcoords[0], this.Slider_Texcoords[2], this.Slider_Texcoords[1], this.Slider_Texcoords[3]);
+            this.gui.Drawer.Draw(GuiTheme.DefaultGuiTheme.ThemeTBO.ID, this.i_Slide_XPos, this.i_Slide_YPos, this.i_TrackBar_Slider_Size[0], this.i_TrackBar_Slider_Size[1], 0f, this.Slider_Texcoords[0], this.Slider_Texcoords[2], this.Slider_Texcoords[1], this.Slider_Texcoords[3]);
         }
 
         private void DrawSliderIDShape()
         {
-            dge.G2D.IDsDrawer.DrawGL2D(GuiTheme.DefaultGuiTheme.ThemeSltTBO.ID, this.idColor,  this.i_Slide_XPos, this.i_Slide_YPos, (uint)this.i_TrackBar_Slider_Size[0], (uint)this.i_TrackBar_Slider_Size[1], 0f, this.Slider_Texcoords[0], this.Slider_Texcoords[2], this.Slider_Texcoords[1], this.Slider_Texcoords[3], 1);
+            dge.G2D.IDsDrawer.DrawGL2D(GuiTheme.DefaultGuiTheme.ThemeSltTBO.ID, this.idColor,  this.i_Slide_XPos, this.i_Slide_YPos, this.i_TrackBar_Slider_Size[0], this.i_TrackBar_Slider_Size[1], 0f, this.Slider_Texcoords[0], this.Slider_Texcoords[2], this.Slider_Texcoords[1], this.Slider_Texcoords[3], 1);
         }
 
         #endregion
@@ -245,9 +244,9 @@ namespace dge.GUI
             { 
                 if (this.o_Orientation != value)
                 {
-                    uint temp = this.ui_width;
-                    this.ui_width = this.ui_height;
-                    this.ui_height = temp;
+                    int temp = this.i_width;
+                    this.i_width = this.i_height;
+                    this.i_height = temp;
                 }
                 this.o_Orientation = value; 
                 this.UpdateShapePos(this.gui != null? this.gui.gt_ActualGuiTheme : GuiTheme.DefaultGuiTheme);

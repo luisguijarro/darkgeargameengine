@@ -43,7 +43,7 @@ namespace dge.GUI
             if (this.gui != null)
             {
                 //base.Draw();
-                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_Checked ? this.tcFrameOffset : new float[]{0,0}, 0);
+                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_Checked ? this.tcFrameOffset : new float[]{0,0}, 0);
             }
         }
 

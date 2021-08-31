@@ -11,7 +11,7 @@ namespace dge.GUI
         internal Color4 X_ColorID;
         private bool X_Pressed;
         //private float[] XB_Texcoords;
-        internal uint ui_TabWidth;
+        internal int i_TabWidth;
         internal int i_TabX;
         private Color4 c4_MouseOnX_Color;
         private bool b_MouseOnX;
@@ -62,7 +62,6 @@ namespace dge.GUI
 
         protected override void OnMMove(object sender, MouseMoveEventArgs e)
         {
-            //base.MMove(sender, e);
             this.b_MouseOnX = (Core2D.SelectedID == this.X_ButtonID);
         }
 
@@ -70,7 +69,7 @@ namespace dge.GUI
         {
             if (this.X_Pressed)
             {
-                this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO.ID, (this.b_MouseOnX) ? this.c4_MouseOnX_Color : Color4.White, x-gui.GuiTheme.TabPage_X_Size[0], y, (uint)this.gui.GuiTheme.TabPage_X_Size[0], (uint)this.gui.GuiTheme.TabPage_X_Size[1], 0f, 
+                this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO.ID, this.b_MouseOnX ? this.c4_MouseOnX_Color : Color4.White, x-gui.GuiTheme.TabPage_X_Size[0], y, this.gui.GuiTheme.TabPage_X_Size[0], this.gui.GuiTheme.TabPage_X_Size[1], 0f, 
                 this.gui.GuiTheme.TabPage_X_FrameOffset[0]+this.gui.GuiTheme.TabPage_X_Texcoords[0], 
                 this.gui.GuiTheme.TabPage_X_FrameOffset[1]+this.gui.GuiTheme.TabPage_X_Texcoords[1], 
                 this.gui.GuiTheme.TabPage_X_FrameOffset[0]+this.gui.GuiTheme.TabPage_X_Texcoords[2], 
@@ -78,13 +77,13 @@ namespace dge.GUI
             }
             else
             {
-                this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO.ID, (this.b_MouseOnX) ? this.c4_MouseOnX_Color : Color4.White, x-gui.GuiTheme.TabPage_X_Size[0], y, (uint)this.gui.GuiTheme.TabPage_X_Size[0], (uint)this.gui.GuiTheme.TabPage_X_Size[1], 0f, this.gui.GuiTheme.TabPage_X_Texcoords[0], this.gui.GuiTheme.TabPage_X_Texcoords[1], this.gui.GuiTheme.TabPage_X_Texcoords[2], this.gui.GuiTheme.TabPage_X_Texcoords[3]);
+                this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO.ID, (this.b_MouseOnX) ? this.c4_MouseOnX_Color : Color4.White, x-gui.GuiTheme.TabPage_X_Size[0], y, this.gui.GuiTheme.TabPage_X_Size[0], this.gui.GuiTheme.TabPage_X_Size[1], 0f, this.gui.GuiTheme.TabPage_X_Texcoords[0], this.gui.GuiTheme.TabPage_X_Texcoords[1], this.gui.GuiTheme.TabPage_X_Texcoords[2], this.gui.GuiTheme.TabPage_X_Texcoords[3]);
             }
         }
 
         internal void Draw_X_Button_ID(int x, int y)
         {
-            dge.G2D.IDsDrawer.DrawGL2D(this.X_ColorID, x-gui.GuiTheme.TabPage_X_Size[0], y, (uint)this.gui.GuiTheme.TabPage_X_Size[0], (uint)this.gui.GuiTheme.TabPage_X_Size[1], 0f);
+            dge.G2D.IDsDrawer.DrawGL2D(this.X_ColorID, x-gui.GuiTheme.TabPage_X_Size[0], y, this.gui.GuiTheme.TabPage_X_Size[0], this.gui.GuiTheme.TabPage_X_Size[1], 0f);
         }
 
         protected override void OnGuiUpdate()

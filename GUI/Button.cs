@@ -23,12 +23,12 @@ namespace dge.GUI
             
         }
 
-        public Button(uint width, uint height) : this(width,height, "Button")
+        public Button(int width, int height) : this(width,height, "Button")
         {
             
         }
 
-        public Button(uint width, uint height, string text) : base(width,height)
+        public Button(int width, int height, string text) : base(width,height)
         {
             this.FirsDraw = true;
             this.s_text = text;
@@ -48,7 +48,7 @@ namespace dge.GUI
             this.setPulsed(false);
             //Console.WriteLine("forzar compilación");
         }
-        internal Button(uint width, uint height, string text, GraphicsUserInterface gui) : this(width,height, text)
+        internal Button(int width, int height, string text, GraphicsUserInterface gui) : this(width,height, text)
         {
             this.gui = gui;
             this.UpdateTheme();
@@ -72,8 +72,8 @@ namespace dge.GUI
             {
                 if (this.gui.Writer != null)
                 {
-                    this.tx_x = ((this.ui_width/2f) - (/*this.gui.*/dge.G2D.Writer.MeasureString(this.font, this.s_text, fsize)[0]/2f));
-                    this.tx_y = (this.ui_height/2.1f) - (fsize/1.2f);
+                    this.tx_x = ((this.i_width/2f) - (/*this.gui.*/dge.G2D.Writer.MeasureString(this.font, this.s_text, fsize)[0]/2f));
+                    this.tx_y = (this.i_height/2.1f) - (fsize/1.2f);
                 }
             }
         }
@@ -139,16 +139,16 @@ namespace dge.GUI
             if (this.gui != null)
             {
                 //base.Draw();
-                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.ui_width, this.ui_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_pulsed ? this.tcFrameOffset : new float[]{0,0}, 0);
+                this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_pulsed ? this.tcFrameOffset : new float[]{0,0}, 0);
 
                 if (tbo_image.ID>0)
                 {
-                    this.gui.Drawer.Draw(this.tbo_image.ui_ID, this.X+this.MarginLeft, this.Y+this.MarginTop, (uint)(this.ui_width-(this.MarginLeft+this.MarginRight)), (uint)(this.ui_height-(this.MarginTop+this.MarginBottom)), 0f, 0f, 0f, 1f, 1f);
+                    this.gui.Drawer.Draw(this.tbo_image.ui_ID, this.X+this.MarginLeft, this.Y+this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom), 0f, 0f, 0f, 1f, 1f);
                 }
                 else
                 {
                     //DrawText();
-                    this.DrawIn(this.i_x+(int)this.MarginsFromTheEdge[0],this.i_y+(int)this.MarginsFromTheEdge[1]/*+(int)this.ui_height*/,(int)this.ui_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.ui_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
+                    this.DrawIn(this.i_x+(int)this.MarginsFromTheEdge[0],this.i_y+(int)this.MarginsFromTheEdge[1],(int)this.i_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.i_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
                 }
             }
         }
