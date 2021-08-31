@@ -24,6 +24,14 @@ namespace dge.GUI
         public float[] Window_FrameOffset; //n=2
         #endregion
 
+        #region Dialogs:
+        public int[] Dialog_Head_MarginsFromTheEdge; // n=4
+        public float[] Dialog_Head_Texcoords; // n=8
+        public int[] Dialog_Body_MarginsFromTheEdge; // n=4
+        public float[] Dialog_Body_Texcoords; // n=8
+        #endregion
+
+
         #region Button:
         public int[] Button_MarginsFromTheEdge; // n=4
         public float[] Button_Texcoords; // n=8
@@ -200,8 +208,8 @@ namespace dge.GUI
             ret.DefaultTextBorderColor = Color4.Black;
             ret.DefaultDisableTextColor = Color4.Gray;
 
-            float multHor = 1f/(float)ret.tbo_ThemeTBO.ui_width;
-            float multVer = 1f/(float)ret.tbo_ThemeTBO.ui_height;
+            float multHor = 1f/(float)ret.tbo_ThemeTBO.i_width;
+            float multVer = 1f/(float)ret.tbo_ThemeTBO.i_height;
 
             // Window:__________________________________________________________________________
             ret.Window_MarginsFromTheEdge = new int[]{2, 22, 2, 2};
@@ -211,6 +219,20 @@ namespace dge.GUI
                 multVer*121f, multVer*143f, multVer*163f, multVer*165f
             };
             ret.Window_FrameOffset = new float[]{0f,0f};
+
+            // Dialog:__________________________________________________________________________
+            ret.Dialog_Head_MarginsFromTheEdge = new int[]{2, 2, 2, 1};
+            ret.Dialog_Head_Texcoords = new float[]
+            {
+                multHor*205f, multHor*207f, multHor*224f, multHor*227f, 
+                multVer*97f, multVer*99f, multVer*117f, multVer*119f
+            };
+            ret.Dialog_Body_MarginsFromTheEdge = new int[]{2, 1, 2, 2};
+            ret.Dialog_Body_Texcoords = new float[]
+            {
+                multHor*205f, multHor*207f, multHor*224f, multHor*227f, 
+                multVer*121f, multVer*122f, multVer*140f, multVer*143f
+            };
 
             // Button:__________________________________________________________________________
             ret.Button_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
