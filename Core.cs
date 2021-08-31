@@ -106,7 +106,7 @@ namespace dge
 			return (uint)(num[0]+num[1]*256+num[2]*256*256); //+num[3]*256*256*256
 		}
 
-        internal static void UpdateIdsMap(uint width, uint height, Action renderScene)
+        internal static void UpdateIdsMap(int width, int height, Action renderScene)
         {
             lock(Core.LockObject)
             {
