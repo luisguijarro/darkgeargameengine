@@ -138,7 +138,7 @@ namespace dge.G2D
         /// <param name="width">Width of the drawing to be painted on the screen.</param>
         /// <param name="height">Height of the drawing to be painted on screen.</param>
         /// <param name="RotInDegrees">Degrees of the rotation.</param>      
-        public void Draw(uint TextureID, int x, int y, uint width, uint height, float RotInDegrees)
+        public void Draw(uint TextureID, int x, int y, int width, int height, float RotInDegrees)
         {
             DrawGL(TextureID, new Color4(1f, 1f, 1f, 1f), x, y, width, height, RotInDegrees, 0, 0, 1, 1, 0);
         }
@@ -156,7 +156,7 @@ namespace dge.G2D
         /// <param name="RotInDegrees">Degrees of the rotation.</param>         
         /// <param name="FlipH">Indicates if The texture is drawn horizontally Flipped.</param>        
         /// <param name="FlipV">Indicates if The texture is drawn vertically Flipped.</param>    
-        public void Draw(uint TextureID, int x, int y, uint width, uint height, float RotInDegrees, bool FlipH, bool FlipV)
+        public void Draw(uint TextureID, int x, int y, int width, int height, float RotInDegrees, bool FlipH, bool FlipV)
         {
             Draw(TextureID, Color4.White, x, y, width, height, RotInDegrees, 0, 0, 1, 1, FlipH, FlipV);
         }
@@ -176,7 +176,7 @@ namespace dge.G2D
         /// <param name="Texcoord0y">The initial Y normalized coordinate of the texture fraction check box. 0f by default.</param>
         /// <param name="Texcoord1x">End X normalized coordinate of the texture fraction check box. 1f by default.</param>
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>        
-        public void Draw(uint TextureID, int x, int y, uint width, uint height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
+        public void Draw(uint TextureID, int x, int y, int width, int height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
         {
             DrawGL(TextureID, new Color4(1f, 1f, 1f, 1f), x, y, width, height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
         }
@@ -196,7 +196,7 @@ namespace dge.G2D
         /// <param name="Texcoord0y">The initial Y normalized coordinate of the texture fraction check box. 0f by default.</param>
         /// <param name="Texcoord1x">End X normalized coordinate of the texture fraction check box. 1f by default.</param>
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>        
-        public void Draw(uint TextureID, Color4 Color, int x, int y, uint width, uint height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
+        public void Draw(uint TextureID, Color4 Color, int x, int y, int width, int height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
         {
             DrawGL(TextureID, Color, x, y, width, height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
         }
@@ -212,7 +212,7 @@ namespace dge.G2D
         /// <param name="width">Width of the drawing to be painted on the screen.</param>
         /// <param name="height">Height of the drawing to be painted on screen.</param>
         /// <param name="RotInDegrees">Degrees of the rotation.</param>       
-        public void Draw(uint TextureID, Color4 Color, int x, int y, uint width, uint height, float RotInDegrees)
+        public void Draw(uint TextureID, Color4 Color, int x, int y, int width, int height, float RotInDegrees)
         {
             DrawGL(TextureID, Color, x, y, width, height, RotInDegrees, 0, 0, 1, 1, 0);
         }
@@ -228,7 +228,7 @@ namespace dge.G2D
         /// <param name="width">Width of the drawing to be painted on the screen.</param>
         /// <param name="height">Height of the drawing to be painted on screen.</param>
         /// <param name="RotInDegrees">Degrees of the rotation.</param>       
-        public void Draw(uint TextureID, Color4 Color, int x, int y, uint width, uint height, float RotInDegrees, bool FlipH, bool FlipV)
+        public void Draw(uint TextureID, Color4 Color, int x, int y, int width, int height, float RotInDegrees, bool FlipH, bool FlipV)
         {
             Draw(TextureID, Color, x, y, width, height, RotInDegrees,0, 0, 1, 1, FlipH, FlipV);
         }
@@ -249,7 +249,7 @@ namespace dge.G2D
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>    
         /// <param name="FlipH">Indicates if The texture is drawn horizontally Flipped.</param>        
         /// <param name="FlipV">Indicates if The texture is drawn vertically Flipped.</param>            
-        public void Draw(uint TextureID, int x, int y, uint width, uint height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, bool FlipH, bool FlipV)
+        public void Draw(uint TextureID, int x, int y, int width, int height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, bool FlipH, bool FlipV)
         {
             float tc0X = FlipH ? Texcoord1x : Texcoord0x;
             float tc0Y = FlipV ? Texcoord1y : Texcoord0y;
@@ -276,7 +276,7 @@ namespace dge.G2D
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>    
         /// <param name="FlipH">Indicates if The texture is drawn horizontally Flipped.</param>        
         /// <param name="FlipV">Indicates if The texture is drawn vertically Flipped.</param>            
-        public void Draw(uint TextureID, Color4 Color, int x, int y, uint width, uint height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, bool FlipH, bool FlipV)
+        public void Draw(uint TextureID, Color4 Color, int x, int y, int width, int height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, bool FlipH, bool FlipV)
         {
             float tc0X = FlipH ? Texcoord1x : Texcoord0x;
             float tc0Y = FlipV ? Texcoord1y : Texcoord0y;
@@ -384,7 +384,7 @@ namespace dge.G2D
         /// <param name="Texcoord0y">The initial Y normalized coordinate of the texture fraction check box. 0f by default.</param>
         /// <param name="Texcoord1x">End X normalized coordinate of the texture fraction check box. 1f by default.</param>
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>        
-        public void Draw(TextureBufferObject tbo, int x, int y, uint width, uint height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
+        public void Draw(TextureBufferObject tbo, int x, int y, int width, int height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
         {
             DrawGL(tbo.ui_ID, new Color4(1f, 1f, 1f, 1f), x, y, width, height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
         }
@@ -404,7 +404,7 @@ namespace dge.G2D
         /// <param name="Texcoord0y">The initial Y normalized coordinate of the texture fraction check box. 0f by default.</param>
         /// <param name="Texcoord1x">End X normalized coordinate of the texture fraction check box. 1f by default.</param>
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>        
-        public void Draw(TextureBufferObject tbo, Color4 Color, int x, int y, uint width, uint height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
+        public void Draw(TextureBufferObject tbo, Color4 Color, int x, int y, int width, int height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
         {
             DrawGL(tbo.ui_ID, Color, x, y, width, height, RotInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y, 0);
         }
@@ -425,7 +425,7 @@ namespace dge.G2D
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>    
         /// <param name="FlipH">Indicates if The texture is drawn horizontally Flipped.</param>        
         /// <param name="FlipV">Indicates if The texture is drawn vertically Flipped.</param>            
-        public void Draw(TextureBufferObject tbo, int x, int y, uint width, uint height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, bool FlipH, bool FlipV)
+        public void Draw(TextureBufferObject tbo, int x, int y, int width, int height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, bool FlipH, bool FlipV)
         {
             float tc0X = FlipH ? Texcoord1x : Texcoord0x;
             float tc0Y = FlipV ? Texcoord1y : Texcoord0y;
@@ -452,7 +452,7 @@ namespace dge.G2D
         /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>    
         /// <param name="FlipH">Indicates if The texture is drawn horizontally Flipped.</param>        
         /// <param name="FlipV">Indicates if The texture is drawn vertically Flipped.</param>            
-        public void Draw(TextureBufferObject tbo, Color4 Color, int x, int y, uint width, uint height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, bool FlipH, bool FlipV)
+        public void Draw(TextureBufferObject tbo, Color4 Color, int x, int y, int width, int height, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, bool FlipH, bool FlipV)
         {
             float tc0X = FlipH ? Texcoord1x : Texcoord0x;
             float tc0Y = FlipV ? Texcoord1y : Texcoord0y;
@@ -472,7 +472,7 @@ namespace dge.G2D
         /// <param name="width">Width of the drawing to be painted on the screen.</param>
         /// <param name="height">Height of the drawing to be painted on screen.</param>    
         /// <param name="RotInDegrees">Degrees of the rotation.</param>
-        public void Draw(Color4 color, int x, int y, uint width, uint height, float RotInDegrees)
+        public void Draw(Color4 color, int x, int y, int width, int height, float RotInDegrees)
         {
             DrawGL(color, x, y, width, height, RotInDegrees);
         }
@@ -523,7 +523,7 @@ namespace dge.G2D
         /// <param name="width">Width of the drawing to be painted on the screen.</param>
         /// <param name="height">Height of the drawing to be painted on screen.</param>    
         /// <param name="RotInDegrees">Degrees of the rotation.</param>
-        public void DrawSilhouette(Color4 color, TextureBufferObject silhouette, int x, int y, uint width, uint height, float RotInDegrees)
+        public void DrawSilhouette(Color4 color, TextureBufferObject silhouette, int x, int y, int width, int height, float RotInDegrees)
         {
             DrawGL(silhouette.ui_ID, color, x, y, width, height, RotInDegrees, 0f, 0f, 1f, 1f, 1);
         }
@@ -541,7 +541,7 @@ namespace dge.G2D
         /// <param name="RotInDegrees">Degrees of the rotation.</param>
         /// <param name="FlipH">Indicates if The texture is drawn horizontally Flipped.</param>        
         /// <param name="FlipV">Indicates if The texture is drawn vertically Flipped.</param>            
-        public void DrawSilhouette(Color4 color, TextureBufferObject silhouette, int x, int y, uint width, uint height, float RotInDegrees, bool FlipH, bool FlipV)
+        public void DrawSilhouette(Color4 color, TextureBufferObject silhouette, int x, int y, int width, int height, float RotInDegrees, bool FlipH, bool FlipV)
         {
             float tc0X = FlipH ? 1 : 0;
             float tc0Y = FlipV ? 1 : 0;
@@ -553,7 +553,7 @@ namespace dge.G2D
 
         #endregion
 
-        private void DrawGL(Color4 color, int x, int y, uint width, uint height, float RotInDegrees)
+        private void DrawGL(Color4 color, int x, int y, int width, int height, float RotInDegrees)
         {
             dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((b_invert_y ? -RotInDegrees : RotInDegrees), new Vector2(width / 2f, height / 2f));
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
@@ -571,7 +571,7 @@ namespace dge.G2D
             GL.glBindVertexArray(0);
         }
         
-        private void DrawGL(uint tboID, Color4 color, int x, int y, uint width, uint height, float RotInDegrees, float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, int Silhouette)
+        private void DrawGL(uint tboID, Color4 color, int x, int y, int width, int height, float RotInDegrees, float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, int Silhouette)
         {
             dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((b_invert_y ? -RotInDegrees : RotInDegrees), new Vector2(width/2f, height/2f));
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.

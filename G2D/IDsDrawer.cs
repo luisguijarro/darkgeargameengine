@@ -245,7 +245,7 @@ namespace dge.G2D
 
         #region Draw2D
 
-        public static void DrawGL2D(Color4 color, int x, int y, uint width, uint height, float RotInDegrees)
+        public static void DrawGL2D(Color4 color, int x, int y, int width, int height, float RotInDegrees)
         {
             dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((b_invert_y ? -RotInDegrees : RotInDegrees), new Vector2(width / 2f, height / 2f));
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
@@ -263,7 +263,7 @@ namespace dge.G2D
             GL.glBindVertexArray(0);
         }
         
-        public static void DrawGL2D(uint tboID, Color4 color, int x, int y, uint width, uint height, float RotInDegrees, float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, int Silhouette)
+        public static void DrawGL2D(uint tboID, Color4 color, int x, int y, int width, int height, float RotInDegrees, float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, int Silhouette)
         {
             dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((b_invert_y ? -RotInDegrees : RotInDegrees), new Vector2(width / 2f, height / 2f));
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
@@ -287,7 +287,7 @@ namespace dge.G2D
 
         #region DrawGui
 
-        public static void DrawGuiGL(uint tboID, Color4 color, int x, int y, uint width, uint height, float RotInDegrees, int[/*4*/]MarginsFromTheEdge, float[/*8*/]TexCoords, float[/*2*/]v2_CoordVariation, int Silhouette)
+        public static void DrawGuiGL(uint tboID, Color4 color, int x, int y, int width, int height, float RotInDegrees, int[/*4*/]MarginsFromTheEdge, float[/*8*/]TexCoords, float[/*2*/]v2_CoordVariation, int Silhouette)
         {
             dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((-RotInDegrees), new Vector2(width/2f, height/2f));
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
@@ -309,7 +309,7 @@ namespace dge.G2D
             GL.glBindVertexArray(0);
         }
 
-        public static void DrawGuiGL(Color4 color, int x, int y, uint width, uint height, float RotInDegrees)
+        public static void DrawGuiGL(Color4 color, int x, int y, int width, int height, float RotInDegrees)
         {
             dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((-RotInDegrees), new Vector2(width/2f, height/2f));
             dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.

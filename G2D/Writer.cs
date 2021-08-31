@@ -350,7 +350,7 @@ namespace dge.G2D
 					else
 					{
 						dgCharacter ch = font.d_characters[text[i]];
-						retSize[0] += ch.ui_width/*f_width*/*(fontsize/font.MaxFontSize);
+						retSize[0] += ch.i_width/*f_width*/*(fontsize/font.MaxFontSize);
 					}
 				//}
 			}
@@ -401,8 +401,8 @@ namespace dge.G2D
 			dgCharacter ch = font.d_characters[character];
 			//PINTAR:
 			
-			float f_width = ((float)ch.ui_width*(fontsize/font.MaxFontSize));
-			float f_height = ((float)ch.ui_height*(fontsize/font.MaxFontSize));
+			float f_width = (float)ch.i_width*(fontsize/font.MaxFontSize);
+			float f_height = (float)ch.i_height*(fontsize/font.MaxFontSize);
 			this.WriteCharGL(font.TBO_Scan0.ui_ID, color, posx, posy, f_width, f_height, ch.f_x0, ch.f_y0, ch.f_x1, ch.f_y1);
 			
 			return ch.f_width*(fontsize/font.MaxFontSize);
@@ -413,8 +413,8 @@ namespace dge.G2D
 			dgCharacter ch = font.d_characters[character];
 			//PINTAR:
 			//this.parentWindow.Drawer2D.Draw(font.TBO_Scan1.ID, color, (int)posx, (int)posy, (uint)(ch.ui_width*(fontsize/font.MaxFontSize)), (uint)(ch.ui_height*(fontsize/font.MaxFontSize)), 0f, ch.f_x0, ch.f_y0, ch.f_x1, ch.f_y1);
-			float f_width = ((float)ch.ui_width*(fontsize/font.MaxFontSize));
-			float f_height = ((float)ch.ui_height*(fontsize/font.MaxFontSize));
+			float f_width = (float)ch.i_width*(fontsize/font.MaxFontSize);
+			float f_height = (float)ch.i_height*(fontsize/font.MaxFontSize);
 			this.WriteCharGL(font.TBO_Scan1.ui_ID, color, posx, posy, f_width, f_height, ch.f_x0, ch.f_y0, ch.f_x1, ch.f_y1);
 		}
 

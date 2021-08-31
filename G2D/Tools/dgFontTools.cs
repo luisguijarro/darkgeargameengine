@@ -64,8 +64,8 @@ namespace dge.G2D
                 {
                     chr_Texcoords[c] = br.ReadSingle(); // Obtenemos las cooredanas de textura del caracter.
                 }
-                ushort s_width = br.ReadUInt16(); // Leemos anchura para superficie de dibujado en pixeles.
-                ushort s_height = br.ReadUInt16(); // Leemos altura para superficie de dibujado en pixeles.
+                short s_width = br.ReadInt16(); // Leemos anchura para superficie de dibujado en pixeles.
+                short s_height = br.ReadInt16(); // Leemos altura para superficie de dibujado en pixeles.
                 // ADD CHARACTER TO Array:
                 dgCharacters[i] = new dgCharacter(chr, chr_Texcoords[0], chr_Texcoords[1], chr_Texcoords[2], chr_Texcoords[3], s_width, s_height, chr_width);
             }
@@ -166,8 +166,8 @@ namespace dge.G2D
                 bw.Write(font.d_characters[key].f_y0); // Escribimos Coordenada Y0 correspondiente a la Textura.
                 bw.Write(font.d_characters[key].f_x1); // Escribimos Coordenada X1 correspondiente a la Textura.
                 bw.Write(font.d_characters[key].f_y1); // Escribimos Coordenada Y1 correspondiente a la Textura.
-                bw.Write(font.d_characters[key].ui_width); // Escribimos anchira de la superficie del caracter en pixeles.
-                bw.Write(font.d_characters[key].ui_height); // Escribimos altura de la superficie del caracter en pixeles.
+                bw.Write(font.d_characters[key].i_width); // Escribimos anchura de la superficie del caracter en pixeles.
+                bw.Write(font.d_characters[key].i_height); // Escribimos altura de la superficie del caracter en pixeles.
             }
             bw.Write((byte)23); // 0001 0111 - 23 -  Fin del bloque de transmisión.
             
@@ -340,7 +340,7 @@ namespace dge.G2D
                     //gb.DrawPath(new Pen(new SolidBrush(Color.White), BorderWidth), p); // Pintamos Borde
 
                     iniX += rf.Width+spacewidth; //Siguiente caracter con espacio de margen.
-                    dgChars.Add(lines[i][c], new dgCharacter(lines[i][c], proporcionalWidth * rf.X, proporcionalHeight * rf.Y, proporcionalWidth * rf.Right, proporcionalHeight * rf.Bottom, (ushort)rf.Width, (ushort)rf.Height, rf.Width));
+                    dgChars.Add(lines[i][c], new dgCharacter(lines[i][c], proporcionalWidth * rf.X, proporcionalHeight * rf.Y, proporcionalWidth * rf.Right, proporcionalHeight * rf.Bottom, (short)rf.Width, (short)rf.Height, rf.Width));
                     MaxCharacterHeight = (MaxCharacterHeight < rf.Height) ? rf.Height : MaxCharacterHeight;
                 }
                 g.FillPath(new SolidBrush(Color.White), p); // Pintamos letra.

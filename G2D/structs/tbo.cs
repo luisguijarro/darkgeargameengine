@@ -5,15 +5,15 @@ namespace dge.G2D
     public struct TextureBufferObject
     {
         public string s_name; // Nombre de la textura
-		internal uint ui_width, ui_height;
+		internal int i_width, i_height;
         internal uint ui_ID;
 		internal string s_HASHCODE;
 
-        public TextureBufferObject(string name, uint width, uint height,uint id, string hashcode)
+        public TextureBufferObject(string name, int width, int height, uint id, string hashcode)
         {
             this.s_name = name;
-            this.ui_width = width;
-            this.ui_height = height;
+            this.i_width = width;
+            this.i_height = height;
             this.s_HASHCODE = hashcode;
             this.ui_ID = id;
         }
@@ -23,14 +23,14 @@ namespace dge.G2D
             get { return this.ui_ID; }
         }
 
-        public uint Width
+        public int Width
         {
-            get { return this.ui_width; }
+            get { return this.i_width; }
         }
 
-        public uint Height
+        public int Height
         {
-            get { return this.ui_height; }
+            get { return this.i_height; }
         }
 
         public string hashcode

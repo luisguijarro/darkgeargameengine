@@ -5,8 +5,8 @@ namespace dge.G2D
 {
     public class Surface
     {
-        protected uint ui_width;
-        protected uint ui_height;
+        protected int i_width;
+        protected int i_height;
         protected int i_x;
         protected int i_y;
         protected float f_Texcoord0x;
@@ -27,10 +27,10 @@ namespace dge.G2D
         ///<sumary>
         ///Basic Constructor that make a Surface width define dimensions
         ///</sumary>
-        public Surface(uint width, uint height)
+        public Surface(int width, int height)
         {
-            this.ui_width = width;
-            this.ui_height = height;
+            this.i_width = width;
+            this.i_height = height;
             this.f_Texcoord0x = 0f;
             this.f_Texcoord0y = 0f;
             this.f_Texcoord1x = 1f;
@@ -57,7 +57,7 @@ namespace dge.G2D
         ///</sumary>
         internal virtual void Draw(Drawer drawer, float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
         {
-            drawer.Draw(this.textureBufferObject, this.i_x, this.i_y, this.ui_width, this.ui_height, RotAngleInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y);
+            drawer.Draw(this.textureBufferObject, this.i_x, this.i_y, this.i_width, this.i_height, RotAngleInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y);
         }
         
         public float RotationDegrees
@@ -99,15 +99,15 @@ namespace dge.G2D
             get { return this.i_y; }
         }
 
-        public uint Width
+        public int Width
         {
-            set { this.ui_width = value; }
-            get { return this.ui_width; }
+            set { this.i_width = value; }
+            get { return this.i_width; }
         }
-        public uint Height
+        public int Height
         {
-            set { this.ui_height = value; }
-            get { return this.ui_height; }
+            set { this.i_height = value; }
+            get { return this.i_height; }
         }
     }
 }

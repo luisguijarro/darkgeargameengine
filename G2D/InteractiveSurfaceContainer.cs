@@ -9,7 +9,7 @@ namespace dge.G2D
         private uint FrameBuffer;
         private uint DepthRenderBuffer;
         private bool contentUpdate;
-        public InteractiveSurfaceContainer(uint width, uint height) : base(width, height)
+        public InteractiveSurfaceContainer(int width, int height) : base(width, height)
         {
             this.contentUpdate = false;
             this.FrameBuffer = GL.glGenFramebuffer();
@@ -21,13 +21,13 @@ namespace dge.G2D
         {
             GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, this.textureBufferObject.ui_ID);
 
-            GL.glTexImage2D(TextureTarget.GL_TEXTURE_2D, 0, InternalFormat.GL_RGBA, (int)this.textureBufferObject.ui_width, (int)this.textureBufferObject.ui_height, 0, PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, new IntPtr(0));
+            GL.glTexImage2D(TextureTarget.GL_TEXTURE_2D, 0, InternalFormat.GL_RGBA, (int)this.textureBufferObject.i_width, (int)this.textureBufferObject.i_height, 0, PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, new IntPtr(0));
 
             GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_MAG_FILTER, (int)TextureMagFilter.GL_NEAREST);
             GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_MIN_FILTER, (int)TextureMagFilter.GL_NEAREST);
 
             GL.glBindRenderbuffer(RenderbufferTarget.GL_RENDERBUFFER, this.DepthRenderBuffer);
-            GL.glRenderbufferStorage(RenderbufferTarget.GL_RENDERBUFFER, InternalFormat.GL_DEPTH_COMPONENT, (int)this.textureBufferObject.ui_width, (int)this.textureBufferObject.ui_height);
+            GL.glRenderbufferStorage(RenderbufferTarget.GL_RENDERBUFFER, InternalFormat.GL_DEPTH_COMPONENT, (int)this.textureBufferObject.i_width, (int)this.textureBufferObject.i_height);
             GL.glFramebufferRenderbuffer(FramebufferTarget.GL_FRAMEBUFFER, FramebufferAttachment.GL_DEPTH_ATTACHMENT, RenderbufferTarget.GL_RENDERBUFFER, this.DepthRenderBuffer);
 
             GL.glFramebufferTexture(FramebufferTarget.GL_FRAMEBUFFER, FramebufferAttachment.GL_COLOR_ATTACHMENT0, this.textureBufferObject.ui_ID, 0);
@@ -48,7 +48,7 @@ namespace dge.G2D
             if (this.contentUpdate) 
             {
                 GL.glBindFramebuffer(FramebufferTarget.GL_FRAMEBUFFER, this.FrameBuffer);
-                GL.glViewport(0, 0, (int)this.textureBufferObject.ui_width, (int)this.textureBufferObject.ui_height);
+                GL.glViewport(0, 0, this.textureBufferObject.i_width, this.textureBufferObject.i_height);
                 DrawContent(drawer);
                 GL.glBindFramebuffer(FramebufferTarget.GL_FRAMEBUFFER, 0);
             }

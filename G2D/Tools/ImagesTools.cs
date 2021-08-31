@@ -114,7 +114,7 @@ namespace dge.G2D
 
             GL.glFlush();
 
-            return new TextureBufferObject(name, (uint)Width, (uint)Height, idret, name);
+            return new TextureBufferObject(name, Width, Height, idret, name);
         }
         
 		public static bool SaveImage(TextureBufferObject tbo, string filepath)
