@@ -72,7 +72,7 @@ namespace dge.GUI
             {
                 if (this.gui.Writer != null)
                 {
-                    this.tx_x = ((this.i_width/2f) - (/*this.gui.*/dge.G2D.Writer.MeasureString(this.font, this.s_text, fsize)[0]/2f));
+                    this.tx_x = (this.i_width/2f) - (dge.G2D.Writer.MeasureString(this.font, this.s_text, fsize)[0]/2f);
                     this.tx_y = (this.i_height/2.1f) - (fsize/1.2f);
                 }
             }
@@ -138,7 +138,6 @@ namespace dge.GUI
             if (this.FirsDraw) { this.updateTextCoords(this.f_FontSize); this.FirsDraw  =false; };
             if (this.gui != null)
             {
-                //base.Draw();
                 this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.b_pulsed ? this.tcFrameOffset : new float[]{0,0}, 0);
 
                 if (tbo_image.ID>0)
@@ -147,8 +146,7 @@ namespace dge.GUI
                 }
                 else
                 {
-                    //DrawText();
-                    this.DrawIn(this.i_x+(int)this.MarginsFromTheEdge[0],this.i_y+(int)this.MarginsFromTheEdge[1],(int)this.i_width-(int)(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), (int)this.i_height-(int)(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
+                    this.DrawIn(this.i_x+this.MarginsFromTheEdge[0],this.i_y+this.MarginsFromTheEdge[1],this.i_width-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), this.i_height-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
                 }
             }
         }
