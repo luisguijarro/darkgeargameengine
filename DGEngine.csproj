@@ -125,5 +125,6 @@
     <Content Include="GUI\TabControl.cs" />
     <Content Include="GUI\TabPage.cs" />
     <Content Include="GUI\Panel.cs" />
+    <Content Include="GUI\Dialogs\Dialog.cs" />
   </ItemGroup>
 </Project>
