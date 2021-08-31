@@ -8,6 +8,7 @@ namespace dge.GUI
 {
     public class GraphicsUserInterface
     {
+        internal Dialog ActiveDialog;
         internal GuiTheme gt_ActualGuiTheme;
         private dgWindow parentWindow;
         internal G2D.GuiDrawer gd_GuiDrawer;
@@ -23,8 +24,8 @@ namespace dge.GUI
         internal Dictionary<string,Menu> m_menu;
         internal List<string> l_menus;
 
-        protected uint ui_width; // Para calculos internos de ViewPorts De elementos.
-        protected uint ui_height; // Para calculos internos de ViewPorts De elementos.
+        protected int i_width; // Para calculos internos de ViewPorts De elementos.
+        protected int i_height; // Para calculos internos de ViewPorts De elementos.
 
         private int mheight; // Alto MainMenu.
 
@@ -212,8 +213,8 @@ namespace dge.GUI
         
         internal void Draw()
         {
-            GL.glViewport(0, 0, (int)this.ui_width, (this.m_menu.Count>0) ? (int)(this.ui_height-this.m_menu[this.l_menus[0]].Height) : (int)this.ui_height);
-            this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.ui_width, ((this.m_menu.Count>0) ? (uint)(this.ui_height-this.m_menu[this.l_menus[0]].Height) : this.ui_height));
+            GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-this.m_menu[this.l_menus[0]].Height) : (int)this.i_height);
+            this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.i_width, (this.m_menu.Count>0) ? this.i_height-this.m_menu[this.l_menus[0]].Height : this.i_height);
             //GL.glClearColor(Color4.Red);
             //GL.glClear(ClearBufferMask.GL_ALL);
             if (this.Update)
@@ -233,19 +234,19 @@ namespace dge.GUI
             if (this.m_menu.Count > 0)
             {
                 GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
-                this.UpdatePerspective(0, 0, this.ui_width, this.ui_height);
+                this.UpdatePerspective(0, 0, this.i_width, this.i_height);
                 this.DrawMenu();
             }
         }
 
         internal void DrawIds()
         {
-            dge.Core2D.UpdateIdsMap((uint)this.ui_width, (uint)this.ui_height, this.DrawContentIds); 
+            dge.Core2D.UpdateIdsMap(this.i_width, this.i_height, this.DrawContentIds); 
         }
 
         private void DrawMenu()
         {
-            this.gd_GuiDrawer.DrawGL(Color4.Gray, 0, 0, (uint)this.ParentWindow.Width, (uint)this.mheight, 0);
+            this.gd_GuiDrawer.DrawGL(Color4.Gray, 0, 0, this.ParentWindow.Width, this.mheight, 0);
             foreach (string key in this.m_menu.Keys)
             {
                 this.m_menu[key].Draw();
@@ -254,7 +255,7 @@ namespace dge.GUI
 
         private void DrawMenuID()
         {
-            this.gd_GuiDrawer.DrawGL(Color4.Gray, 0, 0, (uint)this.ParentWindow.Width, (uint)this.mheight, 0);
+            this.gd_GuiDrawer.DrawGL(Color4.Gray, 0, 0, this.ParentWindow.Width, this.mheight, 0);
             foreach (string key in this.m_menu.Keys)
             {
                 this.m_menu[key].DrawID();
@@ -263,33 +264,38 @@ namespace dge.GUI
 
         private void DrawContentIds()
         {     
-            GL.glViewport(0, 0, (int)this.ui_width, (this.m_menu.Count>0) ? (int)(this.ui_height-this.m_menu[this.l_menus[0]].Height) : (int)this.ui_height);
-            this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.ui_width, ((this.m_menu.Count>0) ? (uint)(this.ui_height-this.m_menu[this.l_menus[0]].Height) : this.ui_height));
+            GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-this.m_menu[this.l_menus[0]].Height) : (int)this.i_height);
+            this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.i_width, (this.m_menu.Count>0) ? (this.i_height-this.m_menu[this.l_menus[0]].Height) : this.i_height);
             //GL.glClearColor(Color4.Red);
             //GL.glClear(ClearBufferMask.GL_ALL);
-            if (this.Update)
+            if (this.ActiveDialog == null)
             {
-                for (int i=0;i<VisibleWindowsOrder.Count;i++)
+                if (this.Update)
                 {
-                    this.d_Windows[VisibleWindowsOrder[i]].DrawID(); // Pintamos Ventanas Visibles.
-                }
+                    for (int i=0;i<VisibleWindowsOrder.Count;i++)
+                    {
+                        this.d_Windows[VisibleWindowsOrder[i]].DrawID(); // Pintamos Ventanas Visibles.
+                    }
 
-                for (int i=0;i<VisibleControlsOrder.Count;i++)
-                {
-                    this.d_Controls[VisibleControlsOrder[i]].DrawID(); // Pintamos Controles Visibles.
+                    for (int i=0;i<VisibleControlsOrder.Count;i++)
+                    {
+                        this.d_Controls[VisibleControlsOrder[i]].DrawID(); // Pintamos Controles Visibles.
+                    }
                 }
             }
-            //GL.glClearColor(Color4.Black);
-            //GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
+            else
+            {
+                this.ActiveDialog.DrawID();
+            }
             if (this.m_menu.Count > 0)
             {
                 GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
-                this.UpdatePerspective(0, 0, this.ui_width, this.ui_height);
-                this.DrawMenuID();
+                this.UpdatePerspective(0, 0, this.i_width, this.i_height);
+                if (this.ActiveDialog==null) { this.DrawMenuID(); }
             } 
         }
 
-        private void UpdatePerspective(int x, int y, uint uwidth, uint uheight)
+        private void UpdatePerspective(int x, int y, int uwidth, int uheight)
         {
             this.gd_GuiDrawer.DefinePerspectiveMatrix(0,0,(float)uwidth, (float)uheight);
             this.Writer.DefinePerspectiveMatrix(0,0,(float)uwidth, (float)uheight, true);
@@ -400,33 +406,33 @@ namespace dge.GUI
             get { return this.gt_ActualGuiTheme; }
         }
 
-        public uint Width // Para calculos internos de ViewPorts De elementos.
+        public int Width // Para calculos internos de ViewPorts De elementos.
         {
             set
             {
-                this.ui_width = value;
+                this.i_width = value;
                 //Meter definir perspectiva;
-                this.gd_GuiDrawer.DefinePerspectiveMatrix(0,0,this.ui_width, this.ui_height);
-                this.Writer.DefinePerspectiveMatrix(0,0,this.ui_width, this.ui_height, true);
-                this.OnResized(this, new ResizeEventArgs((int)this.ui_width, (int)this.ui_height));
+                this.gd_GuiDrawer.DefinePerspectiveMatrix(0,0,this.i_width, this.i_height);
+                this.Writer.DefinePerspectiveMatrix(0,0,this.i_width, this.i_height, true);
+                this.OnResized(this, new ResizeEventArgs((int)this.i_width, (int)this.i_height));
             }
-            get { return this.ui_width;}
+            get { return this.i_width;}
         }
         
-        public uint Height // Para calculos internos de ViewPorts De elementos.
+        public int Height // Para calculos internos de ViewPorts De elementos.
         {
             set
             {
-                this.ui_height = value;
+                this.i_height = value;
                 //Meter definir perspectiva;
-                this.gd_GuiDrawer.DefinePerspectiveMatrix(0,0,this.ui_width, this.ui_height);
-                this.Writer.DefinePerspectiveMatrix(0,0,this.ui_width, this.ui_height, true);
-                this.OnResized(this, new ResizeEventArgs((int)this.ui_width, (int)this.ui_height));
+                this.gd_GuiDrawer.DefinePerspectiveMatrix(0,0,this.i_width, this.i_height);
+                this.Writer.DefinePerspectiveMatrix(0,0,this.i_width, this.i_height, true);
+                this.OnResized(this, new ResizeEventArgs((int)this.i_width, (int)this.i_height));
             }
             get 
             { 
-                //return this.ui_height;
-                return ((this.m_menu.Count>0) ? (uint)(this.ui_height-this.m_menu[this.l_menus[0]].Height) : this.ui_height);
+                //return this.i_height;
+                return ((this.m_menu.Count>0) ? this.i_height-this.m_menu[this.l_menus[0]].Height : this.i_height);
             }
         }
         
