@@ -16,7 +16,7 @@ namespace dge
                         
         }
 
-        public dgWindow(uint width, uint height, string Title) : base(width, height, Title) // Consuctor Básico.
+        public dgWindow(int width, int height, string Title) : base(width, height, Title) // Consuctor Básico.
         {
             Core.LockObject = base.LockObject;
             dge.SoundSystem.SoundTools.InitStaticSoundSystem();
@@ -38,8 +38,8 @@ namespace dge
             base.OnWindowSizeChange(sender, e);
             if (this.gui != null)
             {
-                this.gui.Width = (uint)e.Width;
-                this.gui.Height = (uint)e.Height;
+                this.gui.Width = e.Width;
+                this.gui.Height = e.Height;
             }
             /*while(this.gd_GuiDrawer2D == null)
             {}
@@ -85,8 +85,8 @@ namespace dge
                 this.gui.gd_GuiDrawer = this.GuiDrawer2D;
                 this.gui.Writer = this.writer2D;
                 this.gui.Drawer = this.drawer2D;
-                this.gui.Width = (uint)this.Width;
-                this.gui.Height = (uint)this.Height;
+                this.gui.Width = this.Width;
+                this.gui.Height = this.Height;
             }
             get { return this.gui; }
         }
