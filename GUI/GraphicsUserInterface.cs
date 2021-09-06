@@ -6,7 +6,7 @@ using dgtk.OpenGL;
 
 namespace dge.GUI
 {
-    public class GraphicsUserInterface
+    public class GraphicsUserInterface : IDisposable
     {
         internal Dialog ActiveDialog;
         internal GuiTheme gt_ActualGuiTheme;
@@ -24,6 +24,8 @@ namespace dge.GUI
         internal Dictionary<string,Menu> m_menu;
         internal List<string> l_menus;
 
+        internal Dictionary<string, Dialog> d_Dialogs;
+
         protected int i_width; // Para calculos internos de ViewPorts De elementos.
         protected int i_height; // Para calculos internos de ViewPorts De elementos.
 
@@ -39,14 +41,7 @@ namespace dge.GUI
 		internal event EventHandler<ResizeEventArgs> Resized; // Evento devuelto cuando se reescala la Ventana.
 		
         public GraphicsUserInterface()
-        {
-            if (gt_ActualGuiTheme == null)
-            {
-                gt_ActualGuiTheme = GuiTheme.DefaultGuiTheme;
-                //DefaultThemeTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultTheme.png"), "GuiDefaultTheme");
-                //DefaultThemeSltTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultThemeSlt.png"), "GuiDefaultThemeSlt");
-                this.UpdateTheme();
-            }
+        {            
             this.m_menu = new Dictionary<string, Menu>();
             this.l_menus = new List<string>();
             this.Update = true; //Forzamos para pruebas.
@@ -54,6 +49,16 @@ namespace dge.GUI
             this.VisibleWindowsOrder = new List<uint>();
             this.d_Controls = new Dictionary<uint, BaseObjects.Control>();
             this.VisibleControlsOrder = new List<uint>();
+            this.d_Dialogs = new Dictionary<string, Dialog>();
+
+            if (gt_ActualGuiTheme == null)
+            {
+                gt_ActualGuiTheme = GuiTheme.DefaultGuiTheme;
+                //DefaultThemeTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultTheme.png"), "GuiDefaultTheme");
+                //DefaultThemeSltTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultThemeSlt.png"), "GuiDefaultThemeSlt");
+                this.UpdateTheme();
+            }
+
             this.MouseDown += delegate {}; //Inicialización del evento por defecto.
             this.MouseUp += delegate {}; //Inicialización del evento por defecto.
             this.MouseMove += delegate {}; //Inicialización del evento por defecto.
@@ -64,24 +69,45 @@ namespace dge.GUI
             this.Resized += delegate {}; //Inicialización del evento por defecto.
         }
 
-        ~GraphicsUserInterface()
+        public void Dispose()
         {
-            if (this.parentWindow != null)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
             {
-                this.parentWindow.MouseDown -= MDown;
-                this.parentWindow.MouseUp -= MUp;
-                this.parentWindow.MouseMove -= MMove;
-                this.parentWindow.MouseWheel -= MWheel;
-                this.parentWindow.KeyPulsed -= KPulsed;
-                this.parentWindow.KeyReleased -= KReleased;
-                this.parentWindow.KeyCharReturned -= KCharReturned;
-                this.parentWindow.WindowSizeChange -= WResized;
+                if (this.parentWindow != null)
+                {
+                    this.parentWindow.MouseDown -= MDown;
+                    this.parentWindow.MouseUp -= MUp;
+                    this.parentWindow.MouseMove -= MMove;
+                    this.parentWindow.MouseWheel -= MWheel;
+                    this.parentWindow.KeyPulsed -= KPulsed;
+                    this.parentWindow.KeyReleased -= KReleased;
+                    this.parentWindow.KeyCharReturned -= KCharReturned;
+                    this.parentWindow.WindowSizeChange -= WResized;
+                }
             }
         }
 
         private void UpdateTheme()
         {
             mheight = (int)((this.gt_ActualGuiTheme.DefaultFont.MaxCharacterHeight*(12/this.gt_ActualGuiTheme.DefaultFont.MaxFontSize))+(this.gt_ActualGuiTheme.Menu_MarginsFromTheEdge[1]+this.gt_ActualGuiTheme.Menu_MarginsFromTheEdge[3]));
+            foreach(Window win in this.d_Windows.Values)
+            {
+                win.UpdateTheme();
+            }
+            foreach(BaseObjects.Control ctrl in this.d_Controls.Values)
+            {
+                ctrl.UpdateTheme();
+            }
+            foreach(MenuItem mnt in this.m_menu.Values)
+            {
+                mnt.UpdateTheme();
+            }
         }
 
         #region PUBLIC:
@@ -237,6 +263,8 @@ namespace dge.GUI
                 this.UpdatePerspective(0, 0, this.i_width, this.i_height);
                 this.DrawMenu();
             }
+
+            if (this.ActiveDialog!=null) { this.ActiveDialog.Draw(); }
         }
 
         internal void DrawIds()
@@ -283,16 +311,14 @@ namespace dge.GUI
                     }
                 }
             }
-            else
-            {
-                this.ActiveDialog.DrawID();
-            }
             if (this.m_menu.Count > 0)
             {
                 GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
                 this.UpdatePerspective(0, 0, this.i_width, this.i_height);
-                if (this.ActiveDialog==null) { this.DrawMenuID(); }
+                this.DrawMenuID();
             } 
+
+            if (this.ActiveDialog!=null) { this.ActiveDialog.DrawID(); }
         }
 
         private void UpdatePerspective(int x, int y, int uwidth, int uheight)
