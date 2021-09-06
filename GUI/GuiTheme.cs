@@ -225,7 +225,7 @@ namespace dge.GUI
             ret.Dialog_Head_Texcoords = new float[]
             {
                 multHor*205f, multHor*207f, multHor*224f, multHor*227f, 
-                multVer*97f, multVer*99f, multVer*117f, multVer*119f
+                multVer*97f, multVer*99f, multVer*118f, multVer*119f
             };
             ret.Dialog_Body_MarginsFromTheEdge = new int[]{2, 1, 2, 2};
             ret.Dialog_Body_Texcoords = new float[]
