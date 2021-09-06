@@ -63,7 +63,8 @@ namespace dge.GUI
             if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
             {
                 this.font = this.gui.GuiTheme.DefaultFont;
-            }     
+            }
+            base.UpdateTheme(); // Fuerza el establecimiento del area de dibujo interna.
         }
 
         private void updateTextCoords(float fsize)
