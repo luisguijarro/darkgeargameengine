@@ -21,7 +21,7 @@ namespace dge.GUI.BaseObjects
         protected internal int i_x; // Coordenada X de posición de Objeto
         protected internal int i_y; // Coordenada Y de posición de Objeto)
         protected int i_width; // Ancho del Objeto en Pixeles
-        protected int i_height; // Alto dle objeto en pixeles.
+        protected int i_height; // Alto del objeto en pixeles.
 
         #region CONTENIDO:
         protected internal bool contentUpdate; // Indicador de su se debe o no actualizar el conteido del objeto.
@@ -88,7 +88,7 @@ namespace dge.GUI.BaseObjects
             this.KeyCharReturned += delegate {}; //Inicialización del evento por defecto.
             this.SizeChanged += ResizeEvent;
 
-            this.SetInternalDrawArea(this.i_x+this.MarginLeft, this.i_y+this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-this.MarginTop+this.MarginBottom);
+            this.SetInternalDrawArea(this.MarginLeft, this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-this.MarginTop+this.MarginBottom);
         }
 
         public void Dispose()
@@ -309,8 +309,8 @@ namespace dge.GUI.BaseObjects
 
         protected void SetInternalDrawArea(int x, int y, int width, int height)
         {
-            this.ida_X = x;
-            this.ida_Y = y;
+            this.ida_X = this.i_x+x;
+            this.ida_Y = this.i_y+y;
             this.ida_Width = width;
             this.ida_Height = height;
         }
@@ -322,7 +322,7 @@ namespace dge.GUI.BaseObjects
 
         protected internal virtual void UpdateTheme()
         {
-
+            this.SetInternalDrawArea(this.MarginLeft, this.MarginTop, this.Width-(this.MarginLeft+this.MarginRight), this.Height-(this.MarginTop+this.MarginBottom));
         }
 
         protected virtual void pDrawContent()
@@ -345,7 +345,8 @@ namespace dge.GUI.BaseObjects
         {
             if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
-                this.DrawIdIn(this.i_x+this.MarginLeft, this.i_y+this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom), DrawContentIDs);
+                //this.DrawIdIn(this.i_x+this.MarginLeft, this.i_y+this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom), DrawContentIDs);
+                this.DrawIdIn(this.ida_X, this.ida_Y, this.ida_Width, this.ida_Height, DrawContentIDs);
             }
         }
 
@@ -489,17 +490,17 @@ namespace dge.GUI.BaseObjects
 
         protected virtual void OnResize()
         {
-            this.SetInternalDrawArea(this.i_x+this.MarginLeft, this.i_y+this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom));
+            this.SetInternalDrawArea(this.MarginLeft, this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom));
         }
 
         protected virtual void OnReposition()
         {
-            this.SetInternalDrawArea(this.i_x+this.MarginLeft, this.i_y+this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom));
-            foreach(BaseGuiSurface surf in this.d_guiSurfaces.Values)
+            this.SetInternalDrawArea(this.MarginLeft, this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom));
+            /*foreach(BaseGuiSurface surf in this.d_guiSurfaces.Values)
             {
                 surf.intX = this.int_x+this.i_x+this.MarginsFromTheEdge[0];
                 surf.intY = this.int_y+this.i_y+this.MarginsFromTheEdge[1];
-            }
+            }*/
         }
 
         #endregion
@@ -566,6 +567,11 @@ namespace dge.GUI.BaseObjects
             get { return new Size(this.i_width, this.i_height); }
         }
 
+        public Size InnerSize
+        {
+            get { return new Size(this.ida_Width, this.ida_Height); }
+        }
+
         public int MarginTop
         {
             get { return this.MarginsFromTheEdge[1]; }
@@ -612,10 +618,7 @@ namespace dge.GUI.BaseObjects
 
         protected virtual void OnGuiUpdate()
         {
-            /*foreach(BaseGuiSurface surf in this.d_guiSurfaces.Values)
-            { 
-                surf.GUI = this.gui;
-            }*/
+            this.UpdateTheme();
         }
 
         internal /*virtual */GraphicsUserInterface GUI
@@ -625,6 +628,7 @@ namespace dge.GUI.BaseObjects
                 if (this.gui!= null) // Si ya tenemos un GUI eliminamos los eventos del mismo.
                 {
                     this.gui.RemoveWindow(this.ui_id);
+                    this.gui.RemoveControl(this.ui_id);
                     this.gui.MouseDown -= MDown;
                     this.gui.MouseUp -= MUp;
                     this.gui.MouseMove -= MMove;
