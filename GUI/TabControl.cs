@@ -139,50 +139,35 @@ namespace dge.GUI
                 {
                     
                     TabPage tp = (TabPage)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]];
-                    /* 
-                    uint tmp_width = (uint)(Math.Ceiling(dge.G2D.Writer.MeasureString(this.font, tp.Name, this.f_fontsize)[0]));
-                    tmp_width += (uint)(this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0]+this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[2]);
-                    tmp_width += (this.b_ClosableTabs) ? (uint)this.gui.GuiTheme.TabPage_X_Size[0] : 0;
-                    */
+                    
                     this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.TabDisplacement + tp.i_TabX, 0, /*tmp_width*/ tp.i_TabWidth, this.tabsHeigth, 0, this.MarginsFromTheEdge, Texcoords, (tp.ID == this.ActiveTabID) ? this.gui.GuiTheme.TabPage_FrameOffset_Hor : this.tcFrameOffset, 0);
                     this.gui.Writer.Write(this.gui.GuiTheme.DefaultFont, Color4.Black, tp.Name, this.f_fontsize, this.TabDisplacement + this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0] + tp.i_TabX, 0);
                     if (this.b_ClosableTabs) 
                     { 
                         tp.Draw_X_Button((int)(this.TabDisplacement + tp.i_TabX + /*tmp_width*/ tp.i_TabWidth)-this.MarginRight, (int)(this.MarginTop/2f));
                     }
-                    //this.totalTabsWidth += (int)tmp_width+this.MarginLeft;
                 }
                 else
                 {
 
                 }
             }
-            //this.totalTabsWidth += this.MarginLeft;
         }
 
         private void DrawTabBarIDs()
         {
             // Show Tabs Bar
-            //this.totalTabsWidth = this.MarginLeft; //0; //this.X;
-            //this.tabsHeigth = (uint)(Math.Ceiling(this.font.MaxCharacterHeight*(this.f_fontsize/this.font.MaxFontSize)));
             for (int i=0;i<this.VisibleSurfaceOrder.Count;i++)
             {
                 if (this.barOrientation == Orientation.Horizontal)
                 {
                     TabPage tp = (TabPage)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]];
-                    /*
-                    uint tmp_width = (uint)(Math.Ceiling(dge.G2D.Writer.MeasureString(this.font, tp.Name, this.f_fontsize)[0]));
-                    tmp_width+= (uint)(this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0]+this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[2]);
-                    tmp_width += (this.b_ClosableTabs) ? (uint)this.gui.GuiTheme.TabPage_X_Size[0] : 0;
-                    */
-                    //this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, totalTabsWidth, 0, tmp_width, this.tabsHeigth, 0, this.MarginsFromTheEdge, Texcoords, (this.VisibleSurfaceOrder[i] == this.ActiveTabID) ? this.gui.GuiTheme.TabPage_FrameOffset_Hor : this.tcFrameOffset, 0);
-                    //this.gui.Writer.Write(this.gui.GuiTheme.DefaultFont, Color4.Black, tp.Name, this.f_fontsize, this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0]+totalTabsWidth, 0);
-                    dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, tp.idColor, this.TabDisplacement + tp.i_TabX, 0, /*tmp_width*/ tp.i_TabWidth, this.tabsHeigth, 0, this.MarginsFromTheEdge, Texcoords, (tp.ID == this.ActiveTabID) ? this.gui.GuiTheme.TabPage_FrameOffset_Hor : this.tcFrameOffset, 1); // Pintamos ID de la superficie.
+                    
+                    dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, tp.idColor, this.TabDisplacement + tp.i_TabX, 0, tp.i_TabWidth, this.tabsHeigth, 0, this.MarginsFromTheEdge, Texcoords, (tp.ID == this.ActiveTabID) ? this.gui.GuiTheme.TabPage_FrameOffset_Hor : this.tcFrameOffset, 1); // Pintamos ID de la superficie.
                     if (this.b_ClosableTabs) 
                     { 
-                        tp.Draw_X_Button_ID((int)(this.TabDisplacement + tp.i_TabX + /*tmp_width*/ tp.i_TabWidth)-this.MarginRight, (int)(this.MarginTop/2f));
+                        tp.Draw_X_Button_ID((int)(this.TabDisplacement + tp.i_TabX + tp.i_TabWidth)-this.MarginRight, (int)(this.MarginTop/2f));
                     }
-                    //totalTabsWidth += (int)tmp_width+this.MarginLeft;
                 }
                 else
                 {
@@ -251,7 +236,21 @@ namespace dge.GUI
         #region PROTECTED METHODS:
         protected internal override void UpdateTheme()
         {
-            base.UpdateTheme();
+            if (this.barOrientation == Orientation.Horizontal)
+            {
+                this.MarginsFromTheEdge = this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor;            
+                this.Texcoords = this.gui.GuiTheme.TabPage_Texcoords_Hor;
+                this.tcFrameOffset = new float[]{0f,0f};
+            }
+            else
+            {
+                this.MarginsFromTheEdge = this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Ver;            
+                this.Texcoords = this.gui.GuiTheme.TabPage_Texcoords_Ver;
+                this.tcFrameOffset = new float[]{0f,0f};
+            }
+
+            this.c4_BackgroundColor = this.gui.GuiTheme.Default_BackgroundColor;
+
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
             if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
             {
@@ -261,7 +260,8 @@ namespace dge.GUI
             if (this.c4_BackgroundColor == GuiTheme.DefaultGuiTheme.Default_BackgroundColor)
             {
                 this.c4_BackgroundColor = this.gui.GuiTheme.Default_BackgroundColor;
-            }         
+            }    
+            base.UpdateTheme(); // Fuerza el establecimiento del area de dibujo interna.     
         }
 
         protected override void OnReposition()
