@@ -86,12 +86,12 @@ namespace dge.GUI
             dge.G2D.IDsDrawer.DrawGL2D(this.X_ColorID, x-gui.GuiTheme.TabPage_X_Size[0], y, this.gui.GuiTheme.TabPage_X_Size[0], this.gui.GuiTheme.TabPage_X_Size[1], 0f);
         }
 
-        protected override void OnGuiUpdate()
+        protected internal override void UpdateTheme()
         {
-            base.OnGuiUpdate();
             this.MarginsFromTheEdge = this.gui.GuiTheme.TabPage_Surface_MarginsFromTheEdge;            
             this.Texcoords = this.gui.GuiTheme.TabPage_Surface_Texcoords;
             this.c4_MouseOnX_Color = this.gui.GuiTheme.TabPage_X_MouseOnColor;
+            base.UpdateTheme();
         }
 
         public string Name
