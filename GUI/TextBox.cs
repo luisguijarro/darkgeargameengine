@@ -125,7 +125,7 @@ namespace dge.GUI
             }
         }
 
-        private void updateTextCoords()
+        private void UpdateTextCoords()
         {
             if (this.gui != null)
             {
@@ -158,7 +158,7 @@ namespace dge.GUI
 
         protected override void pDraw()
         {
-            if (this.FirsDraw) { this.updateTextCoords(); this.FirsDraw = false; };
+            if (this.FirsDraw) { this.UpdateTextCoords(); this.FirsDraw = false; };
             base.pDraw();
             DrawIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], this.i_width-this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2], this.i_height-this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[2], WriteText);
         }
@@ -184,19 +184,19 @@ namespace dge.GUI
 
         public float FontSize 
         {
-            set { this.f_FontSize = value; this.updateTextCoords(); }
+            set { this.f_FontSize = value; this.UpdateTextCoords(); }
             get { return this.f_FontSize; }
         }
 
         public dgFont Font
         {
-            set { this.font = value; this.updateTextCoords(); }
+            set { this.font = value; this.UpdateTextCoords(); }
             get { return this.font; }
         }
 
         public string Text
         {
-            set { this.s_text = value; this.updateTextCoords(); }
+            set { this.s_text = value; this.UpdateTextCoords(); }
             get { return this.s_text; }
         }
 
@@ -214,7 +214,7 @@ namespace dge.GUI
 
         public TextAlign TextAlign
         {
-            set { this.ta_textAlign = value; this.updateTextCoords(); }
+            set { this.ta_textAlign = value; this.UpdateTextCoords(); }
             get { return this.ta_textAlign; }
         }
 
