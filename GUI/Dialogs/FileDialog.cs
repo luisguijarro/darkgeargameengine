@@ -52,16 +52,16 @@ namespace dge.GUI
 
             this.textBox1.X = 5;
             this.textBox1.Y = 5;
-            this.textBox1.Width = (uint)(this.Width - (10 + this.MarginLeft + this.MarginRight));
+            this.textBox1.Width = (int)(this.Width - (10 + this.MarginLeft + this.MarginRight));
 
             this.flv.X = 5;
             this.flv.Y = (int)(this.textBox1.Y + this.textBox1.Height+5);
-            this.flv.Width = (uint)(this.ui_width - (this.MarginLeft + this.MarginRight + 10));
-            this.flv.Height = (uint)(this.ui_height - (this.MarginTop+this.MarginBottom + 40 + this.b_ok.Height));
+            this.flv.Width = (int)(this.i_width - (this.MarginLeft + this.MarginRight + 10));
+            this.flv.Height = (int)(this.i_height - (this.MarginTop+this.MarginBottom + 40 + this.b_ok.Height));
 
-            this.b_cancel.X = (int)(this.ui_width-(10+this.MarginsFromTheEdge[1] + this.b_cancel.Width));
+            this.b_cancel.X = (int)(this.i_width-(10+this.MarginsFromTheEdge[1] + this.b_cancel.Width));
             this.b_cancel.Y = (int)(this.flv.Y + this.flv.Height) + 5;
-            this.b_ok.X = (int)(this.ui_width-(10+this.MarginsFromTheEdge[1] + this.b_cancel.Width + 10 + this.b_ok.Width));
+            this.b_ok.X = (int)(this.i_width-(10+this.MarginsFromTheEdge[1] + this.b_cancel.Width + 10 + this.b_ok.Width));
             this.b_ok.Y = (int)(this.flv.Y + this.flv.Height) + 5;
             
         }
