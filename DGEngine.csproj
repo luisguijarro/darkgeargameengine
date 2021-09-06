@@ -126,5 +126,7 @@
     <Content Include="GUI\TabPage.cs" />
     <Content Include="GUI\Panel.cs" />
     <Content Include="GUI\Dialogs\Dialog.cs" />
+    <Content Include="GUI\Dialogs\DialogResultEventArgs.cs" />
+    <Content Include="GUI\NumberBox.cs" />
   </ItemGroup>
 </Project>
