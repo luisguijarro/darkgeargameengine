@@ -58,16 +58,6 @@ namespace dge.GUI
 
         private void UpdateTextCoords()
         {
-            /*
-            if (this.gui != null)
-            {
-                if (this.gui.Writer != null)
-                {
-                    this.tx_x = 0; //(this.i_width/2f) - (dge.G2D.Writer.MeasureString(this.font, this.s_text, this.f_fs)[0]/2f);
-                    this.tx_y = (this.i_height/2.1f) - (this.f_fs/1.2f);
-                }
-            }
-            */
             if (this.gui != null)
             {
                 if (this.gui.Writer != null)
