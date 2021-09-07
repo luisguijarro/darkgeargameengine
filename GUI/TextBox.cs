@@ -8,17 +8,17 @@ namespace dge.GUI
     public class TextBox : BaseObjects.Control
     {
         private bool FirsDraw;
-        private bool b_Focus;
-        private bool b_editable;
-        private string s_text;
-        private int cursorPos;
-        private float tx_x, tx_y; // Coordenadas de texto
-        private dgtk.Graphics.Color4 c4_textColor;
-        private dgtk.Graphics.Color4 c4_textBorderColor;
-        private bool b_textBorder;
-        private float f_FontSize;
-        private dgFont font;
-        private TextAlign ta_textAlign;
+        protected bool b_Focus;
+        protected bool b_editable;
+        protected string s_text;
+        protected int cursorPos;
+        protected float tx_x, tx_y; // Coordenadas de texto
+        protected dgtk.Graphics.Color4 c4_textColor;
+        protected dgtk.Graphics.Color4 c4_textBorderColor;
+        protected bool b_textBorder;
+        protected float f_FontSize;
+        protected dgFont font;
+        protected TextAlign ta_textAlign;
         public TextBox() : this(70, 20, "TextBox") 
         {
 
@@ -41,7 +41,8 @@ namespace dge.GUI
             this.KeyPulsed += Key_Pulsed;
             this.KeyCharReturned += CharReturned;
         }
-        ~ TextBox()
+        
+        protected override void Dispose(bool disposing)
         {
             this.KeyPulsed -= Key_Pulsed;
             this.KeyCharReturned -= CharReturned;
@@ -75,7 +76,7 @@ namespace dge.GUI
             }
         }
 
-        private void Key_Pulsed(object sender, KeyBoardKeysEventArgs e)
+        protected virtual void Key_Pulsed(object sender, KeyBoardKeysEventArgs e)
         {
             if (this.b_Focus && this.b_editable && this.b_IsEnable)
             {
@@ -113,7 +114,7 @@ namespace dge.GUI
             }
         }
 
-        private void CharReturned(object sender, KeyBoardTextEventArgs e)
+        protected virtual void CharReturned(object sender, KeyBoardTextEventArgs e)
         {
             if (this.b_Focus && this.b_editable && this.b_IsEnable)
             {
