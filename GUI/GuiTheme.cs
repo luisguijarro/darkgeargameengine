@@ -165,6 +165,20 @@ namespace dge.GUI
 
         #endregion
 
+        #region Panel
+
+        public int[] NumberBox_MarginsFromTheEdge; // n=4
+        public float[] NumberBox_Texcoords; // n=8
+        public float[] NumberBox_ButtonUpTexcoords; // n=8
+        public int[] NumberBox_ButtonUpMarginsFromTheEdge; // n=4
+        public float[] NumberBox_ButtonDownTexcoords; // n=8
+        public int[] NumberBox_ButtonDownMarginsFromTheEdge; // n=4
+        public float[] NumberBox_ButtonUpFrameOffset; // n=2
+        public float[] NumberBox_ButtonDownFrameOffset; // n=2
+        public int[] NumberBox_ButtonsSize;
+
+        #endregion
+
 
         public GuiTheme()
         {
@@ -491,6 +505,32 @@ namespace dge.GUI
             };
             ret.Panel_BorderInFrameOffset = new float[]{multHor*24f, 0f};
             ret.Panel_BorderOutFrameOffset = new float[]{0f, multVer*24f};
+
+            // NumberBox:__________________________________________________________________________
+            ret.NumberBox_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.NumberBox_Texcoords = new float[]
+            {
+                multHor*121f, multHor*123f, multHor*141f, multHor*143f, 
+                multVer*217f, multVer*219f, multVer*237f, multVer*239f
+            };
+
+            ret.NumberBox_ButtonUpMarginsFromTheEdge = new int[]{1, 1, 1, 1};
+            ret.NumberBox_ButtonUpTexcoords = new float[]
+            {
+                multHor*145f, multHor*146f, multHor*159f, multHor*160f, 
+                multVer*217f, multVer*218f, multVer*226f, multVer*227f
+            };
+            ret.NumberBox_ButtonUpFrameOffset = new float[]{multHor*17f, 0f};
+
+            ret.NumberBox_ButtonDownMarginsFromTheEdge = new int[]{1, 1, 1, 1};
+            ret.NumberBox_ButtonDownTexcoords = new float[]
+            {
+                multHor*145f, multHor*146f, multHor*159f, multHor*160f, 
+                multVer*229f, multVer*230f, multVer*238f, multVer*239f
+            };
+            ret.NumberBox_ButtonDownFrameOffset = new float[]{multHor*17f, 0f};
+
+            ret.NumberBox_ButtonsSize = new int[] {15, 10};
 
 
             return ret;
