@@ -22,6 +22,8 @@ namespace dge.GUI.BaseObjects
         protected internal int i_y; // Coordenada Y de posición de Objeto)
         protected int i_width; // Ancho del Objeto en Pixeles
         protected int i_height; // Alto del objeto en pixeles.
+        protected int i_AlteredWidth; // Ancho del Objeto en Pixeles
+        protected int i_AlteredHeight; // Alto del objeto en pixeles.
 
         #region CONTENIDO:
         protected internal bool contentUpdate; // Indicador de su se debe o no actualizar el conteido del objeto.
@@ -86,7 +88,7 @@ namespace dge.GUI.BaseObjects
             this.KeyPulsed += delegate {}; //Inicialización del evento por defecto.
             this.KeyReleased += delegate {}; //Inicialización del evento por defecto.
             this.KeyCharReturned += delegate {}; //Inicialización del evento por defecto.
-            this.SizeChanged += ResizeEvent;
+            this.SizeChanged += delegate {}; //ResizeEvent;
 
             this.SetInternalDrawArea(this.MarginLeft, this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-this.MarginTop+this.MarginBottom);
         }
@@ -101,7 +103,7 @@ namespace dge.GUI.BaseObjects
         {
             if (disposing)
             {
-                this.SizeChanged -= ResizeEvent;
+                //this.SizeChanged -= ResizeEvent;
                 Core2D.ReleaseID(this.ui_id);
                 #if DEBUG
                     Console.WriteLine("Liberamos ID de Superficie de GUI.");
@@ -116,15 +118,16 @@ namespace dge.GUI.BaseObjects
                 this.VisibleSurfaceOrder = null;
             }
         }
-
+        /*
         #region PRIVATES:
-
+        
         private void ResizeEvent(object sender, ResizeEventArgs e)
         {
             this.OnResize();
         }
 
         #endregion
+        */
 
         #region Protected
 
@@ -493,6 +496,19 @@ namespace dge.GUI.BaseObjects
             this.SetInternalDrawArea(this.MarginLeft, this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom));
         }
 
+        // Metodopara alterar el tamaño entrante
+        protected virtual void InputSizeAlter(int width, int height)
+        {
+            this.i_width = width;
+            this.i_height = height;
+        }
+
+        // Metodopara alterar el tamaño entrante
+        protected virtual int[] OutputSizeAlter(int width, int height)
+        {
+            return new int[]{width, height};
+        }
+
         protected virtual void OnReposition()
         {
             this.SetInternalDrawArea(this.MarginLeft, this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom));
@@ -552,19 +568,35 @@ namespace dge.GUI.BaseObjects
 
         public int Width
         {
-            set { this.i_width = value; this.SizeChanged(this, new ResizeEventArgs(this.i_width, this.i_height)); }
-            get { return this.i_width; }
+            set 
+            { 
+                this.i_width = value; 
+                this.InputSizeAlter(value, this.i_height); // Alteradores del valior de entrada. Potencial sustituto de OnResize().
+                this.OnResize(); 
+                this.SizeChanged(this, new ResizeEventArgs(this.i_width, this.i_height)); 
+            }
+            get { return this.OutputSizeAlter(this.i_width, this.i_height)[0]; }
         }
 
         public int Height
         {
-            set { this.i_height = value; this.SizeChanged(this, new ResizeEventArgs(this.i_width, this.i_height)); }
-            get { return this.i_height; }
+            set 
+            { 
+                this.i_height = value;
+                this.InputSizeAlter(this.i_width, value); // Alteradores del valior de entrada. Potencial sustituto de OnResize().
+                this.OnResize(); 
+                this.SizeChanged(this, new ResizeEventArgs(this.i_width, this.i_height)); 
+            }
+            get { return this.OutputSizeAlter(this.i_width, this.i_height)[1]; }
         }
 
         public Size Size
         {
-            get { return new Size(this.i_width, this.i_height); }
+            get 
+            { 
+                int[] alteredSize = this.OutputSizeAlter(this.i_width, this.i_height);
+                return new Size(alteredSize[0], alteredSize[1]);
+            }
         }
 
         public Size InnerSize
