@@ -37,6 +37,10 @@ namespace dge.GUI
         }
         public NumberBox(int width, int height, int value) : base(width, height, value.ToString())
         {
+            this.i_MinValue = 0;
+            this.i_MaxValue = int.MaxValue;
+            this.ApplyMinMaxValues();
+
             this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
             this.f_FontSize = 14;
             this.b_textBorder = false;
@@ -250,11 +254,12 @@ namespace dge.GUI
             {
                 this.i_value = this.i_MaxValue;
             }
+            this.s_text = this.i_value.ToString();
         }
 
         #region PROPERTIES:
         
-        public int Values
+        public int Value
         {
             set 
             { 
