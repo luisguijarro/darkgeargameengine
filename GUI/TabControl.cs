@@ -141,7 +141,7 @@ namespace dge.GUI
                     TabPage tp = (TabPage)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]];
                     
                     this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.TabDisplacement + tp.i_TabX, 0, /*tmp_width*/ tp.i_TabWidth, this.tabsHeigth, 0, this.MarginsFromTheEdge, Texcoords, (tp.ID == this.ActiveTabID) ? this.gui.GuiTheme.TabPage_FrameOffset_Hor : this.tcFrameOffset, 0);
-                    this.gui.Writer.Write(this.gui.GuiTheme.DefaultFont, Color4.Black, tp.Name, this.f_fontsize, this.TabDisplacement + this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0] + tp.i_TabX, 0);
+                    this.gui.Writer.Write(this.gui.GuiTheme.DefaultFont, Color4.Black, tp.Text, this.f_fontsize, this.TabDisplacement + this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0] + tp.i_TabX, 0);
                     if (this.b_ClosableTabs) 
                     { 
                         tp.Draw_X_Button((int)(this.TabDisplacement + tp.i_TabX + /*tmp_width*/ tp.i_TabWidth)-this.MarginRight, (int)(this.MarginTop/2f));

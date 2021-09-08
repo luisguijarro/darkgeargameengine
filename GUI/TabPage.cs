@@ -6,6 +6,7 @@ namespace dge.GUI
     public class TabPage : BaseObjects.Control
     {
         string s_name;
+        string s_text;
         //internal Button Xbutton;
         internal uint X_ButtonID;
         internal Color4 X_ColorID;
@@ -15,9 +16,14 @@ namespace dge.GUI
         internal int i_TabX;
         private Color4 c4_MouseOnX_Color;
         private bool b_MouseOnX;
-        public TabPage(string name) : base()
+        public TabPage(string name) : this(name, name)
+        {
+            
+        }
+        public TabPage(string name, string text) : base()
         {
             this.s_name = name;
+            this.s_text = text;
             this.X_Pressed = false;
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.TabPage_Surface_MarginsFromTheEdge;            
             this.Texcoords = GuiTheme.DefaultGuiTheme.TabPage_Surface_Texcoords;
@@ -96,8 +102,14 @@ namespace dge.GUI
 
         public string Name
         {
-            set { this.s_name = value; }
+            //set { this.s_name = value; }
             get { return this.s_name; }
+        }
+
+        public string Text
+        {
+            set { this.s_text = value; }
+            get { return this.s_text; }
         }
     }
 }
