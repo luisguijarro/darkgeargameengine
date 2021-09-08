@@ -108,10 +108,10 @@ namespace dge.GUI.BaseObjects
                 #if DEBUG
                     Console.WriteLine("Liberamos ID de Superficie de GUI.");
                 #endif
-                foreach(BaseGuiSurface bgs in this.d_guiSurfaces.Values)
+                /*foreach(BaseGuiSurface bgs in this.d_guiSurfaces.Values)
                 {
                     bgs.Dispose();
-                }
+                }*/
                 this.d_guiSurfaces.Clear();
                 this.d_guiSurfaces = null;
                 this.VisibleSurfaceOrder.Clear();
@@ -367,7 +367,7 @@ namespace dge.GUI.BaseObjects
 
         #endregion
 
-        internal void Draw()
+        public void Draw()
         {   
             if (this.gui != null)
             {
@@ -571,9 +571,9 @@ namespace dge.GUI.BaseObjects
             set 
             { 
                 this.i_width = value; 
-                this.InputSizeAlter(value, this.i_height); // Alteradores del valior de entrada. Potencial sustituto de OnResize().
+                this.InputSizeAlter(value, this.Height); // Alteradores del valior de entrada. Potencial sustituto de OnResize().
                 this.OnResize(); 
-                this.SizeChanged(this, new ResizeEventArgs(this.i_width, this.i_height)); 
+                this.SizeChanged(this, new ResizeEventArgs(this.Width, this.Height)); 
             }
             get { return this.OutputSizeAlter(this.i_width, this.i_height)[0]; }
         }
@@ -583,9 +583,9 @@ namespace dge.GUI.BaseObjects
             set 
             { 
                 this.i_height = value;
-                this.InputSizeAlter(this.i_width, value); // Alteradores del valior de entrada. Potencial sustituto de OnResize().
+                this.InputSizeAlter(this.Width, value); // Alteradores del valior de entrada. Potencial sustituto de OnResize().
                 this.OnResize(); 
-                this.SizeChanged(this, new ResizeEventArgs(this.i_width, this.i_height)); 
+                this.SizeChanged(this, new ResizeEventArgs(this.Width, this.Height)); 
             }
             get { return this.OutputSizeAlter(this.i_width, this.i_height)[1]; }
         }
@@ -653,7 +653,7 @@ namespace dge.GUI.BaseObjects
             this.UpdateTheme();
         }
 
-        internal /*virtual */GraphicsUserInterface GUI
+        public /*virtual */GraphicsUserInterface GUI
         {
             set 
             { 
