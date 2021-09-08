@@ -127,6 +127,7 @@ namespace dge.GUI
                     case KeyCode.Return:
                         if(txt1+txt2 != this.s_text) {changed = true; }
                         this.b_Focus = false;
+                        this.EnterPulsed(this, new KeyBoardKeysEventArgs(new KeyBoard_Status(KeyCode.Return, PushRelease.Push)));
                         break;
                 }
                 this.s_text = txt1 + txt2;
