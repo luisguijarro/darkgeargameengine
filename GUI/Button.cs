@@ -126,11 +126,11 @@ namespace dge.GUI
             float py = this.tx_y;
             if (this.b_textBorder)
             {
-                this.gui.Writer.Write(this.font, this.c4_textColor, this.s_text, f_fs, px, py, this.c4_textBorderColor);
+                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, f_fs, px, py, (this.b_IsEnable) ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, this.c4_textColor, this.s_text, f_fs, px, py);
+                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor: this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, f_fs, px, py);
             }
         }
 
