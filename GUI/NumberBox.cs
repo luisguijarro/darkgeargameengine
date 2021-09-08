@@ -30,6 +30,8 @@ namespace dge.GUI
         Color4 C4_id_down;
 
         List<int> aceptedChars = new List<int>(){'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-'};
+
+        public event EventHandler<IntValueChangedEventArgs> ValueChanged;
         
         public NumberBox() : this(70, 20, 0) 
         {
@@ -67,6 +69,8 @@ namespace dge.GUI
 
             this.C4_id_up = new Color4(dge.Core2D.DeUIntAByte4(this.ui_id_Up));
             this.C4_id_down = new Color4(dge.Core2D.DeUIntAByte4(this.ui_id_Down));
+
+            this.ValueChanged += delegate{};
         }
 
         protected override void Dispose(bool disposing)
@@ -108,6 +112,7 @@ namespace dge.GUI
             {
                 string txt1 = this.s_text.Substring(0, this.cursorPos);
                 string txt2 = this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
+                bool changed = false;
                 switch (e.KeyStatus.KeyCode) // == KeyCode.BackSpace)
                 {
                     case KeyCode.BackSpace:
@@ -115,6 +120,7 @@ namespace dge.GUI
                         {
                             txt1 =  txt1.Substring(0, txt1.Length-1);
                             this.cursorPos--;
+                            changed = true;
                         }
                         break;
                     case KeyCode.LEFT:
@@ -133,7 +139,12 @@ namespace dge.GUI
                         if (txt2.Length>0)
                         {
                             txt2 = txt2.Substring(1, txt2.Length-1);
+                            changed = true;
                         }
+                        break;
+                    case KeyCode.Return:
+                        changed = true;
+                        this.b_Focus = false;
                         break;
                 }
 
@@ -141,6 +152,13 @@ namespace dge.GUI
                 {
                     // OK
                     this.s_text = txt1 + txt2;
+                    if (changed)
+                    {
+                        if (!this.ApplyMinMaxValues())
+                        {
+                            this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                        }
+                    }
                 }
                 else
                 {
@@ -169,6 +187,10 @@ namespace dge.GUI
                 {
                     this.b_Focus = false;
                     this.s_text = this.i_value.ToString();
+                    if (!this.ApplyMinMaxValues())
+                    {
+                        this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                    }
                 }
                 this.b_UpPulsed = false;
                 this.b_DownPulsed = false;   
@@ -176,14 +198,20 @@ namespace dge.GUI
                 {
                     this.b_UpPulsed = true;
                     this.i_value++;
-                    this.ApplyMinMaxValues();
+                    if (!this.ApplyMinMaxValues())
+                    {
+                        this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                    }
                     this.s_text = this.i_value.ToString();
                 }
                 if (Core2D.SelectedID == this.ui_id_Down)
                 {
                     this.b_DownPulsed = true;   
                     this.i_value--;     
-                    this.ApplyMinMaxValues();    
+                    if (!this.ApplyMinMaxValues())
+                    {
+                        this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                    }
                     this.s_text = this.i_value.ToString();        
                 }
             }
@@ -208,7 +236,10 @@ namespace dge.GUI
                         txt1 += e.Character;
                         this.s_text = txt1+txt2;
                         this.cursorPos++;
-                        this.ApplyMinMaxValues();
+                        if (!this.ApplyMinMaxValues())
+                        {
+                            this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                        }
                     }
                 }
             }
@@ -244,17 +275,22 @@ namespace dge.GUI
             dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeTBO.ID, this.C4_id_down, this.X+this.i_width, this.Y+this.NumberBox_ButtonsSize[1], this.NumberBox_ButtonsSize[0], this.NumberBox_ButtonsSize[1], 0f, this.NumberBox_ButtonDownMarginsFromTheEdge, this.NumberBox_ButtonDownTexcoords, this.b_DownPulsed ? this.NumberBox_ButtonDownFrameOffset : new float[]{0f, 0f}, 1);
         }
 
-        private void ApplyMinMaxValues()
+        private bool ApplyMinMaxValues()
         {
             if (this.i_value < this.i_MinValue)
             {
                 this.i_value = this.i_MinValue;
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
+                return true;
             }
             if (this.i_value > this.i_MaxValue)
             {
                 this.i_value = this.i_MaxValue;
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
+                return true;
             }
             this.s_text = this.i_value.ToString();
+            return false;
         }
 
         #region PROPERTIES:
@@ -266,6 +302,7 @@ namespace dge.GUI
                 if ((this.i_MinValue < value)  && (value < this.i_MaxValue)) 
                 { 
                     this.i_value = value; 
+                    this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
                 }
                 else
                 {
@@ -278,13 +315,21 @@ namespace dge.GUI
 
         public int MinValue
         {
-            set { this.i_MinValue = value; this.ApplyMinMaxValues(); }
+            set 
+            { 
+                this.i_MinValue = value; 
+                this.ApplyMinMaxValues(); 
+            }
             get { return this.i_MinValue; }
         }
 
         public int MaxValue
         {
-            set { this.i_MaxValue = value; this.ApplyMinMaxValues(); }
+            set 
+            { 
+                this.i_MaxValue = value; 
+                this.ApplyMinMaxValues(); 
+            }
             get { return this.i_MaxValue; }
         }
         #endregion

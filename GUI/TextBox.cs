@@ -19,6 +19,9 @@ namespace dge.GUI
         protected float f_FontSize;
         protected dgFont font;
         protected TextAlign ta_textAlign;
+
+        public event EventHandler<TextChangedEventArgs> TextChanged;
+
         public TextBox() : this(70, 20, "TextBox") 
         {
 
@@ -40,6 +43,7 @@ namespace dge.GUI
 
             this.KeyPulsed += Key_Pulsed;
             this.KeyCharReturned += CharReturned;
+            this.TextChanged += delegate{};
         }
         
         protected override void Dispose(bool disposing)
@@ -73,6 +77,7 @@ namespace dge.GUI
             else
             {
                 this.b_Focus = false;
+                this.TextChanged(this, new TextChangedEventArgs(this.s_text, false));
             }
         }
 
@@ -82,6 +87,7 @@ namespace dge.GUI
             {
                 string txt1 = this.s_text.Substring(0, this.cursorPos);
                 string txt2 = this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
+                bool changed = false;
                 switch (e.KeyStatus.KeyCode) // == KeyCode.BackSpace)
                 {
                     case KeyCode.BackSpace:
@@ -89,6 +95,7 @@ namespace dge.GUI
                         {
                             txt1 =  txt1.Substring(0, txt1.Length-1);
                             this.cursorPos--;
+                            changed = true;
                         }
                         break;
                     case KeyCode.LEFT:
@@ -107,10 +114,19 @@ namespace dge.GUI
                         if (txt2.Length>0)
                         {
                             txt2 = txt2.Substring(1, txt2.Length-1);
+                            changed = true;
                         }
+                        break;
+                    case KeyCode.Return:
+                        if(txt1+txt2 != this.s_text) {changed = true; }
+                        this.b_Focus = false;
                         break;
                 }
                 this.s_text = txt1 + txt2;
+                if (changed)
+                {
+                    this.TextChanged(this, new TextChangedEventArgs(this.s_text, false));
+                }
             }
         }
 
@@ -123,6 +139,7 @@ namespace dge.GUI
                 txt1 += e.Character;
                 this.s_text = txt1+txt2;
                 this.cursorPos++;
+                this.TextChanged(this, new TextChangedEventArgs(this.s_text, false));
             }
         }
 
@@ -197,7 +214,12 @@ namespace dge.GUI
 
         public string Text
         {
-            set { this.s_text = value; this.UpdateTextCoords(); }
+            set 
+            { 
+                this.s_text = value; 
+                this.UpdateTextCoords();
+                this.TextChanged(this, new TextChangedEventArgs(value, true));
+            }
             get { return this.s_text; }
         }
 
