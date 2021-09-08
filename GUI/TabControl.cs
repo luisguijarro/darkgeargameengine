@@ -276,12 +276,7 @@ namespace dge.GUI
         protected override void OnResize()
         {
             base.OnResize();
-            
-            foreach (BaseObjects.BaseGuiSurface value in this.d_guiSurfaces.Values)
-            {
-                value.Width = this.Width;
-                value.Height = (int)(this.Height-(this.tabsHeigth-(uint)this.MarginBottom));
-            }
+            this.UpdateTabsHeight();
             this.CalculateTabDisplacement();
         }
 
@@ -291,7 +286,7 @@ namespace dge.GUI
             foreach (BaseObjects.BaseGuiSurface value in this.d_guiSurfaces.Values)
             {
                 value.Width = this.Width;
-                value.Height = (int)(this.Height-(this.tabsHeigth-(uint)this.MarginBottom+1));
+                value.Height = (int)(this.Height-(this.tabsHeigth-this.MarginBottom+1));
             }
         }
 
@@ -306,7 +301,6 @@ namespace dge.GUI
                     this.DrawActiveTab();
                     this.DrawIn(this.i_x,this.i_y+1,(int)this.i_width, (int)this.i_height, DrawTabBar);
                 }
-                //this.DrawTabBar();
             }
         }
 
