@@ -15,8 +15,6 @@ namespace dge.GUI
         internal G2D.Writer Writer;
         internal G2D.Drawer Drawer;
         internal bool Update;
-        //internal static dge.G2D.TextureBufferObject DefaultThemeTBO;
-        //internal static dge.G2D.TextureBufferObject DefaultThemeSltTBO;
         private readonly Dictionary<uint, Window> d_Windows; // Todas las Ventanas del Interface.
         internal List<uint> VisibleWindowsOrder; // Orden de las Ventanas Visibles.
         private readonly Dictionary<uint, BaseObjects.Control> d_Controls; // Todos los Controles fuera de ventanas.
@@ -30,6 +28,8 @@ namespace dge.GUI
         protected int i_height; // Para calculos internos de ViewPorts De elementos.
 
         private int mheight; // Alto MainMenu.
+
+        private Color4 c4_MenuBackgroundColor;
 
 		internal event EventHandler<MouseButtonEventArgs> MouseDown; // Evento que se da cuando se pulsa un botón del ratón.
 		internal event EventHandler<MouseButtonEventArgs> MouseUp; // Evento que se da cuando se suelta un botón del ratón.
@@ -54,8 +54,6 @@ namespace dge.GUI
             if (gt_ActualGuiTheme == null)
             {
                 gt_ActualGuiTheme = GuiTheme.DefaultGuiTheme;
-                //DefaultThemeTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultTheme.png"), "GuiDefaultTheme");
-                //DefaultThemeSltTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultThemeSlt.png"), "GuiDefaultThemeSlt");
                 this.UpdateTheme();
             }
 
@@ -93,9 +91,14 @@ namespace dge.GUI
             }
         }
 
-        private void UpdateTheme()
+        protected virtual void UpdateTheme()
         {
-            mheight = (int)((this.gt_ActualGuiTheme.DefaultFont.MaxCharacterHeight*(12/this.gt_ActualGuiTheme.DefaultFont.MaxFontSize))+(this.gt_ActualGuiTheme.Menu_MarginsFromTheEdge[1]+this.gt_ActualGuiTheme.Menu_MarginsFromTheEdge[3]));
+            mheight = (int)((this.gt_ActualGuiTheme.Default_Font.MaxCharacterHeight*(12/this.gt_ActualGuiTheme.Default_Font.MaxFontSize))+(this.gt_ActualGuiTheme.Menu_MarginsFromTheEdge[1]+this.gt_ActualGuiTheme.Menu_MarginsFromTheEdge[3]));
+            if (this.c4_MenuBackgroundColor == GuiTheme.DefaultGuiTheme.Default_MenuBackgroundColor)
+            {
+                this.c4_MenuBackgroundColor = this.GuiTheme.Default_MenuBackgroundColor;
+            }
+
             foreach(Window win in this.d_Windows.Values)
             {
                 win.UpdateTheme();
@@ -241,8 +244,7 @@ namespace dge.GUI
         {
             GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-this.m_menu[this.l_menus[0]].Height) : (int)this.i_height);
             this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.i_width, (this.m_menu.Count>0) ? this.i_height-this.m_menu[this.l_menus[0]].Height : this.i_height);
-            //GL.glClearColor(Color4.Red);
-            //GL.glClear(ClearBufferMask.GL_ALL);
+            
             if (this.Update)
             {
                 for (int i=0;i<VisibleWindowsOrder.Count;i++)
@@ -255,12 +257,11 @@ namespace dge.GUI
                     this.d_Controls[VisibleControlsOrder[i]].Draw(); // Pintamos Controles Visibles.
                 }
             }
-            //GL.glClearColor(Color4.Black);
-            //GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
+            
             if (this.m_menu.Count > 0)
             {
                 GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
-                this.UpdatePerspective(0, 0, this.i_width, this.i_height);
+                this.UpdatePerspective(0, 0, this.parentWindow.Width, this.parentWindow.Height); //this.i_width, this.i_height);
                 this.DrawMenu();
             }
 
@@ -274,7 +275,7 @@ namespace dge.GUI
 
         private void DrawMenu()
         {
-            this.gd_GuiDrawer.DrawGL(Color4.Gray, 0, 0, this.ParentWindow.Width, this.mheight, 0);
+            this.gd_GuiDrawer.DrawGL(this.c4_MenuBackgroundColor, 0, 0, this.ParentWindow.Width, this.mheight, 0);
             foreach (string key in this.m_menu.Keys)
             {
                 this.m_menu[key].Draw();
@@ -283,7 +284,7 @@ namespace dge.GUI
 
         private void DrawMenuID()
         {
-            this.gd_GuiDrawer.DrawGL(Color4.Gray, 0, 0, this.ParentWindow.Width, this.mheight, 0);
+            this.gd_GuiDrawer.DrawGL(Color4.Black, 0, 0, this.ParentWindow.Width, this.mheight, 0);
             foreach (string key in this.m_menu.Keys)
             {
                 this.m_menu[key].DrawID();
@@ -293,9 +294,9 @@ namespace dge.GUI
         private void DrawContentIds()
         {     
             GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-this.m_menu[this.l_menus[0]].Height) : (int)this.i_height);
-            this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.i_width, (this.m_menu.Count>0) ? (this.i_height-this.m_menu[this.l_menus[0]].Height) : this.i_height);
-            //GL.glClearColor(Color4.Red);
-            //GL.glClear(ClearBufferMask.GL_ALL);
+            
+            dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.i_width, (this.m_menu.Count>0) ? (this.i_height-this.m_menu[this.l_menus[0]].Height) : this.i_height, true);
+            
             if (this.ActiveDialog == null)
             {
                 if (this.Update)
@@ -314,7 +315,7 @@ namespace dge.GUI
             if (this.m_menu.Count > 0)
             {
                 GL.glViewport(0, 0, this.parentWindow.Width, this.parentWindow.Height);
-                this.UpdatePerspective(0, 0, this.i_width, this.i_height);
+                dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0, 0, this.parentWindow.Width, this.parentWindow.Height, true); //this.i_width, this.i_height);
                 this.DrawMenuID();
             } 
 
@@ -457,7 +458,6 @@ namespace dge.GUI
             }
             get 
             { 
-                //return this.i_height;
                 return ((this.m_menu.Count>0) ? this.i_height-this.m_menu[this.l_menus[0]].Height : this.i_height);
             }
         }
@@ -470,6 +470,12 @@ namespace dge.GUI
         public G2D.GuiDrawer GuiDrawer
         {
             get { return this.gd_GuiDrawer; }
+        }
+
+        public Color4 MenuBackgroundColor
+        {
+            set { this.c4_MenuBackgroundColor = value; }
+            get { return this.c4_MenuBackgroundColor; }
         }
     
         #endregion
