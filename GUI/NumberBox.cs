@@ -277,20 +277,21 @@ namespace dge.GUI
 
         private bool ApplyMinMaxValues()
         {
+            bool ret = false;
             if (this.i_value < this.i_MinValue)
             {
                 this.i_value = this.i_MinValue;
                 this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
-                return true;
+                ret = true;
             }
             if (this.i_value > this.i_MaxValue)
             {
                 this.i_value = this.i_MaxValue;
                 this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
-                return true;
+                ret = true;
             }
             this.s_text = this.i_value.ToString();
-            return false;
+            return ret;
         }
 
         #region PROPERTIES:
