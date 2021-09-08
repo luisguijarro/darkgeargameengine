@@ -128,5 +128,6 @@
     <Content Include="GUI\Dialogs\Dialog.cs" />
     <Content Include="GUI\Dialogs\DialogResultEventArgs.cs" />
     <Content Include="GUI\NumberBox.cs" />
+    <Content Include="GUI\Events\TextChanged.cs" />
   </ItemGroup>
 </Project>
