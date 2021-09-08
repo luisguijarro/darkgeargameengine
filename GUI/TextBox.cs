@@ -21,6 +21,7 @@ namespace dge.GUI
         protected TextAlign ta_textAlign;
 
         public event EventHandler<TextChangedEventArgs> TextChanged;
+        public event EventHandler<KeyBoardKeysEventArgs> EnterPulsed;
 
         public TextBox() : this(70, 20, "TextBox") 
         {
@@ -44,6 +45,12 @@ namespace dge.GUI
             this.KeyPulsed += Key_Pulsed;
             this.KeyCharReturned += CharReturned;
             this.TextChanged += delegate{};
+            this.EnterPulsed += delegate{};
+        }
+
+        public void SetFocus()
+        {
+            this.b_Focus = true;
         }
         
         protected override void Dispose(bool disposing)
