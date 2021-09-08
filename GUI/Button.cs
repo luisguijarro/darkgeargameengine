@@ -33,7 +33,7 @@ namespace dge.GUI
             this.FirsDraw = true;
             this.s_text = text;
             this.FontSize = 16;
-            this.font = GuiTheme.DefaultGuiTheme.DefaultFont; //dge.G2D.Writer.Fonts["Linux Libertine"];
+            this.font = GuiTheme.DefaultGuiTheme.Default_Font; //dge.G2D.Writer.Fonts["Linux Libertine"];
             this.c4_textColor = dgtk.Graphics.Color4.Black;
             this.c4_textBorderColor = dgtk.Graphics.Color4.Black;
                         
@@ -60,9 +60,9 @@ namespace dge.GUI
             this.Texcoords = this.gui.gt_ActualGuiTheme.Button_Texcoords;
             this.tcFrameOffset = this.gui.gt_ActualGuiTheme.Button_FrameOffset;
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
-            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.Default_Font.Name)
             {
-                this.font = this.gui.GuiTheme.DefaultFont;
+                this.font = this.gui.GuiTheme.Default_Font;
             }
             base.UpdateTheme(); // Fuerza el establecimiento del area de dibujo interna.
         }
@@ -126,11 +126,11 @@ namespace dge.GUI
             float py = this.tx_y;
             if (this.b_textBorder)
             {
-                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, f_fs, px, py, (this.b_IsEnable) ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
+                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, this.s_text, f_fs, px, py, (this.b_IsEnable) ? this.c4_textBorderColor : this.gui.GuiTheme.Default_DisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor: this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, f_fs, px, py);
+                this.gui.Writer.Write(this.font, (this.b_IsEnable) ? this.c4_textColor: this.gui.GuiTheme.Default_DisableTextColor, this.s_text, f_fs, px, py);
             }
         }
 

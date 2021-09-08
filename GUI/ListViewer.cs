@@ -40,7 +40,7 @@ namespace dge.GUI
             this.l_ObjectsElements = new List<object>();
             this.d_ListViewerColumns = new Dictionary<string, ListViewerHeader>();
 
-            this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
+            this.font = GuiTheme.DefaultGuiTheme.Default_Font;
             this.f_FontSize = 16;
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ListViewer_MarginsFromTheEdge;
             this.Texcoords = GuiTheme.DefaultGuiTheme.ListViewer_Texcoords;
@@ -69,9 +69,9 @@ namespace dge.GUI
             this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.ListViewer_MarginsFromTheEdge;
             this.Texcoords = this.gui.gt_ActualGuiTheme.ListViewer_Texcoords;
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
-            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.Default_Font.Name)
             {
-                this.font = this.gui.GuiTheme.DefaultFont;
+                this.font = this.gui.GuiTheme.Default_Font;
             }     
         }
 

@@ -32,7 +32,7 @@ namespace dge.GUI
             this.ListViewer_Dibider_Texcoords = GuiTheme.DefaultGuiTheme.ListViewer_Dibider_Texcoords;
             this.ListViewer_Dibider_Width = GuiTheme.DefaultGuiTheme.ListViewer_Dibider_Width;
 
-            this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
+            this.font = GuiTheme.DefaultGuiTheme.Default_Font;
             this.c4_textColor = dgtk.Graphics.Color4.Black;
             this.c4_textBorderColor = dgtk.Graphics.Color4.Black;
             this.f_FontSize = 14;
@@ -47,9 +47,9 @@ namespace dge.GUI
             this.ListViewer_Dibider_Texcoords = this.gui.gt_ActualGuiTheme.ListViewer_Dibider_Texcoords;
             this.ListViewer_Dibider_Width = this.gui.gt_ActualGuiTheme.ListViewer_Dibider_Width;
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
-            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.Default_Font.Name)
             {
-                this.font = this.gui.GuiTheme.DefaultFont;
+                this.font = this.gui.GuiTheme.Default_Font;
             }     
         }
 

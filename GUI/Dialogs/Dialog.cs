@@ -29,9 +29,9 @@ namespace dge.GUI
         {
             this.s_text = text;
             this.f_fontsize = 14;
-            this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
-            this.c4_forecolor = GuiTheme.DefaultGuiTheme.DefaultTextColor;
-            this.c4_bordercolor = GuiTheme.DefaultGuiTheme.DefaultTextBorderColor;
+            this.font = GuiTheme.DefaultGuiTheme.Default_Font;
+            this.c4_forecolor = GuiTheme.DefaultGuiTheme.Default_TextColor;
+            this.c4_bordercolor = GuiTheme.DefaultGuiTheme.Default_TextBorderColor;
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.Dialog_Head_MarginsFromTheEdge;
             this.Texcoords = GuiTheme.DefaultGuiTheme.Dialog_Head_Texcoords;
             this.tcFrameOffset = new float[]{0f,0f};
@@ -45,17 +45,17 @@ namespace dge.GUI
 
         protected override void OnGuiUpdate()
         {            
-            this.c4_forecolor = this.gui.GuiTheme.DefaultTextColor;
-            this.c4_bordercolor = this.gui.GuiTheme.DefaultTextBorderColor;
+            this.c4_forecolor = this.gui.GuiTheme.Default_TextColor;
+            this.c4_bordercolor = this.gui.GuiTheme.Default_TextBorderColor;
             this.MarginsFromTheEdge = this.gui.GuiTheme.Dialog_Head_MarginsFromTheEdge;
             this.Texcoords = this.gui.GuiTheme.Dialog_Head_Texcoords;
             this.tcFrameOffset = new float[]{0f,0f};
             this.BodyMarginsFromTheEdge = this.gui.GuiTheme.Dialog_Body_MarginsFromTheEdge;
             this.BodyTexcoords = this.gui.GuiTheme.Dialog_Body_Texcoords;
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
-            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.Default_Font.Name)
             {
-                this.font = this.gui.GuiTheme.DefaultFont;
+                this.font = this.gui.GuiTheme.Default_Font;
             } 
             this.CalculateHeadHeight();
             this.CalculateInternalArea();
@@ -105,11 +105,11 @@ namespace dge.GUI
             float py = this.tx_y;
             if (this.b_textBorder)
             {
-                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_forecolor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, this.f_fontsize, px, py, this.b_IsEnable ? this.c4_bordercolor : this.gui.GuiTheme.DefaultDisableTextColor);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_forecolor : this.gui.GuiTheme.Default_DisableTextColor, this.s_text, this.f_fontsize, px, py, this.b_IsEnable ? this.c4_bordercolor : this.gui.GuiTheme.Default_DisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_forecolor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, this.f_fontsize, px, py);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_forecolor : this.gui.GuiTheme.Default_DisableTextColor, this.s_text, this.f_fontsize, px, py);
             }
         }
 

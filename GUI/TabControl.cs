@@ -40,7 +40,7 @@ namespace dge.GUI
             this.tcFrameOffset = new float[]{0f,0f};
             this.c4_BackgroundColor = GuiTheme.DefaultGuiTheme.Default_BackgroundColor; 
 
-            this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
+            this.font = GuiTheme.DefaultGuiTheme.Default_Font;
 
             this.UpdateTabsHeight();
 
@@ -141,7 +141,7 @@ namespace dge.GUI
                     TabPage tp = (TabPage)this.d_guiSurfaces[this.VisibleSurfaceOrder[i]];
                     
                     this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.TabDisplacement + tp.i_TabX, 0, /*tmp_width*/ tp.i_TabWidth, this.tabsHeigth, 0, this.MarginsFromTheEdge, Texcoords, (tp.ID == this.ActiveTabID) ? this.gui.GuiTheme.TabPage_FrameOffset_Hor : this.tcFrameOffset, 0);
-                    this.gui.Writer.Write(this.gui.GuiTheme.DefaultFont, Color4.Black, tp.Text, this.f_fontsize, this.TabDisplacement + this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0] + tp.i_TabX, 0);
+                    this.gui.Writer.Write(this.gui.GuiTheme.Default_Font, Color4.Black, tp.Text, this.f_fontsize, this.TabDisplacement + this.gui.GuiTheme.TabPage_MarginsFromTheEdge_Hor[0] + tp.i_TabX, 0);
                     if (this.b_ClosableTabs) 
                     { 
                         tp.Draw_X_Button((int)(this.TabDisplacement + tp.i_TabX + /*tmp_width*/ tp.i_TabWidth)-this.MarginRight, (int)(this.MarginTop/2f));
@@ -252,9 +252,9 @@ namespace dge.GUI
             this.c4_BackgroundColor = this.gui.GuiTheme.Default_BackgroundColor;
 
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
-            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.Default_Font.Name)
             {
-                this.font = this.gui.GuiTheme.DefaultFont;
+                this.font = this.gui.GuiTheme.Default_Font;
                 this.UpdateTabsHeight();
             }   
             if (this.c4_BackgroundColor == GuiTheme.DefaultGuiTheme.Default_BackgroundColor)

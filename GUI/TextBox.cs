@@ -35,7 +35,7 @@ namespace dge.GUI
             this.s_text = text;
             this.f_FontSize = 14;
             this.ta_textAlign = TextAlign.Left;
-            this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
+            this.font = GuiTheme.DefaultGuiTheme.Default_Font;
             this.c4_textColor = dgtk.Graphics.Color4.Black;
             this.c4_textBorderColor = dgtk.Graphics.Color4.Black;
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.TextBox_MarginsFromTheEdge;            
@@ -64,9 +64,9 @@ namespace dge.GUI
             this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.TextBox_MarginsFromTheEdge;            
             this.Texcoords = this.gui.gt_ActualGuiTheme.TextBox_Texcoords;
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
-            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.Default_Font.Name)
             {
-                this.font = this.gui.GuiTheme.DefaultFont;
+                this.font = this.gui.GuiTheme.Default_Font;
             }     
         }
 
@@ -194,11 +194,11 @@ namespace dge.GUI
             if (this.b_Focus)
             {
                 string s_txt = this.s_text.Substring(0, this.cursorPos) + GuiTheme.DefaultGuiTheme.TextBox_CursorChar + this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
-                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, s_txt, this.f_FontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, s_txt, this.f_FontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.Default_DisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, this.s_text, this.f_FontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, this.s_text, this.f_FontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.Default_DisableTextColor);
             }
         }
 

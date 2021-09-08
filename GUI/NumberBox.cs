@@ -43,7 +43,7 @@ namespace dge.GUI
             this.i_MaxValue = int.MaxValue;
             this.ApplyMinMaxValues();
 
-            this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
+            this.font = GuiTheme.DefaultGuiTheme.Default_Font;
             this.f_FontSize = 14;
             this.b_textBorder = false;
 
@@ -86,9 +86,9 @@ namespace dge.GUI
         protected internal override void UpdateTheme()
         {
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
-            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.Default_Font.Name)
             {
-                this.font = this.gui.GuiTheme.DefaultFont;
+                this.font = this.gui.GuiTheme.Default_Font;
             }    
 
             this.MarginsFromTheEdge = this.gui.GuiTheme.TextBox_MarginsFromTheEdge;            

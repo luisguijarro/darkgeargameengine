@@ -42,7 +42,7 @@ namespace dge.GUI
             this.c4_textBorderColor = dgtk.Graphics.Color4.Black;
             this.b_textBorder = true;
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.Window_MarginsFromTheEdge;
-            this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
+            this.font = GuiTheme.DefaultGuiTheme.Default_Font;
             
             this.Texcoords = GuiTheme.DefaultGuiTheme.Window_Texcoords;
             this.tcFrameOffset  = GuiTheme.DefaultGuiTheme.Window_FrameOffset;
@@ -59,7 +59,7 @@ namespace dge.GUI
         protected internal override void UpdateTheme()
         {
             this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.Window_MarginsFromTheEdge;
-            this.font = this.gui.gt_ActualGuiTheme.DefaultFont;
+            this.font = this.gui.gt_ActualGuiTheme.Default_Font;
             this.Texcoords = this.gui.gt_ActualGuiTheme.Window_Texcoords;
             this.tcFrameOffset  = this.gui.gt_ActualGuiTheme.Window_FrameOffset;
 

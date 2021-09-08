@@ -32,7 +32,7 @@ namespace dge.GUI
             this.Texcoords = GuiTheme.DefaultGuiTheme.Menu_Texcoords;
             this.tcFrameOffset = new float[]{0f,0f};
 
-            this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
+            this.font = GuiTheme.DefaultGuiTheme.Default_Font;
             this.f_fontSize = 12;
             this.c4_textColor = dgtk.Graphics.Color4.Black;
             this.c4_textBorderColor = dgtk.Graphics.Color4.Black;
@@ -138,9 +138,9 @@ namespace dge.GUI
         {
             this.UpdateSizeFromText();
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
-            if (this.font.Name == GuiTheme.DefaultGuiTheme.DefaultFont.Name)
+            if (this.font.Name == GuiTheme.DefaultGuiTheme.Default_Font.Name)
             {
-                this.font = this.gui.GuiTheme.DefaultFont;
+                this.font = this.gui.GuiTheme.Default_Font;
             }   
             this.RepositionMenus();  
         }
@@ -199,11 +199,11 @@ namespace dge.GUI
         {
             if (this.b_textBorder)
             {
-                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.DefaultDisableTextColor);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.Default_DisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.DefaultDisableTextColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, " "+this.s_text+" ", f_fontSize, tx_x, tx_y);
             }
             if (!this.IsMain) { this.DrawOpenCloseIcon(); }
         }
@@ -235,13 +235,13 @@ namespace dge.GUI
         {
             if (this.gui == null)
             {
-                this.font = GuiTheme.DefaultGuiTheme.DefaultFont;
+                this.font = GuiTheme.DefaultGuiTheme.Default_Font;
             }
             else
             {
                 if (this.font.TBO_Scan0.ID == 0) // si no tiene fuente asignada.
                 {
-                    this.font = this.gui.GuiTheme.DefaultFont;
+                    this.font = this.gui.GuiTheme.Default_Font;
                 }
             }
             float[] textSize = dge.G2D.Writer.MeasureString(this.font, " " + this.s_text + " ", this.f_fontSize);
