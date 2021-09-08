@@ -164,7 +164,7 @@ namespace dge.GUI
             } 
         }
 
-        public void ShowDialog()
+        public virtual void ShowDialog()
         {
             if (this.gui.ActiveDialog==null)
             {
