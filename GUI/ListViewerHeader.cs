@@ -154,11 +154,6 @@ namespace dge.GUI
             this.gui.Drawer.Draw(this.gui.GuiTheme.ThemeTBO.ID, this.i_x+(this.Width-this.ListViewer_Dibider_Width), 0, this.ListViewer_Dibider_Width, this.Height, 0f, this.ListViewer_Dibider_Texcoords[0], this.ListViewer_Dibider_Texcoords[1], this.ListViewer_Dibider_Texcoords[2], this.ListViewer_Dibider_Texcoords[3]);
         }
 
-        internal override void DrawID()
-        {
-            base.DrawID();
-        }
-
         private void DrawText()
         {
             float f_fs = this.b_pulsed ? this.f_FontSize-1 : f_FontSize;
