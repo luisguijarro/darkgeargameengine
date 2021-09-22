@@ -568,14 +568,7 @@ namespace dge.GUI.BaseObjects
 
         internal int intX
         {
-            set 
-            { 
-                this.int_x = value;
-                /*foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
-                {
-                    srf.intX = this.int_x+this.i_x;
-                }*/
-                this.OnReposition(); }
+            set { this.int_x = value; this.OnReposition(); }
         }
 
         public int Y
