@@ -440,6 +440,34 @@ namespace dge.G2D
         /// </sumary>
         /// <remarks>DRAW Textures</remarks>
         /// <param name="tbo">Texture Buffer Object of the texture to draw..</param>
+        /// <param name="x">X coordinate of the position on the screen where the texture to be painted will be placed.</param>
+        /// <param name="y">Y coordinate of the position on the screen where the texture to be painted will be placed.</param>
+        /// <param name="width">Width of the drawing to be painted on the screen.</param>
+        /// <param name="height">Height of the drawing to be painted on screen.</param>
+        /// <param name="rotateX">X coord of point of the rotation.</param>
+        /// <param name="rotateY">Y coord of point of the rotation.</param>
+        /// <param name="RotInDegrees">Degrees of the rotation.</param>
+        /// <param name="Texcoord0x">The initial X normalized coordinate of the texture fraction check box. 0f by default.</param>
+        /// <param name="Texcoord0y">The initial Y normalized coordinate of the texture fraction check box. 0f by default.</param>
+        /// <param name="Texcoord1x">End X normalized coordinate of the texture fraction check box. 1f by default.</param>
+        /// <param name="Texcoord1y">End Y normalized coordinate of the texture fraction check box. 1f by default.</param>    
+        /// <param name="FlipH">Indicates if The texture is drawn horizontally Flipped.</param>        
+        /// <param name="FlipV">Indicates if The texture is drawn vertically Flipped.</param>            
+        public void Draw(TextureBufferObject tbo, int x, int y, int width, int height, int rotateX, int rotateY, float RotInDegrees,float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, bool FlipH, bool FlipV)
+        {
+            float tc0X = FlipH ? Texcoord1x : Texcoord0x;
+            float tc0Y = FlipV ? Texcoord1y : Texcoord0y;
+            float tc1X = FlipH ? Texcoord0x : Texcoord1x;
+            float tc1Y = FlipV ? Texcoord0y : Texcoord1y;
+
+            DrawGL(tbo.ui_ID, new Color4(1f, 1f, 1f, 1f), x, y, width, height, rotateX, rotateY, RotInDegrees, tc0X, tc0Y, tc1X, tc1Y, 0);
+        }
+
+        /// <sumary>
+        /// Method use to draw Elements.
+        /// </sumary>
+        /// <remarks>DRAW Textures</remarks>
+        /// <param name="tbo">Texture Buffer Object of the texture to draw..</param>
         /// <param name="Color">Color4 to mix with the Texture.</param>
         /// <param name="x">X coordinate of the position on the screen where the texture to be painted will be placed.</param>
         /// <param name="y">Y coordinate of the position on the screen where the texture to be painted will be placed.</param>
@@ -590,6 +618,27 @@ namespace dge.G2D
             GL.glDrawElements(PrimitiveType.GL_TRIANGLES, 6, DrawElementsType.GL_UNSIGNED_INT, new IntPtr(0));
             GL.glBindVertexArray(0);
         }
+
+        private void DrawGL(uint tboID, Color4 color, int x, int y, int width, int height, int rotateX, int rotateY, float RotInDegrees, float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, int Silhouette)
+        {
+            dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((b_invert_y ? -RotInDegrees : RotInDegrees), new Vector2(rotateX, rotateY));
+            dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
+            
+            GL.glEnable(EnableCap.GL_TEXTURE_2D);
+            
+            BasicShader.Use();
+            GL.glUniform4fv(idUniform_texcoords, 1, new float[]{Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y});
+            GL.glUniform2f(idUniform_v_size, width, height);
+            GL.glUniform1i(idUniformSilhouette, Silhouette);
+            GL.glUniform1i(idUniformTexturePassed, 1);
+            GL.glUniformMatrix(idUniformMat_Tra, dgtk.OpenGL.Boolean.GL_FALSE, m4T * m4R ); // Transmitimos al Shader la trasformación.
+            GL.glUniform4f(idUniformColor, color.R, color.G, color.B, color.A);
+            GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, tboID);
+            GL.glBindVertexArray(VAO);
+            GL.glDrawElements(PrimitiveType.GL_TRIANGLES, 6, DrawElementsType.GL_UNSIGNED_INT, new IntPtr(0));
+            GL.glBindVertexArray(0);
+        }
+
 
         public Color4 TransparentColor
         {
