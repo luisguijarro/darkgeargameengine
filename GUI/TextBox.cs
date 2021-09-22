@@ -33,11 +33,11 @@ namespace dge.GUI
             this.b_editable = true;
             this.b_Focus = false;
             this.s_text = text;
-            this.f_FontSize = 14;
+            this.f_FontSize = GuiTheme.DefaultGuiTheme.Default_FontSize;
             this.ta_textAlign = TextAlign.Left;
             this.font = GuiTheme.DefaultGuiTheme.Default_Font;
-            this.c4_textColor = dgtk.Graphics.Color4.Black;
-            this.c4_textBorderColor = dgtk.Graphics.Color4.Black;
+            this.c4_textColor = GuiTheme.DefaultGuiTheme.Default_TextColor;
+            this.c4_textBorderColor = GuiTheme.DefaultGuiTheme.Default_TextBorderColor;
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.TextBox_MarginsFromTheEdge;            
             this.Texcoords = GuiTheme.DefaultGuiTheme.TextBox_Texcoords;
             this.tcFrameOffset = new float[]{0f,0f};
@@ -67,7 +67,15 @@ namespace dge.GUI
             if (this.font.Name == GuiTheme.DefaultGuiTheme.Default_Font.Name)
             {
                 this.font = this.gui.GuiTheme.Default_Font;
-            }     
+            }
+            if (this.f_FontSize == GuiTheme.DefaultGuiTheme.Default_FontSize)
+            {
+                this.f_FontSize = this.gui.GuiTheme.Default_FontSize;
+            }
+            if (this.c4_textColor == GuiTheme.DefaultGuiTheme.Default_TextColor)
+            {
+                this.c4_textColor = this.gui.GuiTheme.Default_TextColor;
+            }
         }
 
         protected override void OnMDown(object sender, MouseButtonEventArgs e)
@@ -186,7 +194,7 @@ namespace dge.GUI
         {
             if (this.FirsDraw) { this.UpdateTextCoords(); this.FirsDraw = false; };
             base.pDraw();
-            DrawIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], this.i_width-this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2], this.i_height-this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[2], WriteText);
+            DrawIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], this.i_width-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), this.i_height-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[2]), WriteText);
         }
 
         private void WriteText()
@@ -225,6 +233,7 @@ namespace dge.GUI
             set 
             { 
                 this.s_text = value; 
+                this.cursorPos = this.s_text.Length;
                 this.UpdateTextCoords();
                 this.TextChanged(this, new TextChangedEventArgs(value, true));
             }
