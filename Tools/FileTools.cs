@@ -14,10 +14,31 @@ namespace dge.Tools
 		{
 			//DateTime initdt = DateTime.Now;
 			FileStream file = new FileStream(fileName, FileMode.Open);
+			/*
 			MD5 md5 = new MD5CryptoServiceProvider();
 			byte[] retVal = md5.ComputeHash(file);
 			file.Close();
 			file.Dispose();
+			
+			StringBuilder sb = new StringBuilder();
+			for (int i=0; i< retVal.Length;i++)
+			{
+				sb.Append(retVal[i]);
+			}
+			//Console.WriteLine("Calcular MD5: "+(DateTime.Now-initdt).TotalMilliseconds+" milisegundos");
+			return sb.ToString();
+			*/
+			return MD5FromFile(file);
+		}
+
+		public static string MD5FromFile(Stream filestream)
+		{
+			//DateTime initdt = DateTime.Now;
+			//FileStream file = new FileStream(fileName, FileMode.Open);
+			MD5 md5 = new MD5CryptoServiceProvider();
+			byte[] retVal = md5.ComputeHash(filestream);
+			filestream.Close();
+			filestream.Dispose();
 			
 			StringBuilder sb = new StringBuilder();
 			for (int i=0; i< retVal.Length;i++)
