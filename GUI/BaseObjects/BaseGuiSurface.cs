@@ -25,6 +25,8 @@ namespace dge.GUI.BaseObjects
         protected int i_AlteredWidth; // Ancho del Objeto en Pixeles
         protected int i_AlteredHeight; // Alto del objeto en pixeles.
 
+        private DateTime TimeLastClick; // momento de la ejecuciónd evento click. Para control de doble click.
+
         #region CONTENIDO:
         protected internal bool contentUpdate; // Indicador de su se debe o no actualizar el conteido del objeto.
 
@@ -48,6 +50,7 @@ namespace dge.GUI.BaseObjects
         
 		public event EventHandler<MouseButtonEventArgs> MouseDown; // Evento que se da cuando se pulsa un botón del ratón.
 		public event EventHandler<MouseButtonEventArgs> MouseUp; // Evento que se da cuando se suelta un botón del ratón.
+        public event EventHandler<MouseButtonEventArgs> DoubleClick; // Evento que se da cuando se suelta el boton del ratón dos veces en un timepo corto
 		public event EventHandler<MouseMoveEventArgs> MouseMove; // Evento que se da cuando el ratón se mueve.
 		public event EventHandler<MouseWheelEventArgs> MouseWheel; // Evento que se da cuando se acciona la rueda del ratón.		
         public event EventHandler<KeyBoardKeysEventArgs> KeyPulsed; // Evento que se da cuando se pulsa una tecla del teclado.
@@ -73,7 +76,7 @@ namespace dge.GUI.BaseObjects
             this.i_width = width; // Establecemos ancho del objeto.
             this.i_height = height; // Establecemos Alto del objeto.
 
-            this.contentUpdate = false; // Por defecto el contenido no actualiza.
+            this.contentUpdate = true; // Por defecto el contenido no actualiza.
 
             dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
 
@@ -81,8 +84,10 @@ namespace dge.GUI.BaseObjects
             this.d_guiSurfaces = new Dictionary<uint, BaseGuiSurface>(); // Lista de objetos Hijo.
             this.VisibleSurfaceOrder = new List<uint>(); // Lista de objetos hijo visibles.
 
+            this.TimeLastClick = DateTime.Now;
             this.MouseDown += delegate {}; //Inicialización del evento por defecto.
             this.MouseUp += delegate {}; //Inicialización del evento por defecto.
+            this.DoubleClick += delegate{}; //Inicialización del evento por defecto.
             this.MouseMove += delegate {}; //Inicialización del evento por defecto.
             this.MouseWheel += delegate {}; //Inicialización del evento por defecto.
             this.KeyPulsed += delegate {}; //Inicialización del evento por defecto.
@@ -243,10 +248,14 @@ namespace dge.GUI.BaseObjects
                     dgtk.Math.Mat4 m4 = this.gui.Drawer.m4P;
                     dgtk.Math.Mat4 m4g = this.gui.gd_GuiDrawer.m4P;
                     dgtk.Math.Mat4 m4w = this.gui.Writer.m4P;
-
+/*
                     this.gui.Drawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
                     this.gui.gd_GuiDrawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY);
                     this.gui.Writer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
+*/
+                    this.gui.Drawer.DefinePerspectiveMatrix(0, 0, ivp_width/*-mX*/, ivp_height/*-mY*/, true);
+                    this.gui.gd_GuiDrawer.DefinePerspectiveMatrix(0, 0, ivp_width/*-mX*/, ivp_height/*-mY*/);
+                    this.gui.Writer.DefinePerspectiveMatrix(0, 0, ivp_width/*-mX*/, ivp_height/*-mY*/, true);
 
                     action();
 
@@ -300,7 +309,8 @@ namespace dge.GUI.BaseObjects
 
                     dgtk.Math.Mat4 m4 = dge.G2D.IDsDrawer.m4P;
 
-                    dge.G2D.IDsDrawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
+                    //dge.G2D.IDsDrawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
+                    dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0, 0, ivp_width/*-mX*/, ivp_height/*-mY*/, true);
 
                     action();
 
@@ -379,7 +389,7 @@ namespace dge.GUI.BaseObjects
             }      
         }
 
-        internal virtual void DrawID()
+        public void DrawID()
         {
             if (this.gui != null)
             { 
@@ -401,6 +411,11 @@ namespace dge.GUI.BaseObjects
         protected virtual void OnMUp(object sender, MouseButtonEventArgs e)
         {
             this.MouseUp(this, e);
+        }
+
+        protected virtual void OnMDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            this.DoubleClick(this, e);
         }
 
         protected virtual void OnMMove(object sender, MouseMoveEventArgs e)
@@ -436,6 +451,15 @@ namespace dge.GUI.BaseObjects
             if (this.b_IsEnable)
             {
                 this.OnMDown(this, e);
+                if (dge.Core2D.SelectedID == this.ui_id)
+                {
+                    DateTime dt_now = DateTime.Now;
+                    if ((dt_now-this.TimeLastClick).TotalMilliseconds < 200)
+                    {
+                        this.OnMDoubleClick(this, e);
+                    }
+                    this.TimeLastClick = dt_now;
+                }
             }
         }
 
@@ -544,7 +568,14 @@ namespace dge.GUI.BaseObjects
 
         internal int intX
         {
-            set { this.int_x = value; this.OnReposition(); }
+            set 
+            { 
+                this.int_x = value;
+                /*foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
+                {
+                    srf.intX = this.int_x+this.i_x;
+                }*/
+                this.OnReposition(); }
         }
 
         public int Y
@@ -563,7 +594,15 @@ namespace dge.GUI.BaseObjects
 
         internal int intY
         {
-            set { this.int_y = value; this.OnReposition(); }
+            set 
+            { 
+                this.int_y = value;
+                foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
+                {
+                    srf.intY = this.int_y+this.i_y;
+                }
+                this.OnReposition(); 
+            }
         }
 
         public int Width
