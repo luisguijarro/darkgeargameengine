@@ -28,9 +28,10 @@ namespace dge.GUI
         private string s_FieldToShow;
 
         private readonly Dictionary<string, TreeViewerElement> d_Elements;
-        private readonly Dictionary<uint, TreeViewerElement> d_ElementsParent;
-        private List<uint> l_IDs;
+        private readonly Dictionary<uint, TreeViewerElement> d_ElementsParent; // Diccionario con IDs de botones de colapso y expansion
+        private Dictionary<uint, TreeViewerElement> d_IDs; // Todos los IDs Existentes.
         private uint ui_SelectedID;
+        public event EventHandler<ElementSelectedEventArgs> ElementSelected;
 
         public TreeViewer() : base()
         {
@@ -64,7 +65,7 @@ namespace dge.GUI
             this.sbHor.Visible = false; // Ocultas por defecto.
 
             //this.sbHor.ValueChanged += ScrollBarHorChange;
-            this.l_IDs = new List<uint>();
+            this.d_IDs = new Dictionary<uint, TreeViewerElement>();
             this.d_Elements = new Dictionary<string, TreeViewerElement>();
             this.d_ElementsParent = new Dictionary<uint, TreeViewerElement>();
 
@@ -72,6 +73,7 @@ namespace dge.GUI
             this.sbVer.GUI = this.gui;    
             
             this.ui_SelectedID=0;
+            this.ElementSelected += delegate{};
             this.UpdateScrollBars();        
         }
 
@@ -279,9 +281,10 @@ namespace dge.GUI
             {
                 this.d_ElementsParent[dge.Core2D.SelectedID].b_collapse = !this.d_ElementsParent[dge.Core2D.SelectedID].b_collapse;
             }
-            if (l_IDs.Contains(dge.Core2D.SelectedID))
+            if (d_IDs.ContainsKey(dge.Core2D.SelectedID))
             {
                 this.ui_SelectedID = dge.Core2D.SelectedID;
+                this.ElementSelected(this, new ElementSelectedEventArgs(d_IDs[this.ui_SelectedID]));
             }
         }
 
@@ -387,7 +390,7 @@ namespace dge.GUI
 
         private void UpdateScrollBars()
         {
-            this.l_IDs.Clear();
+            this.d_IDs.Clear();
             this.d_ElementsParent.Clear();
             this.f_ContentWidth = 0;
             this.f_ContentHeight = 0;
@@ -423,7 +426,7 @@ namespace dge.GUI
             this.f_ContentHeight += this.i_TextHeight+this.i_interline;
             TreeViewerElement[] tves = parentelement.GetSubElements();
             if (tves.Length > 0) { this.d_ElementsParent.Add(parentelement.ui_id_Button, parentelement); }
-            this.l_IDs.Add(parentelement.ui_id);
+            this.d_IDs.Add(parentelement.ui_id, parentelement);
             for (int i=0;i<tves.Length;i++)
             {
                 CalculateContentWidthHeigth(tves[i], x+this.i_TextHeight, y+((this.i_TextHeight+this.i_interline)*(i+1)));
