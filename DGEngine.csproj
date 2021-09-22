@@ -133,5 +133,6 @@
     <Content Include="GUI\OptionBox.cs" />
     <Content Include="GUI\TreeViewer.cs" />
     <Content Include="GUI\TreeViewerElement.cs" />
+    <Content Include="GUI\Events\ElementSelectedEventArgs.cs" />
   </ItemGroup>
 </Project>
