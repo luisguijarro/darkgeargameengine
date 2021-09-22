@@ -263,6 +263,24 @@ namespace dge.G2D
             GL.glBindVertexArray(0);
         }
         
+        public static void DrawGL2D(Color4 color, int x, int y, int width, int height, int rotateX, int rotateY, float RotInDegrees)
+        {
+            dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((b_invert_y ? -RotInDegrees : RotInDegrees), new Vector2(rotateX, rotateY));
+            dgtk.Math.Mat4 m4T = dgtk.Math.MatrixTools.MakeTraslationMatrix(new Vector3(x, y, 0)); // Creamos la Matriz de traslación.
+
+            BasicShader.Use();
+            GL.glUniform4fv(idUniform_texcoords, 1, new float[]{0f, 0f, 1f, 1f});
+            GL.glUniform2f(idUniform_v_size, width, height);
+            GL.glUniform1i(idUniformSilhouette, 0);
+            GL.glUniform1i(idUniformTexturePassed, 0);
+            GL.glUniformMatrix(idUniformMat_Tra, dgtk.OpenGL.Boolean.GL_FALSE, m4T * m4R); // Transmitimos al Shader la trasformación.
+            GL.glUniform4f(idUniformColor, color.R, color.G, color.B, color.A);
+            GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, 0);
+            GL.glBindVertexArray(VAO);
+            GL.glDrawElements(PrimitiveType.GL_TRIANGLES, 6, DrawElementsType.GL_UNSIGNED_INT, new IntPtr(0));
+            GL.glBindVertexArray(0);
+        }
+        
         public static void DrawGL2D(uint tboID, Color4 color, int x, int y, int width, int height, float RotInDegrees, float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y, int Silhouette)
         {
             dgtk.Math.Mat4 m4R = dgtk.Math.MatrixTools.TwistAroundPoint2D((b_invert_y ? -RotInDegrees : RotInDegrees), new Vector2(width / 2f, height / 2f));
