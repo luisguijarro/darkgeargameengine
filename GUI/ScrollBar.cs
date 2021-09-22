@@ -64,6 +64,12 @@ namespace dge.GUI
 
         protected internal override void UpdateTheme()
         {
+            this.btn1.Width = this.gui.gt_ActualGuiTheme.ScrollBar_BarWidth;
+            this.btn1.Height = this.gui.gt_ActualGuiTheme.ScrollBar_BarWidth;
+            this.btn2.Width = this.gui.gt_ActualGuiTheme.ScrollBar_BarWidth;
+            this.btn2.Height = this.gui.gt_ActualGuiTheme.ScrollBar_BarWidth;
+            this.slider.Width = this.gui.gt_ActualGuiTheme.ScrollBar_BarWidth;
+            this.slider.Height = this.gui.gt_ActualGuiTheme.ScrollBar_BarWidth;
             this.UpdateOrientation(this.gui.gt_ActualGuiTheme);
         }
 
@@ -95,7 +101,7 @@ namespace dge.GUI
         }
         private void SliderMove(object sender, MouseMoveEventArgs e)
         {
-            if (this.slider.b_pulsed && (Core2D.SelectedID == this.slider.ID))
+            if (this.slider.b_pulsed) // && (Core2D.SelectedID == this.slider.ID))
             {
                 if (this.o_Orientation == Orientation.Vertical)
                 {
@@ -276,7 +282,7 @@ namespace dge.GUI
             }
         }
 
-        internal override void DrawID()
+        protected override void pDrawID()
         {
             if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
