@@ -74,7 +74,7 @@ namespace dge.G2D
             TextureBufferObject tbo_ret = new TextureBufferObject();
             if (stream != null)
 			{
-                Bitmap bp = (Bitmap)(Image.FromStream(stream, true, false));
+                Bitmap bp = (Bitmap)Image.FromStream(stream, true, false);
                 BitmapData bd = bp.LockBits(new Rectangle(0, 0, bp.Size.Width, bp.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 							
 				tbo_ret = p_LoadImageFromIntPTr(s_hash, bd.Width, bd.Height, bd.Scan0);
