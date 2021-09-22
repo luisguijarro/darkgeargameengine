@@ -119,6 +119,7 @@ namespace dge.GUI
             if (!this.d_Windows.ContainsKey(window.ID))
             {
                 window.GraphicsUserInterface = this; // Adoptar Ventana.
+                window.intY = (this.l_menus.Count>0) ? this.m_menu[this.l_menus[0]].Height : 0;
                 this.d_Windows.Add(window.ID, window); // Añadir Ventana.
                 if (window.Visible)
                 {
@@ -150,6 +151,7 @@ namespace dge.GUI
             if (!this.d_Controls.ContainsKey(control.ID))
             {
                 control.GUI = this; // Adoptar Control.
+                control.intY = (this.l_menus.Count>0) ? this.m_menu[this.l_menus[0]].Height : 0;
                 this.d_Controls.Add(control.ID, control); // Añadir Control.
                 if (control.Visible)
                 {
@@ -193,6 +195,10 @@ namespace dge.GUI
                 this.m_menu[MenuName].GUI = this;
                 this.l_menus.Add(MenuName);
                 this.ReorderMenus();
+                foreach(BaseObjects.Control ctrl in this.d_Controls.Values)
+                {
+                    ctrl.intY = (this.l_menus.Count>0) ? this.m_menu[this.l_menus[0]].Height : 0;;
+                }
             }
         }
 
@@ -204,6 +210,10 @@ namespace dge.GUI
                 this.m_menu[menu.Name].GUI = this;
                 this.l_menus.Add(menu.Name);
                 this.ReorderMenus();
+                foreach(BaseObjects.Control ctrl in this.d_Controls.Values)
+                {
+                    ctrl.intY = (this.l_menus.Count>0) ? this.m_menu[this.l_menus[0]].Height : 0;
+                }
             }
         }
 
@@ -295,7 +305,8 @@ namespace dge.GUI
         {     
             GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-this.m_menu[this.l_menus[0]].Height) : (int)this.i_height);
             
-            dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.i_width, (this.m_menu.Count>0) ? (this.i_height-this.m_menu[this.l_menus[0]].Height) : this.i_height, true);
+            //dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.i_width, (this.m_menu.Count>0) ? (this.i_height-this.m_menu[this.l_menus[0]].Height) : this.i_height, true);
+            dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0, 0, this.i_width, this.Height, true);
             
             if (this.ActiveDialog == null)
             {
