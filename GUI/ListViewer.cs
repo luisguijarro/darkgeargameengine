@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+
 using dgtk.Graphics;
 using dge.G2D;
 using dgtk;
@@ -19,6 +20,8 @@ namespace dge.GUI
         private int i_selectedIndex;
         private object o_SelectedItem;
 
+        public event EventHandler ItemSelected;
+
         public ListViewer()
         {
             this.sbVer = new ScrollBar();
@@ -33,8 +36,10 @@ namespace dge.GUI
 
             this.sbHor.ValueChanged += ScrollBarHorChange;
 
-            this.AddSurface(this.sbVer);
-            this.AddSurface(this.sbHor);
+            //this.AddSurface(this.sbVer);
+            //this.AddSurface(this.sbHor);
+            this.sbHor.GUI = this.gui;
+            this.sbVer.GUI = this.gui;
 
             this.l_VisualOrder = new List<int>();
             this.l_ObjectsElements = new List<object>();
@@ -46,6 +51,7 @@ namespace dge.GUI
             this.Texcoords = GuiTheme.DefaultGuiTheme.ListViewer_Texcoords;
             this.tcFrameOffset = new float[] {0,0};
             this.b_showColumns = true;
+            this.ItemSelected += delegate{};
         }
 
         protected override void Dispose(bool disposing)
@@ -174,20 +180,39 @@ namespace dge.GUI
             }
         }
 
+        public void SelectItem(int index)
+        {
+            if (this.l_ObjectsElements.Count > index)
+            {
+                this.i_selectedIndex = index;
+                this.o_SelectedItem = this.l_ObjectsElements[index];
+                this.ItemSelected(this, new EventArgs());
+            }            
+        }
+
         #endregion
 
         #region OVERRIDE:
 
         protected override void OnMDown(object sender, MouseButtonEventArgs e)
-        {
-            base.OnMDown(sender, e);
-            
+        {            
             if (Core2D.SelectedID == this.ui_id)
             {
                 int posX = e.X - (this.int_x+this.i_x);
                 int posY = e.Y - (this.int_y+this.i_y+this.MarginsFromTheEdge[1]+(this.b_showColumns ? (int)(this.f_FontSize + 4) : 0));
                 this.SelectItem(posX, posY);
             }
+            base.OnMDown(sender, e);
+        }
+
+        protected override void OnMDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            /*
+            if (Core2D.SelectedID == this.ui_id)
+            {
+               
+            }*/
+            base.OnMDoubleClick(sender, e);
         }
 
         protected override void OnMWheel(object sender, MouseWheelEventArgs e)
@@ -225,7 +250,7 @@ namespace dge.GUI
             }
         }
 
-        internal override void DrawID()
+        protected override void pDrawID()
         {
             if (this.gui != null)
             {
@@ -261,6 +286,14 @@ namespace dge.GUI
             this.sbHor.Y = (int)(this.Height - this.sbHor.Height);
             this.sbHor.Width = this.Width-this.sbVer.Width;
             this.UpdateSbVerMaxValue();
+        }
+
+        protected override void OnGuiUpdate()
+        {
+            base.OnGuiUpdate();
+
+            this.sbHor.GUI = this.gui;
+            this.sbVer.GUI = this.gui;
         }
 
         #endregion
@@ -414,6 +447,7 @@ namespace dge.GUI
                         this.i_selectedIndex = i;
                         this.o_SelectedItem = this.l_ObjectsElements[i];
                         //Console.WriteLine("Selected Item: "+i);
+                        this.ItemSelected(this, new EventArgs());
                         return;
                     }
                 }
