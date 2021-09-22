@@ -81,31 +81,34 @@ namespace dge.GUI
             {
                 if (this.d_guiSurfaces.ContainsKey(dge.Core2D.SelectedID) || (dge.Core2D.SelectedID == this.ID) || this.l_ClosersIDs.Contains(dge.Core2D.SelectedID))
                 {
-                    //Desplazar Tabs.
-                    int tempdisplace = this.TabDisplacement;
-                    int DispCant = (int)(this.totalTabsWidth/this.i_width);
-                    if (DispCant > this.i_width) { DispCant = (int)this.i_width; }
-                    
-                    tempdisplace += (int)(DispCant*(e.Delta*3));
-                    
-                    if ((tempdisplace <= 0) && (tempdisplace>=(this.Width-this.totalTabsWidth)))
+                    if (this.totalTabsWidth > this.i_width)
                     {
-                        this.TabDisplacement = tempdisplace;
-                    }
-                    else //Control de posicio final e inicial.
-                    {
-                        if (tempdisplace > 0)
+                        //Desplazar Tabs.
+                        int tempdisplace = this.TabDisplacement;
+                        int DispCant = (int)(this.totalTabsWidth/this.i_width);
+                        if (DispCant > this.i_width) { DispCant = (int)this.i_width; }
+                        
+                        tempdisplace += (int)(DispCant*(e.Delta*3));
+                        
+                        if ((tempdisplace <= 0) && (tempdisplace>=(this.Width-this.totalTabsWidth)))
                         {
-                            this.TabDisplacement = 0;
+                            this.TabDisplacement = tempdisplace;
                         }
-                        if (tempdisplace<(this.Width-this.totalTabsWidth))
+                        else //Control de posicio final e inicial.
                         {
-                            this.TabDisplacement = this.Width-this.totalTabsWidth;
+                            if (tempdisplace > 0)
+                            {
+                                this.TabDisplacement = 0;
+                            }
+                            if (tempdisplace<(this.Width-this.totalTabsWidth))
+                            {
+                                this.TabDisplacement = this.Width-this.totalTabsWidth;
+                            }
                         }
+                        
+                        //Console.WriteLine("Tab Displacement: "+this.TabDisplacement);
+                        Console.WriteLine("Delta: "+e.Delta);
                     }
-                    
-                    //Console.WriteLine("Tab Displacement: "+this.TabDisplacement);
-                    Console.WriteLine("Delta: "+e.Delta);
                 }
             }
         }
@@ -264,15 +267,16 @@ namespace dge.GUI
             base.UpdateTheme(); // Fuerza el establecimiento del area de dibujo interna.     
         }
 
+        /*
         protected override void OnReposition()
         {
             foreach (BaseObjects.BaseGuiSurface value in this.d_guiSurfaces.Values)
             {
-                value.X = this.X;
-                value.Y = 1 + this.Y + (int)this.tabsHeigth - this.MarginBottom;
+                //value.X = this.X;
+                //value.Y = 1 + this.Y + (int)this.tabsHeigth - this.MarginBottom;
             }
         }
-
+        */
         protected override void OnResize()
         {
             base.OnResize();
@@ -295,12 +299,22 @@ namespace dge.GUI
             if (this.b_ShowMe)
             {
                 this.gui.GuiDrawer.DrawGL(c4_BackgroundColor,this.i_x, this.i_y, this.Width, this.Height, 0f);
-                
+                /*
                 if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
                 {
                     this.DrawActiveTab();
-                    this.DrawIn(this.i_x,this.i_y+1,(int)this.i_width, (int)this.i_height, DrawTabBar);
+                    this.DrawIn(this.i_x,this.i_y+1,(int)this.i_width, (int)this.tabsHeigth, DrawTabBar);
                 }
+                */
+            }
+        }
+
+        protected override void pDrawContent()
+        {
+            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+            {
+                this.DrawActiveTab();
+                this.DrawIn(this.i_x,this.i_y+1,(int)this.i_width, (int)this.tabsHeigth, DrawTabBar);
             }
         }
 
@@ -309,12 +323,22 @@ namespace dge.GUI
             if (this.b_ShowMe)
             {
                 dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, this.idColor, this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos ID de la superficie.
-
+                /*
                 if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
                 {
                     this.DrawActiveTabIDs();
-                    this.DrawIdIn(this.i_x,this.i_y+1,(int)this.i_width, (int)this.i_height, DrawTabBarIDs);
+                    this.DrawIdIn(this.i_x,this.i_y+1,(int)this.i_width, (int)this.tabsHeigth, DrawTabBarIDs);
                 }
+                */
+            }
+        }
+
+        protected override void pDrawContentID()
+        {
+            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
+            {
+                this.DrawActiveTabIDs();
+                this.DrawIdIn(this.i_x,this.i_y+1,(int)this.i_width, (int)this.tabsHeigth, DrawTabBarIDs);
             }
         }
 
@@ -329,7 +353,7 @@ namespace dge.GUI
                 this.d_Name_Id.Add(TabName, tp.ID);
                 this.ActiveTabID = tp.ID;
                 tp.X = this.X;
-                tp.Y = 1 + this.Y+(int)this.tabsHeigth-this.MarginBottom;
+                tp.Y = 1 + this.i_y+(int)this.tabsHeigth-this.MarginBottom;
                 tp.Width = this.Width;
                 tp.Height = (int)(this.Height-(this.tabsHeigth-this.MarginBottom));
                 this.l_ClosersIDs.Add(tp.X_ButtonID);
@@ -346,7 +370,7 @@ namespace dge.GUI
                 this.d_Name_Id.Add(TabName, page.ID);
                 this.ActiveTabID = page.ID;
                 page.X = this.X;
-                page.Y = 1 + this.Y+this.tabsHeigth-this.MarginBottom;
+                page.Y = 1 + this.i_y+this.tabsHeigth-this.MarginBottom;
                 page.Width = this.Width;
                 page.Height = this.Height-(this.tabsHeigth-this.MarginBottom);
                 this.l_ClosersIDs.Add(page.X_ButtonID);
@@ -405,17 +429,6 @@ namespace dge.GUI
         {
             //Eliminamos ejecución de código.
         }
-
-        protected override void DrawContent()
-        {
-            //base.DrawContent();
-        }
-
-        protected override void pDrawContent()
-        {
-            //base.DrawContent();
-        }
-
         #endregion
 
         #region PROPERTIES:
