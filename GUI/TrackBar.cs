@@ -62,7 +62,7 @@ namespace dge.GUI
         protected override void OnMMove(object sender, MouseMoveEventArgs e)
         {
             base.OnMMove(sender, e);
-            if ((this.b_pulsed) && (Core2D.SelectedID == this.ui_id))
+            if ((this.b_pulsed)) // && (Core2D.SelectedID == this.ui_id))
             {
                 if (Orientation == Orientation.Horizontal)
                 {
@@ -213,17 +213,24 @@ namespace dge.GUI
             base.pDraw();
             base.DrawIn(this.i_x, this.i_y, this.i_width, this.i_height, DrawSliderShape);
         }
-        internal override void DrawID()
+
+        protected override void pDrawID()
         {
             dge.G2D.IDsDrawer.DrawGuiGL(this.gui.GuiTheme.ThemeSltTBO.ID, new Color4(0f,0f,0f,0f), this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, this.tcFrameOffset, 1); // Pintamos sin ID de la superficie.
-           
+        }
+
+
+        protected override void pDrawContentID()
+        {
+            /*
             if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
                 this.DrawIdIn(this.i_x-this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], this.i_width-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), this.i_height-this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3], DrawContentIDs);
             }
-
+            */
             base.DrawIdIn(this.i_x, this.i_y, this.i_width, this.i_height, DrawSliderIDShape);
         }
+
 
         private void DrawSliderShape()
         {
