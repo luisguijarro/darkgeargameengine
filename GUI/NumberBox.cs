@@ -303,6 +303,7 @@ namespace dge.GUI
                 if ((this.i_MinValue < value)  && (value < this.i_MaxValue)) 
                 { 
                     this.i_value = value; 
+                    this.s_text = value.ToString();
                     this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
                 }
                 else
