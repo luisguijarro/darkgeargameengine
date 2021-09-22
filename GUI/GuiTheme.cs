@@ -12,6 +12,7 @@ namespace dge.GUI
         internal dge.G2D.TextureBufferObject tbo_ThemeSltTBO; // TBO de siluetas para ID.
 
         public dgFont Default_Font;
+        public float Default_FontSize;
 
         public Color4 Default_MenuBackgroundColor;
 
@@ -167,7 +168,7 @@ namespace dge.GUI
 
         #endregion
 
-        #region Panel
+        #region NumberBox
 
         public int[] NumberBox_MarginsFromTheEdge; // n=4
         public float[] NumberBox_Texcoords; // n=8
@@ -178,6 +179,18 @@ namespace dge.GUI
         public float[] NumberBox_ButtonUpFrameOffset; // n=2
         public float[] NumberBox_ButtonDownFrameOffset; // n=2
         public int[] NumberBox_ButtonsSize;
+
+        #endregion
+
+        #region TreeViewer
+
+        public int[] TreeViewer_MarginsFromTheEdge; // n=4
+        public float[] TreeViewer_Texcoords; // n=8
+        public Color4 TreeViewer_DefaultBackgroundColor;
+        public float[] TreeViewer_ExpandCollapseButton_Texcoords; // n=4
+        public float[] TreeViewer_ExpandCollapseButton_FrameOffset; // n=4
+        public int[] TreeViewer_Selection_MarginsFromTheEdge; // n=4
+        public float[] TreeViewer_Selection_Texcoords; // n=8
 
         #endregion
 
@@ -219,6 +232,7 @@ namespace dge.GUI
             ret.tbo_ThemeTBO  = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultTheme.png"), "GuiDefaultTheme");
             ret.tbo_ThemeSltTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultThemeSlt.png"), "GuiDefaultThemeSlt");
             ret.Default_Font = dge.G2D.Tools.LoadDGFont(Core.LoadEmbeddedResource("dge.dgFonts.LinuxLibertine.dgf"), "dge.dgFonts.LinuxLibertine.dgf");
+            ret.Default_FontSize = 12;
             ret.Default_BackgroundColor = new Color4(83,83,83,255);
             ret.Default_TextColor = Color4.Black;
             ret.Default_TextBorderColor = Color4.Black;
@@ -417,7 +431,7 @@ namespace dge.GUI
                 multHor*145f, multHor*147f, multHor*165f, multHor*167f, 
                 multVer*49f, multVer*51f, multVer*69f, multVer*71f
             };
-            ret.ScrollBar_BarWidth = 22;
+            ret.ScrollBar_BarWidth = 15;
 
 
             // ListViewer:_______________________________________________________________________
@@ -533,6 +547,30 @@ namespace dge.GUI
             ret.NumberBox_ButtonDownFrameOffset = new float[]{multHor*17f, 0f};
 
             ret.NumberBox_ButtonsSize = new int[] {15, 10};
+
+            // TreeViewer
+
+            ret.TreeViewer_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.TreeViewer_Texcoords = new float[]
+            {
+                multHor*145f, multHor*147f, multHor*165f, multHor*167f, 
+                multVer*193f, multVer*195f, multVer*213f, multVer*215f
+            };
+            ret.TreeViewer_DefaultBackgroundColor = Color4.White;
+            ret.TreeViewer_ExpandCollapseButton_Texcoords = new float[]
+            {
+                multHor*169f, multVer*193f, multHor*180f, multVer*204f
+            };
+            ret.TreeViewer_ExpandCollapseButton_FrameOffset = new float[]
+            {
+                0f, multVer*11f
+            };
+            ret.TreeViewer_Selection_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.TreeViewer_Selection_Texcoords = new float[]
+            {
+                multHor*182f, multHor*184f, multHor*189f, multHor*191f, 
+                multVer*193f, multVer*195f, multVer*200f, multVer*202f
+            };
 
 
             return ret;
