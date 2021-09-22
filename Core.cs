@@ -51,6 +51,11 @@ namespace dge
             return Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
         }
 
+        public static System.IO.Stream LoadEmbeddedResource(string resource, Assembly assembly)
+        {
+            return assembly.GetManifestResourceStream(resource);
+        }
+
     }
 
     public static class Core2D
@@ -77,7 +82,7 @@ namespace dge
             return e;
         }
 
-        internal static bool ReleaseID(uint id) // Liberia ID de objeto y devuelve si ha tenido exito.
+        public static bool ReleaseID(uint id) // Liberia ID de objeto y devuelve si ha tenido exito.
         {
             if (IDS == null) { return false; }
             if (IDS.ContainsKey(id))
