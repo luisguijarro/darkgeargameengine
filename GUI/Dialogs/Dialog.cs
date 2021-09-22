@@ -105,11 +105,11 @@ namespace dge.GUI
             float py = this.tx_y;
             if (this.b_textBorder)
             {
-                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_forecolor : this.gui.GuiTheme.Default_DisableTextColor, this.s_text, this.f_fontsize, px, py, this.b_IsEnable ? this.c4_bordercolor : this.gui.GuiTheme.Default_DisableTextColor);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_forecolor : this.gui.GuiTheme.Default_DisableTextColor, " "+this.s_text, this.f_fontsize, px, py, this.b_IsEnable ? this.c4_bordercolor : this.gui.GuiTheme.Default_DisableTextColor);
             }
             else
             {
-                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_forecolor : this.gui.GuiTheme.Default_DisableTextColor, this.s_text, this.f_fontsize, px, py);
+                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_forecolor : this.gui.GuiTheme.Default_DisableTextColor, " "+this.s_text, this.f_fontsize, px, py);
             }
         }
 
@@ -155,15 +155,6 @@ namespace dge.GUI
                 DrawIn(this.ida_X, this.ida_Y, this.ida_Width, this.ida_Height, DrawContent);
             } 
         }
-
-        protected override void pDrawContentID()
-        {
-            if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
-            {
-                DrawIdIn(this.ida_X, this.ida_Y, this.ida_Width, this.ida_Height, DrawContentIDs);
-            } 
-        }
-
         public virtual void ShowDialog()
         {
             if (this.gui.ActiveDialog==null)
