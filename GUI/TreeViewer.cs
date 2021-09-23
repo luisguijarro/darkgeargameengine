@@ -288,6 +288,18 @@ namespace dge.GUI
             }
         }
 
+        protected override void OnMWheel(object sender, MouseWheelEventArgs e)
+        {
+            base.OnMWheel(sender, e);
+            if ((this.ui_id ==  dge.Core2D.SelectedID) || this.d_IDs.ContainsKey(dge.Core2D.SelectedID))
+            {
+                if (this.f_ContentHeight>this.InnerSize.Height)
+                {
+                    this.sbVer.Value -= (int)(e.Delta*(this.f_ContentHeight/this.InnerSize.Height));
+                }
+            }
+        }
+
         protected override void InputSizeAlter(int width, int height)
         {
             base.InputSizeAlter(sbVer.Visible ? width-this.sbVer.Width : width, sbHor.Visible ? height - this.sbHor.Height : height);
