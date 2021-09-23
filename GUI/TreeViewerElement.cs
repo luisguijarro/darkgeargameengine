@@ -13,8 +13,6 @@ namespace dge.GUI
         private string s_text;
         private readonly Dictionary<string, TreeViewerElement> d_SubElements;
         private string s_name;
-        private int i_x;
-        private int i_y;
         private object o_AsociateObject;
         internal bool b_collapse;
 
