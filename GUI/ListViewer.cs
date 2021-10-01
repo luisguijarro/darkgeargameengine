@@ -46,7 +46,7 @@ namespace dge.GUI
             this.d_ListViewerColumns = new Dictionary<string, ListViewerHeader>();
 
             this.font = GuiTheme.DefaultGuiTheme.Default_Font;
-            this.f_FontSize = 16;
+            this.f_FontSize = GuiTheme.DefaultGuiTheme.Default_FontSize;
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ListViewer_MarginsFromTheEdge;
             this.Texcoords = GuiTheme.DefaultGuiTheme.ListViewer_Texcoords;
             this.tcFrameOffset = new float[] {0,0};
