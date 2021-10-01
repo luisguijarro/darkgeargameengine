@@ -116,6 +116,8 @@ namespace dge.GUI
 
         public int[] ListViewer_MarginsFromTheEdge; // n=4
         public float[] ListViewer_Texcoords; // n=8
+        public int[] ListViewer_Selection_MarginsFromTheEdge; // n=4
+        public float[] ListViewer_Selection_Texcoords; // n=8
         public int[] ListViewer_Header_MarginsFromTheEdge; // n=4
         public float[] ListViewer_Header_Texcoords; // n=8
         public float[] ListViewer_Header_FrameOffset; // n=2
@@ -194,6 +196,16 @@ namespace dge.GUI
 
         #endregion
 
+        #region ImagesGallery
+
+        public int[] ImagesGallery_MarginsFromTheEdge; // n=4
+        public float[] ImagesGallery_Texcoords; // n=8
+        public Color4 ImagesGallery_DefaultBackgroundColor;
+        public int[] ImagesGallery__image_MarginsFromTheEdge; // n=4
+        public float[] ImagesGallery_image_Texcoords; // n=8
+        public float[] ImagesGallery_image_FrameOffset; // n=2
+
+        #endregion
 
         public GuiTheme()
         {
@@ -441,6 +453,12 @@ namespace dge.GUI
                 multHor*25f, multHor*27f, multHor*45f, multHor*47f, 
                 multVer*145f, multVer*147f, multVer*165f, multVer*167f
             };
+            ret.ListViewer_Selection_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ListViewer_Selection_Texcoords = new float[]
+            {
+                multHor*101f, multHor*103f, multHor*107f, multHor*110f, 
+                multVer*145f, multVer*147f, multVer*151f, multVer*154f
+            };
             ret.ListViewer_Header_Texcoords = new float[]
             {
                 multHor*49f, multHor*51f, multHor*69f, multHor*71f, 
@@ -548,8 +566,7 @@ namespace dge.GUI
 
             ret.NumberBox_ButtonsSize = new int[] {15, 10};
 
-            // TreeViewer
-
+            // TreeViewer:_________________________________________________________________________
             ret.TreeViewer_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
             ret.TreeViewer_Texcoords = new float[]
             {
@@ -571,6 +588,23 @@ namespace dge.GUI
                 multHor*182f, multHor*184f, multHor*189f, multHor*191f, 
                 multVer*193f, multVer*195f, multVer*200f, multVer*202f
             };
+
+            // ImagesGallery:______________________________________________________________________
+
+            ret.ImagesGallery_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ImagesGallery_Texcoords = new float[]
+            {
+                multHor*121f, multHor*123f, multHor*141f, multHor*143f, 
+                multVer*169f, multVer*171f, multVer*189f, multVer*191f
+            };
+            ret.ImagesGallery_DefaultBackgroundColor = Color4.White;
+            ret.ImagesGallery__image_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ImagesGallery_image_Texcoords = new float[]
+            {
+                multHor*145f, multHor*147f, multHor*165f, multHor*167f, 
+                multVer*169f, multVer*171f, multVer*189f, multVer*191f
+            };
+            ret.ImagesGallery_image_FrameOffset = new float[]{multHor*24f, 0f};
 
 
             return ret;
