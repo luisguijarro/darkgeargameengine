@@ -33,10 +33,10 @@ namespace dge.GUI
 
         private void CheckedChanged(object sender, CheckedStateChanged e)
         {
-            if (((OptionBox)sender).Checked)
-            {
-                this.b_Checked = false;
-            }
+                if (((OptionBox)sender).Checked)
+                {
+                    this.Checked = false;
+                }
         }
     }
 }
