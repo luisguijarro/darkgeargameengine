@@ -528,6 +528,21 @@ namespace dge.G2D
         /// <param name="x">X coordinate of the position on the screen where the color rectangle to be painted will be placed.</param>
         /// <param name="y">Y coordinate of the position on the screen where the color rectangle to be painted will be placed.</param>
         /// <param name="RotInDegrees">Degrees of the rotation.</param>
+        /// <param name="TexCoords">Float array of Texture Coordinates.</param>
+        public void DrawSilhouette(Color4 color, TextureBufferObject silhouette, int x, int y, float RotInDegrees, float[] TexCoords)
+        {
+            DrawGL(silhouette.ui_ID, color, x, y, silhouette.Width, silhouette.Height, RotInDegrees, TexCoords[0], TexCoords[1], TexCoords[2], TexCoords[3], 1);
+        }
+        
+        /// <sumary>
+        /// Method use to draw silhouettes.
+        /// </sumary>
+        /// <remarks>DRAW a colored silhouette.</remarks>
+        /// <param name="color">Color to use to draw the silhouette in screen.</param>
+        /// <param name="silhouette">Texture Buffer Object of the silhouette to draw with info of Width and Height.</param>
+        /// <param name="x">X coordinate of the position on the screen where the color rectangle to be painted will be placed.</param>
+        /// <param name="y">Y coordinate of the position on the screen where the color rectangle to be painted will be placed.</param>
+        /// <param name="RotInDegrees">Degrees of the rotation.</param>
         /// <param name="FlipH">Indicates if The texture is drawn horizontally Flipped.</param>        
         /// <param name="FlipV">Indicates if The texture is drawn vertically Flipped.</param>            
         public void DrawSilhouette(Color4 color, TextureBufferObject silhouette, int x, int y, float RotInDegrees, bool FlipH, bool FlipV)
