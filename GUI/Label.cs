@@ -24,7 +24,7 @@ namespace dge.GUI
         {
             this.FirsDraw = true;
             this.s_text = text;
-            this.FontSize = 14;
+            this.FontSize = GuiTheme.DefaultGuiTheme.Default_FontSize;
             this.ta_textAlign = TextAlign.Left;
             this.font = GuiTheme.DefaultGuiTheme.Default_Font;
             this.c4_forecolor = GuiTheme.DefaultGuiTheme.Default_TextColor;
