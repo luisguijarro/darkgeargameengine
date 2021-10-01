@@ -8,6 +8,7 @@ namespace dge.GUI
 {
     public class NumberBox : TextBox
     {
+        private int i_LastValue;
         private int i_value;
         private int i_MinValue;
         private int i_MaxValue;
@@ -39,6 +40,7 @@ namespace dge.GUI
         }
         public NumberBox(int width, int height, int value) : base(width, height, value.ToString())
         {
+            this.TextAlign = TextAlign.Right;
             this.i_MinValue = 0;
             this.i_MaxValue = int.MaxValue;
             this.ApplyMinMaxValues();
@@ -145,6 +147,13 @@ namespace dge.GUI
                     case KeyCode.Return:
                         changed = true;
                         this.b_Focus = false;
+                    this.s_text = this.i_value.ToString();
+                        if (!this.ApplyMinMaxValues())
+                        {
+                            this.UpdateTextCoords();
+                            this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_LastValue, false));
+                            this.i_LastValue = this.i_value;
+                        }
                         break;
                 }
 
@@ -156,7 +165,8 @@ namespace dge.GUI
                     {
                         if (!this.ApplyMinMaxValues())
                         {
-                            this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                            this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_LastValue, false));
+                            this.i_LastValue = this.i_value;
                         }
                     }
                 }
@@ -167,6 +177,7 @@ namespace dge.GUI
                         this.s_text = "";
                     }
                 }
+                this.UpdateTextCoords();
             }
         }
 
@@ -179,6 +190,7 @@ namespace dge.GUI
                 {
                     this.b_Focus = true; 
                     this.cursorPos = this.s_text.Length; 
+                    this.UpdateTextCoords();
                 }
             }
             else
@@ -189,7 +201,9 @@ namespace dge.GUI
                     this.s_text = this.i_value.ToString();
                     if (!this.ApplyMinMaxValues())
                     {
-                        this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                        this.UpdateTextCoords();
+                        this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_LastValue, false));
+                        this.i_LastValue = this.i_value;
                     }
                 }
                 this.b_UpPulsed = false;
@@ -200,9 +214,11 @@ namespace dge.GUI
                     this.i_value++;
                     if (!this.ApplyMinMaxValues())
                     {
-                        this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                        this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_LastValue, false));
+                        this.i_LastValue = this.i_value;
                     }
                     this.s_text = this.i_value.ToString();
+                    this.UpdateTextCoords();
                 }
                 if (Core2D.SelectedID == this.ui_id_Down)
                 {
@@ -210,9 +226,11 @@ namespace dge.GUI
                     this.i_value--;     
                     if (!this.ApplyMinMaxValues())
                     {
-                        this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                        this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_LastValue, false));
+                        this.i_LastValue = this.i_value;
                     }
-                    this.s_text = this.i_value.ToString();        
+                    this.s_text = this.i_value.ToString();   
+                    this.UpdateTextCoords();     
                 }
             }
         }
@@ -231,17 +249,32 @@ namespace dge.GUI
                 string txt2 = this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
                 if (this.aceptedChars.Contains(e.Character)) // CONTROL NUMERICO
                 {
-                    if (int.TryParse(txt1+e.Character+txt2, out this.i_value)) // CONTROL LÓGICO
+                    if (e.Character != '-')
                     {
-                        txt1 += e.Character;
-                        this.s_text = txt1+txt2;
-                        this.cursorPos++;
-                        if (!this.ApplyMinMaxValues())
+                        if (int.TryParse(txt1+e.Character+txt2, out this.i_value)) // CONTROL LÓGICO
                         {
-                            this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                            txt1 += e.Character;
+                            this.s_text = txt1+txt2;
+                            this.cursorPos++;
+                            if (!this.ApplyMinMaxValues())
+                            {
+                                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_LastValue, false));
+                                this.i_LastValue = this.i_value;
+                            }
                         }
                     }
+                    else
+                    {
+                        if (this.MinValue < 0)
+                        {
+                            txt1 += e.Character;
+                            this.s_text = txt1+txt2;
+                            this.cursorPos++;
+                        }
+                    }
+                    
                 }
+                this.UpdateTextCoords();
             }
             this.b_UpPulsed = false;
             this.b_DownPulsed = false;  
@@ -281,13 +314,15 @@ namespace dge.GUI
             if (this.i_value < this.i_MinValue)
             {
                 this.i_value = this.i_MinValue;
-                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_LastValue, true));
+                this.i_LastValue = i_value;
                 ret = true;
             }
             if (this.i_value > this.i_MaxValue)
             {
                 this.i_value = this.i_MaxValue;
-                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_LastValue, true));
+                this.i_LastValue = i_value;
                 ret = true;
             }
             this.s_text = this.i_value.ToString();
@@ -304,7 +339,9 @@ namespace dge.GUI
                 { 
                     this.i_value = value; 
                     this.s_text = value.ToString();
-                    this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
+                    this.UpdateTextCoords();
+                    this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_LastValue, true));
+                    this.i_LastValue = value;
                 }
                 else
                 {
