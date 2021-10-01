@@ -134,5 +134,10 @@
     <Content Include="GUI\TreeViewer.cs" />
     <Content Include="GUI\TreeViewerElement.cs" />
     <Content Include="GUI\Events\ElementSelectedEventArgs.cs" />
+    <Content Include="GUI\ImagesGalery.cs" />
+    <Content Include="GUI\ImagesGallery.cs" />
+    <Content Include="GUI\Events\ImageSelectedEventArgs.cs" />
+    <Content Include="GUI\ListViewer2.cs" />
+    <Content Include="GUI\ListViewerHeader2.cs" />
   </ItemGroup>
 </Project>
