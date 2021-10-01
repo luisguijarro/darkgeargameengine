@@ -13,7 +13,7 @@ namespace dge.GUI
         private float f_FontSize;
         private Color4 c4_fontColor;
         private dgtk.Graphics.Color4 c4_textBorderColor;
-        private Color4 c4_BkacgroundColor;
+        private Color4 c4_BackgroundColor;
         private int i_TextHeight;
         private int i_interline;
         private float f_ContentHeight;
@@ -39,7 +39,7 @@ namespace dge.GUI
             this.f_FontSize = GuiTheme.DefaultGuiTheme.Default_FontSize;
             this.c4_fontColor = GuiTheme.DefaultGuiTheme.Default_TextColor;
             this.c4_textBorderColor = GuiTheme.DefaultGuiTheme.Default_TextBorderColor;
-            this.c4_BkacgroundColor = GuiTheme.DefaultGuiTheme.TreeViewer_DefaultBackgroundColor;
+            this.c4_BackgroundColor = GuiTheme.DefaultGuiTheme.TreeViewer_DefaultBackgroundColor;
             this.i_TextHeight = (int)(this.font.MaxCharacterHeight*(this.f_FontSize/this.font.MaxFontSize));
             this.i_interline = 0;
 
@@ -61,7 +61,7 @@ namespace dge.GUI
             this.sbVer.MaxValue = 0; // Ocultas por defecto.
             this.sbHor.MaxValue = 0; // Ocultas por defecto.
 
-            this.sbVer.Visible = true; // Ocultas por defecto.
+            this.sbVer.Visible = false; // Ocultas por defecto.
             this.sbHor.Visible = false; // Ocultas por defecto.
 
             //this.sbHor.ValueChanged += ScrollBarHorChange;
@@ -95,9 +95,9 @@ namespace dge.GUI
             this.SelectionTexcoords = this.gui.gt_ActualGuiTheme.TreeViewer_Selection_Texcoords;
             this.TreeViewer_ExpandCollapseButton_Texcoords = this.gui.gt_ActualGuiTheme.TreeViewer_ExpandCollapseButton_Texcoords;
             this.tcFrameOffset = this.gui.gt_ActualGuiTheme.TreeViewer_ExpandCollapseButton_FrameOffset;
-            if (this.c4_BkacgroundColor == this.gui.gt_ActualGuiTheme.TreeViewer_DefaultBackgroundColor)
+            if (this.c4_BackgroundColor == this.gui.gt_ActualGuiTheme.TreeViewer_DefaultBackgroundColor)
             {
-                this.c4_BkacgroundColor = this.gui.gt_ActualGuiTheme.TreeViewer_DefaultBackgroundColor;
+                this.c4_BackgroundColor = this.gui.gt_ActualGuiTheme.TreeViewer_DefaultBackgroundColor;
             }
 
             // Si la fuente establecida es la del tema por defecto se cambia, sino, se deja la establecida por el usuario.
@@ -123,9 +123,9 @@ namespace dge.GUI
             base.OnResize();
             
             this.sbVer.X = (int)(this.Width - this.sbVer.Width);
-            this.sbVer.Y = 0;
+            this.sbVer.Y = this.Y;
             this.sbVer.Height = this.Height;
-            this.sbHor.X = 0;
+            this.sbHor.X = this.X;
             this.sbHor.Y = (int)(this.Height - this.sbHor.Height);
             this.sbHor.Width = this.Width-this.sbVer.Width;
 
@@ -136,7 +136,7 @@ namespace dge.GUI
         {
             if (this.b_ShowMe)
             {
-                this.gui.Drawer.Draw(this.c4_BkacgroundColor, this.i_x, this.i_y, this.i_width, this.i_height, 0f);
+                this.gui.Drawer.Draw(this.c4_BackgroundColor, this.i_x, this.i_y, this.i_width, this.i_height, 0f);
                 this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, new float[]{0f,0f}, 0);
             }
             this.DrawScrollBars();
@@ -277,14 +277,17 @@ namespace dge.GUI
         protected override void OnMDown(object sender, MouseButtonEventArgs e)
         {
             base.OnMDown(sender, e);
-            if (this.d_ElementsParent.ContainsKey(dge.Core2D.SelectedID))
+            if (e.Buttons == MouseButtons.Left)
             {
-                this.d_ElementsParent[dge.Core2D.SelectedID].b_collapse = !this.d_ElementsParent[dge.Core2D.SelectedID].b_collapse;
-            }
-            if (d_IDs.ContainsKey(dge.Core2D.SelectedID))
-            {
-                this.ui_SelectedID = dge.Core2D.SelectedID;
-                this.ElementSelected(this, new ElementSelectedEventArgs(d_IDs[this.ui_SelectedID]));
+                if (this.d_ElementsParent.ContainsKey(dge.Core2D.SelectedID))
+                {
+                    this.d_ElementsParent[dge.Core2D.SelectedID].b_collapse = !this.d_ElementsParent[dge.Core2D.SelectedID].b_collapse;
+                }
+                if (d_IDs.ContainsKey(dge.Core2D.SelectedID))
+                {
+                    this.ui_SelectedID = dge.Core2D.SelectedID;
+                    this.ElementSelected(this, new ElementSelectedEventArgs(d_IDs[this.ui_SelectedID]));
+                }
             }
         }
 
