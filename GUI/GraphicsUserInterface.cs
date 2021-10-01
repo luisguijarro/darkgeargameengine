@@ -29,6 +29,9 @@ namespace dge.GUI
 
         private int mheight; // Alto MainMenu.
 
+        private int i_LastPosX;
+        private int i_LastPosY;
+
         private Color4 c4_MenuBackgroundColor;
 
 		internal event EventHandler<MouseButtonEventArgs> MouseDown; // Evento que se da cuando se pulsa un botón del ratón.
@@ -119,7 +122,7 @@ namespace dge.GUI
             if (!this.d_Windows.ContainsKey(window.ID))
             {
                 window.GraphicsUserInterface = this; // Adoptar Ventana.
-                window.intY = (this.l_menus.Count>0) ? this.m_menu[this.l_menus[0]].Height : 0;
+                window.intY = (this.l_menus.Count>0) ? this.mheight : 0;
                 this.d_Windows.Add(window.ID, window); // Añadir Ventana.
                 if (window.Visible)
                 {
@@ -151,7 +154,7 @@ namespace dge.GUI
             if (!this.d_Controls.ContainsKey(control.ID))
             {
                 control.GUI = this; // Adoptar Control.
-                control.intY = (this.l_menus.Count>0) ? this.m_menu[this.l_menus[0]].Height : 0;
+                control.intY = (this.l_menus.Count>0) ? this.mheight : 0;
                 this.d_Controls.Add(control.ID, control); // Añadir Control.
                 if (control.Visible)
                 {
@@ -197,7 +200,7 @@ namespace dge.GUI
                 this.ReorderMenus();
                 foreach(BaseObjects.Control ctrl in this.d_Controls.Values)
                 {
-                    ctrl.intY = (this.l_menus.Count>0) ? this.m_menu[this.l_menus[0]].Height : 0;;
+                    ctrl.intY = (this.l_menus.Count>0) ? this.mheight : 0;;
                 }
             }
         }
@@ -212,7 +215,7 @@ namespace dge.GUI
                 this.ReorderMenus();
                 foreach(BaseObjects.Control ctrl in this.d_Controls.Values)
                 {
-                    ctrl.intY = (this.l_menus.Count>0) ? this.m_menu[this.l_menus[0]].Height : 0;
+                    ctrl.intY = (this.l_menus.Count>0) ? this.mheight : 0;
                 }
             }
         }
@@ -252,8 +255,8 @@ namespace dge.GUI
         
         internal void Draw()
         {
-            GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-this.m_menu[this.l_menus[0]].Height) : (int)this.i_height);
-            this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.i_width, (this.m_menu.Count>0) ? this.i_height-this.m_menu[this.l_menus[0]].Height : this.i_height);
+            GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-mheight) : (int)this.i_height);
+            this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.mheight : 0, this.i_width, (this.m_menu.Count>0) ? this.i_height-this.mheight : this.i_height);
             
             if (this.Update)
             {
@@ -303,7 +306,7 @@ namespace dge.GUI
 
         private void DrawContentIds()
         {     
-            GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-this.m_menu[this.l_menus[0]].Height) : (int)this.i_height);
+            GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-this.mheight) : (int)this.i_height);
             
             //dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0, (this.m_menu.Count>0) ? (int)this.m_menu[this.l_menus[0]].Height : 0, this.i_width, (this.m_menu.Count>0) ? (this.i_height-this.m_menu[this.l_menus[0]].Height) : this.i_height, true);
             dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0, 0, this.i_width, this.Height, true);
@@ -345,36 +348,39 @@ namespace dge.GUI
         internal void MDown(object sender, dgtk.dgtk_MouseButtonEventArgs e)
         {
             this.DrawIds();
-            dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
-            this.MouseDown(this, new MouseButtonEventArgs(e.X, e.Y, (MouseButtons)e.Buttons, (PushRelease)e.Action));
+            uint idselected = dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
+            this.MouseDown(this, new MouseButtonEventArgs(e.X, (this.m_menu.Count<=0) ? e.Y : e.Y-mheight, (MouseButtons)e.Buttons, (PushRelease)e.Action, idselected));
         }
 
         internal void MUp(object sender, dgtk.dgtk_MouseButtonEventArgs e)
         {
             //this.DrawIds(); // Comentanos de momento
-            dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
-            this.MouseUp(this, new MouseButtonEventArgs(e.X, e.Y, (MouseButtons)e.Buttons, (PushRelease)e.Action));
+            uint idselected = dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
+            this.MouseUp(this, new MouseButtonEventArgs(e.X, (this.m_menu.Count<=0) ? e.Y : e.Y-mheight, (MouseButtons)e.Buttons, (PushRelease)e.Action, idselected));
         }
 
         internal void MMove(object sender, dgtk.dgtk_MouseMoveEventArgs e)
         {
+            uint idselected = 0;
             //this.DrawIds();
             if ((e.X_inScreen>this.parentWindow.X) && (e.X_inScreen<(this.parentWindow.X+this.parentWindow.Width)))
             {
                 if ((e.Y_inScreen>this.parentWindow.Y) && (e.Y_inScreen<(this.parentWindow.Y+this.parentWindow.Height)))
                 {
                     this.DrawIds();
-                    dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
+                    idselected = dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
                 }
             }
-            this.MouseMove(this, new MouseMoveEventArgs(e.X, e.Y, e.X_inScreen, e.Y_inScreen));
+            this.MouseMove(this, new MouseMoveEventArgs(e.X, (this.m_menu.Count<=0) ? e.Y : e.Y-mheight, this.i_LastPosX, this.i_LastPosY, e.X_inScreen, e.Y_inScreen, idselected));
+            this.i_LastPosX = e.X;
+            this.i_LastPosY = (this.m_menu.Count<=0) ? e.Y : e.Y-mheight;
         }
 
         internal void MWheel(object sender, dgtk.dgtk_MouseWheelEventArgs e)
         {
             this.DrawIds();
-            dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
-            this.MouseWheel(this, new MouseWheelEventArgs(e.X, e.Y, e.Delta));
+            uint idselected = dge.Core2D.SelectID(e.X, e.Y, (int)this.parentWindow.Width, (int)this.parentWindow.Height);
+            this.MouseWheel(this, new MouseWheelEventArgs(e.X, (this.m_menu.Count<=0) ? e.Y : e.Y-mheight, e.Delta, idselected));
         }
 
         internal void KPulsed(object sender, dgtk.dgtk_KeyBoardKeysEventArgs e)
