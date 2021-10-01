@@ -9,6 +9,7 @@ namespace dge.GUI
     public class ProgressBar : BaseObjects.Control
     {
         private Orientation o_Orientation;
+        private int i_lastValue;
         private int i_value;
         private int i_MaxValue;
         private int i_MinValue;
@@ -31,6 +32,7 @@ namespace dge.GUI
             this.i_MinValue = 0;
             this.i_MaxValue = 100;
             this.i_value = 0;
+            this.i_lastValue = 0;
             this.ValueChanged += delegate { };
         }
 
@@ -168,7 +170,8 @@ namespace dge.GUI
                     this.i_value = value;
                 }
                 this.UpdateProgres();
-                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_lastValue, true));
+                this.i_lastValue = this.i_value;
             }
             get { return this.i_value; }
         }

@@ -10,6 +10,7 @@ namespace dge.GUI
         private int lastPosY;
         //private bool b_SliderPulsed;
         private int i_value;
+        private int i_lastValue;
         private int i_MaxValue;
         private int i_MinValue;
         private int i_step;
@@ -133,7 +134,8 @@ namespace dge.GUI
                         }
                     }
                 }
-                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_lastValue, false));
+                this.i_lastValue = this.i_value;
                 this.lastPosX = e.X;
                 this.lastPosY = e.Y;
             }
@@ -376,7 +378,8 @@ namespace dge.GUI
                 {
                     this.i_value = value;
                 }
-                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_lastValue, true));
+                this.i_lastValue = this.i_value;
                 this.UpdateSizePos();
                 this.UpdateSliderPos();
             }

@@ -12,6 +12,7 @@ namespace dge.GUI
         private int i_Slide_XPos;
         private int i_Slide_YPos;
         private int i_value;
+        private int i_lastValue;
         private int i_MaxValue;
         private int i_MinValue;
         private Orientation o_Orientation; // indica si se visualiza Horizontal o Verticalmente,
@@ -102,7 +103,8 @@ namespace dge.GUI
                         Console.WriteLine("Valor Ver: "+this.i_value);
                     }
                 }
-                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, false));
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_lastValue, false));
+                this.i_lastValue = this.i_value;
                 this.lastX = e.X;
                 this.lastY = e.Y;
             }
@@ -336,7 +338,8 @@ namespace dge.GUI
                 {
                     this.i_value = value;
                 }
-                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, true));
+                this.ValueChanged(this, new IntValueChangedEventArgs(this.i_value, this.i_lastValue, true));
+                this.i_lastValue = this.i_value;
                 this.UpdateShapePos(this.gui != null? this.gui.gt_ActualGuiTheme : GuiTheme.DefaultGuiTheme);
                 this.UpdateShape(this.gui != null? this.gui.gt_ActualGuiTheme : GuiTheme.DefaultGuiTheme);
             }
