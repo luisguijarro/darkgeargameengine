@@ -4,20 +4,26 @@ namespace dge.GUI
 {
     public class IntValueChangedEventArgs
     {
+        int i_LastValue;
         int i_value;
-        bool b_fromPropertie;
-        public IntValueChangedEventArgs(int value, bool fromPropertie)
+        bool b_fromProperty;
+        public IntValueChangedEventArgs(int value, int lastValue, bool fromProperty)
         {
             this.i_value = value;
-            this.b_fromPropertie = fromPropertie;
+            this.i_LastValue = lastValue;
+            this.b_fromProperty = fromProperty;
         }
         public int Value
         {
             get { return this.i_value; }
         }
-        public bool fromPropertie
+        public int LastValue
         {
-            get { return this.b_fromPropertie; }
+            get { return this.i_LastValue; }
+        }
+        public bool fromProperty
+        {
+            get { return this.b_fromProperty; }
         }
     }
 }
