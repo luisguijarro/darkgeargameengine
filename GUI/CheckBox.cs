@@ -127,7 +127,7 @@ namespace dge.GUI
         }
         public bool Checked
         {
-            set { this.b_Checked = value; }
+            set { this.b_Checked = value; this.CheckedStateChanged(this, new CheckedStateChanged(this.b_Checked)); }
             get { return this.b_Checked; }
         }
     }
