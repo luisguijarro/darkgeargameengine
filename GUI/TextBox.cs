@@ -87,12 +87,17 @@ namespace dge.GUI
                 {
                     this.b_Focus = true; 
                     this.cursorPos = this.s_text.Length; 
+                    this.UpdateTextCoords();
                 }
             }
             else
             {
-                this.b_Focus = false;
-                this.TextChanged(this, new TextChangedEventArgs(this.s_text, false));
+                if (this.b_Focus)
+                {
+                    this.b_Focus = false;
+                    this.UpdateTextCoords();
+                    this.TextChanged(this, new TextChangedEventArgs(this.s_text, false));
+                }
             }
         }
 
@@ -143,6 +148,7 @@ namespace dge.GUI
                 {
                     this.TextChanged(this, new TextChangedEventArgs(this.s_text, false));
                 }
+                this.UpdateTextCoords();
             }
         }
 
@@ -155,37 +161,42 @@ namespace dge.GUI
                 txt1 += e.Character;
                 this.s_text = txt1+txt2;
                 this.cursorPos++;
+                this.UpdateTextCoords();
                 this.TextChanged(this, new TextChangedEventArgs(this.s_text, false));
             }
         }
 
-        private void UpdateTextCoords()
+        protected void UpdateTextCoords()
         {
             if (this.gui != null)
             {
                 if (this.gui.Writer != null)
                 {
-                    float txtsize = G2D.Writer.MeasureString(this.font, this.s_text, this.f_FontSize)[0];
+                    float txtsize = G2D.Writer.MeasureString(this.font, this.b_Focus ? this.s_text+"|" : this.s_text, this.f_FontSize)[0];
                     if (this.b_Focus)
                     {
-                        string s_txt = this.s_text.Substring(0, this.cursorPos) + GuiTheme.DefaultGuiTheme.TextBox_CursorChar + this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);                        
-                        txtsize = G2D.Writer.MeasureString(this.font, this.s_text, this.f_FontSize)[0];
+                        if (this.cursorPos > this.s_text.Length)
+                        {
+                            this.cursorPos = this.s_text.Length;
+                        }
+                        //string s_txt = this.s_text.Substring(0, this.cursorPos) + GuiTheme.DefaultGuiTheme.TextBox_CursorChar + this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);                        
+                        //txtsize = G2D.Writer.MeasureString(this.font, this.b_Focus ? this.s_text+"|" : this.s_text, this.f_FontSize)[0];
                     }
 
                     switch(this.ta_textAlign)
                     {
                         case TextAlign.Left:
-                            this.tx_x = this.MarginsFromTheEdge[0] * 2;
+                            this.tx_x = this.MarginLeft * 2;
                             break;
                         case TextAlign.Center:
-                            this.tx_x = (this.i_width/2f) - (txtsize/2f);
+                            this.tx_x = (this.InnerSize.Width/2f) - (txtsize/2f);
                             break;
                         case TextAlign.Right:
-                            this.tx_x = this.i_width-(this.MarginsFromTheEdge[2]*2) - txtsize;
+                            this.tx_x = this.InnerSize.Width-(this.MarginRight + this.MarginLeft + txtsize);
                             break;
                     }
 
-                    this.tx_y = (this.i_height/2.1f) - (this.f_FontSize/1.2f);
+                    this.tx_y = (this.InnerSize.Height/2f) - (this.f_FontSize/1.5f);
                 }
             }
         }
