@@ -141,6 +141,36 @@ namespace dge.GUI.BaseObjects
 
         }
 
+
+        protected bool IsMouseOn(int ix, int iy)
+        {
+            int x = ix; // - this.int_x;
+            int y = iy; // - this.int_y;
+            if ((x>this.int_x+this.MarginLeft) && (x<this.int_x+this.InnerSize.Width))
+            {
+                if ((y>this.int_y+this.MarginTop) && (y<this.int_y+this.InnerSize.Height))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        protected bool IsMouseIn(int ix, int iy, int x0, int y0, int x1, int y1)
+        {
+            int x = ix; // Mouse X Coord;
+            int y = iy; // Mouse Y Coord;
+            if ((x>this.int_x+this.MarginLeft+x0) && (x<this.int_x+x1))
+            {
+                if ((y>this.int_y+this.MarginTop+y0) && (y<this.int_y+y1))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
         protected void AddSurface(BaseGuiSurface surface)
         {
             if (!this.d_guiSurfaces.ContainsValue(surface))
@@ -559,7 +589,7 @@ namespace dge.GUI.BaseObjects
                 this.i_x = value;
                 foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
                 {
-                    srf.intX = this.int_x+this.i_x;
+                    srf.intX = this.int_x+this.i_x+this.MarginLeft;
                 }
                 this.OnReposition();
             }
@@ -568,7 +598,16 @@ namespace dge.GUI.BaseObjects
 
         internal int intX
         {
-            set { this.int_x = value; this.OnReposition(); }
+            get { return this.int_x; }
+            set 
+            { 
+                this.int_x = value; 
+                foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
+                {
+                    //srf.intX = this.int_x+this.i_x+this.MarginLeft;
+                }
+                this.OnReposition();
+            }
         }
 
         public int Y
@@ -578,7 +617,7 @@ namespace dge.GUI.BaseObjects
                 this.i_y = value;
                 foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
                 {
-                    srf.intY = this.int_y+this.i_y;
+                    srf.intY = this.int_y+this.i_y+this.MarginTop;
                 }
                 this.OnReposition();
             }
@@ -587,12 +626,13 @@ namespace dge.GUI.BaseObjects
 
         internal int intY
         {
+            get { return this.int_y; }
             set 
             { 
                 this.int_y = value;
                 foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
                 {
-                    srf.intY = this.int_y+this.i_y;
+                    //srf.intY = this.int_y+this.i_y+this.MarginTop;
                 }
                 this.OnReposition(); 
             }
