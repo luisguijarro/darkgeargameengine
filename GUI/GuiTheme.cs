@@ -64,6 +64,7 @@ namespace dge.GUI
         public float[] TextBox_Texcoords; // n=8
         //public float[] TextBox_FrameOffset; // n=2
         public char TextBox_CursorChar;
+        public Color4 TextBox_Default_BackgroundColor;
         #endregion
 
         #region ProgressBar
@@ -344,6 +345,7 @@ namespace dge.GUI
                 multVer*73f, multVer*75f, multVer*93f, multVer*95f
             };
             ret.TextBox_CursorChar = '|';
+            ret.TextBox_Default_BackgroundColor = Color4.White;
             //ret.TextBox_FrameOffset = new float[]{0f,0f};
             
 

@@ -15,6 +15,7 @@ namespace dge.GUI
         protected float tx_x, tx_y; // Coordenadas de texto
         protected dgtk.Graphics.Color4 c4_textColor;
         protected dgtk.Graphics.Color4 c4_textBorderColor;
+        protected dgtk.Graphics.Color4 c4_BackgroundColor;
         protected bool b_textBorder;
         protected float f_FontSize;
         protected dgFont font;
@@ -38,6 +39,7 @@ namespace dge.GUI
             this.font = GuiTheme.DefaultGuiTheme.Default_Font;
             this.c4_textColor = GuiTheme.DefaultGuiTheme.Default_TextColor;
             this.c4_textBorderColor = GuiTheme.DefaultGuiTheme.Default_TextBorderColor;
+            this.c4_BackgroundColor = GuiTheme.DefaultGuiTheme.TextBox_Default_BackgroundColor;
             this.MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.TextBox_MarginsFromTheEdge;            
             this.Texcoords = GuiTheme.DefaultGuiTheme.TextBox_Texcoords;
             this.tcFrameOffset = new float[]{0f,0f};
@@ -76,6 +78,10 @@ namespace dge.GUI
             {
                 this.c4_textColor = this.gui.GuiTheme.Default_TextColor;
             }
+            if (this.c4_BackgroundColor == GuiTheme.DefaultGuiTheme.TextBox_Default_BackgroundColor)
+            {
+                this.c4_BackgroundColor = this.gui.GuiTheme.TextBox_Default_BackgroundColor;
+            }            
         }
 
         protected override void OnMDown(object sender, MouseButtonEventArgs e)
@@ -204,10 +210,13 @@ namespace dge.GUI
         protected override void pDraw()
         {
             if (this.FirsDraw) { this.UpdateTextCoords(); this.FirsDraw = false; };
+            this.gui.GuiDrawer.DrawGL(this.gui.gt_ActualGuiTheme.tbo_ThemeSltTBO.ID, 
+                    this.c4_BackgroundColor, this.i_x, this.i_y, this.i_width, this.i_height, 
+                    0f, this.MarginsFromTheEdge, this.Texcoords, new float[]{0f,0f}, 1);
             base.pDraw();
             DrawIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], this.i_width-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), this.i_height-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[2]), WriteText);
         }
-
+        
         private void WriteText()
         {
             if (this.b_Focus)
@@ -220,6 +229,8 @@ namespace dge.GUI
                 this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, this.s_text, this.f_FontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.Default_DisableTextColor);
             }
         }
+
+        #region PROPERTIES:
 
         public bool TextBorder
         {
@@ -262,6 +273,11 @@ namespace dge.GUI
             set { this.c4_textBorderColor = value; }
             get { return this.c4_textBorderColor; }
         }
+        public dgtk.Graphics.Color4 BackgroundColor
+        {
+            set { this.c4_BackgroundColor = value; }
+            get { return this.c4_BackgroundColor; }
+        }
 
         public TextAlign TextAlign
         {
@@ -274,5 +290,7 @@ namespace dge.GUI
             set { this.b_editable = value; }
             get { return this.Editable; }
         }
+
+        #endregion
     }
 }
