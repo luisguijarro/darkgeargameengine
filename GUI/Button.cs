@@ -11,13 +11,13 @@ namespace dge.GUI
         private bool FirsDraw;
         private float tx_x, tx_y; // Coordenadas de texto
         internal bool b_pulsed;
-        private string s_text;
-        private dgtk.Graphics.Color4 c4_textColor;
-        private dgtk.Graphics.Color4 c4_textBorderColor;
-        private bool b_textBorder;
-        private float f_FontSize;
-        private dgFont font;
-        private TextureBufferObject tbo_image;
+        protected string s_text;
+        protected dgtk.Graphics.Color4 c4_textColor;
+        protected dgtk.Graphics.Color4 c4_textBorderColor;
+        protected bool b_textBorder;
+        protected float f_FontSize;
+        protected dgFont font;
+        protected TextureBufferObject tbo_image;
         public Button() : this(22,22)
         {
             
@@ -106,7 +106,7 @@ namespace dge.GUI
 
         protected override void OnMUp(object sender, MouseButtonEventArgs e)
         {
-            if (dge.Core2D.SelectedID == this.ui_id)
+            if ((e.ID == this.ui_id) && this.b_pulsed) 
             {
                 base.OnMUp(sender, e);
             }
