@@ -39,7 +39,15 @@ namespace dge.GUI
             if (this.font.Name == GuiTheme.DefaultGuiTheme.Default_Font.Name)
             {
                 this.font = this.gui.GuiTheme.Default_Font;
-            }     
+            }
+            if (this.f_fs == GuiTheme.DefaultGuiTheme.Default_FontSize)
+            {
+                this.f_fs = this.gui.GuiTheme.Default_FontSize;
+            }
+            if (this.c4_forecolor == GuiTheme.DefaultGuiTheme.Default_TextColor)
+            {
+                this.c4_forecolor = this.gui.GuiTheme.Default_TextColor;
+            }    
         }
 
         private void DrawText()
