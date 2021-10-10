@@ -160,9 +160,9 @@ namespace dge.GUI.BaseObjects
         {
             int x = ix; // Mouse X Coord;
             int y = iy; // Mouse Y Coord;
-            if ((x>this.int_x+this.MarginLeft+x0) && (x<this.int_x+x1))
+            if ((x>this.i_x+this.int_x+x0) && (x<this.i_x+this.int_x+x0+x1))
             {
-                if ((y>this.int_y+this.MarginTop+y0) && (y<this.int_y+y1))
+                if ((y>this.i_y+this.int_y+y0) && (y<this.i_y+this.int_y+y0+y1))
                 {
                     return true;
                 }
@@ -278,14 +278,10 @@ namespace dge.GUI.BaseObjects
                     dgtk.Math.Mat4 m4 = this.gui.Drawer.m4P;
                     dgtk.Math.Mat4 m4g = this.gui.gd_GuiDrawer.m4P;
                     dgtk.Math.Mat4 m4w = this.gui.Writer.m4P;
-/*
+
                     this.gui.Drawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
                     this.gui.gd_GuiDrawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY);
                     this.gui.Writer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
-*/
-                    this.gui.Drawer.DefinePerspectiveMatrix(0, 0, ivp_width/*-mX*/, ivp_height/*-mY*/, true);
-                    this.gui.gd_GuiDrawer.DefinePerspectiveMatrix(0, 0, ivp_width/*-mX*/, ivp_height/*-mY*/);
-                    this.gui.Writer.DefinePerspectiveMatrix(0, 0, ivp_width/*-mX*/, ivp_height/*-mY*/, true);
 
                     action();
 
@@ -339,8 +335,7 @@ namespace dge.GUI.BaseObjects
 
                     dgtk.Math.Mat4 m4 = dge.G2D.IDsDrawer.m4P;
 
-                    //dge.G2D.IDsDrawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
-                    dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0, 0, ivp_width/*-mX*/, ivp_height/*-mY*/, true);
+                    dge.G2D.IDsDrawer.DefinePerspectiveMatrix(-mX, -mY, ivp_width-mX, ivp_height-mY, true);
 
                     action();
 
