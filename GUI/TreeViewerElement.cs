@@ -15,6 +15,7 @@ namespace dge.GUI
         private string s_name;
         private object o_AsociateObject;
         internal bool b_collapse;
+        internal TreeViewerElement parentTVE;
 
         public TreeViewerElement(object asociate_object) : this(asociate_object.ToString())
         {
@@ -74,6 +75,7 @@ namespace dge.GUI
             if (!this.d_SubElements.ContainsKey(element.Name))
             {
                 this.d_SubElements.Add(element.Name, element);
+                element.parentTVE = this;
                 return element.ID;
             }
             return 0;
