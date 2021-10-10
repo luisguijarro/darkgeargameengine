@@ -29,7 +29,7 @@ namespace dge.GUI
 
         private readonly Dictionary<string, TreeViewerElement> d_Elements;
         private readonly Dictionary<uint, TreeViewerElement> d_ElementsParent; // Diccionario con IDs de botones de colapso y expansion
-        private Dictionary<uint, TreeViewerElement> d_IDs; // Todos los IDs Existentes.
+        private readonly Dictionary<uint, TreeViewerElement> d_IDs; // Todos los IDs Existentes.
         private uint ui_SelectedID;
         public event EventHandler<ElementSelectedEventArgs> ElementSelected;
 
@@ -121,17 +121,35 @@ namespace dge.GUI
         protected override void OnResize()
         {
             base.OnResize();
-            
-            this.sbVer.X = (int)(this.Width - this.sbVer.Width);
-            this.sbVer.Y = this.Y;
+
+            this.sbVer.Y = 0;
             this.sbVer.Height = this.Height;
-            this.sbHor.X = this.X;
-            this.sbHor.Y = (int)(this.Height - this.sbHor.Height);
-            this.sbHor.Width = this.Width-this.sbVer.Width;
+            this.sbVer.X = this.i_width;
+
+            this.sbHor.Y = (int)(this.i_height);
+            this.sbHor.Width = this.i_width;
+            this.sbHor.X = 0;
 
             this.UpdateScrollBars();  
         }
         
+        protected override void InputSizeAlter(int width, int height)
+        {
+            this.i_width = width-this.sbVer.Width; //sbVer.Visible ? width-this.sbVer.Width : width;
+            this.i_height = height - this.sbHor.Height; //sbHor.Visible ? height - this.sbHor.Height : height;
+        }
+
+        protected override int[] OutputSizeAlter(int width, int height)
+        {
+            int[] ret;
+            ret = new int[] { width+this.sbVer.Width, height + this.sbHor.Height };//sbVer.Visible ? width+this.sbVer.Width : width, sbHor.Visible ? height + this.sbHor.Height : height };
+            return ret;
+        }
+
+        #endregion
+
+        #region PROTECTED DRAW METHODS:
+
         protected override void pDraw()
         {
             if (this.b_ShowMe)
@@ -139,7 +157,8 @@ namespace dge.GUI
                 this.gui.Drawer.Draw(this.c4_BackgroundColor, this.i_x, this.i_y, this.i_width, this.i_height, 0f);
                 this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, new float[]{0f,0f}, 0);
             }
-            this.DrawScrollBars();
+            DrawIn(this.i_x, this.i_y, this.Width, this.Height, DrawScrollBars);
+            //this.DrawScrollBars();
         }
         
         protected override void pDrawContent()
@@ -161,7 +180,7 @@ namespace dge.GUI
         protected override void pDrawID()
         {
             base.pDrawID();
-            this.DrawScrollBarsIDs();
+            DrawIdIn(this.i_x, this.i_y, this.Width, this.Height, DrawScrollBarsIDs);
         }
 
         protected override void DrawContent()
@@ -169,7 +188,8 @@ namespace dge.GUI
             int cont = 0;
             foreach (TreeViewerElement val in this.d_Elements.Values)
             {
-                cont += DrawElement(val, this.MarginLeft-sbHor.Value, this.MarginTop+((this.i_TextHeight+this.i_interline)*(cont))-sbVer.Value); // Dejamos margenes iniciales para que no esten pegados al centro.
+                int y = this.MarginTop+((this.i_TextHeight+this.i_interline)*(cont))-sbVer.Value;
+                cont += DrawElement(val, this.MarginLeft-sbHor.Value, y); // Dejamos margenes iniciales para que no esten pegados al centro.
                 //cont++;
             }
         }
@@ -183,6 +203,10 @@ namespace dge.GUI
                 //cont++;
             }
         }
+
+        #endregion
+
+        #region PRIVATE DRAW METHODS:
 
         private int DrawElement(TreeViewerElement parentElement, int x, int y)
         {
@@ -218,30 +242,37 @@ namespace dge.GUI
                 finalX += (int)(this.i_TextHeight/1.5f);
             }
 
-            //this.gui.Writer.Write(this.font, this.c4_fontColor, " "+TextToShow, this.f_FontSize, finalX, y);
-
-            if (this.ui_SelectedID == parentElement.ID)
+            if (y+this.i_TextHeight>0 && y<this.InnerSize.Height)
             {
-                this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.tbo_ThemeTBO.ID, Color4.White, finalX, y, (int)this.f_ContentWidth-(finalX), this.i_TextHeight, 0f, this.SelectionMarginsFromTheEdge, this.SelectionTexcoords, new float[]{0f,0f}, 0);
-                this.gui.Writer.Write(this.font, this.c4_fontColor, " "+TextToShow, this.f_FontSize, finalX, y, this.c4_textBorderColor);
-            }
-            else
-            {
-                this.gui.Writer.Write(this.font, this.c4_fontColor, " "+TextToShow, this.f_FontSize, finalX, y);
+                // Dibujamos Elemento:
+                if (this.ui_SelectedID == parentElement.ID)
+                {
+                    this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.tbo_ThemeTBO.ID, Color4.White, finalX, y, (int)(this.f_ContentWidth-(finalX+sbHor.Value)), this.i_TextHeight, 0f, this.SelectionMarginsFromTheEdge, this.SelectionTexcoords, new float[]{0f,0f}, 0);
+                    this.gui.Writer.Write(this.font, this.c4_fontColor, " "+TextToShow, this.f_FontSize, finalX, y, this.c4_textBorderColor);
+                }
+                else
+                {
+                    this.gui.Writer.Write(this.font, this.c4_fontColor, " "+TextToShow, this.f_FontSize, finalX, y);
+                }
             }
 
             if (parentElement.ChildsCount > 0)
             {
                 if (!parentElement.b_collapse)
                 {
-                    // Draw Vertical Line
-                    this.gui.Drawer.Draw(Color4.Black, x+(this.i_TextHeight/4), y+(this.i_TextHeight/4)*3, 1, ((this.i_TextHeight+this.i_interline)*parentElement.ChildsCount)-(int)(this.i_TextHeight/4f), 0f);
                     TreeViewerElement[] childs = parentElement.GetSubElements();
                     for (int i=0;i<childs.Length;i++)
                     {
-                        // Draw Horizontal Line
-                        this.gui.Drawer.Draw(Color4.Black, x+(this.i_TextHeight/4), y+((this.i_TextHeight+this.i_interline)*(i+1))+(this.i_TextHeight/2), (this.i_TextHeight/2), 1, 0f);
-                        ret += this.DrawElement(childs[i], x+(this.i_TextHeight/4)*3, y+((this.i_TextHeight+this.i_interline)*(i+1)));
+                        int lineHy = y+((this.i_TextHeight+this.i_interline)*(ret))+(this.i_TextHeight/2);
+                        if (lineHy>0 && lineHy < this.InnerSize.Height)
+                        {
+                            // Draw Horizontal Line
+                            this.gui.Drawer.Draw(Color4.Black, x+(this.i_TextHeight/4), y+((this.i_TextHeight+this.i_interline)*(ret))+(this.i_TextHeight/2), (this.i_TextHeight/2), 1, 0f);
+                        }
+                        // Draw Vertical Line
+                        this.gui.Drawer.Draw(Color4.Black, x+(this.i_TextHeight/4), y+(this.i_TextHeight/4)*3, 1, ((this.i_TextHeight+this.i_interline)*(ret))-(int)(this.i_TextHeight/4f), 0f);
+
+                        ret += this.DrawElement(childs[i], x+(this.i_TextHeight/4)*3, y+((this.i_TextHeight+this.i_interline)*(ret)));
                     }
                 }
             }
@@ -267,12 +298,16 @@ namespace dge.GUI
                     TreeViewerElement[] childs = parentElement.GetSubElements();
                     for (int i=0;i<childs.Length;i++)
                     {
-                        ret += this.DrawElementID(childs[i], x+(this.i_TextHeight/4)*3, y+((this.i_TextHeight+this.i_interline)*(i+1)));
+                        ret += this.DrawElementID(childs[i], x+(this.i_TextHeight/4)*3, y+((this.i_TextHeight+this.i_interline)*(ret)));
                     }
                 }
             }
             return ret;
         }
+
+        #endregion
+
+        #region PROTECTED INPUT EVENTS:
 
         protected override void OnMDown(object sender, MouseButtonEventArgs e)
         {
@@ -298,19 +333,9 @@ namespace dge.GUI
             {
                 if (this.f_ContentHeight>this.InnerSize.Height)
                 {
-                    this.sbVer.Value -= (int)(e.Delta*(this.f_ContentHeight/this.InnerSize.Height));
+                    this.sbVer.Value -= (int)(e.Delta*(this.f_ContentHeight/this.InnerSize.Height))*2;
                 }
             }
-        }
-
-        protected override void InputSizeAlter(int width, int height)
-        {
-            base.InputSizeAlter(sbVer.Visible ? width-this.sbVer.Width : width, sbHor.Visible ? height - this.sbHor.Height : height);
-        }
-
-        protected override int[] OutputSizeAlter(int width, int height)
-        {
-            return base.OutputSizeAlter(sbVer.Visible ? width+this.sbVer.Width : width, sbHor.Visible ? height + this.sbHor.Height : height);
         }
 
         #endregion
@@ -433,10 +458,15 @@ namespace dge.GUI
                 PropertyInfo pi = this.t_ObjectType.GetProperty(this.FieldToShow);
                 TextToShow = pi.GetValue(parentelement.AsociatedObject).ToString();
             }
-            float[] size = dge.G2D.Writer.MeasureString(this.font, " "+TextToShow, this.f_FontSize);
-            if (this.f_ContentWidth < x+size[0])
+            float[] size = dge.G2D.Writer.MeasureString(this.font, /*" "+*/TextToShow, this.f_FontSize);
+            int finalX = x;
+            if (parentelement.ChildsCount>0)
             {
-                this.f_ContentWidth = x+size[0];
+                finalX += (int)(this.i_TextHeight/1.5f);
+            }
+            if (this.f_ContentWidth < finalX+size[0])
+            {
+                this.f_ContentWidth = finalX+size[0];
             }
             this.f_ContentHeight += this.i_TextHeight+this.i_interline;
             TreeViewerElement[] tves = parentelement.GetSubElements();
@@ -444,7 +474,7 @@ namespace dge.GUI
             this.d_IDs.Add(parentelement.ui_id, parentelement);
             for (int i=0;i<tves.Length;i++)
             {
-                CalculateContentWidthHeigth(tves[i], x+this.i_TextHeight, y+((this.i_TextHeight+this.i_interline)*(i+1)));
+                this.CalculateContentWidthHeigth(tves[i], finalX + (int)(this.i_TextHeight/4), y+((this.i_TextHeight+this.i_interline)*(i+1)));
             }
         }
 
