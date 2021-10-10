@@ -218,7 +218,7 @@ namespace dge.GUI
         protected override void OnMWheel(object sender, MouseWheelEventArgs e)
         {
             base.OnMWheel(sender, e);
-            if (Core2D.SelectedID==this.ui_id)
+            if (e.ID==this.ui_id)
             {
                 if (this.l_ObjectsElements.Count > 0)
                 {
