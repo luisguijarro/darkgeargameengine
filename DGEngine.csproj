@@ -139,5 +139,7 @@
     <Content Include="GUI\Events\ImageSelectedEventArgs.cs" />
     <Content Include="GUI\ListViewer2.cs" />
     <Content Include="GUI\ListViewerHeader2.cs" />
+    <Content Include="GUI\Dialogs\ErrorDialog.cs" />
+    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
   </ItemGroup>
 </Project>
