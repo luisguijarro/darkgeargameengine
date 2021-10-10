@@ -318,10 +318,17 @@ namespace dge.GUI
         {
             set 
             { 
-                if (value <= this.i_MinValue) // Si el nuevo MaxValue es menor que el MinValue.
+                if (value == this.i_MinValue)
+                {
+                    this.i_MaxValue = this.i_MinValue;
+                    this.i_value = value;
+                    this.Enable = false;
+                }
+                else if (value < this.i_MinValue) // Si el nuevo MaxValue es menor que el MinValue.
                 {
                     this.i_MaxValue = this.i_MinValue+1; // Establecemos el MaxValue por encima del MinValue,
                     this.i_value = this.i_MinValue; // Establecemos el Valor igual al MinValue.
+                    this.Enable = true;
                 }
                 else
                 {
@@ -330,6 +337,7 @@ namespace dge.GUI
                         this.i_value = value; // Degradamos Value a MaxValue
                     }
                     this.i_MaxValue = value; // Establecemos el valor de MaxValue
+                    this.Enable = true;
                 }
                 this.UpdateSizePos();
                 this.UpdateSliderPos();
@@ -342,10 +350,17 @@ namespace dge.GUI
         {
             set 
             { 
-                if (value >= this.i_MaxValue) // Si el nuevo MinValue es mayor que el MaxValue.
+                if (value == this.i_MaxValue)
+                {
+                    this.i_MinValue = this.i_MaxValue;
+                    this.i_value = value;
+                    this.Enable = false;
+                }
+                else if (value >= this.i_MaxValue) // Si el nuevo MinValue es mayor que el MaxValue.
                 {
                     this.i_MinValue = this.i_MaxValue-1; // Establecemos el MinValue por debajo del MaxValue,
                     this.i_value = this.i_MinValue; // Establecemos el Valor igual al MinValue.
+                    this.Enable = true;
                 }
                 else
                 {
@@ -354,6 +369,7 @@ namespace dge.GUI
                         this.i_value = value; // Incrementamos Value a MinValue.
                     }
                     this.i_MinValue = value; // Establecemos el valor de MinValue
+                    this.Enable = true;
                 }
                 this.UpdateSizePos();
                 this.UpdateSliderPos();
