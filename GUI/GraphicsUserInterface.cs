@@ -154,7 +154,7 @@ namespace dge.GUI
             if (!this.d_Controls.ContainsKey(control.ID))
             {
                 control.GUI = this; // Adoptar Control.
-                control.intY = (this.l_menus.Count>0) ? this.mheight : 0;
+                control.intY = 0; //(this.l_menus.Count>0) ? this.mheight : 0;
                 this.d_Controls.Add(control.ID, control); // Añadir Control.
                 if (control.Visible)
                 {
@@ -200,7 +200,7 @@ namespace dge.GUI
                 this.ReorderMenus();
                 foreach(BaseObjects.Control ctrl in this.d_Controls.Values)
                 {
-                    ctrl.intY = (this.l_menus.Count>0) ? this.mheight : 0;;
+                    //ctrl.intY = (this.l_menus.Count>0) ? this.mheight : 0;;
                 }
             }
         }
@@ -215,7 +215,7 @@ namespace dge.GUI
                 this.ReorderMenus();
                 foreach(BaseObjects.Control ctrl in this.d_Controls.Values)
                 {
-                    ctrl.intY = (this.l_menus.Count>0) ? this.mheight : 0;
+                    //ctrl.intY = (this.l_menus.Count>0) ? this.mheight : 0;
                 }
             }
         }
