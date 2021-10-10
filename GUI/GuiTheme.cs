@@ -123,7 +123,11 @@ namespace dge.GUI
         public float[] ListViewer_Header_Texcoords; // n=8
         public float[] ListViewer_Header_FrameOffset; // n=2
         public float[] ListViewer_Dibider_Texcoords; // n=4
+        public float[] ListViewer_ArrowUp_Texcoords; // n=4
+        public float[] ListViewer_ArrowDown_Texcoords; // n=4
+        public int[] ListViewer_Arrow_Size; // n=2
         public int ListViewer_Dibider_Width;
+        public Color4 ListViewer_Default_BackgroundColor;
 
         #endregion
 
@@ -471,9 +475,24 @@ namespace dge.GUI
             ret.ListViewer_Dibider_Texcoords = new float[]
             {
                 multHor*97f, multVer*145f,
-                multHor*99f, multVer*147f
+                multHor*99f, multVer*167f
+            };
+            ret.ListViewer_ArrowUp_Texcoords = new float[]
+            {
+                multHor*111f, multVer*158f,
+                multHor*119f, multVer*147f
+            };
+            ret.ListViewer_ArrowDown_Texcoords = new float[]
+            {
+                multHor*101f, multVer*158f,
+                multHor*109f, multVer*147f
+            };
+            ret.ListViewer_Arrow_Size = new int[]
+            {
+                8, 9
             };
             ret.ListViewer_Header_MarginsFromTheEdge = new int[] {2, 2, 2, 2};
+            ret.ListViewer_Default_BackgroundColor = new Color4(0.95f, 0.95f, 0.95f, 1f);
 
 
             // CheckBox:__________________________________________________________________________
@@ -575,7 +594,7 @@ namespace dge.GUI
                 multHor*145f, multHor*147f, multHor*165f, multHor*167f, 
                 multVer*193f, multVer*195f, multVer*213f, multVer*215f
             };
-            ret.TreeViewer_DefaultBackgroundColor = Color4.White;
+            ret.TreeViewer_DefaultBackgroundColor = new Color4(0.95f, 0.95f, 0.95f, 1f);
             ret.TreeViewer_ExpandCollapseButton_Texcoords = new float[]
             {
                 multHor*169f, multVer*193f, multHor*180f, multVer*204f
@@ -599,7 +618,7 @@ namespace dge.GUI
                 multHor*121f, multHor*123f, multHor*141f, multHor*143f, 
                 multVer*169f, multVer*171f, multVer*189f, multVer*191f
             };
-            ret.ImagesGallery_DefaultBackgroundColor = Color4.White;
+            ret.ImagesGallery_DefaultBackgroundColor = new Color4(0.95f, 0.95f, 0.95f, 1f);
             ret.ImagesGallery__image_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
             ret.ImagesGallery_image_Texcoords = new float[]
             {
