@@ -95,7 +95,7 @@ namespace dge.G2D
             IntPtr scan0 = Marshal.AllocHGlobal(decompresedbytes.Length); // Creamos Puntero para Subor a la gráfica.
             Marshal.Copy(decompresedbytes, 0, scan0, decompresedbytes.Length); // Copiamos bytes en puntero.
 
-            TextureBufferObject tbo0 = dge.G2D.Tools.p_LoadImageFromIntPTr(FontName+"_Scan0", (int)imgWidth, (int)imgHeight, scan0); // Creamos tbo de letras.
+            TextureBufferObject tbo0 = dge.G2D.Tools.p_LoadImageFromIntPTr(FontName+"_Scan0", (int)imgWidth, (int)imgHeight, scan0, FontName+"_Scan0"); // Creamos tbo de letras.
 
             Marshal.FreeHGlobal(scan0);
 
@@ -123,7 +123,7 @@ namespace dge.G2D
             IntPtr scan1 = Marshal.AllocHGlobal(decompresed1bytes.Length); // Creamos Puntero para Subor a la gráfica.
             Marshal.Copy(decompresed1bytes, 0, scan1, decompresed1bytes.Length); // Copiamos bytes en puntero.
 
-            TextureBufferObject tbo1 = dge.G2D.Tools.p_LoadImageFromIntPTr(FontName+"_Scan1", (int)img1Width, (int)img1Height, scan1); // Creamos tbo de letras.
+            TextureBufferObject tbo1 = dge.G2D.Tools.p_LoadImageFromIntPTr(FontName+"_Scan1", (int)img1Width, (int)img1Height, scan1, FontName+"_Scan1"); // Creamos tbo de letras.
 
             Marshal.FreeHGlobal(scan1);
 
@@ -357,14 +357,14 @@ namespace dge.G2D
 
             BitmapData bd = bmp0.LockBits(new Rectangle(0, 0, bmp0.Size.Width, bmp0.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 				
-            TextureBufferObject tbo0 = dge.G2D.Tools.p_LoadImageFromIntPTr(pfc.Families[0].Name, bmp0.Width, bmp0.Height, bd.Scan0);
+            TextureBufferObject tbo0 = dge.G2D.Tools.p_LoadImageFromIntPTr(pfc.Families[0].Name, bmp0.Width, bmp0.Height, bd.Scan0, pfc.Families[0].Name);
             bmp0.UnlockBits(bd);
             bmp0.Save("Letras.png");
 			bmp0.Dispose();
 
             BitmapData bdB = bmpBorde.LockBits(new Rectangle(0, 0, bmpBorde.Size.Width, bmpBorde.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 				
-            TextureBufferObject tboB = dge.G2D.Tools.p_LoadImageFromIntPTr(pfc.Families[0].Name+"_Borde", bmpBorde.Width, bmpBorde.Height, bdB.Scan0);
+            TextureBufferObject tboB = dge.G2D.Tools.p_LoadImageFromIntPTr(pfc.Families[0].Name+"_Borde", bmpBorde.Width, bmpBorde.Height, bdB.Scan0, pfc.Families[0].Name+"_Borde");
             bmpBorde.UnlockBits(bdB);
             bmpBorde.Save("Borde.png");
 			bmpBorde.Dispose();
