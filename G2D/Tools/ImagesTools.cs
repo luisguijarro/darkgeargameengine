@@ -3,6 +3,7 @@ using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 using dge.Tools;
 
@@ -44,7 +45,7 @@ namespace dge.G2D
             {
                 return d_imageshash[hash];
             }
-            d_imageshash.Add(hash, p_LoadImageFromIntPTr(name, Width, Height, Scan0));
+            d_imageshash.Add(hash, p_LoadImageFromIntPTr(name, Width, Height, Scan0, hash));
             return d_imageshash[hash];
         }
 
@@ -56,7 +57,7 @@ namespace dge.G2D
                 Bitmap bp = new Bitmap(filepath);
                 BitmapData bd = bp.LockBits(new Rectangle(0, 0, bp.Size.Width, bp.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 							
-				tbo_ret = p_LoadImageFromIntPTr(filepath, bd.Width, bd.Height, bd.Scan0);
+				tbo_ret = p_LoadImageFromIntPTr(filepath, bd.Width, bd.Height, bd.Scan0, s_hash);
 							
 				bp.UnlockBits(bd);
 				bp.Dispose();
@@ -77,7 +78,7 @@ namespace dge.G2D
                 Bitmap bp = (Bitmap)Image.FromStream(stream, true, false);
                 BitmapData bd = bp.LockBits(new Rectangle(0, 0, bp.Size.Width, bp.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 							
-				tbo_ret = p_LoadImageFromIntPTr(s_hash, bd.Width, bd.Height, bd.Scan0);
+				tbo_ret = p_LoadImageFromIntPTr(name, bd.Width, bd.Height, bd.Scan0, s_hash);
 							
 				bp.UnlockBits(bd);
 				bp.Dispose();
@@ -90,7 +91,7 @@ namespace dge.G2D
             return tbo_ret;
         }
 
-        private static unsafe TextureBufferObject p_LoadImageFromIntPTr(string name, int Width, int Height, IntPtr Scan0)
+        private static unsafe TextureBufferObject p_LoadImageFromIntPTr(string name, int Width, int Height, IntPtr Scan0, string hash)
 		{
             /*bool current = */dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
 
@@ -114,19 +115,51 @@ namespace dge.G2D
 
             GL.glFlush();
 
-            return new TextureBufferObject(name, Width, Height, idret, name);
+            return new TextureBufferObject(name, Width, Height, idret, hash);
         }
         
 		public static bool SaveImage(TextureBufferObject tbo, string filepath)
 		{
-			
-			return false;
-			
+            IntPtr ptr_data = Marshal.AllocHGlobal(tbo.Width*tbo.Height*4);
+			GL.glGetTexImage(TextureTarget.GL_TEXTURE_2D, 0, dgtk.OpenGL.PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, ptr_data);
+            Bitmap bp = new Bitmap(tbo.Width, tbo.Height, 4*tbo.Width, System.Drawing.Imaging.PixelFormat.Format32bppArgb, ptr_data);
+            bp.Save(filepath);
+			return true;			
 		}
+
+        public static byte[]? GetImageBytes(TextureBufferObject tbo)
+        {
+            return null;
+        }
+
+        public static string ImageToBase64String(TextureBufferObject tbo, ImageFormat FileImageFormat)
+        {
+            byte[] bytes;
+            lock(dge.Core.LockObject)
+            {
+                MemoryStream ms = new MemoryStream();
+                if (!dgtk.OpenGL.OGL_SharedContext.MakeCurrent())
+                {
+                    Console.WriteLine("MAKECURRENT() FAIL IN ImageToBase64String METHOD.");
+                }
+                IntPtr ptr_data = Marshal.AllocHGlobal(tbo.Width * tbo.Height * 4);
+                GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, tbo.ui_ID);
+                GL.glGetTexImage(TextureTarget.GL_TEXTURE_2D, 0, dgtk.OpenGL.PixelFormat.GL_BGRA, PixelType.GL_UNSIGNED_BYTE, ptr_data);
+                Bitmap bp = new Bitmap(tbo.Width, tbo.Height, 4 * tbo.Width, System.Drawing.Imaging.PixelFormat.Format32bppArgb, ptr_data);
+                
+                bp.Save(ms, FileImageFormat);
+                bytes = ms.ToArray();
+                ms.Close();
+                Marshal.FreeHGlobal(ptr_data);
+                
+                dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
+            }
+            return Convert.ToBase64String(bytes, Base64FormattingOptions.None);
+        }
 		
 		public static bool SaveScreenShot( string filepath)
 		{
-			
+			MemoryStream ms = new MemoryStream();
 			return false;
 			
 		}
