@@ -8,7 +8,7 @@ using dgtk.Graphics;
 namespace dge.GUI
 {
     
-    internal class ListViewerHeader2 : Button
+    internal class ListViewerHeader : Button
     {
         private float[] ListViewer_Dibider_Texcoords; // n=4
         private float[] ListViewer_ArrowUp_Texcoords; // n=4
@@ -20,7 +20,7 @@ namespace dge.GUI
         //private readonly string s_name;
         internal bool b_Shorted;
         internal bool b_Ascending;
-        public ListViewerHeader2(string name, string fieldname)
+        public ListViewerHeader(string name, string fieldname)
         {
 
             /*this.s_name*/ this.Text = name;
@@ -71,7 +71,7 @@ namespace dge.GUI
             //base.OnMDown(sender, e);
             if (e.ID == this.ui_id)
             {
-                if (this.IsMouseIn(e.X, e.Y, this.InnerSize.Width-this.ListViewer_Dibider_Width, 0, this.InnerSize.Width, this.InnerSize.Height))
+                if (this.IsMouseIn(e.X, e.Y, this.InnerSize.Width-(this.ListViewer_Dibider_Width*2), 0, this.InnerSize.Width, this.InnerSize.Height))
                 {
                     // Esta sobre El dibisor y debe escalar.
                     this.b_DibiderPulsed = true;
@@ -89,6 +89,9 @@ namespace dge.GUI
             if (this.b_DibiderPulsed)
             {
                 this.Width += e.X-e.LastPosX;
+                #if DEBUG
+                    Console.WriteLine(this.Width);
+                #endif
             }
         }
 

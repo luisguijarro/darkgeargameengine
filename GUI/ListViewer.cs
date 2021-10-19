@@ -8,7 +8,7 @@ using dgtk;
 
 namespace dge.GUI
 {
-    public class ListViewer2 : BaseObjects.Control
+    public class ListViewer : BaseObjects.Control
     {
         private readonly ScrollBar sbVer;
         private readonly ScrollBar sbHor;
@@ -22,25 +22,29 @@ namespace dge.GUI
         private int[] ListViewer_Selection_MarginsFromTheEdge;
         private float[] ListViewer_Selection_Texcoords;
         private int[] ListViewer_Header_MarginsFromTheEdge;
+        private float[] FileIcon_TexCoords;
+        private float [] FolderIcon_TexCoords;
 
         #endregion
 
         private readonly Dictionary<string, uint> d_Headers_names; // <Nombre de Header , ID de HEADER>
-        private readonly Dictionary<uint, ListViewerHeader2> d_Headers; // <ID de Campo , HEADER A MOSTRAR>
+        private readonly Dictionary<uint, ListViewerHeader> d_Headers; // <ID de Campo , HEADER A MOSTRAR>
         private readonly List<KeyValuePair<uint, object>> l_objects;
+        private readonly Dictionary<uint, object> d_id_object;
         private readonly List<uint> l_Ids;
         private uint selectedID;
         private Type t_ObjectType;
         private string s_SortingField;
         private bool b_AscendingOrder;
+        private int elmHeight;
 
         private int headersWidth;
-        private KeyValuePair<uint, object> KVP_SelectedObject;
-        private int i_selectedIndex;
+        private object o_SelectedObject;
+        //private int i_selectedIndex;
         
-        public event EventHandler ItemSelected;
+        public event EventHandler<ListItemSelectedEventArgs> ItemSelected;
 
-        public ListViewer2()
+        public ListViewer()
         {
             this.sbVer = new ScrollBar();
             this.sbVer.MaxValue = 0;
@@ -59,16 +63,22 @@ namespace dge.GUI
             this.Texcoords = GuiTheme.DefaultGuiTheme.ListViewer_Texcoords;
             this.ListViewer_Header_MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ListViewer_Header_MarginsFromTheEdge;
 
+            this.FileIcon_TexCoords = GuiTheme.DefaultGuiTheme.FileIcon_TexCoords;
+            this.FolderIcon_TexCoords = GuiTheme.DefaultGuiTheme.FolderIcon_TexCoords;
+
             this.tcFrameOffset = new float[] {0,0};
 
-            this.d_Headers = new Dictionary<uint, ListViewerHeader2>();
+            this.d_Headers = new Dictionary<uint, ListViewerHeader>();
             this.d_Headers_names = new Dictionary<string, uint>();
             this.l_Ids = new List<uint>();
             this.l_objects = new List<KeyValuePair<uint, object>>();
+            this.d_id_object = new Dictionary<uint, object>();
 
             this.sbHor.ValueChanged += HorValueChanged;
-            this.ItemSelected = delegate{};
+            this.ItemSelected += delegate{};
             this.t_ObjectType = typeof(Object);
+
+            this.UpdateElementHeight();
         }
 
         #region PROTECTED OVERRIDE METHODS:
@@ -78,7 +88,7 @@ namespace dge.GUI
             base.OnGuiUpdate();
             this.sbVer.GUI = this.gui;
             this.sbHor.GUI = this.gui;
-            foreach (ListViewerHeader2 val in this.d_Headers.Values)
+            foreach (ListViewerHeader val in this.d_Headers.Values)
             {
                 val.GUI = this.gui;
             }
@@ -95,6 +105,8 @@ namespace dge.GUI
 
             this.ListViewer_Header_MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.ListViewer_Header_MarginsFromTheEdge;
 
+            this.FileIcon_TexCoords = this.gui.gt_ActualGuiTheme.FileIcon_TexCoords;
+            this.FolderIcon_TexCoords = this.gui.gt_ActualGuiTheme.FolderIcon_TexCoords;
 
             this.c4_BackgroundColor = this.gui.gt_ActualGuiTheme.ListViewer_Default_BackgroundColor;
 
@@ -111,6 +123,7 @@ namespace dge.GUI
             {
                 this.c4_fontColor = this.gui.GuiTheme.Default_TextColor;
             }
+            this.UpdateElementHeight();
         }
 
         protected override void OnResize()
@@ -126,7 +139,7 @@ namespace dge.GUI
         {
             base.OnReposition();
 
-            foreach (ListViewerHeader2 val in this.d_Headers.Values)
+            foreach (ListViewerHeader val in this.d_Headers.Values)
             {
                 val.intX = this.int_x + this.i_x;
                 val.intY = this.int_y + this.i_y;
@@ -156,10 +169,25 @@ namespace dge.GUI
 
         protected override void OnMDown(object sender, MouseButtonEventArgs e)
         {
-            base.OnMDown(sender, e);
-            if (this.l_Ids.Contains(e.ID))
+            if (this.b_IsEnable)
             {
-                this.selectedID = e.ID;
+                //this.OnMDown(this, e);
+                if ((dge.Core2D.SelectedID == this.ui_id) || this.l_Ids.Contains(e.ID))
+                {
+                    DateTime dt_now = DateTime.Now;
+                    if ((dt_now-this.TimeLastClick).TotalMilliseconds < 200)
+                    {
+                        this.OnMDoubleClick(this, e);
+                    }
+                    this.TimeLastClick = dt_now;
+
+                    if (this.l_Ids.Contains(e.ID))
+                    {
+                        this.selectedID = e.ID;
+                        this.o_SelectedObject = this.d_id_object[e.ID];
+                        this.ItemSelected(this, new ListItemSelectedEventArgs(this.d_id_object[e.ID]));
+                    }
+                }
             }
         }
 
@@ -170,7 +198,7 @@ namespace dge.GUI
             {
                 if (this.l_objects.Count > 0)
                 {
-                    this.sbVer.Value -= (this.Height / (this.l_objects.Count*2) * (e.Delta > 0? 1 : -1));
+                    this.sbVer.Value -= (int)(((this.l_objects.Count*this.elmHeight)/this.InnerSize.Height) * e.Delta); //(this.Height / (this.l_objects.Count*2) * (e.Delta > 0? 1 : -1));
                 }
             }
         }
@@ -232,7 +260,7 @@ namespace dge.GUI
             //UpdateHeaders();
             
             int posX = 0-this.sbHor.Value;
-            foreach (ListViewerHeader2 val in this.d_Headers.Values)
+            foreach (ListViewerHeader val in this.d_Headers.Values)
             {
                 val.X = posX;
                 posX += val.Width; 
@@ -241,12 +269,17 @@ namespace dge.GUI
         private void UpdateHeaders()
         {
             int posX = 0-this.sbHor.Value;
-            foreach (ListViewerHeader2 val in this.d_Headers.Values)
+            foreach (ListViewerHeader val in this.d_Headers.Values)
             {
                 val.X = posX;
                 posX += val.Width; 
             }
             this.headersWidth = posX+this.sbHor.Value;
+        }
+
+        private void UpdateElementHeight()
+        {
+            elmHeight = (int)((this.font.MaxCharacterHeight/this.font.MaxFontSize)*this.f_FontSize);
         }
 
         private void UpdateScrollBars()
@@ -305,7 +338,7 @@ namespace dge.GUI
             }
         }
 
-        private void ResiceheadEvent(object sender, ResizeEventArgs e)
+        private void ResizeheadEvent(object sender, ResizeEventArgs e)
         {
             this.UpdateHeaders();
             this.UpdateScrollBars();
@@ -318,7 +351,7 @@ namespace dge.GUI
 
         private void DrawHeaders()
         {
-            foreach(ListViewerHeader2 header in this.d_Headers.Values)
+            foreach(ListViewerHeader header in this.d_Headers.Values)
             {
                 header.Draw(); //(this.sbHor.Value, 0);
             }
@@ -326,7 +359,7 @@ namespace dge.GUI
 
         private void DrawHeadersIds()
         {
-            foreach(ListViewerHeader2 header in this.d_Headers.Values)
+            foreach(ListViewerHeader header in this.d_Headers.Values)
             {
                 header.DrawID(); //(this.sbHor.Value, 0);
             }
@@ -337,7 +370,7 @@ namespace dge.GUI
             for(int i =0; i<this.l_objects.Count;i++)
             {
                 KeyValuePair<uint, object> val = this.l_objects[i];
-                int elmHeight = (int)((this.font.MaxCharacterHeight/this.font.MaxFontSize)*this.f_FontSize);
+                
                 int posy = (int)(i * elmHeight ) - this.sbVer.Value; // Alto de elemento
                 int posx = 0;
                 if (this.d_Headers.Count>0)
@@ -348,32 +381,56 @@ namespace dge.GUI
 
                         string TextToWrite = "";
 
-                        ListViewerHeader2 head = this.d_Headers[key];
+                        ListViewerHeader head = this.d_Headers[key];
                         //if (this.t_ObjectType != typeof(string))
                         //{
-                            if ((this.t_ObjectType == typeof(String)) && (head.FieldToShow.Length>=8) && (head.FieldToShow.Substring(0,8) == "ToString"))
+                            if ((val.Value.GetType() == typeof(String)) && (head.FieldToShow.Length>=8) && (head.FieldToShow.Substring(0,8) == "ToString"))
                             {
                                 TextToWrite = " "+(string)val.Value;
                             }
                             else
                             {
-                                System.Reflection.MemberInfo[] mi = this.t_ObjectType.GetMember(head.FieldToShow);                        
-                        
-                                switch(mi[0].MemberType)
+
+                                if ((val.Value.GetType() == typeof(System.IO.FileInfo)) && head.FieldToShow == "Name")
                                 {
-                                    case MemberTypes.Property:
-                                        TextToWrite = " "+((PropertyInfo)mi[0]).GetValue(val.Value).ToString();
-                                        break;
-                                    case MemberTypes.Field:
-                                        TextToWrite = " "+((FieldInfo)mi[0]).GetValue(val.Value).ToString();
-                                        break;
-                                    case MemberTypes.Method:
-                                        TextToWrite = " "+((MethodInfo)mi[0]).Invoke(val.Value, null).ToString();
-                                        break;
-                                    default:
-                                        //Nada.
-                                        break;
+                                    this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, px, posy, elmHeight, elmHeight, 0f,
+                                    this.FileIcon_TexCoords[0],
+                                    this.FileIcon_TexCoords[1],
+                                    this.FileIcon_TexCoords[2],
+                                    this.FileIcon_TexCoords[3]);
+                                    px += elmHeight;
                                 }
+                                if ((val.Value.GetType() == typeof(System.IO.DirectoryInfo)) && head.FieldToShow == "Name")
+                                {
+                                    this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, px, posy, elmHeight, elmHeight, 0f,
+                                    this.FolderIcon_TexCoords[0],
+                                    this.FolderIcon_TexCoords[1],
+                                    this.FolderIcon_TexCoords[2],
+                                    this.FolderIcon_TexCoords[3]);
+                                    px += elmHeight;
+                                }
+                                //System.Reflection.MemberInfo[] mi = this.t_ObjectType.GetMember(head.FieldToShow);   
+                                System.Reflection.MemberInfo[] mi = val.Value.GetType().GetMember(head.FieldToShow); 
+
+                                if (mi.Length>0)
+                                {
+                                    switch(mi[0].MemberType)
+                                    {
+                                        case MemberTypes.Property:
+                                            TextToWrite = " "+((PropertyInfo)mi[0]).GetValue(val.Value).ToString();
+                                            break;
+                                        case MemberTypes.Field:
+                                            TextToWrite = " "+((FieldInfo)mi[0]).GetValue(val.Value).ToString();
+                                            break;
+                                        case MemberTypes.Method:
+                                            TextToWrite = " "+((MethodInfo)mi[0]).Invoke(val.Value, null).ToString();
+                                            break;
+                                        default:
+                                            //Nada.
+                                            break;
+                                    }
+                                }
+                                
                             }
 
                           /*  
@@ -449,30 +506,30 @@ namespace dge.GUI
         {
             if (!d_Headers_names.ContainsKey(name))
             {
-                ListViewerHeader2 lvh = new ListViewerHeader2(name, fieldname);
+                ListViewerHeader lvh = new ListViewerHeader(name, fieldname);
                 lvh.GUI = this.gui;
-                lvh.SizeChanged += ResiceheadEvent;
+                lvh.SizeChanged += ResizeheadEvent;
                 this.d_Headers.Add(lvh.ID, lvh);
                 this.d_Headers_names.Add(name, lvh.ID);
                 this.UpdateHeaders();
             }
         }
 
-        public void AddHeaders(string[] name_fieldname)
+        public void SetHeaders(string[] name_fieldname)
         {
             if (name_fieldname.Length%2 == 0)
             {
                 this.d_Headers_names.Clear();
-                foreach (ListViewerHeader2 val in this.d_Headers.Values)
+                foreach (ListViewerHeader val in this.d_Headers.Values)
                 {
-                    val.SizeChanged -= ResiceheadEvent;
+                    val.SizeChanged -= ResizeheadEvent;
                 }
                 this.d_Headers.Clear();
                 for (int i=0;i<name_fieldname.Length;i+=2)
                 {
-                    ListViewerHeader2 lvh = new ListViewerHeader2(name_fieldname[i], name_fieldname[i+1]);
+                    ListViewerHeader lvh = new ListViewerHeader(name_fieldname[i], name_fieldname[i+1]);
                     lvh.GUI = this.gui;
-                    lvh.SizeChanged += ResiceheadEvent;
+                    lvh.SizeChanged += ResizeheadEvent;
                     this.d_Headers.Add(lvh.ID, lvh);
                     this.d_Headers_names.Add(lvh.Name, lvh.ID);
                 }
@@ -482,26 +539,23 @@ namespace dge.GUI
 
         public void AddObject(object @object)
         {
-            if (@object.GetType() == this.t_ObjectType)
+            bool contains = false;
+            for(int i=0;i<this.l_objects.Count;i++)
             {
-                bool contains = false;
-                for(int i=0;i<this.l_objects.Count;i++)
+                if (this.l_objects[i].Value == @object)
                 {
-                    if (this.l_objects[i].Value == @object)
-                    {
-                        contains = true;
-                        break;
-                    }
-                }
-                if (!contains)
-                {
-                    uint tid = dge.Core2D.GetID();
-                    this.l_objects.Add(new KeyValuePair<uint, object>(tid, @object)); //@object);
-                    this.l_Ids.Add(tid);
-                    this.UpdateScrollBars();
+                    contains = true;
+                    break;
                 }
             }
-            //this.UpdateSbVerMaxValue();
+            if (!contains)
+            {
+                uint tid = dge.Core2D.GetID();
+                this.d_id_object.Add(tid, @object);
+                this.l_objects.Add(new KeyValuePair<uint, object>(tid, @object));
+                this.l_Ids.Add(tid);
+                this.UpdateScrollBars();
+            }
         }
 
         public void AddObjects(object[] objects)
@@ -543,6 +597,7 @@ namespace dge.GUI
             if (contains)
             {
                 dge.Core2D.ReleaseID(this.l_objects[toDelete].Key);
+                this.d_id_object.Remove(this.l_objects[toDelete].Key);
                 this.l_Ids.Remove(this.l_objects[toDelete].Key);
                 this.l_objects.RemoveAt(toDelete);
                 this.UpdateScrollBars();
@@ -557,6 +612,7 @@ namespace dge.GUI
             {
                 dge.Core2D.ReleaseID(this.l_objects[i].Key);
             }
+            this.d_id_object.Clear();
             this.l_objects.Clear();
             this.l_Ids.Clear();
             this.UpdateScrollBars();
@@ -566,10 +622,19 @@ namespace dge.GUI
         {
             if (this.l_objects.Count > index)
             {
-                this.i_selectedIndex = index;
-                this.KVP_SelectedObject = this.l_objects[index];
-                this.ItemSelected(this, new EventArgs());
+                //this.i_selectedIndex = index;
+                this.o_SelectedObject = this.l_objects[index].Value;
+                this.ItemSelected(this, new ListItemSelectedEventArgs(this.o_SelectedObject));
             }            
+        }
+
+        public void SetHeaderWidth(string head, uint width)
+        {
+            if (this.d_Headers_names.ContainsKey(head))
+            {
+                this.d_Headers[this.d_Headers_names[head]].Width = (int)width;
+                this.UpdateHeaders();
+            }
         }
 
         #endregion
@@ -588,7 +653,7 @@ namespace dge.GUI
 
         public object SelectedObject
         {
-            get { return this.KVP_SelectedObject.Value; }
+            get { return this.o_SelectedObject; }
         }
 
         public string ShorttingField
