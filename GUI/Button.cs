@@ -147,7 +147,7 @@ namespace dge.GUI
                 }
                 else
                 {
-                    this.DrawIn(this.i_x+this.MarginsFromTheEdge[0],this.i_y+this.MarginsFromTheEdge[1],this.i_width-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), this.i_height-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[3]), DrawText);
+                    this.DrawIn(this.i_x+this.MarginLeft,this.i_y+this.MarginTop,this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom), DrawText);
                 }
             }
         }
