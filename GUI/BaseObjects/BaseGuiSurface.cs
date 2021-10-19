@@ -25,7 +25,7 @@ namespace dge.GUI.BaseObjects
         protected int i_AlteredWidth; // Ancho del Objeto en Pixeles
         protected int i_AlteredHeight; // Alto del objeto en pixeles.
 
-        private DateTime TimeLastClick; // momento de la ejecuciónd evento click. Para control de doble click.
+        protected DateTime TimeLastClick; // momento de la ejecuciónd evento click. Para control de doble click.
 
         #region CONTENIDO:
         protected internal bool contentUpdate; // Indicador de su se debe o no actualizar el conteido del objeto.
