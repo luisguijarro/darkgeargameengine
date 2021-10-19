@@ -11,6 +11,9 @@ namespace dge.GUI
         internal dge.G2D.TextureBufferObject tbo_ThemeTBO; // TBO Visual
         internal dge.G2D.TextureBufferObject tbo_ThemeSltTBO; // TBO de siluetas para ID.
 
+        public float[] FileIcon_TexCoords; // n=4
+        public float[] FolderIcon_TexCoords; // n=4
+
         public dgFont Default_Font;
         public float Default_FontSize;
 
@@ -248,15 +251,28 @@ namespace dge.GUI
 
             ret.tbo_ThemeTBO  = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultTheme.png"), "GuiDefaultTheme");
             ret.tbo_ThemeSltTBO = dge.G2D.Tools.LoadImage(Core.LoadEmbeddedResource("dge.images.GuiDefaultThemeSlt.png"), "GuiDefaultThemeSlt");
+
+            float multHor = 1f/(float)ret.tbo_ThemeTBO.i_width;
+            float multVer = 1f/(float)ret.tbo_ThemeTBO.i_height;
+
+            ret.FolderIcon_TexCoords = new float[]
+            {
+                multHor * 179, multVer * 217,
+                multHor * 201, multVer * 239
+            };
+
+            ret.FileIcon_TexCoords = new float[]
+            {
+                multHor * 203, multVer * 217,
+                multHor * 225, multVer * 239
+            };
+
             ret.Default_Font = dge.G2D.Tools.LoadDGFont(Core.LoadEmbeddedResource("dge.dgFonts.LinuxLibertine.dgf"), "dge.dgFonts.LinuxLibertine.dgf");
             ret.Default_FontSize = 12;
             ret.Default_BackgroundColor = new Color4(83,83,83,255);
             ret.Default_TextColor = Color4.Black;
             ret.Default_TextBorderColor = Color4.Black;
             ret.Default_DisableTextColor = Color4.Gray;
-
-            float multHor = 1f/(float)ret.tbo_ThemeTBO.i_width;
-            float multVer = 1f/(float)ret.tbo_ThemeTBO.i_height;
 
             // Window:__________________________________________________________________________
             ret.Window_MarginsFromTheEdge = new int[]{2, 22, 2, 2};
