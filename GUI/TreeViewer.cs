@@ -122,27 +122,19 @@ namespace dge.GUI
         {
             base.OnResize();
 
-            this.sbVer.Y = 0;
-            this.sbVer.Height = this.Height;
-            this.sbVer.X = this.i_width;
-
-            this.sbHor.Y = (int)(this.i_height);
-            this.sbHor.Width = this.i_width;
-            this.sbHor.X = 0;
-
-            this.UpdateScrollBars();  
+            this.UpdateScrollBars();
         }
         
         protected override void InputSizeAlter(int width, int height)
         {
-            this.i_width = width-this.sbVer.Width; //sbVer.Visible ? width-this.sbVer.Width : width;
-            this.i_height = height - this.sbHor.Height; //sbHor.Visible ? height - this.sbHor.Height : height;
+            this.i_width = /*width-this.sbVer.Width; /*/sbVer.Visible ? width-this.sbVer.Width : width;
+            this.i_height = /*height - this.sbHor.Height; /*/sbHor.Visible ? height - this.sbHor.Height : height;
         }
 
         protected override int[] OutputSizeAlter(int width, int height)
         {
             int[] ret;
-            ret = new int[] { width+this.sbVer.Width, height + this.sbHor.Height };//sbVer.Visible ? width+this.sbVer.Width : width, sbHor.Visible ? height + this.sbHor.Height : height };
+            ret = new int[] { /*width+this.sbVer.Width, height + this.sbHor.Height };/*/sbVer.Visible ? width+this.sbVer.Width : width, sbHor.Visible ? height + this.sbHor.Height : height };
             return ret;
         }
 
@@ -440,14 +432,64 @@ namespace dge.GUI
                 this.CalculateContentWidthHeigth(val, this.MarginLeft, this.MarginTop+((this.i_TextHeight+this.i_interline)*(cont)));
                 cont++;
             }
+
+            if ( this.sbHor.Visible != (this.f_ContentWidth > this.InnerSize.Width))
+            {
+                this.sbHor.Visible = (this.f_ContentWidth > this.InnerSize.Width);
+                if (this.f_ContentWidth<=this.InnerSize.Width)
+                {
+                    this.f_ContentWidth = this.InnerSize.Width;
+                    //this.i_height = this.i_height;
+                    this.sbHor.Visible = false;
+                }
+                else
+                {
+                    this.i_height = this.i_height - this.sbHor.Height;
+                    this.sbHor.Visible = true;
+                }
+            }
+
+            if (this.sbVer.Visible != (this.f_ContentHeight > this.InnerSize.Height))
+            {
+                this.sbVer.Visible = (this.f_ContentHeight > this.InnerSize.Height);
+                if (this.f_ContentHeight <= this.InnerSize.Height)
+                {
+                    this.f_ContentHeight = this.InnerSize.Height;
+                    //this.i_width = this.Width;
+                    this.sbVer.Visible = false;
+                }
+                else
+                {
+                    this.i_width = this.i_width - this.sbVer.Width;
+                    this.sbVer.Visible = true;
+                }
+            }
+
+            /*
             this.sbHor.Visible = (this.f_ContentWidth > this.InnerSize.Width);
             this.sbVer.Visible = (this.f_ContentHeight > this.InnerSize.Height);
+            */
+            //this.Height = this.Height;
+            
+            
+            
+            
+            
+            //base.InputSizeAlter(this.i_width, this.i_height);
+            this.SetInternalDrawArea(this.MarginLeft, this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom));
+
             this.sbHor.MaxValue = (this.f_ContentWidth > this.InnerSize.Width) ? (int)this.f_ContentWidth-this.InnerSize.Width : 0;
             this.sbVer.MaxValue = (this.f_ContentHeight > this.InnerSize.Height) ? (int)this.f_ContentHeight-this.InnerSize.Height : 0;
-            if (this.f_ContentWidth<this.InnerSize.Width)
-            {
-                this.f_ContentWidth = this.InnerSize.Width;
-            }
+
+
+            this.sbVer.Y = 0;
+            this.sbVer.Height = this.Height;
+            this.sbVer.X = this.i_width;
+
+            this.sbHor.Y = (int)(this.i_height);
+            this.sbHor.Width = this.i_width;
+            this.sbHor.X = 0;
+ 
         }
 
         private void CalculateContentWidthHeigth(TreeViewerElement parentelement, int x, int y)
