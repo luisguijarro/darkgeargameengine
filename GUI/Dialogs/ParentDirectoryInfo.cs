@@ -15,6 +15,11 @@ namespace dge.GUI.Dialogs
             return "../";
         }
 
+        public string Name()
+        {
+            return "../";
+        }
+
         public DirectoryInfo DirectoryInfo
         {
             get { return this.di; }
