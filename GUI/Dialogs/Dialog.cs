@@ -155,6 +155,7 @@ namespace dge.GUI
                 DrawIn(this.ida_X, this.ida_Y, this.ida_Width, this.ida_Height, DrawContent);
             } 
         }
+        
         public virtual void ShowDialog()
         {
             if (this.gui.ActiveDialog==null)
