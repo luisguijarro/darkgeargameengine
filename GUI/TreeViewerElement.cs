@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using dgtk.Graphics;
 
 namespace dge.GUI
-{   public class TreeViewerElement : IDisposable
+{   
+    public class TreeViewerElement : IDisposable
     {
         internal uint ui_id;
         internal uint ui_id_Button;
@@ -18,6 +19,11 @@ namespace dge.GUI
         internal TreeViewerElement parentTVE;
 
         public TreeViewerElement(object asociate_object) : this(asociate_object.ToString())
+        {
+            this.o_AsociateObject = asociate_object;
+        }
+
+        public TreeViewerElement(string name, object asociate_object) : this(name)
         {
             this.o_AsociateObject = asociate_object;
         }
