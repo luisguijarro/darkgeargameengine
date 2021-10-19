@@ -126,12 +126,14 @@ namespace dge.G2D
             bp.Save(filepath);
 			return true;			
 		}
-
+        
+        #nullable enable
+        #nullable disable warnings
         public static byte[]? GetImageBytes(TextureBufferObject tbo)
         {
             return null;
         }
-
+        
         public static string ImageToBase64String(TextureBufferObject tbo, ImageFormat FileImageFormat)
         {
             byte[] bytes;
