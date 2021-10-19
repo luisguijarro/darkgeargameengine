@@ -103,9 +103,6 @@
     <Content Include="GUI\ProgressBar.cs" />
     <Content Include="GUI\ContentViewer.cs" />
     <Content Include="GUI\ScrollBar.cs" />
-    <Content Include="GUI\ListViewer.cs" />
-    <Content Include="GUI\ListViewerElement.cs" />
-    <Content Include="GUI\ListViewerHeader.cs" />
     <Content Include="GUI\Dialogs\FileDialog.cs" />
     <Content Include="SoundSystem\SoundTools.cs" />
     <Content Include="Scene\Scene2D.cs" />
@@ -137,9 +134,11 @@
     <Content Include="GUI\ImagesGalery.cs" />
     <Content Include="GUI\ImagesGallery.cs" />
     <Content Include="GUI\Events\ImageSelectedEventArgs.cs" />
-    <Content Include="GUI\ListViewer2.cs" />
     <Content Include="GUI\ListViewerHeader2.cs" />
     <Content Include="GUI\Dialogs\ErrorDialog.cs" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
+    <Content Include="GUI\Events\ListItemSelectedEventArgs.cs" />
+    <Content Include="GUI\ListViewerHeader.cs" />
+    <Content Include="GUI\ListViewer.cs" />
   </ItemGroup>
 </Project>
