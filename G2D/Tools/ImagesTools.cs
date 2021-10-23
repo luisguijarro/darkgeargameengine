@@ -93,48 +93,56 @@ namespace dge.G2D
 
         private static unsafe TextureBufferObject p_LoadImageFromIntPTr(string name, int Width, int Height, IntPtr Scan0, string hash)
 		{
-            /*bool current = */dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
-
+            /*bool current = */
             UInt32 idret = 0; //stackalloc uint[1];
-            GL.glEnable(EnableCap.GL_TEXTURE_2D);
 
-            idret = GL.glGenTexture();
-            GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, idret);
-            GL.glPixelStoref(PixelStoreParameter.GL_UNPACK_ALIGNMENT, 1);
+            lock(dge.Core.LockObject)
+            {
+                dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
 
-            GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_MIN_FILTER, (int)TextureMinFilter.GL_LINEAR);
-            GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_MAG_FILTER, (int)TextureMagFilter.GL_NEAREST);
-            GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_WRAP_S, (int)TextureWrapMode.GL_REPEAT);
-            GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_WRAP_T, (int)TextureWrapMode.GL_REPEAT);
+                
+                GL.glEnable(EnableCap.GL_TEXTURE_2D);
 
-            GL.glTexEnvi(TextureEnvTarget.GL_TEXTURE_ENV, TextureEnvParameter.GL_TEXTURE_ENV_MODE, (int)TextureEnvMode.GL_REPLACE_EXT);
+                idret = GL.glGenTexture();
+                GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, idret);
+                GL.glPixelStoref(PixelStoreParameter.GL_UNPACK_ALIGNMENT, 1);
 
-            GL.glTexImage2D(TextureTarget.GL_TEXTURE_2D, 0, InternalFormat.GL_RGBA, Width, Height, 0, dgtk.OpenGL.PixelFormat.GL_BGRA, PixelType.GL_UNSIGNED_BYTE, Scan0);
+                GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_MIN_FILTER, (int)TextureMinFilter.GL_LINEAR);
+                GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_MAG_FILTER, (int)TextureMagFilter.GL_NEAREST);
+                GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_WRAP_S, (int)TextureWrapMode.GL_REPEAT);
+                GL.glTexParameteri(TextureTarget.GL_TEXTURE_2D, TextureParameterName.GL_TEXTURE_WRAP_T, (int)TextureWrapMode.GL_REPEAT);
 
-            GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, 0);
+                GL.glTexEnvi(TextureEnvTarget.GL_TEXTURE_ENV, TextureEnvParameter.GL_TEXTURE_ENV_MODE, (int)TextureEnvMode.GL_REPLACE_EXT);
 
-            GL.glFlush();
+                GL.glTexImage2D(TextureTarget.GL_TEXTURE_2D, 0, InternalFormat.GL_RGBA, Width, Height, 0, dgtk.OpenGL.PixelFormat.GL_BGRA, PixelType.GL_UNSIGNED_BYTE, Scan0);
+
+                GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, 0);
+
+                GL.glFlush();
+
+                dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
+            }
 
             return new TextureBufferObject(name, Width, Height, idret, hash);
         }
         
 		public static bool SaveImage(TextureBufferObject tbo, string filepath)
 		{
-            IntPtr ptr_data = Marshal.AllocHGlobal(tbo.Width*tbo.Height*4);
-			GL.glGetTexImage(TextureTarget.GL_TEXTURE_2D, 0, dgtk.OpenGL.PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, ptr_data);
-            Bitmap bp = new Bitmap(tbo.Width, tbo.Height, 4*tbo.Width, System.Drawing.Imaging.PixelFormat.Format32bppArgb, ptr_data);
-            bp.Save(filepath);
+            lock(dge.Core.LockObject)
+            {
+                IntPtr ptr_data = Marshal.AllocHGlobal(tbo.Width*tbo.Height*4);
+                
+                dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
+                GL.glGetTexImage(TextureTarget.GL_TEXTURE_2D, 0, dgtk.OpenGL.PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, ptr_data);
+                dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
+
+                Bitmap bp = new Bitmap(tbo.Width, tbo.Height, 4*tbo.Width, System.Drawing.Imaging.PixelFormat.Format32bppArgb, ptr_data);
+                bp.Save(filepath);
+            }
 			return true;			
 		}
         
-        #nullable enable
-        #nullable disable warnings
-        public static byte[]? GetImageBytes(TextureBufferObject tbo)
-        {
-            return null;
-        }
-        
-        public static string ImageToBase64String(TextureBufferObject tbo, ImageFormat FileImageFormat)
+        public static byte[] GetImageBytes(TextureBufferObject tbo, ImageFormat FileImageFormat)
         {
             byte[] bytes;
             lock(dge.Core.LockObject)
@@ -156,6 +164,12 @@ namespace dge.G2D
                 
                 dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
             }
+            return bytes;
+        }
+        
+        public static string ImageToBase64String(TextureBufferObject tbo, ImageFormat FileImageFormat)
+        {
+            byte[] bytes = GetImageBytes(tbo, FileImageFormat);
             return Convert.ToBase64String(bytes, Base64FormattingOptions.None);
         }
 		
