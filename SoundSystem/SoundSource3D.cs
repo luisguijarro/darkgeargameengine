@@ -147,7 +147,7 @@ namespace dge.SoundSystem
 				return AL.alGetSourceState(this.ui_ID);				
 			}
 		}
-		public float pitch
+		public float Pitch
 		{
 			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_PITCH, value);}
 			get { return AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_PITCH); }
