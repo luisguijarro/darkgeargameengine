@@ -50,6 +50,25 @@ namespace dge
             */
         }
 
+        protected override void OnKeyPulsed(object sender, dgtk_KeyBoardKeysEventArgs e)
+        {
+            base.OnKeyPulsed(sender, e);
+            
+            if (System.IO.File.Exists("config.dge"))
+            {
+
+            }
+            else
+            {
+                if (e.KeyStatus.KeyCode == KeyCode.F12)
+                {
+                    DateTime now = DateTime.Now;
+                    string name = now.ToString("dd-MM-yyyy_" + now.ToString("T"));
+                    dge.G2D.Tools.SaveScreenShot(name+".png", this);
+                }
+            }
+        }
+
         protected override void OnRenderFrame(object sender, dgtk_OnRenderEventArgs e)
         {
             dgtk.OpenGL.GL.glClear(dgtk.OpenGL.ClearBufferMask.GL_ALL);
