@@ -173,11 +173,40 @@ namespace dge.G2D
             return Convert.ToBase64String(bytes, Base64FormattingOptions.None);
         }
 		
-		public static bool SaveScreenShot( string filepath)
+		public static bool SaveScreenShot( string filepath, dgWindow win)
 		{
-			MemoryStream ms = new MemoryStream();
-			return false;
-			
+            lock(win.LockObject)
+            {
+                win.MakeCurrent();
+                GL.glReadBuffer(ReadBufferMode.GL_FRONT);
+
+                //byte[] bytes = new byte[4*win.Width*win.Height];
+
+                IntPtr ptr_ret = Marshal.AllocHGlobal(4*win.Width*win.Height); //bytes.Length);
+                GL.glReadPixels(0, 0, win.Width, win.Height, dgtk.OpenGL.PixelFormat.GL_BGRA, PixelType.GL_UNSIGNED_BYTE, ptr_ret);
+                win.UnMakeCurrent();
+
+                Bitmap bmp = new Bitmap(win.Width, win.Height);
+                BitmapData bd = bmp.LockBits(new Rectangle(0, 0, win.Width, win.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                bd.Scan0 = ptr_ret;
+                
+                bmp.UnlockBits(bd);
+                Marshal.FreeHGlobal(ptr_ret);
+                bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+                if (filepath.Length>4)
+                {
+                    if (filepath.Substring(filepath.Length-4, 4)!=".png")
+                    {
+                        filepath += ".png";
+                    }
+                }
+
+                bmp.Save(filepath, ImageFormat.Png);
+                bmp.Dispose();
+            }
+
+			return true;			
 		}
     }
 }
