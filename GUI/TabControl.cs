@@ -275,9 +275,9 @@ namespace dge.GUI
             foreach (BaseObjects.BaseGuiSurface tp in this.d_guiSurfaces.Values)
             {
                 //tp.X = this.X;
-                tp.Y = 1 + this.i_y+(int)this.tabsHeigth-this.MarginBottom;
+                tp.Y = 0; //1 + this.i_y+(int)this.tabsHeigth-this.MarginBottom;
                 tp.Width = this.Width;
-                tp.Height = (int)(this.Height-(this.tabsHeigth-this.MarginBottom));
+                tp.Height = (int)(this.Height-(1+this.tabsHeigth-this.MarginBottom));
             }
         }
 
@@ -303,7 +303,8 @@ namespace dge.GUI
         {
             if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
-                this.DrawActiveTab();
+                //this.DrawActiveTab();
+                this.DrawIn(this.i_x, this.i_y+this.tabsHeigth-1, this.i_width, this.i_height-this.tabsHeigth, DrawActiveTab);
                 this.DrawIn(this.i_x,this.i_y+1,(int)this.i_width, (int)this.tabsHeigth, DrawTabBar);
             }
         }
@@ -321,6 +322,7 @@ namespace dge.GUI
             if (this.contentUpdate && VisibleSurfaceOrder.Count>0) 
             {
                 this.DrawActiveTabIDs();
+                this.DrawIdIn(this.i_x, this.i_y+this.tabsHeigth, this.i_width, this.i_height-this.tabsHeigth, DrawActiveTabIDs);
                 this.DrawIdIn(this.i_x,this.i_y+1,(int)this.i_width, (int)this.tabsHeigth, DrawTabBarIDs);
             }
         }
@@ -335,10 +337,10 @@ namespace dge.GUI
                 TabPage tp = new TabPage(TabName);
                 this.d_Name_Id.Add(TabName, tp.ID);
                 this.ActiveTabID = tp.ID;
-                tp.X = this.X;
-                tp.Y = 1 + this.i_y+(int)this.tabsHeigth-this.MarginBottom;
+                tp.X = 0; //this.X;
+                tp.Y = 0; //1 + this.i_y+(int)this.tabsHeigth-this.MarginBottom;
                 tp.Width = this.Width;
-                tp.Height = (int)(this.Height-(this.tabsHeigth-this.MarginBottom));
+                tp.Height = (int)(this.Height-(1+this.tabsHeigth-this.MarginBottom));
                 this.l_ClosersIDs.Add(tp.X_ButtonID);
                 base.AddSurface((BaseObjects.BaseGuiSurface)tp);
                 tp.intY += this.tabsHeigth;
@@ -353,10 +355,10 @@ namespace dge.GUI
             {
                 this.d_Name_Id.Add(TabName, page.ID);
                 this.ActiveTabID = page.ID;
-                page.X = this.X;
-                page.Y = 1 + this.i_y+this.tabsHeigth-this.MarginBottom;
+                page.X = 0; //this.X;
+                page.Y = 0; //1 + this.i_y+this.tabsHeigth-this.MarginBottom;
                 page.Width = this.Width;
-                page.Height = this.Height-(this.tabsHeigth-this.MarginBottom);
+                page.Height = this.Height-(1+this.tabsHeigth-this.MarginBottom);
                 this.l_ClosersIDs.Add(page.X_ButtonID);
                 base.AddSurface((BaseObjects.BaseGuiSurface)page);
                 page.intY += this.tabsHeigth;
