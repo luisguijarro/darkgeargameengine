@@ -160,9 +160,10 @@ namespace dge.GUI.BaseObjects
         {
             int x = ix; // Mouse X Coord;
             int y = iy; // Mouse Y Coord;
-            if ((x>this.i_x+this.int_x+x0) && (x<this.i_x+this.int_x+x0+x1))
+            if ((x>this.i_x+this.int_x+x0) && (x<this.i_x+this.int_x+x1))
             {
-                if ((y>this.i_y+this.int_y+y0) && (y<this.i_y+this.int_y+y0+y1))
+                int mHeight = ((this.gui.l_menus.Count>0) ? this.gui.mheight : 0);
+                if ((y>this.i_y+this.int_y-mHeight+y0) && (y<this.i_y+this.int_y-mHeight+y1))
                 {
                     return true;
                 }
@@ -177,8 +178,8 @@ namespace dge.GUI.BaseObjects
             {
                 surface.parentGuiSurface = this; // Adoptar guiSurface
                 surface.GUI = this.gui; // Asignar mimo GUI.
-                surface.intX = this.int_x+this.i_x;
-                surface.intY = this.int_y+this.i_y;
+                surface.intX = this.int_x+this.i_x+this.MarginLeft;
+                surface.intY = this.int_y+this.i_y+this.MarginTop;
                 this.d_guiSurfaces.Add(surface.ID, surface); // Añadir guiSurface.
                 if (surface.Visible)
                 {
@@ -396,7 +397,7 @@ namespace dge.GUI.BaseObjects
             }
             else
             {
-                dge.G2D.IDsDrawer.DrawGuiGL(this.idColor, this.i_x, this.i_y, this.i_width, this.i_height, 0); // Pintamos ID de la superficie.
+                dge.G2D.IDsDrawer.DrawGL2D(this.idColor, this.i_x, this.i_y, this.i_width, this.i_height, 0); // Pintamos ID de la superficie.
             }
         }
 
@@ -561,11 +562,11 @@ namespace dge.GUI.BaseObjects
         protected virtual void OnReposition()
         {
             this.SetInternalDrawArea(this.MarginLeft, this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom));
-            /*foreach(BaseGuiSurface surf in this.d_guiSurfaces.Values)
+            foreach(BaseGuiSurface surf in this.d_guiSurfaces.Values)
             {
-                surf.intX = this.int_x+this.i_x+this.MarginsFromTheEdge[0];
-                surf.intY = this.int_y+this.i_y+this.MarginsFromTheEdge[1];
-            }*/
+                surf.intX = this.int_x+this.i_x+this.MarginLeft;
+                surf.intY = this.int_y+this.i_y+this.MarginTop;
+            }
         }
 
         #endregion
@@ -599,7 +600,7 @@ namespace dge.GUI.BaseObjects
                 this.int_x = value; 
                 foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
                 {
-                    //srf.intX = this.int_x+this.i_x+this.MarginLeft;
+                    srf.intX = this.int_x+this.i_x+this.MarginLeft;
                 }
                 this.OnReposition();
             }
@@ -627,7 +628,7 @@ namespace dge.GUI.BaseObjects
                 this.int_y = value;
                 foreach(BaseGuiSurface srf in this.d_guiSurfaces.Values)
                 {
-                    //srf.intY = this.int_y+this.i_y+this.MarginTop;
+                    srf.intY = this.int_y+this.i_y+this.MarginTop;
                 }
                 this.OnReposition(); 
             }
