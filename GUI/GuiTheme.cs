@@ -13,6 +13,7 @@ namespace dge.GUI
 
         public float[] FileIcon_TexCoords; // n=4
         public float[] FolderIcon_TexCoords; // n=4
+        public float[] TransparentBackground_TexCoords; // n=4
 
         public dgFont Default_Font;
         public float Default_FontSize;
@@ -212,6 +213,19 @@ namespace dge.GUI
         public int[] ImagesGallery__image_MarginsFromTheEdge; // n=4
         public float[] ImagesGallery_image_Texcoords; // n=8
         public float[] ImagesGallery_image_FrameOffset; // n=2
+        #endregion
+
+        #region ColorPicker
+
+        public int[] ColorPicker_MarginsFromTheEdge; // n=4
+        public float[] ColorPicker_Texcoords; // n=8
+        public float[] ColorPicker_CromSelector_Texcoords; // n=4
+        public float[] ColorPicker_Picker_Texcoords; // n=4
+        public int[] ColorPicker_CromSelectorMargins; // n=2
+        public int[] ColorPicker_PickerMargins; // n=2
+        public int[] ColorPicker_CromSelectorSize; // n=2
+        public int[] ColorPicker_PickerSize; // n=2
+
 
         #endregion
 
@@ -265,6 +279,12 @@ namespace dge.GUI
             {
                 multHor * 203, multVer * 217,
                 multHor * 225, multVer * 239
+            };
+
+            ret.TransparentBackground_TexCoords = new float[]
+            {
+                multHor * 193, multVer * 193,
+                multHor * 205, multVer * 205
             };
 
             ret.Default_Font = dge.G2D.Tools.LoadDGFont(Core.LoadEmbeddedResource("dge.dgFonts.LinuxLibertine.dgf"), "dge.dgFonts.LinuxLibertine.dgf");
@@ -642,6 +662,27 @@ namespace dge.GUI
                 multVer*169f, multVer*171f, multVer*189f, multVer*191f
             };
             ret.ImagesGallery_image_FrameOffset = new float[]{multHor*24f, 0f};
+
+            // ColorPicker:______________________________________________________________________
+
+            ret.ColorPicker_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.ColorPicker_Texcoords = new float[]
+            {
+                multHor*193f, multHor*195f, multHor*213f, multHor*215f, 
+                multVer*169f, multVer*171f, multVer*189f, multVer*191f
+            };
+            ret.ColorPicker_CromSelector_Texcoords = new float[]
+            {
+                multHor*217f, multVer*169f, multHor*233f, multVer*178f
+            };
+            ret.ColorPicker_Picker_Texcoords = new float[]
+            {
+                multHor*217f, multVer*180f, multHor*226f, multVer*189f
+            };
+            ret.ColorPicker_CromSelectorMargins = new int[]{4, 4};
+            ret.ColorPicker_PickerMargins = new int[]{5, 5};
+            ret.ColorPicker_CromSelectorSize = new int[]{16, 9};
+            ret.ColorPicker_PickerSize = new int[]{11, 11};
 
 
             return ret;
