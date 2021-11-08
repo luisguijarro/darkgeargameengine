@@ -122,7 +122,7 @@ namespace dge.GUI
                         {
                             txt1 =  txt1.Substring(0, txt1.Length-1);
                             this.cursorPos--;
-                            changed = true;
+                            //changed = true;
                         }
                         break;
                     case KeyCode.LEFT:
@@ -141,7 +141,7 @@ namespace dge.GUI
                         if (txt2.Length>0)
                         {
                             txt2 = txt2.Substring(1, txt2.Length-1);
-                            changed = true;
+                            //changed = true;
                         }
                         break;
                     case KeyCode.Return:
