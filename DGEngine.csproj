@@ -140,5 +140,9 @@
     <Content Include="GUI\Events\ListItemSelectedEventArgs.cs" />
     <Content Include="GUI\ListViewerHeader.cs" />
     <Content Include="GUI\ListViewer.cs" />
+    <Content Include="GUI\ColorPicker.cs" />
+    <Content Include="G2D\ShaderSources\ColorMapShader.cs" />
+    <Content Include="G2D\ShaderSources\LightColorMapShader.cs" />
+    <Content Include="GUI\Events\SelectedColorEventArgs.cs" />
   </ItemGroup>
 </Project>
