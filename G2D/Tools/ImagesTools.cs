@@ -182,16 +182,16 @@ namespace dge.G2D
 
                 //byte[] bytes = new byte[4*win.Width*win.Height];
 
-                IntPtr ptr_ret = Marshal.AllocHGlobal(4*win.Width*win.Height); //bytes.Length);
-                GL.glReadPixels(0, 0, win.Width, win.Height, dgtk.OpenGL.PixelFormat.GL_BGRA, PixelType.GL_UNSIGNED_BYTE, ptr_ret);
+                IntPtr ptr_ret = Marshal.AllocHGlobal(3*win.Width*win.Height); //bytes.Length);
+                GL.glReadPixels(0, 0, win.Width, win.Height, dgtk.OpenGL.PixelFormat.GL_BGR, PixelType.GL_UNSIGNED_BYTE, ptr_ret);
                 win.UnMakeCurrent();
 
                 Bitmap bmp = new Bitmap(win.Width, win.Height);
-                BitmapData bd = bmp.LockBits(new Rectangle(0, 0, win.Width, win.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                Color c0 = Color.Azure;
+                BitmapData bd = bmp.LockBits(new Rectangle(0, 0, win.Width, win.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
                 bd.Scan0 = ptr_ret;
-                
                 bmp.UnlockBits(bd);
-                Marshal.FreeHGlobal(ptr_ret);
+                //Marshal.FreeHGlobal(ptr_ret);
                 bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
 
                 if (filepath.Length>4)
