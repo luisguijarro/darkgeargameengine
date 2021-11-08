@@ -198,7 +198,7 @@ namespace dge.GUI
             {
                 if (this.l_objects.Count > 0)
                 {
-                    this.sbVer.Value -= (int)(((this.l_objects.Count*this.elmHeight)/this.InnerSize.Height) * e.Delta); //(this.Height / (this.l_objects.Count*2) * (e.Delta > 0? 1 : -1));
+                    this.sbVer.Value -= (int)((float)((this.l_objects.Count*this.elmHeight)/(float)(this.InnerSize.Height/(float)this.elmHeight)) * e.Delta); //(this.Height / (this.l_objects.Count*2) * (e.Delta > 0? 1 : -1));
                 }
             }
         }
