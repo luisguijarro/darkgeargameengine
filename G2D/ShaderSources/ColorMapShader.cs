@@ -19,35 +19,22 @@ namespace dge.G2D
         {
             switch (vId)
             {
-                case 1: //0x , 0y
-                    VColor = vec4(1, 1, 1, 1);
-                    break;
-                case 2: 
-                    VColor = vec4((1.0/3.0)*2, (1.0/3.0)*2, (1.0/3.0)*2, 1);
-                    break;
-                case 3:
-                    VColor = vec4(1.0/3.0, 1.0/3.0, 1.0/3.0, 1);
-                    break;
-                case 4: //0x 1y
-                    VColor = vec4(0, 0, 0, 1);
-                    break;
-
-                case 5: //1x 0y
+                case 1: //1x 0y
                     VColor = vec4(1, 0, 0, 1);
                     break;
-                case 6: //1x 0y
+                case 2: //1x 0y
                     VColor = vec4(1, 1, 0, 1);
                     break;
-                case 7:
+                case 3:
                     VColor = vec4(0, 1, 0, 1);
                     break;
-                case 8:
+                case 4:
                     VColor = vec4(0, 1, 1, 1);
                     break;
-                case 9: //1x, 1y
+                case 5: //1x, 1y
                     VColor = vec4(0, 0, 1, 1);
                     break;
-                case 10: //1x, 1y
+                case 6: //1x, 1y
                     VColor = vec4(1, 0, 1, 1);
                     break;
                     
