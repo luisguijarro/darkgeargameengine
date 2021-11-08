@@ -41,13 +41,6 @@ namespace dge
                 this.gui.Width = e.Width;
                 this.gui.Height = e.Height;
             }
-            /*while(this.gd_GuiDrawer2D == null)
-            {}
-            //this.gd_GuiDrawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height);  
-            while(this.Drawer2D == null)
-            {}      
-            //this.Drawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height, true);
-            */
         }
 
         protected override void OnKeyPulsed(object sender, dgtk_KeyBoardKeysEventArgs e)
