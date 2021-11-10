@@ -47,9 +47,14 @@ namespace dge.SoundSystem
 		{
 			AL.alSourceStop(this.ui_ID);
 		}
-		public void AssignSound(Sound sound)
+		public bool AssignSound(Sound sound)
 		{
-			this.snd = sound; AL.alSourcei(this.ui_ID, AL_SourceiParam.AL_BUFFER, (int)sound.ID);
+			if (sound != null)
+			{
+				this.snd = sound; AL.alSourcei(this.ui_ID, AL_SourceiParam.AL_BUFFER, (int)sound.ID);
+				return true;
+			}
+			return false;
 		}
 		public unsafe bool HaveSound()
 		{
