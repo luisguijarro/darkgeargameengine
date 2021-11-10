@@ -27,6 +27,7 @@ namespace dge
 
             this.MakeCurrent();
             this.drawer2D = new G2D.Drawer();
+            this.drawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height, true);
             this.GuiDrawer2D = new G2D.GuiDrawer();
             this.GuiDrawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height);
             this.writer2D = new G2D.Writer();
@@ -64,7 +65,6 @@ namespace dge
 
         protected override void OnRenderFrame(object sender, dgtk_OnRenderEventArgs e)
         {
-            dgtk.OpenGL.GL.glClear(dgtk.OpenGL.ClearBufferMask.GL_ALL);
             base.OnRenderFrame(sender, e);
             if (this.scn_escene != null)
             {
