@@ -22,11 +22,11 @@ namespace dge
                 {
                     SF_INFO sf_info = new SF_INFO();
                     sf_info.format = 0;
-                    IntPtr ptr_snd = dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_open(path, OpenMode.SFM_READ, ref sf_info) : ImportsL.sf_open(path, OpenMode.SFM_READ, ref sf_info);
+                    IntPtr ptr_snd = (dge.Core.GetOS() == dge.Core.OperatingSystem.Windows) ? ImportsW.sf_open(path, OpenMode.SFM_READ, ref sf_info) : ImportsL.sf_open(path, OpenMode.SFM_READ, ref sf_info);
                         #if DEBUG
                         if (ptr_snd == IntPtr.Zero) // Si se ha dado algun error...
                         {
-                            Console.WriteLine(dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_error(ptr_snd).ToString() : ImportsL.sf_error(ptr_snd).ToString()); // Hay que saber cual.
+                            Console.WriteLine((dge.Core.GetOS() == dge.Core.OperatingSystem.Windows) ? ImportsW.sf_error(ptr_snd).ToString() : ImportsL.sf_error(ptr_snd).ToString()); // Hay que saber cual.
                             return null;
                         }
                         #endif
@@ -34,7 +34,7 @@ namespace dge
                     List<short> l_data = new List<short>();
                     short[] data = new short[4096];
                     long datareaded = 0;
-                    while ((datareaded = (dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_read_short(ptr_snd, ref data, 4096) : ImportsL.sf_read_short(ptr_snd, ref data, 4096))) != 0)
+                    while ((datareaded = (dge.Core.GetOS() == dge.Core.OperatingSystem.Windows) ? ImportsW.sf_read_short(ptr_snd, ref data, 4096) : ImportsL.sf_read_short(ptr_snd, ref data, 4096)) != 0)
                     {
                         short[] s_datatemp = new short[datareaded];
                         Array.Copy(data, s_datatemp, datareaded);
@@ -49,15 +49,9 @@ namespace dge
                     {
                         ImportsL.sf_close(ptr_snd);
                     }
-
-                    //s_ret.FileName = path;
-                    // AL_FORMAT alf = sf_info.channels > 1? AL_FORMAT.AL_FORMAT_STEREO16 : AL_FORMAT.AL_FORMAT_MONO16;
-
                     this.cntxt.MakeCurrent();
-                    //s_ret.IDBuffer = AL.alGenBuffer(); // Lo metemos en el constructor del Sonido.
 
                     Sound s_ret = new Sound(path, (byte)sf_info.channels, data, sf_info.samplerate);
-                    // AL.alBufferData(s_ret.ID, alf, data, data.Length*sizeof(short), sf_info.samplerate); // Lometemos en el constructor de Sound.
 
 
                     return s_ret;
