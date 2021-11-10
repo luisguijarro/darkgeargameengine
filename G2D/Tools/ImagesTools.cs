@@ -98,8 +98,8 @@ namespace dge.G2D
 
             lock(dge.Core.LockObject)
             {
+                dgtk.OpenGL.OGL_Context PrevContext = dgtk.Core.ActualOpenGLContext;
                 dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
-
                 
                 GL.glEnable(EnableCap.GL_TEXTURE_2D);
 
@@ -121,11 +121,12 @@ namespace dge.G2D
                 GL.glFlush();
 
                 dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
+                PrevContext.MakeCurrent();
             }
 
             return new TextureBufferObject(name, Width, Height, idret, hash);
         }
-        
+
 		public static bool SaveImage(TextureBufferObject tbo, string filepath)
 		{
             lock(dge.Core.LockObject)
