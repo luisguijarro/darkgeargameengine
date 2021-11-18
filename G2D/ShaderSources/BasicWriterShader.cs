@@ -47,22 +47,26 @@ namespace dge.G2D
         
         uniform sampler2D s2Dtexture;
         uniform vec4 Color;
+        uniform int AA;
         
 
         void main()
         {
             vec4 finalColor = texture(s2Dtexture, tc);
             
-            float varx = 1.0/(textureSize(s2Dtexture,0).s/3); // Antes 0.001
-            float vary = 1.0/(textureSize(s2Dtexture,0).t/3); // Antes 0.001
-            for (float x=-varx;x<=varx;x+=varx) //X
+            if (AA >= 1)
             {
-                for (float y=-vary;y<=vary;y+=vary) //Y
+                float varx = 1.0/(textureSize(s2Dtexture,0).s/3); // Antes 0.001
+                float vary = 1.0/(textureSize(s2Dtexture,0).t/3); // Antes 0.001
+                for (float x=-varx;x<=varx;x+=varx) //X
                 {
-                    vec2 ttc = tc - vec2(x,y);
-                    if (ttc != tc)
+                    for (float y=-vary;y<=vary;y+=vary) //Y
                     {
-                        finalColor = mix(finalColor, texture(s2Dtexture, ttc), 0.1);
+                        vec2 ttc = tc - vec2(x,y);
+                        if (ttc != tc)
+                        {
+                            finalColor = mix(finalColor, texture(s2Dtexture, ttc), 0.1);
+                        }
                     }
                 }
             }

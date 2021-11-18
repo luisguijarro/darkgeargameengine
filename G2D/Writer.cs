@@ -29,6 +29,7 @@ namespace dge.G2D
         private readonly int idUniformMat_View; // ID de Uniform que contiene la matriz de Projección.
         private readonly int idUniformMat_Per; // ID de Uniform que contiene la matriz de Perspectiva.
         private readonly int idUniformMat_Tra; // ID de Uniform que contiene la matriz de Perspectiva.
+        private readonly int idUniformBool_AA; // ID de Uniform que define si aplicar AA casero o no.
 
         #endregion
 
@@ -80,8 +81,10 @@ namespace dge.G2D
             idUniformMat_View = GL.glGetUniformLocation(BasicShader.ui_id, "view");
             idUniformMat_Per = GL.glGetUniformLocation(BasicShader.ui_id, "perspective");
             idUniformMat_Tra = GL.glGetUniformLocation(BasicShader.ui_id, "trasform");
+			idUniformBool_AA = GL.glGetUniformLocation(BasicShader.ui_id, "AA");
 
             DefineViewMatrix(dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
+			AA_OnOff(false); 
 
             GL.glEnable(EnableCap.GL_BLEND);
             GL.glBlendFunc(BlendingFactor.GL_SRC_ALPHA, BlendingFactor.GL_ONE_MINUS_SRC_ALPHA);
@@ -97,6 +100,17 @@ namespace dge.G2D
         {
             BasicShader.Use();
             GL.glUniformMatrix(this.idUniformMat_View, dgtk.OpenGL.Boolean.GL_FALSE, mat);
+        }
+
+        /// <sumary>
+        /// Method use to turn On or Turn Off Antialiasing in text.
+        /// </sumary>
+        /// <remarks>Turn On or Turn Off Antialiasing in text</remarks>
+        /// <param name="bool">Turn On?</param>
+        public void AA_OnOff(bool SetOn)
+        {
+            BasicShader.Use();
+            GL.glUniform1i(this.idUniformBool_AA, SetOn ? 1 : 0);
         }
 
         /// <sumary>
