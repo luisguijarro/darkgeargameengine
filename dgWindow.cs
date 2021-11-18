@@ -20,7 +20,7 @@ namespace dge
         {
             Core.LockObject = base.LockObject;
             dge.SoundSystem.SoundTools.InitStaticSoundSystem();
-            sndSystem = new SndSystem(base.OpenALContext);
+            sndSystem = new SndSystem(dge.SoundSystem.SoundTools.OpenAL_Context);
 
             dge.G2D.IDsDrawer.Init_IDs_Drawer(); // Iniciamos Código de visualizado de Ids.
             dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0,0,this.Width, this.Height, true);
