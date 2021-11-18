@@ -47,7 +47,7 @@ namespace dge.SoundSystem
         [DllImport("sndfile.dll", EntryPoint="sf_readf_int")]
 		internal static unsafe extern long sf_readf_int (IntPtr sndfile, int* data, long frames);
 
-		internal static unsafe long sf_readf_int (IntPtr sndfile, int[] data, long frames)
+		internal static unsafe long sf_readf_int (IntPtr sndfile, ref int[] data, long frames)
 		{
 			fixed(int* ptr = data)
 			{
@@ -58,7 +58,7 @@ namespace dge.SoundSystem
         [DllImport("sndfile.dll", EntryPoint = "sf_read_int")]
         internal static unsafe extern long sf_read_int(IntPtr sndfile, int* data, long items);
 
-        internal static unsafe long sf_read_int(IntPtr sndfile, int[] data, long items)
+        internal static unsafe long sf_read_int(IntPtr sndfile, ref int[] data, long items)
         {
             fixed (int* ptr = data)
             {
@@ -69,7 +69,7 @@ namespace dge.SoundSystem
         [DllImport("sndfile.dll", EntryPoint="sf_readf_float")]
 		internal static unsafe extern long sf_readf_float (IntPtr sndfile, float* data, long frames);
 
-		internal static unsafe long sf_readf_float (IntPtr sndfile, float[] data, long frames)
+		internal static unsafe long sf_readf_float (IntPtr sndfile, ref float[] data, long frames)
 		{
 			fixed(float* ptr = data)
 			{
@@ -80,7 +80,7 @@ namespace dge.SoundSystem
         [DllImport("sndfile.dll", EntryPoint = "sf_read_float")]
         internal static unsafe extern long sf_read_float(IntPtr sndfile, float* data, long items);
 
-        internal static unsafe long sf_read_float(IntPtr sndfile, float[] data, long items)
+        internal static unsafe long sf_read_float(IntPtr sndfile, ref float[] data, long items)
         {
             fixed (float* ptr = data)
             {
@@ -91,7 +91,7 @@ namespace dge.SoundSystem
         [DllImport("sndfile.dll", EntryPoint="sf_readf_double")]
 		internal static unsafe extern long sf_readf_double (IntPtr sndfile, double* data, long frames);
 
-		internal static unsafe long sf_readf_double (IntPtr sndfile, double[] data, long frames)
+		internal static unsafe long sf_readf_double (IntPtr sndfile, ref double[] data, long frames)
 		{
 			fixed(double* ptr = data)
 			{
@@ -102,7 +102,7 @@ namespace dge.SoundSystem
         [DllImport("sndfile.dll", EntryPoint = "sf_read_double")]
         internal static unsafe extern long sf_read_double(IntPtr sndfile, double* data, long items);
 
-        internal static unsafe long sf_read_double(IntPtr sndfile, double[] data, long items)
+        internal static unsafe long sf_read_double(IntPtr sndfile, ref double[] data, long items)
         {
             fixed (double* ptr = data)
             {
@@ -160,7 +160,7 @@ namespace dge.SoundSystem
         [DllImport("libsndfile.so.1", EntryPoint="sf_readf_int")]
 		internal static unsafe extern long sf_readf_int (IntPtr sndfile, int* data, long frames);
 
-		internal static unsafe long sf_readf_int (IntPtr sndfile, int[] data, long frames)
+		internal static unsafe long sf_readf_int (IntPtr sndfile, ref int[] data, long frames)
 		{
 			fixed(int* ptr = data)
 			{
@@ -171,7 +171,7 @@ namespace dge.SoundSystem
         [DllImport("libsndfile.so.1", EntryPoint = "sf_read_int")]
         internal static unsafe extern long sf_read_int(IntPtr sndfile, int* data, long items);
 
-        internal static unsafe long sf_read_int(IntPtr sndfile, int[] data, long items)
+        internal static unsafe long sf_read_int(IntPtr sndfile, ref int[] data, long items)
         {
             fixed (int* ptr = data)
             {
@@ -182,7 +182,7 @@ namespace dge.SoundSystem
         [DllImport("libsndfile.so.1", EntryPoint="sf_readf_float")]
 		internal static unsafe extern long sf_readf_float (IntPtr sndfile, float* data, long frames);
 
-		internal static unsafe long sf_readf_float (IntPtr sndfile, float[] data, long frames)
+		internal static unsafe long sf_readf_float (IntPtr sndfile, ref float[] data, long frames)
 		{
 			fixed(float* ptr = data)
 			{
@@ -193,7 +193,7 @@ namespace dge.SoundSystem
         [DllImport("libsndfile.so.1", EntryPoint = "sf_read_float")]
         internal static unsafe extern long sf_read_float(IntPtr sndfile, float* data, long items);
 
-        internal static unsafe long sf_read_float(IntPtr sndfile, float[] data, long items)
+        internal static unsafe long sf_read_float(IntPtr sndfile, ref float[] data, long items)
         {
             fixed (float* ptr = data)
             {
@@ -204,7 +204,7 @@ namespace dge.SoundSystem
         [DllImport("libsndfile.so.1", EntryPoint="sf_readf_double")]
 		internal static unsafe extern long sf_readf_double (IntPtr sndfile, double* data, long frames);
 
-		internal static unsafe long sf_readf_double (IntPtr sndfile, double[] data, long frames)
+		internal static unsafe long sf_readf_double (IntPtr sndfile, ref double[] data, long frames)
 		{
 			fixed(double* ptr = data)
 			{
@@ -215,7 +215,7 @@ namespace dge.SoundSystem
         [DllImport("libsndfile.so.1", EntryPoint = "sf_read_double")]
         internal static unsafe extern long sf_read_double(IntPtr sndfile, double* data, long items);
 
-        internal static unsafe long sf_read_double(IntPtr sndfile, double[] data, long items)
+        internal static unsafe long sf_read_double(IntPtr sndfile, ref double[] data, long items)
         {
             fixed (double* ptr = data)
             {
