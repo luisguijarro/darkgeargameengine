@@ -30,12 +30,12 @@ namespace dge.SoundSystem
     }
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct VIO_DATA
+	internal unsafe struct VIO_DATA
 	{	
 		public long offset;
 		public long Length;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 524288)]
-		public byte[] data;
+		//[MarshalAs(UnmanagedType.ByValArray, SizeConst = 524288)]
+		public byte*/*[]*/ data;
 	} 
 
 	internal delegate long sf_vio_get_filelen (IntPtr user_data);
