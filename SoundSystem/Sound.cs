@@ -18,12 +18,12 @@ namespace dge.SoundSystem
 			this.ui_ID = AL.alGenBuffer();
 			this.s_FileName = filename;
 			this.i_Channels = channels;
+			this.i_Rate = samplerate;
 			AL_FORMAT alf = channels > 1? AL_FORMAT.AL_FORMAT_STEREO16 : AL_FORMAT.AL_FORMAT_MONO16;
 			AL.alBufferData(this.ui_ID, alf, data, data.Length*sizeof(short), samplerate);
 
 			System.IO.FileInfo fi = new System.IO.FileInfo(filename);
-			this.l_Duration = (long)((data.Length*sizeof(short)) / (samplerate * channels * (16/8f)));
-			//duration = filesize in bytes / (samplerate * #of channels * (bitspersample/eight))
+			this.l_Duration = (long)(((sizeof(short)*data.Length) * 8f / (float)(channels * 16f)) / (float)samplerate);
 		}
 
 		public Sound (string filename, byte channels, float[] data, int samplerate)
@@ -32,11 +32,11 @@ namespace dge.SoundSystem
 			this.s_FileName = filename;
 			this.i_Channels = channels;
 			this.i_Rate = samplerate;
-			AL_FORMAT alf = channels > 1? AL_FORMAT.AL_FORMAT_STEREO16 : AL_FORMAT.AL_FORMAT_MONO16;
+			AL_FORMAT alf = channels > 1? (AL_FORMAT)0x10011 : (AL_FORMAT)0x10010;
 			AL.alBufferData(this.ui_ID, alf, data, data.Length*sizeof(float), samplerate);
 
 			System.IO.FileInfo fi = new System.IO.FileInfo(filename);
-			this.l_Duration = (long)((data.Length*sizeof(float)) / (samplerate * channels * (16/8f)));
+			this.l_Duration = (long)((((sizeof(float)*data.Length) * 8f / (float)(channels * 32f))) / (float)samplerate);
 		}
 
 		public override string ToString()

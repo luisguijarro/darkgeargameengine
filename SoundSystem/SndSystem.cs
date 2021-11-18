@@ -31,12 +31,12 @@ namespace dge
                         }
                         #endif
 
-                    List<short> l_data = new List<short>();
-                    short[] data = new short[4096];
+                    List<float> l_data = new List<float>();
+                    float[] data = new float[4096];
                     long datareaded = 0;
-                    while ((datareaded = (dge.Core.GetOS() == dge.Core.OperatingSystem.Windows) ? ImportsW.sf_read_short(ptr_snd, ref data, 4096) : ImportsL.sf_read_short(ptr_snd, ref data, 4096)) != 0)
+                    while ((datareaded = (dge.Core.GetOS() == dge.Core.OperatingSystem.Windows) ? ImportsW.sf_read_float(ptr_snd, ref data, 4096) : ImportsL.sf_read_float(ptr_snd, ref data, 4096)) != 0)
                     {
-                        short[] s_datatemp = new short[datareaded];
+                        float[] s_datatemp = new float[datareaded];
                         Array.Copy(data, s_datatemp, datareaded);
                         l_data.AddRange(s_datatemp);
                     }

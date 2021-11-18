@@ -16,6 +16,11 @@ namespace dge.SoundSystem
             OpenAL_Cntx = new OAL_Context();
         }
 
+        public static OAL_Context OpenAL_Context
+        {
+            get { return OpenAL_Cntx; }
+        }
+
         public unsafe static Sound LoadSndFile(string path)
         {
             if (File.Exists(path)) // Existe Fichero?
@@ -31,12 +36,12 @@ namespace dge.SoundSystem
                     }
                     #endif
 
-                List<short> l_data = new List<short>();
-                short[] data = new short[4096];
+                List<float> l_data = new List<float>();
+                float[] data = new float[4096];
                 long datareaded = 0;
-                while ((datareaded = (dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_read_short(ptr_snd, ref data, 4096) : ImportsL.sf_read_short(ptr_snd, ref data, 4096))) != 0)
+                while ((datareaded = (dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_read_float(ptr_snd, ref data, 4096) : ImportsL.sf_read_float(ptr_snd, ref data, 4096))) != 0)
                 {
-                    short[] s_datatemp = new short[datareaded];
+                    float[] s_datatemp = new float[datareaded];
                     Array.Copy(data, s_datatemp, datareaded);
                     l_data.AddRange(s_datatemp);
                 }
@@ -72,17 +77,24 @@ namespace dge.SoundSystem
         {
             if (bytes.Length > 0) // Existen bytes?
             {
-                byte[] nbytes = new byte[524288];
-                bytes.CopyTo(nbytes, 0);
+                //byte[] nbytes = new byte[524288];
+                //bytes.CopyTo(nbytes, 0);
 
                 VIO_DATA v_data = new VIO_DATA
                 {
                     offset = 0,
                     Length = bytes.Length,
-                    data = nbytes
+                    //data = bytes
                 };
 
-                IntPtr PtrData = Marshal.AllocHGlobal(Marshal.SizeOf(v_data));
+                fixed(byte* b_ptr = bytes)
+                {
+                    v_data.data = b_ptr;
+                }
+
+                int SizeInBytes_of_v_data = (sizeof(long)*2) + bytes.Length;
+
+                IntPtr PtrData = Marshal.AllocHGlobal(SizeInBytes_of_v_data); //Marshal.SizeOf(v_data));
                 Marshal.StructureToPtr(v_data, PtrData, false);
 
                 SF_INFO sf_info = new SF_INFO();
@@ -109,12 +121,12 @@ namespace dge.SoundSystem
                     }
                     #endif
 
-                List<short> l_data = new List<short>();
-                short[] data = new short[4096];
+                List<float> l_data = new List<float>();
+                float[] data = new float[4096];
                 long datareaded = 0;
-                while ((datareaded = (dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_read_short(ptr_snd, ref data, 4096) : ImportsL.sf_read_short(ptr_snd, ref data, 4096))) != 0)
+                while ((datareaded = (dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_read_float(ptr_snd, ref data, 4096) : ImportsL.sf_read_float(ptr_snd, ref data, 4096))) != 0)
                 {
-                    short[] s_datatemp = new short[datareaded];
+                    float[] s_datatemp = new float[datareaded];
                     Array.Copy(data, s_datatemp, datareaded);
                     l_data.AddRange(s_datatemp);
                 }
@@ -172,7 +184,7 @@ namespace dge.SoundSystem
             Marshal.StructureToPtr(vd, user_data, true);
             return vd.offset;
         }
-        private static long sf_vio_read (IntPtr ptr, long count, IntPtr user_data)
+        private static unsafe long sf_vio_read (IntPtr ptr, long count, IntPtr user_data)
         {
             VIO_DATA vd = (VIO_DATA)Marshal.PtrToStructure(user_data, typeof(VIO_DATA));
 
@@ -180,8 +192,13 @@ namespace dge.SoundSystem
             {
                 count = vd.Length - vd.offset;
             }
+            byte[] bytes = new byte[vd.Length];
+            for (long i=0;i<vd.Length;i++)
+            {
+                bytes[i] = vd.data[i];
+            }
 
-            Marshal.Copy(vd.data, (int)vd.offset, ptr, (int)count);
+            Marshal.Copy(bytes, (int)vd.offset, ptr, (int)count);
             
             vd.offset += count;
 
