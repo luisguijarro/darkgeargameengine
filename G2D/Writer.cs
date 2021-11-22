@@ -224,7 +224,6 @@ namespace dge.G2D
 			//Console.WriteLine("Escribir en ancho: "+text);
 			string[] s_words = text.Split(' ');
 
-			float tmp_linewidth = 0;
 			float actualpos = posx;
 			int n_lines = 0;
 			for (int w=0;w<s_words.Length;w++)
@@ -234,22 +233,19 @@ namespace dge.G2D
 					string s_word = s_words[w];
 
 					float[] word_size = MeasureString(font, s_word, fsize);
-					if ((tmp_linewidth + word_size[0]) > lineWidth)
-					{
-						tmp_linewidth = word_size[0] + (font.f_spaceWidth*(fsize/font.MaxFontSize));
-						actualpos = posx;
-						n_lines++;
-					}
-					else
-					{
-						tmp_linewidth += word_size[0] + (font.f_spaceWidth*(fsize/font.MaxFontSize)); // Palabra + Espacio.
-					}			
 					
 					for (int i=0;i<s_word.Length;i++)
 					{
 						if (font.d_characters.ContainsKey(s_word[i]))
 						{
-							actualpos += WriteChar(font, color, s_word[i], fsize, actualpos, posy + ((font.MaxCharacterHeight*(fsize/font.MaxFontSize))*n_lines));
+							float increment = font.d_characters[s_word[i]].f_width*(fsize/font.MaxFontSize);
+							if (actualpos + increment > posx+lineWidth)
+							{
+								actualpos = posx;
+								n_lines++;
+							}
+							WriteChar(font, color, s_word[i], fsize, actualpos, posy + ((font.MaxCharacterHeight*(fsize/font.MaxFontSize))*n_lines));
+							actualpos += increment;
 						}
 					}
 				}
@@ -305,6 +301,56 @@ namespace dge.G2D
 					float w = WriteChar(font, color, text[i], fsize, actualpos, posy);
 					WriteCharBorder(font, BorderColor, text[i], fsize, actualpos, posy);
 					actualpos += w;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Method used by the writer to write text in screen with Border.
+		/// </summary>
+		/// <remarks>Write Text.</remarks>
+		/// <param name="font">Font to Use when Write text.</param>
+		/// <param name="color">Sets the color in which the text will be written.</param>
+		/// <param name="text">Text to Write.</param>
+		/// <param name="size">Size of the font in pixels.</param>
+		/// <param name="posx">X coord of Origin of the text.</param>
+		/// <param name="posy">Y coord of origin of the text.</param>
+		/// <param name="BorderColor">Sets the color in which the border will be drawn.</param>
+		/// <param name="lineWidth">Max line width of the text.</param>
+		public void Write(dgFont font, dgtk.Graphics.Color4 color, string text, float fsize, float posx, float posy, dgtk.Graphics.Color4 BorderColor, float lineWidth)
+		{
+			//Console.WriteLine("Escribir en ancho: "+text);
+			string[] s_words = text.Split(' ');
+
+			float actualpos = posx;
+			int n_lines = 0;
+			for (int w=0;w<s_words.Length;w++)
+			{
+				if (s_words[w].Length>0)
+				{
+					string s_word = s_words[w];
+
+					float[] word_size = MeasureString(font, s_word, fsize);		
+					
+					for (int i=0;i<s_word.Length;i++)
+					{
+						if (font.d_characters.ContainsKey(s_word[i]))
+						{
+							float increment = font.d_characters[s_word[i]].f_width*(fsize/font.MaxFontSize);
+							if (actualpos + increment > posx+lineWidth)
+							{
+								actualpos = posx;
+								n_lines++;
+							}
+							WriteChar(font, color, s_word[i], fsize, actualpos, posy + ((font.MaxCharacterHeight*(fsize/font.MaxFontSize))*n_lines));
+							WriteCharBorder(font, BorderColor, s_word[i], fsize, actualpos, posy + ((font.MaxCharacterHeight*(fsize/font.MaxFontSize))*n_lines));
+							actualpos += increment;
+						}
+					}
+				}
+				if (w<s_words.Length-1) // añadimos espacio si no es la ultima palabra.
+				{ 
+					actualpos += font.f_spaceWidth*(fsize/font.MaxFontSize); 
 				}
 			}
 		}
@@ -394,15 +440,36 @@ namespace dge.G2D
 				if (s_words[w].Length>0)
 				{
 					float[] word_size = MeasureString(font.Name, s_words[w], fontsize);
-					if ((tmp_linewidth + word_size[0]) > lineWidth)
+					if (word_size[0] > lineWidth)
 					{
-						tmp_linewidth = word_size[0] + (font.f_spaceWidth*(fontsize/font.MaxFontSize));
-						n_lines++;
+						//METER CÓDIGO de division de palabras largas.
+						float tmp_posx = tmp_linewidth;
+						for (int i=0;i<s_words.Length;i++)
+						{
+							dgCharacter ch = font.d_characters[s_words[w][i]];
+							if (tmp_posx + ch.f_width*(fontsize/font.MaxFontSize) > lineWidth)
+							{
+								tmp_posx = 0;
+								n_lines++;
+							}
+							tmp_posx += ch.f_width*(fontsize/font.MaxFontSize);
+						}
+						tmp_linewidth = tmp_posx;
 					}
 					else
 					{
-						tmp_linewidth += word_size[0] + (font.f_spaceWidth*(fontsize/font.MaxFontSize)); // Palabra + Espacio.
-					}	
+						if ((tmp_linewidth + word_size[0]) > lineWidth)
+						{
+							tmp_linewidth = word_size[0] + (font.f_spaceWidth*(fontsize/font.MaxFontSize));
+							n_lines++;
+						}
+						else
+						{
+							tmp_linewidth += word_size[0] + (font.f_spaceWidth*(fontsize/font.MaxFontSize)); // Palabra + Espacio.
+						}	
+					}
+
+					
 					//maxheight = (maxheight < word_size[1]) ? word_size[1] : maxheight;
 				}
 			}
