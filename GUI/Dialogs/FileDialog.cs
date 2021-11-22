@@ -18,6 +18,7 @@ namespace dge.GUI
         //private string s_FullName;
         private string s_filter;
         private List<string> CarpetasRevisadas;
+        private bool b_InSaveMode;
         
         public FileDialog(GraphicsUserInterface gui) : base(gui)
         {
@@ -119,6 +120,7 @@ namespace dge.GUI
             {
                 this.updateFolder();
                 this.textBox2.Editable = save;
+                this.b_InSaveMode = save;
             }
             base.ShowDialog();
         }
@@ -201,7 +203,7 @@ namespace dge.GUI
         {
             if (this.FullPath != "")
             {
-                string[] line = this.FullPath.Split('.');
+                string[] line = this.textBox2.Text.Split('.');
                 if (line.Length>1)
                 {
                     if (line[line.Length-1] == this.s_filter.Split('.')[1])
@@ -288,10 +290,20 @@ namespace dge.GUI
             get { return this.s_Path+"/"+this.textBox2.Text; }
         }
 
+        public string FileName
+        {
+            get { return this.textBox2.Text; }
+        }
+
         public string RootFolder 
         {
             set { this.s_RootFolder = value; UpdateTreeViewer(); }
             get { return this.s_RootFolder; }
+        }
+
+        public bool IsInSaveMode
+        {
+            get { return this.b_InSaveMode; }
         }
     }
 }
