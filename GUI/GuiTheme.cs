@@ -19,8 +19,8 @@ namespace dge.GUI
         public float Default_FontSize;
 
         public Color4 Default_MenuBackgroundColor;
-
         public Color4 Default_BackgroundColor;
+        public Color4 Default_ControlsBackgroundColor;
         public Color4 Default_TextColor;
         public Color4 Default_TextBorderColor;
         public Color4 Default_DisableTextColor;
@@ -290,6 +290,7 @@ namespace dge.GUI
             ret.Default_Font = dge.G2D.Tools.LoadDGFont(Core.LoadEmbeddedResource("dge.dgFonts.LinuxLibertine.dgf"), "dge.dgFonts.LinuxLibertine.dgf");
             ret.Default_FontSize = 12;
             ret.Default_BackgroundColor = new Color4(83,83,83,255);
+            ret.Default_ControlsBackgroundColor = new Color4((byte)185, 185, 185, 255);
             ret.Default_TextColor = Color4.Black;
             ret.Default_TextBorderColor = Color4.Black;
             ret.Default_DisableTextColor = Color4.Gray;
