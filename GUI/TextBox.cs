@@ -61,6 +61,12 @@ namespace dge.GUI
             this.KeyCharReturned -= CharReturned;
         }
 
+        protected override void OnResize()
+        {
+            base.OnResize();
+            this.UpdateTextCoords();
+        }
+
         protected internal override void UpdateTheme()
         {
             this.MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.TextBox_MarginsFromTheEdge;            
@@ -178,31 +184,34 @@ namespace dge.GUI
             {
                 if (this.gui.Writer != null)
                 {
-                    float txtsize = G2D.Writer.MeasureString(this.font, this.b_Focus ? this.s_text+"|" : this.s_text, this.f_FontSize)[0];
-                    if (this.b_Focus)
+                    if (dge.G2D.Writer.Fonts.ContainsKey(this.font.Name))
                     {
-                        if (this.cursorPos > this.s_text.Length)
+                        float[] txtsize = G2D.Writer.MeasureString(this.font, this.b_Focus ? this.s_text+"|" : this.s_text, this.f_FontSize, this.InnerSize.Width);
+                        if (this.b_Focus)
                         {
-                            this.cursorPos = this.s_text.Length;
+                            if (this.cursorPos > this.s_text.Length)
+                            {
+                                this.cursorPos = this.s_text.Length;
+                            }
+                            //string s_txt = this.s_text.Substring(0, this.cursorPos) + GuiTheme.DefaultGuiTheme.TextBox_CursorChar + this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);                        
+                            //txtsize = G2D.Writer.MeasureString(this.font, this.b_Focus ? this.s_text+"|" : this.s_text, this.f_FontSize)[0];
                         }
-                        //string s_txt = this.s_text.Substring(0, this.cursorPos) + GuiTheme.DefaultGuiTheme.TextBox_CursorChar + this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);                        
-                        //txtsize = G2D.Writer.MeasureString(this.font, this.b_Focus ? this.s_text+"|" : this.s_text, this.f_FontSize)[0];
-                    }
 
-                    switch(this.ta_textAlign)
-                    {
-                        case TextAlign.Left:
-                            this.tx_x = this.MarginLeft * 2;
-                            break;
-                        case TextAlign.Center:
-                            this.tx_x = (this.InnerSize.Width/2f) - (txtsize/2f);
-                            break;
-                        case TextAlign.Right:
-                            this.tx_x = this.InnerSize.Width-(this.MarginRight + this.MarginLeft + txtsize);
-                            break;
-                    }
+                        switch(this.ta_textAlign)
+                        {
+                            case TextAlign.Left:
+                                this.tx_x = this.MarginLeft * 2;
+                                break;
+                            case TextAlign.Center:
+                                this.tx_x = (this.InnerSize.Width/2f) - (txtsize[0]/2f);
+                                break;
+                            case TextAlign.Right:
+                                this.tx_x = this.InnerSize.Width-(this.MarginRight + this.MarginLeft + txtsize[0]);
+                                break;
+                        }
 
-                    this.tx_y = (this.InnerSize.Height/2f) - (this.f_FontSize/1.5f);
+                        this.tx_y = 0; //(this.InnerSize.Height/2f) - (txtsize[1]/2); //(this.f_FontSize/1.5f);
+                    }
                 }
             }
         }
@@ -214,19 +223,35 @@ namespace dge.GUI
                     this.c4_BackgroundColor, this.i_x, this.i_y, this.i_width, this.i_height, 
                     0f, this.MarginsFromTheEdge, this.Texcoords, new float[]{0f,0f}, 1);
             base.pDraw();
+            
             DrawIn(this.i_x+this.MarginsFromTheEdge[0], this.i_y+this.MarginsFromTheEdge[1], this.i_width-(this.MarginsFromTheEdge[0]+this.MarginsFromTheEdge[2]), this.i_height-(this.MarginsFromTheEdge[1]+this.MarginsFromTheEdge[2]), WriteText);
         }
         
         private void WriteText()
         {
-            if (this.b_Focus)
+            if (this.b_textBorder)
             {
-                string s_txt = this.s_text.Substring(0, this.cursorPos) + GuiTheme.DefaultGuiTheme.TextBox_CursorChar + this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
-                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, s_txt, this.f_FontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.Default_DisableTextColor);
+                if (this.b_Focus)
+                {
+                    string s_txt = this.s_text.Substring(0, this.cursorPos) + GuiTheme.DefaultGuiTheme.TextBox_CursorChar + this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
+                    this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, s_txt, this.f_FontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.Default_DisableTextColor, this.InnerSize.Width);
+                }
+                else
+                {
+                    this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, this.s_text, this.f_FontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.Default_DisableTextColor, this.InnerSize.Width);
+                }
             }
             else
             {
-                this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, this.s_text, this.f_FontSize, tx_x, tx_y, this.b_IsEnable ? this.c4_textBorderColor : this.gui.GuiTheme.Default_DisableTextColor);
+                if (this.b_Focus)
+                {
+                    string s_txt = this.s_text.Substring(0, this.cursorPos) + GuiTheme.DefaultGuiTheme.TextBox_CursorChar + this.s_text.Substring(this.cursorPos, this.s_text.Length-this.cursorPos);
+                    this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, s_txt, this.f_FontSize, tx_x, tx_y, this.InnerSize.Width);
+                }
+                else
+                {
+                    this.gui.Writer.Write(this.font, this.b_IsEnable ? this.c4_textColor : this.gui.GuiTheme.Default_DisableTextColor, this.s_text, this.f_FontSize, tx_x, tx_y, this.InnerSize.Width);
+                }
             }
         }
 
