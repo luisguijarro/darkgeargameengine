@@ -33,6 +33,7 @@ namespace dge.GUI
         private int i_LastPosY;
 
         private Color4 c4_MenuBackgroundColor;
+        private Color4 c4_BackgroundColor;
 
 		internal event EventHandler<MouseButtonEventArgs> MouseDown; // Evento que se da cuando se pulsa un botón del ratón.
 		internal event EventHandler<MouseButtonEventArgs> MouseUp; // Evento que se da cuando se suelta un botón del ratón.
@@ -57,6 +58,8 @@ namespace dge.GUI
             if (gt_ActualGuiTheme == null)
             {
                 gt_ActualGuiTheme = GuiTheme.DefaultGuiTheme;
+                this.c4_MenuBackgroundColor = gt_ActualGuiTheme.Default_MenuBackgroundColor;
+                this.c4_BackgroundColor = gt_ActualGuiTheme.Default_BackgroundColor;//new Color4(0.65f, 0.65f, 0.65f, 1f);
                 this.UpdateTheme();
             }
 
@@ -259,6 +262,7 @@ namespace dge.GUI
         
         internal void Draw()
         {
+            this.Drawer.Draw(this.c4_BackgroundColor, 0, 0, this.Width, this.i_height, 0f);
             GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-mheight) : (int)this.i_height);
             this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.mheight : 0, this.i_width, (this.m_menu.Count>0) ? this.i_height-this.mheight : this.i_height);
             
@@ -497,6 +501,12 @@ namespace dge.GUI
         {
             set { this.c4_MenuBackgroundColor = value; }
             get { return this.c4_MenuBackgroundColor; }
+        }
+
+        public Color4 GUIBackGround
+        {
+            set { this.c4_BackgroundColor = value; }
+            get { return this.c4_BackgroundColor; }
         }
     
         #endregion
