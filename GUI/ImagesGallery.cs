@@ -165,6 +165,15 @@ namespace dge.GUI
             }
         }
 
+        protected override void OnMWheel(object sender, MouseWheelEventArgs e)
+        {
+            base.OnMWheel(sender, e);
+            if ((this.ui_id == e.ID) || (this.d_InteractiveIDs.ContainsValue(e.ID)))
+            {
+                this.sbVer.Value -= (int)((this.imageSize/2f) * e.Delta);
+            }
+        }
+
         protected override void pDraw()
         {
             if (this.b_ShowMe)
