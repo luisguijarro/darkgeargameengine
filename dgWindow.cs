@@ -22,8 +22,11 @@ namespace dge
             dge.SoundSystem.SoundTools.InitStaticSoundSystem();
             sndSystem = new SndSystem(dge.SoundSystem.SoundTools.OpenAL_Context);
 
+            //this.MakeCurrent();
+            dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
             dge.G2D.IDsDrawer.Init_IDs_Drawer(); // Iniciamos Código de visualizado de Ids.
             dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0,0,this.Width, this.Height, true);
+            dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
 
             this.MakeCurrent();
             this.drawer2D = new G2D.Drawer();
