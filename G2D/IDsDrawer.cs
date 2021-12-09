@@ -57,10 +57,12 @@ namespace dge.G2D
             if (!inicialized)
             {
                 dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
+                /*
                 dgtk.OpenGL.GL.glEnable(dgtk.OpenGL.EnableCap.GL_VERTEX_ARRAY);
                 dgtk.OpenGL.GL.glEnableClientState(dgtk.OpenGL.EnableCap.GL_VERTEX_ARRAY);
                 dgtk.OpenGL.GL.glEnable(dgtk.OpenGL.EnableCap.GL_TEXTURE_COORD_ARRAY);
                 dgtk.OpenGL.GL.glEnableClientState(dgtk.OpenGL.EnableCap.GL_TEXTURE_COORD_ARRAY);
+                */
                 dge.Core2D.PixelBufferObject_Select = GL.glGenBuffer();
                 //Console.WriteLine("Init_IDs_Drawer 0: "+(ErrorCode)GL.glGetError());
 
