@@ -155,6 +155,48 @@ namespace dge.SoundSystem
         }
 
         
+        public static void SetDistanceAttenuationModel(AL_DistanceModel adm)
+        {
+            OpenAL_Cntx.MakeCurrent();
+            AL.alDistanceModel(adm);
+        }
+        
+        public static void SetListener(float PositionX, float PositionY, float PositionZ, float DirectionX, float DirectionY, float DirectionZ, float UpX, float UpY, float UpZ)
+        {
+            OpenAL_Cntx.MakeCurrent();
+            AL.alListener3f(AL_Listener3vParam.AL_POSITION, PositionX, PositionY, PositionZ);
+            AL.alListener3f(AL_Listener3vParam.AL_VELOCITY, 0f, 0f, 0f);
+            AL.alListenerfv(AL_Listener3vParam.AL_ORIENTATION, new float[]{DirectionX, DirectionY, DirectionZ, UpX, UpY, UpZ});
+        }
+
+        public static void SetListenerPosition(float PositionX, float PositionY, float PositionZ)
+        {
+            OpenAL_Cntx.MakeCurrent();
+            AL.alListener3f(AL_Listener3vParam.AL_POSITION, PositionX, PositionY, PositionZ);
+        }
+
+        public static void SetListenerOrientation(float DirectionX, float DirectionY, float DirectionZ, float UpX, float UpY, float UpZ)
+        {
+            OpenAL_Cntx.MakeCurrent();
+            AL.alListenerfv(AL_Listener3vParam.AL_ORIENTATION, new float[]{DirectionX, DirectionY, DirectionZ, UpX, UpY, UpZ});
+        }
+
+        public static void SetMetersPerUnit(float meters)
+        {
+            AL.alListenerf(AL_ListenerifParam.AL_METERS_PER_UNIT, meters);
+        }
+
+        public static SoundSource3D CreateSoundSource3D()
+        {
+            OpenAL_Cntx.MakeCurrent();
+            return new SoundSource3D();
+        }
+
+        public static bool MakeCurrent()
+        {
+            return OpenAL_Cntx.MakeCurrent();
+        }
+
         private static long sf_vio_get_filelen (IntPtr user_data)
         {
             VIO_DATA vd = (VIO_DATA)Marshal.PtrToStructure(user_data, typeof(VIO_DATA));
