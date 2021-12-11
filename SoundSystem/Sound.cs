@@ -25,7 +25,7 @@ namespace dge.SoundSystem
 			int bits;
 			AL.alGetBufferi(this.ui_ID, AL_BufferParam.AL_BITS, out bits);
 
-			System.IO.FileInfo fi = new System.IO.FileInfo(filename);
+			//System.IO.FileInfo fi = new System.IO.FileInfo(filename);
 			this.l_Duration = (long)((float)(((sizeof(short)*data.Length) * 8 ) / (channels * bits)) / (float)samplerate);
 		}
 
@@ -41,7 +41,7 @@ namespace dge.SoundSystem
 			int bits;
 			AL.alGetBufferi(this.ui_ID, AL_BufferParam.AL_BITS, out bits);
 
-			System.IO.FileInfo fi = new System.IO.FileInfo(filename);			
+			//System.IO.FileInfo fi = new System.IO.FileInfo(filename);			
 			this.l_Duration = (long)((float)(((sizeof(float)*data.Length) * 8 ) / (channels * bits)) / (float)samplerate);
 		}
 
