@@ -35,7 +35,7 @@ namespace dge.SoundSystem
 			this.s_FileName = filename;
 			this.i_Channels = channels;
 			this.i_Rate = samplerate;
-			AL_FORMAT alf = channels > 1? (AL_FORMAT)0x10011 : (AL_FORMAT)0x10010;
+			AL_FORMAT alf = channels > 1? AL_FORMAT.AL_FORMAT_STEREO_FLOAT32 : AL_FORMAT.AL_FORMAT_MONO_FLOAT32;
 			AL.alBufferData(this.ui_ID, alf, data, data.Length*sizeof(float), samplerate);
 
 			int bits;
