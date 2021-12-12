@@ -182,14 +182,14 @@ namespace dge.SoundSystem
 			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET, value.Ticks); }
 			get { float ret = AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET); return new DateTime((TimeSpan.FromSeconds(ret)).Ticks);}
 		}
-		public long TimeTicks
+		public long TimeSeconds
 		{
-			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET, (float)TimeSpan.FromTicks(value).TotalSeconds);}
-			get { float ret = AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET); return (TimeSpan.FromSeconds(ret)).Ticks;}
+			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET, value); } //(float)TimeSpan.FromTicks(value).TotalSeconds);}
+			get { float ret = AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET); return (long)ret; } //(TimeSpan.FromSeconds(ret)).Ticks;}
 		}
-		public DateTime Duration
+		public TimeSpan Duration
 		{
-			get { TimeSpan dur = TimeSpan.FromSeconds(this.snd.Duration); return new DateTime(dur.Ticks);}
+			get { TimeSpan dur = TimeSpan.FromSeconds(this.snd.Duration); return dur; } //new DateTime(dur.Ticks);}
 		}
 		public DateTime TimeRemaining
 		{
