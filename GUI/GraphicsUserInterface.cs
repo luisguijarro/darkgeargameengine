@@ -31,6 +31,7 @@ namespace dge.GUI
 
         private int i_LastPosX;
         private int i_LastPosY;
+        internal bool b_SmoothText;
 
         private Color4 c4_MenuBackgroundColor;
         private Color4 c4_BackgroundColor;
@@ -46,6 +47,7 @@ namespace dge.GUI
 		
         public GraphicsUserInterface()
         {            
+            this.b_SmoothText = true;
             this.m_menu = new Dictionary<string, Menu>();
             this.l_menus = new List<string>();
             this.Update = true; //Forzamos para pruebas.
@@ -262,6 +264,7 @@ namespace dge.GUI
         
         internal void Draw()
         {
+            this.Writer.AA_OnOff(this.b_SmoothText);
             this.Drawer.Draw(this.c4_BackgroundColor, 0, 0, this.Width, this.i_height, 0f);
             GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-mheight) : (int)this.i_height);
             this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.mheight : 0, this.i_width, (this.m_menu.Count>0) ? this.i_height-this.mheight : this.i_height);
@@ -507,6 +510,12 @@ namespace dge.GUI
         {
             set { this.c4_BackgroundColor = value; }
             get { return this.c4_BackgroundColor; }
+        }
+
+        public bool SmoothText
+        {
+            set { this.b_SmoothText = value; }
+            get { return this.b_SmoothText; }
         }
     
         #endregion
