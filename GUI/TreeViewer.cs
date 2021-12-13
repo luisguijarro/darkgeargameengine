@@ -239,7 +239,8 @@ namespace dge.GUI
                 // Dibujamos Elemento:
                 if (this.ui_SelectedID == parentElement.ID)
                 {
-                    this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.tbo_ThemeTBO.ID, Color4.White, finalX, y, (int)(this.f_ContentWidth-(finalX+sbHor.Value)), this.i_TextHeight, 0f, this.SelectionMarginsFromTheEdge, this.SelectionTexcoords, new float[]{0f,0f}, 0);
+                    int TWidth = (int)dge.G2D.Writer.MeasureString(this.font, " "+TextToShow+" ", this.f_FontSize)[0];
+                    this.gui.GuiDrawer.DrawGL(this.gui.GuiTheme.tbo_ThemeTBO.ID, Color4.White, finalX, y, TWidth/*(int)(this.f_ContentWidth-(finalX+sbHor.Value))*/, this.i_TextHeight, 0f, this.SelectionMarginsFromTheEdge, this.SelectionTexcoords, new float[]{0f,0f}, 0);
                     this.gui.Writer.Write(this.font, this.c4_fontColor, " "+TextToShow, this.f_FontSize, finalX, y, this.c4_textBorderColor);
                 }
                 else
