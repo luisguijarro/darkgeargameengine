@@ -144,5 +144,7 @@
     <Content Include="G2D\ShaderSources\ColorMapShader.cs" />
     <Content Include="G2D\ShaderSources\LightColorMapShader.cs" />
     <Content Include="GUI\Events\SelectedColorEventArgs.cs" />
+    <Content Include="GUI\AudioPlayer.cs" />
+    <Content Include="GUI\InteractiveProgressBar.cs" />
   </ItemGroup>
 </Project>
