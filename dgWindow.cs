@@ -63,6 +63,10 @@ namespace dge
                     string name = now.ToString("dd-MM-yyyy_" + now.ToString("T"));
                     dge.G2D.Tools.SaveScreenShot(name+".png", this);
                 }
+                if (e.KeyStatus.KeyCode == KeyCode.F11)
+                {
+                    this.FullScreen = !this.FullScreen;
+                }
             }
         }
 
