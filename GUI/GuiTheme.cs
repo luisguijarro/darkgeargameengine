@@ -12,6 +12,8 @@ namespace dge.GUI
         internal dge.G2D.TextureBufferObject tbo_ThemeSltTBO; // TBO de siluetas para ID.
 
         public float[] FileIcon_TexCoords; // n=4
+        public float[] FileImageIcon_TexCoords; // n=4
+        public float[] FileSoundIcon_TexCoords; // n=4
         public float[] FolderIcon_TexCoords; // n=4
         public float[] TransparentBackground_TexCoords; // n=4
 
@@ -79,6 +81,17 @@ namespace dge.GUI
         public float[] ProgressBar_Ver_Texcoords; // n=8
         public float[] ProgressBar_Hor_Filling_Texcoords; // n=4
         public float[] ProgressBar_Ver_Filling_Texcoords; // n=4
+
+        #endregion
+
+        #region InteractiveProgressBar
+
+        public int[] InteractiveProgressBar_Hor_MarginsFromTheEdge; // n=4
+        public int[] InteractiveProgressBar_Ver_MarginsFromTheEdge; // n=4
+        public float[] InteractiveProgressBar_Hor_Texcoords; // n=8
+        public float[] InteractiveProgressBar_Ver_Texcoords; // n=8
+        public float[] InteractiveProgressBar_Hor_Filling_Texcoords; // n=4
+        public float[] InteractiveProgressBar_Ver_Filling_Texcoords; // n=4
 
         #endregion
 
@@ -229,6 +242,22 @@ namespace dge.GUI
 
         #endregion
 
+        #region MiniAudioPlayer
+        
+        public int[] AudioPlayer_MarginsFromTheEdge; // n=4
+        public float[] AudioPlayer_Texcoords; // n=8
+        public int[] AudioPlayer_ButtonsMarginsFromTheEdge; // n=4
+        public int[] AudioPlayer_ButtonsSize; // n=2
+        public float[] AudioPlayer_PlayButtonTexcoords; // n=4
+        public float[] AudioPlayer_PlayButtonOffSet;
+        public float[] AudioPlayer_PauseButtonTexcoords; // n=4
+        public float[] AudioPlayer_PauseButtonOffSet;
+        public float[] AudioPlayer_StopButtonTexcoords; // n=4
+        public float[] AudioPlayer_StopButtonOffSet;
+        public Color4 AudioPlayer_DefaultTextColor;
+
+        #endregion
+
         public GuiTheme()
         {
 
@@ -279,6 +308,18 @@ namespace dge.GUI
             {
                 multHor * 203, multVer * 217,
                 multHor * 225, multVer * 239
+            };
+
+            ret.FileImageIcon_TexCoords = new float[]
+            {
+                multHor * 225, multVer * 193,
+                multHor * 246, multVer * 215
+            };
+
+            ret.FileSoundIcon_TexCoords = new float[]
+            {
+                multHor * 225, multVer * 217,
+                multHor * 246, multVer * 239
             };
 
             ret.TransparentBackground_TexCoords = new float[]
@@ -412,6 +453,27 @@ namespace dge.GUI
                 multHor*181f, multVer*1f, multHor*203f, multVer*155f
             };
 
+            // InteractiveProgressBar:___________________________________________________________
+            ret.InteractiveProgressBar_Hor_MarginsFromTheEdge = new int[]{1, 1, 1, 1};
+            ret.InteractiveProgressBar_Ver_MarginsFromTheEdge = new int[]{1, 1, 1, 1};
+            ret.InteractiveProgressBar_Hor_Texcoords = new float[]
+            {
+                multHor*207f, multHor*208f, multHor*215f, multHor*216f, 
+                multVer*56f, multVer*57f, multVer*64f, multVer*65f
+            };
+            ret.InteractiveProgressBar_Ver_Texcoords = new float[]
+            {
+                multHor*207f, multHor*208f, multHor*215f, multHor*216f, 
+                multVer*56f, multVer*57f, multVer*64f, multVer*65f
+            };
+            ret.InteractiveProgressBar_Hor_Filling_Texcoords = new float[]
+            {
+                multHor*218f, multVer*57f, multHor*225f, multVer*64f
+            };
+            ret.InteractiveProgressBar_Ver_Filling_Texcoords = new float[]
+            {
+                multHor*218f, multVer*57f, multHor*225f, multVer*64f
+            };
 
             // ContentViewer:____________________________________________________________________
             ret.ContentViewer_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
@@ -685,6 +747,32 @@ namespace dge.GUI
             ret.ColorPicker_CromSelectorSize = new int[]{16, 9};
             ret.ColorPicker_PickerSize = new int[]{11, 11};
 
+            // AudioPlayer:______________________________________________________________________
+
+            ret.AudioPlayer_MarginsFromTheEdge = new int[]{2, 2, 2, 2};
+            ret.AudioPlayer_Texcoords = new float[]
+            {
+                multHor*229f, multHor*231f, multHor*249f, multHor*251f, 
+                multVer*145f, multVer*147f, multVer*165f, multVer*167f
+            };
+
+            ret.AudioPlayer_ButtonsSize = new int[]{22, 22};
+
+            ret.AudioPlayer_PlayButtonTexcoords = new float[]
+            {
+                multHor*229f, multVer*1, multHor*251f, multVer*23
+            };
+            ret.AudioPlayer_PlayButtonOffSet = new float[]{0f, multVer*24f};
+            ret.AudioPlayer_PauseButtonTexcoords = new float[]
+            {
+                multHor*229f, multVer*48, multHor*251f, multVer*71
+            };
+            ret.AudioPlayer_PauseButtonOffSet = new float[]{0f, multVer*24f};
+            ret.AudioPlayer_StopButtonTexcoords = new float[]
+            {
+                multHor*229f, multVer*97, multHor*251f, multVer*119
+            };
+            ret.AudioPlayer_StopButtonOffSet = new float[]{0f, multVer*24f};
 
             return ret;
         }
