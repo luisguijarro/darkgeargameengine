@@ -8,13 +8,13 @@ namespace dge.GUI
 {    
     public class ProgressBar : BaseObjects.Control
     {
-        private Orientation o_Orientation;
-        private int i_lastValue;
-        private int i_value;
-        private int i_MaxValue;
-        private int i_MinValue;
-        private float[] FillingTexCoords;
-        private int ProgressWidthHeight;
+        protected Orientation o_Orientation;
+        protected int i_lastValue;
+        protected int i_value;
+        protected int i_MaxValue;
+        protected int i_MinValue;
+        protected float[] FillingTexCoords;
+        protected int ProgressWidthHeight;
         public event EventHandler<IntValueChangedEventArgs> ValueChanged;
         public ProgressBar() : this (100,22)
         {
@@ -43,7 +43,7 @@ namespace dge.GUI
             this.FillingTexCoords = this.gui.gt_ActualGuiTheme.ProgressBar_Hor_Filling_Texcoords;
         }
 
-        private void UpdateProgres()
+        protected virtual void UpdateProgres()
         {
             int valuerange = this.MaxValue - this.MinValue;
             if (this.o_Orientation == Orientation.Horizontal)
@@ -51,14 +51,14 @@ namespace dge.GUI
                 int pixelrange = this.Width;
                 float mult = (float)pixelrange/(float)valuerange;
                 this.ProgressWidthHeight = (int)(mult*this.i_value);
-                this.Texcoords = GuiTheme.DefaultGuiTheme.ProgressBar_Hor_Texcoords;
-                float ValueRangeOfTexCoords = GuiTheme.DefaultGuiTheme.ProgressBar_Hor_Filling_Texcoords[2] - GuiTheme.DefaultGuiTheme.ProgressBar_Hor_Filling_Texcoords[0];
+                this.Texcoords =this.gui.gt_ActualGuiTheme.ProgressBar_Hor_Texcoords;
+                float ValueRangeOfTexCoords = this.gui.gt_ActualGuiTheme.ProgressBar_Hor_Filling_Texcoords[2] - this.gui.gt_ActualGuiTheme.ProgressBar_Hor_Filling_Texcoords[0];
                 this.FillingTexCoords = new float[]
                 {
-                    GuiTheme.DefaultGuiTheme.ProgressBar_Hor_Filling_Texcoords[0],
-                    GuiTheme.DefaultGuiTheme.ProgressBar_Hor_Filling_Texcoords[1],
-                    GuiTheme.DefaultGuiTheme.ProgressBar_Hor_Filling_Texcoords[0] + (ValueRangeOfTexCoords/this.MaxValue) * this.i_value,
-                    GuiTheme.DefaultGuiTheme.ProgressBar_Hor_Filling_Texcoords[3]
+                    this.gui.gt_ActualGuiTheme.ProgressBar_Hor_Filling_Texcoords[0],
+                    this.gui.gt_ActualGuiTheme.ProgressBar_Hor_Filling_Texcoords[1],
+                    this.gui.gt_ActualGuiTheme.ProgressBar_Hor_Filling_Texcoords[0] + (ValueRangeOfTexCoords/this.MaxValue) * this.i_value,
+                    this.gui.gt_ActualGuiTheme.ProgressBar_Hor_Filling_Texcoords[3]
                 };
             }
             else
@@ -66,14 +66,14 @@ namespace dge.GUI
                 int pixelrange = this.Height;
                 float mult = (float)pixelrange/(float)valuerange;
                 this.ProgressWidthHeight = (int)(mult*this.i_value);
-                this.Texcoords = GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Texcoords;
-                float ValueRangeOfTexCoords = GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[3] - GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[1];
+                this.Texcoords = this.gui.gt_ActualGuiTheme.ProgressBar_Ver_Texcoords;
+                float ValueRangeOfTexCoords = this.gui.gt_ActualGuiTheme.ProgressBar_Ver_Filling_Texcoords[3] - this.gui.gt_ActualGuiTheme.ProgressBar_Ver_Filling_Texcoords[1];
                 this.FillingTexCoords = new float[]
                 {
-                    GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[0],
-                    GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[1] + (ValueRangeOfTexCoords/this.MaxValue) * (this.MaxValue-this.i_value),
-                    GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[2],
-                    GuiTheme.DefaultGuiTheme.ProgressBar_Ver_Filling_Texcoords[3]
+                    this.gui.gt_ActualGuiTheme.ProgressBar_Ver_Filling_Texcoords[0],
+                    this.gui.gt_ActualGuiTheme.ProgressBar_Ver_Filling_Texcoords[1] + (ValueRangeOfTexCoords/this.MaxValue) * (this.MaxValue-this.i_value),
+                    this.gui.gt_ActualGuiTheme.ProgressBar_Ver_Filling_Texcoords[2],
+                    this.gui.gt_ActualGuiTheme.ProgressBar_Ver_Filling_Texcoords[3]
                 };
             }
         }
@@ -82,11 +82,11 @@ namespace dge.GUI
         {
             if (this.o_Orientation == Orientation.Horizontal)
             {
-                this.gui.Drawer.Draw(GuiTheme.DefaultGuiTheme.ThemeTBO.ui_ID, this.X, this.Y, this.ProgressWidthHeight, this.i_height, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
+                this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.ThemeTBO.ui_ID, this.X, this.Y, this.ProgressWidthHeight, this.i_height, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
             }
             else
             {
-                this.gui.Drawer.Draw(GuiTheme.DefaultGuiTheme.ThemeTBO.ui_ID, this.X, this.Y + (this.i_height-this.ProgressWidthHeight), this.i_width, this.ProgressWidthHeight, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
+                this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.ThemeTBO.ui_ID, this.X, this.Y + (this.i_height-this.ProgressWidthHeight), this.i_width, this.ProgressWidthHeight, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
             }
             base.pDraw();
         }
@@ -107,6 +107,12 @@ namespace dge.GUI
                 this.UpdateProgres();
             }
             get { return this.o_Orientation; }
+        }
+
+        protected void internal_Set_Value(int val)
+        {
+            this.i_value = val;
+            this.ValueChanged(this, new IntValueChangedEventArgs(val, val, false));
         }
 
         public int MaxValue
