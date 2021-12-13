@@ -23,6 +23,8 @@ namespace dge.GUI
         private float[] ListViewer_Selection_Texcoords;
         private int[] ListViewer_Header_MarginsFromTheEdge;
         private float[] FileIcon_TexCoords;
+        private float[] FileImageIcon_TexCoords;
+        private float[] FileSoundIcon_TexCoords;
         private float [] FolderIcon_TexCoords;
 
         #endregion
@@ -64,6 +66,8 @@ namespace dge.GUI
             this.ListViewer_Header_MarginsFromTheEdge = GuiTheme.DefaultGuiTheme.ListViewer_Header_MarginsFromTheEdge;
 
             this.FileIcon_TexCoords = GuiTheme.DefaultGuiTheme.FileIcon_TexCoords;
+            this.FileImageIcon_TexCoords = GuiTheme.DefaultGuiTheme.FileImageIcon_TexCoords;
+            this.FileSoundIcon_TexCoords = GuiTheme.DefaultGuiTheme.FileSoundIcon_TexCoords;
             this.FolderIcon_TexCoords = GuiTheme.DefaultGuiTheme.FolderIcon_TexCoords;
 
             this.tcFrameOffset = new float[] {0,0};
@@ -106,6 +110,8 @@ namespace dge.GUI
             this.ListViewer_Header_MarginsFromTheEdge = this.gui.gt_ActualGuiTheme.ListViewer_Header_MarginsFromTheEdge;
 
             this.FileIcon_TexCoords = this.gui.gt_ActualGuiTheme.FileIcon_TexCoords;
+            this.FileImageIcon_TexCoords = this.gui.gt_ActualGuiTheme.FileImageIcon_TexCoords;
+            this.FileSoundIcon_TexCoords = this.gui.gt_ActualGuiTheme.FileSoundIcon_TexCoords;
             this.FolderIcon_TexCoords = this.gui.gt_ActualGuiTheme.FolderIcon_TexCoords;
 
             this.c4_BackgroundColor = this.gui.gt_ActualGuiTheme.ListViewer_Default_BackgroundColor;
@@ -393,11 +399,31 @@ namespace dge.GUI
 
                                 if ((val.Value.GetType() == typeof(System.IO.FileInfo)) && head.FieldToShow == "Name")
                                 {
+                                    float[] FileTexCoord = this.FileIcon_TexCoords;
+                                    switch(((System.IO.FileInfo)val.Value).Name.Substring(((System.IO.FileInfo)val.Value).Name.Length-4, 4))
+                                    {
+                                        case ".png":
+                                        case ".bmp":
+                                        case ".jpg":
+                                        case "jpeg":
+                                        case ".gif":
+                                            FileTexCoord = this.FileImageIcon_TexCoords;
+                                            break;
+                                        case ".ogg":
+                                        case ".wav":
+                                        case ".mp3":
+                                        case "flac":
+                                            FileTexCoord = this.FileSoundIcon_TexCoords;
+                                            break;
+                                        default:
+                                            FileTexCoord = this.FileIcon_TexCoords;
+                                            break;
+                                    }
                                     this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, px, posy, elmHeight, elmHeight, 0f,
-                                    this.FileIcon_TexCoords[0],
-                                    this.FileIcon_TexCoords[1],
-                                    this.FileIcon_TexCoords[2],
-                                    this.FileIcon_TexCoords[3]);
+                                    FileTexCoord[0],
+                                    FileTexCoord[1],
+                                    FileTexCoord[2],
+                                    FileTexCoord[3]);
                                     px += elmHeight;
                                 }
                                 if ((val.Value.GetType() == typeof(System.IO.DirectoryInfo)) && head.FieldToShow == "Name")
