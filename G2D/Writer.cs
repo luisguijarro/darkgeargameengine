@@ -219,39 +219,66 @@ namespace dge.G2D
 		/// <param name="posx">X coord of Origin of the text.</param>
 		/// <param name="posy">Y coord of origin of the text.</param>
 		/// <param name="lineWidth">Max line width of the text.</param>
-		public void Write(dgFont font, dgtk.Graphics.Color4 color, string text, float fsize, float posx, float posy, float lineWidth)
+		public void Write(dgFont font, dgtk.Graphics.Color4 color, string text, float fontsize, float posx, float posy, float lineWidth)
 		{
-			//Console.WriteLine("Escribir en ancho: "+text);
 			string[] s_words = text.Split(' ');
 
-			float actualpos = posx;
+			float tmp_linewidth = 0;
 			int n_lines = 0;
+			float tmp_posx = posx;
 			for (int w=0;w<s_words.Length;w++)
 			{
 				if (s_words[w].Length>0)
 				{
-					string s_word = s_words[w];
-
-					float[] word_size = MeasureString(font, s_word, fsize);
-					
-					for (int i=0;i<s_word.Length;i++)
+					float[] word_size = MeasureString(font.Name, s_words[w], fontsize);
+					if (word_size[0] > lineWidth)
 					{
-						if (font.d_characters.ContainsKey(s_word[i]))
+						//METER CÓDIGO de division de palabras largas.					
+						if (tmp_linewidth > 0)
 						{
-							float increment = font.d_characters[s_word[i]].f_width*(fsize/font.MaxFontSize);
-							if (actualpos + increment > posx+lineWidth)
+							tmp_posx = posx;
+							tmp_linewidth = 0;
+							n_lines++;
+						}
+						for (int i=0;i<s_words[w].Length;i++)
+						{							
+							dgCharacter ch = font.d_characters[s_words[w][i]];
+							if (tmp_linewidth + ch.f_width*(fontsize/font.MaxFontSize) > lineWidth)
 							{
-								actualpos = posx;
+								tmp_posx = posx;
+								tmp_linewidth = 0;
 								n_lines++;
 							}
-							WriteChar(font, color, s_word[i], fsize, actualpos, posy + ((font.MaxCharacterHeight*(fsize/font.MaxFontSize))*n_lines));
-							actualpos += increment;
+							WriteChar(font, color, ch.ch_character, fontsize, tmp_posx, posy + (int)(((font.MaxCharacterHeight/fontsize)*1.5f)*n_lines));
+							tmp_posx += ch.f_width*(fontsize/font.MaxFontSize);
+							tmp_linewidth += ch.f_width*(fontsize/font.MaxFontSize);
+						}
+						
+					}
+					else
+					{
+						if ((tmp_linewidth + word_size[0]) > lineWidth)
+						{
+							tmp_linewidth = word_size[0] + (font.f_spaceWidth*(fontsize/font.MaxFontSize));
+							tmp_posx = posx;
+							n_lines++;
+						}
+						else
+						{
+							tmp_linewidth += word_size[0] + (font.f_spaceWidth*(fontsize/font.MaxFontSize)); // Palabra + Espacio.
+						}
+						for (int i=0;i<s_words[w].Length;i++)
+						{
+							dgCharacter ch = font.d_characters[s_words[w][i]];
+							float increment = ch.f_width*(fontsize/font.MaxFontSize);
+							WriteChar(font, color, ch.ch_character, fontsize, tmp_posx, posy + (int)(((font.MaxCharacterHeight/fontsize)*1.5f)*n_lines));
+							tmp_posx += increment;
 						}
 					}
-				}
-				if (w<s_words.Length-1) // añadimos espacio si no es la ultima palabra.
-				{ 
-					actualpos += font.f_spaceWidth*(fsize/font.MaxFontSize); 
+					if (w<s_words.Length-1) // añadimos espacio si no es la ultima palabra.
+					{ 
+						tmp_posx += font.f_spaceWidth*(fontsize/font.MaxFontSize); 
+					}
 				}
 			}
 		}
@@ -317,40 +344,68 @@ namespace dge.G2D
 		/// <param name="posy">Y coord of origin of the text.</param>
 		/// <param name="BorderColor">Sets the color in which the border will be drawn.</param>
 		/// <param name="lineWidth">Max line width of the text.</param>
-		public void Write(dgFont font, dgtk.Graphics.Color4 color, string text, float fsize, float posx, float posy, dgtk.Graphics.Color4 BorderColor, float lineWidth)
+		public void Write(dgFont font, dgtk.Graphics.Color4 color, string text, float fontsize, float posx, float posy, dgtk.Graphics.Color4 BorderColor, float lineWidth)
 		{
-			//Console.WriteLine("Escribir en ancho: "+text);
 			string[] s_words = text.Split(' ');
 
-			float actualpos = posx;
+			float tmp_linewidth = 0;
 			int n_lines = 0;
+			float tmp_posx = posx;
 			for (int w=0;w<s_words.Length;w++)
 			{
 				if (s_words[w].Length>0)
 				{
-					string s_word = s_words[w];
-
-					float[] word_size = MeasureString(font, s_word, fsize);		
-					
-					for (int i=0;i<s_word.Length;i++)
+					float[] word_size = MeasureString(font.Name, s_words[w], fontsize);
+					if (word_size[0] > lineWidth)
 					{
-						if (font.d_characters.ContainsKey(s_word[i]))
+						//METER CÓDIGO de division de palabras largas.					
+						if (tmp_linewidth > 0)
 						{
-							float increment = font.d_characters[s_word[i]].f_width*(fsize/font.MaxFontSize);
-							if (actualpos + increment > posx+lineWidth)
+							tmp_posx = posx;
+							tmp_linewidth = 0;
+							n_lines++;
+						}
+						for (int i=0;i<s_words[w].Length;i++)
+						{							
+							dgCharacter ch = font.d_characters[s_words[w][i]];
+							if (tmp_linewidth + ch.f_width*(fontsize/font.MaxFontSize) > lineWidth)
 							{
-								actualpos = posx;
+								tmp_posx = posx;
+								tmp_linewidth = 0;
 								n_lines++;
 							}
-							WriteChar(font, color, s_word[i], fsize, actualpos, posy + ((font.MaxCharacterHeight*(fsize/font.MaxFontSize))*n_lines));
-							WriteCharBorder(font, BorderColor, s_word[i], fsize, actualpos, posy + ((font.MaxCharacterHeight*(fsize/font.MaxFontSize))*n_lines));
-							actualpos += increment;
+							WriteChar(font, color, ch.ch_character, fontsize, tmp_posx, posy + (int)(((font.MaxCharacterHeight/fontsize)*1.5f)*n_lines));
+							WriteCharBorder(font, BorderColor, ch.ch_character, fontsize, tmp_posx, posy + (int)(((font.MaxCharacterHeight/fontsize)*1.5f)*n_lines));
+							tmp_posx += ch.f_width*(fontsize/font.MaxFontSize);
+							tmp_linewidth += ch.f_width*(fontsize/font.MaxFontSize);
+						}
+						
+					}
+					else
+					{
+						if ((tmp_linewidth + word_size[0]) > lineWidth)
+						{
+							tmp_linewidth = word_size[0] + (font.f_spaceWidth*(fontsize/font.MaxFontSize));
+							tmp_posx = posx;
+							n_lines++;
+						}
+						else
+						{
+							tmp_linewidth += word_size[0] + (font.f_spaceWidth*(fontsize/font.MaxFontSize)); // Palabra + Espacio.
+						}
+						for (int i=0;i<s_words[w].Length;i++)
+						{
+							dgCharacter ch = font.d_characters[s_words[w][i]];
+							float increment = ch.f_width*(fontsize/font.MaxFontSize);
+							WriteChar(font, color, ch.ch_character, fontsize, tmp_posx, posy + (int)(((font.MaxCharacterHeight/fontsize)*1.5f)*n_lines));
+							WriteCharBorder(font, BorderColor, ch.ch_character, fontsize, tmp_posx, posy + (int)(((font.MaxCharacterHeight/fontsize)*1.5f)*n_lines));
+							tmp_posx += increment;
 						}
 					}
-				}
-				if (w<s_words.Length-1) // añadimos espacio si no es la ultima palabra.
-				{ 
-					actualpos += font.f_spaceWidth*(fsize/font.MaxFontSize); 
+					if (w<s_words.Length-1) // añadimos espacio si no es la ultima palabra.
+					{ 
+						tmp_posx += font.f_spaceWidth*(fontsize/font.MaxFontSize); 
+					}
 				}
 			}
 		}
@@ -433,6 +488,7 @@ namespace dge.G2D
 			string[] s_words = text.Split(' ');
 
 			float tmp_linewidth = 0;
+			float tmp_posx = 0;
 			int n_lines = 1;
 			//float maxheight = 0f;
 			for (int w=0;w<s_words.Length;w++)
@@ -442,9 +498,28 @@ namespace dge.G2D
 					float[] word_size = MeasureString(font.Name, s_words[w], fontsize);
 					if (word_size[0] > lineWidth)
 					{
-						//METER CÓDIGO de division de palabras largas.
+						//METER CÓDIGO de division de palabras largas.					
+						if (tmp_linewidth > 0)
+						{
+							tmp_posx = 0;
+							tmp_linewidth = 0;
+							n_lines++;
+						}
+						for (int i=0;i<s_words[w].Length;i++)
+						{							
+							dgCharacter ch = font.d_characters[s_words[w][i]];
+							if (tmp_linewidth + ch.f_width*(fontsize/font.MaxFontSize) > lineWidth)
+							{
+								tmp_posx = 0;
+								tmp_linewidth = 0;
+								n_lines++;
+							}
+							tmp_posx += ch.f_width*(fontsize/font.MaxFontSize);
+							tmp_linewidth += ch.f_width*(fontsize/font.MaxFontSize);
+						}
+						/*
 						float tmp_posx = tmp_linewidth;
-						for (int i=0;i<s_words.Length;i++)
+						for (int i=0;i<s_words[w].Length;i++)
 						{
 							dgCharacter ch = font.d_characters[s_words[w][i]];
 							if (tmp_posx + ch.f_width*(fontsize/font.MaxFontSize) > lineWidth)
@@ -455,6 +530,7 @@ namespace dge.G2D
 							tmp_posx += ch.f_width*(fontsize/font.MaxFontSize);
 						}
 						tmp_linewidth = tmp_posx;
+						*/
 					}
 					else
 					{
@@ -474,7 +550,7 @@ namespace dge.G2D
 				}
 			}
 			
-			return new float[]{lineWidth, (n_lines)*(font.MaxCharacterHeight*(fontsize/font.MaxFontSize))};
+			return new float[]{lineWidth, n_lines*((font.MaxCharacterHeight/fontsize)*1.5f)};
 		}
 
 		private float WriteChar(dgFont font, dgtk.Graphics.Color4 color, char character, float fontsize, float posx, float posy) // Retornamos ancho dle caracter.
