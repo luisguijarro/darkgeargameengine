@@ -2,6 +2,8 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 
+using dge.SoundSystem;
+
 using dge.G2D;
 using dgtk.Graphics;
 
@@ -20,7 +22,7 @@ namespace dge.GUI
         private readonly uint id_play, id_pause, id_stop;
         private readonly Color4 c4_play, c4_pause, c4_stop;
         private bool b_play, b_pause, b_stop;
-        private readonly dge.SoundSystem.SoundSource3D ss3D;
+        private readonly SoundSource3D ss3D;
         private string SoundName;
         public AudioPlayer() : base(200, 55)
         {
@@ -48,7 +50,7 @@ namespace dge.GUI
             this.b_pause = false;
             this.b_stop = true;
 
-            this.ss3D = new SoundSystem.SoundSource3D();
+            this.ss3D = new SoundSource3D();
 
             // Texto con el nombre de la canción.
             this.ipb_ProgresBar = new InteractiveProgressBar();
@@ -69,7 +71,7 @@ namespace dge.GUI
             {
                 if (this.ss3D.HaveSound())
                 {
-                    this.ss3D.TimeSeconds = e.Value;
+                    this.ss3D.TimeMilliSeconds = e.Value;
                     Console.WriteLine("Value: "+e.Value);
                 }
             }
@@ -223,7 +225,7 @@ namespace dge.GUI
 
         private void UpdatePlaystate()
         {
-            this.ipb_ProgresBar.Value = (int)this.ss3D.TimeSeconds;            
+            this.ipb_ProgresBar.Value = (int)this.ss3D.TimeMilliSeconds;            
             
             if (UpdateState() == dgtk.OpenAL.AL_SourceState.AL_STOPPED)
             {
@@ -233,15 +235,20 @@ namespace dge.GUI
 
         #endregion
 
-        public bool AssignSound(SoundSystem.Sound sound)
+        public bool AssignSound(Sound sound)
         {
             bool ret = this.ss3D.AssignSound(sound);
             if (ret)
             {
                 this.SoundName = sound.FileName;
-                this.ipb_ProgresBar.MaxValue = (int)this.ss3D.Duration.TotalSeconds; 
+                this.ipb_ProgresBar.MaxValue = (int)this.ss3D.AssignedSound.DurationMilliseconds; 
             }            
             return ret;
+        }
+
+        public Sound AssignedSound
+        {
+            get { return this.ss3D.AssignedSound; }
         }
     }
 }
