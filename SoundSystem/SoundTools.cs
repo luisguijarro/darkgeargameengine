@@ -11,9 +11,12 @@ namespace dge.SoundSystem
     {
         private static OAL_Context OpenAL_Cntx;
 
+        internal static Dictionary<string, Sound> LoadedSounds; // HASH , SOUND
+
         internal static void InitStaticSoundSystem()
         {
             OpenAL_Cntx = new OAL_Context();
+            LoadedSounds = new Dictionary<string, Sound>();
         }
 
         public static OAL_Context OpenAL_Context
@@ -23,8 +26,19 @@ namespace dge.SoundSystem
 
         public unsafe static Sound LoadSndFile(string path)
         {
+            if (LoadedSounds == null)
+            {
+                InitStaticSoundSystem();
+            }
+            
             if (File.Exists(path)) // Existe Fichero?
             {
+                string hash = dge.Tools.FileTools.MD5FromFile(path);
+                if (LoadedSounds.ContainsKey(hash))
+                {
+                    return LoadedSounds[hash];
+                }
+
                 SF_INFO sf_info = new SF_INFO();
                 sf_info.format = 0;
                 IntPtr ptr_snd = dge.Core.GetOS() == dge.Core.OperatingSystem.Windows ? ImportsW.sf_open(path, OpenMode.SFM_READ, ref sf_info) : ImportsL.sf_open(path, OpenMode.SFM_READ, ref sf_info);
@@ -64,7 +78,7 @@ namespace dge.SoundSystem
                 Sound s_ret = new Sound(path, (byte)sf_info.channels, data, sf_info.samplerate);
                 // AL.alBufferData(s_ret.ID, alf, data, data.Length*sizeof(short), sf_info.samplerate); // Lometemos en el constructor de Sound.
 
-
+                LoadedSounds.Add(hash, s_ret);
                 return s_ret;
             }
             else // Si no existe...
@@ -75,8 +89,18 @@ namespace dge.SoundSystem
 
         public unsafe static Sound LoadSndFile(byte[] bytes, string name)
         {
+            if (LoadedSounds == null)
+            {
+                InitStaticSoundSystem();
+            }
             if (bytes.Length > 0) // Existen bytes?
             {
+                string hash = dge.Tools.FileTools.MD5FromBytes(bytes);
+
+                if (LoadedSounds.ContainsKey(hash))
+                {
+                    return LoadedSounds[hash];
+                }
                 //byte[] nbytes = new byte[524288];
                 //bytes.CopyTo(nbytes, 0);
 
