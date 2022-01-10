@@ -10,8 +10,11 @@ namespace dge.SoundSystem
 		//private int i_Bits;
 		private int i_Rate;
 		private long l_Duration;
+		private long l_DurationM;
 		//internal string HASH;
 		private string s_FileName;
+
+		private int i_bitrate;
 
 		public Sound (string filename, byte channels, short[] data, int samplerate)
 		{
@@ -25,8 +28,11 @@ namespace dge.SoundSystem
 			int bits;
 			AL.alGetBufferi(this.ui_ID, AL_BufferParam.AL_BITS, out bits);
 
+			this.i_bitrate = samplerate * bits * channels;
+
 			//System.IO.FileInfo fi = new System.IO.FileInfo(filename);
-			this.l_Duration = (long)((float)(((sizeof(short)*data.Length) * 8 ) / (channels * bits)) / (float)samplerate);
+			this.l_DurationM = (long)((float)(((sizeof(short)*data.Length) * 8f ) / (float)this.i_bitrate) * 1000f);
+			this.l_Duration = (long)(float)(((sizeof(short)*data.Length) * 8f ) / (float)this.i_bitrate);
 		}
 
 		public Sound (string filename, byte channels, float[] data, int samplerate)
@@ -41,8 +47,11 @@ namespace dge.SoundSystem
 			int bits;
 			AL.alGetBufferi(this.ui_ID, AL_BufferParam.AL_BITS, out bits);
 
-			//System.IO.FileInfo fi = new System.IO.FileInfo(filename);			
-			this.l_Duration = (long)((float)(((sizeof(float)*data.Length) * 8 ) / (channels * bits)) / (float)samplerate);
+			this.i_bitrate = samplerate * bits * channels;
+
+			//System.IO.FileInfo fi = new System.IO.FileInfo(filename);
+			this.l_DurationM = (long)((float)(((sizeof(float)*data.Length) * 8f ) / (float)this.i_bitrate) * 1000);
+			this.l_Duration = (long)(float)(((sizeof(float)*data.Length) * 8f ) / (float)this.i_bitrate);
 		}
 
 		public override string ToString()
@@ -60,6 +69,11 @@ namespace dge.SoundSystem
 			get { return this.l_Duration;}
 		}
 
+		public long DurationMilliseconds
+		{
+			get { return this.l_DurationM;}
+		}
+
 		public string FileName
 		{
 			get { return this.s_FileName;}
@@ -68,6 +82,11 @@ namespace dge.SoundSystem
 		public int SampleRate
 		{
 			get { return this.i_Rate; }
+		}
+
+		public int BitRate
+		{
+			get { return this.i_bitrate; }
 		}
 	}
 }
