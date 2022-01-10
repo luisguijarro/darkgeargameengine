@@ -230,7 +230,7 @@ namespace dge.G2D
 			{
 				if (s_words[w].Length>0)
 				{
-					float[] word_size = MeasureString(font.Name, s_words[w], fontsize);
+					float[] word_size = MeasureString(font/*.Name*/, s_words[w], fontsize);
 					if (word_size[0] > lineWidth)
 					{
 						//METER CÓDIGO de division de palabras largas.					
