@@ -184,8 +184,21 @@ namespace dge.SoundSystem
 		}
 		public long TimeSeconds
 		{
-			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET, value); } //(float)TimeSpan.FromTicks(value).TotalSeconds);}
-			get { float ret = AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET); return (long)ret; } //(TimeSpan.FromSeconds(ret)).Ticks;}
+			set { AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET, value); } 
+			get { float ret = AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_SEC_OFFSET); return (long)ret; }
+		}
+		public long TimeMilliSeconds
+		{
+			set 
+			{ 
+				float bytes = ((value/1000f)*this.snd.BitRate)/8f;
+				AL.alSourcef(this.ui_ID, AL_SourcefParam.AL_BYTE_OFFSET, bytes); 
+			} 
+			get 
+			{ 
+				float bytes = AL.alGetSourcef(this.ui_ID, AL_SourcefParam.AL_BYTE_OFFSET); 
+				return (long)((bytes*8/(float)(this.snd.BitRate))*1000f);
+			}
 		}
 		public TimeSpan Duration
 		{
@@ -200,6 +213,11 @@ namespace dge.SoundSystem
 		public uint ID
 		{
 			get { return this.ui_ID; }
+		}
+
+		public Sound AssignedSound
+		{
+			get { return this.snd; }
 		}
 	}
 }
