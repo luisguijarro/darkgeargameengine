@@ -7,7 +7,13 @@
     <AssemblyName>dge</AssemblyName>
     <RootNamespace>dge</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+
+  <PropertyGroup Condition="'$(Configuration)'=='debug'">
+    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>dge</AssemblyName>
+    <RootNamespace>dge</RootNamespace>
     <NoLogo>true</NoLogo>
     <Optimize>false</Optimize>
     <DefineDebug>true</DefineDebug>
@@ -15,7 +21,13 @@
     <DebugType>full</DebugType>
     <OutputPath>bin\Debug</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+
+  <PropertyGroup Condition="'$(Configuration)'=='release'">
+    <OutputType>Library</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AssemblyName>dge</AssemblyName>
+    <RootNamespace>dge</RootNamespace>
     <NoLogo>true</NoLogo>
     <Optimize>true</Optimize>
     <DefineDebug>false</DefineDebug>
