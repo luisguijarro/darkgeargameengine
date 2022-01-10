@@ -2,3 +2,4 @@ bin/
 obj/
 .vs*/
 .VS*/
+libsndfile.so.1.*
