@@ -5,36 +5,42 @@ using dgtk.OpenGL;
 
 namespace dge
 {
-    public class Scene : Scenenode
+    public class Scene : SceneNode
     {
-        protected string s_name;
         protected dgWindow parentWin;
         protected dgtk.Graphics.Color4 c4_BackGroundColor;
-        public Scene(string name) : base()
+        public event EventHandler<ParentWindowSettedEventArgs> ParentWindowSetted;
+        public Scene(string name) : base(name)
         {
-            this.s_name = name;
+            this.ParentWindowSetted += delegate{};
+            this.c4_BackGroundColor = dgtk.Graphics.Color4.Black;
         }
-        internal virtual void InternalDraw()
+        internal virtual void InternalDraw(dge.G2D.Drawer drawer)
         {
             GL.glClearColor(this.c4_BackGroundColor);
             GL.glClear(ClearBufferMask.GL_ALL);
-            this.Draw();
+            this.Draw(drawer);
         }
-        protected virtual void Draw() // Dibuja la escena.
+        protected virtual void Draw(dge.G2D.Drawer drawer) // Dibuja la escena.
         {
 
         }
-        internal virtual void SetParentWindow(dgWindow win)
+
+        internal void SetParentWindow(dgWindow win)
         {
-            parentWin = win;
+            this.parentWin = win;
+            this.ParentWindow_Setted(win);
+            this.ParentWindowSetted(this, new ParentWindowSettedEventArgs(this.parentWin));
         }
+
+        protected virtual void ParentWindow_Setted(dgWindow window)
+        {
+
+        }
+
         internal virtual void RemParentWindow()
         {
-            parentWin = null;
-        }
-        public string Name
-        {
-            get { return this.s_name; }
+            this.parentWin = null;
         }
     }
 
