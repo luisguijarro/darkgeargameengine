@@ -3,13 +3,19 @@ using System.Collections.Generic;
 
 namespace dge
 {
-    public class Scenenode
+    public class SceneNode : I_SceneNode
     {
-        Dictionary<int,Scenenode> Nodes;
-        Dictionary<int,Ligth> Ligths;
-        public Scenenode()
+        protected string s_name;
+        protected Dictionary<int,I_SceneNode> Nodes;
+        public SceneNode(string name)
         {
-            this.Nodes = new Dictionary<int, Scenenode>();
+            this.s_name = name;
+            this.Nodes = new Dictionary<int, I_SceneNode>();
+        }
+        public string Name
+        {
+            set { this.s_name = value; }
+            get { return this.s_name; }
         }
     }
 
