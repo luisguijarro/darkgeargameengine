@@ -236,7 +236,7 @@ namespace dge.GUI
 
         private void DrawSliderShape()
         {
-            this.gui.Drawer.Draw(GuiTheme.DefaultGuiTheme.ThemeTBO.ID, this.i_Slide_XPos, this.i_Slide_YPos, this.i_TrackBar_Slider_Size[0], this.i_TrackBar_Slider_Size[1], 0f, this.Slider_Texcoords[0], this.Slider_Texcoords[2], this.Slider_Texcoords[1], this.Slider_Texcoords[3]);
+            this.gui.Drawer.Draw(GuiTheme.DefaultGuiTheme.ThemeTBO.ID, this.i_Slide_XPos, this.i_Slide_YPos, 0, this.i_TrackBar_Slider_Size[0], this.i_TrackBar_Slider_Size[1], 0f, this.Slider_Texcoords[0], this.Slider_Texcoords[2], this.Slider_Texcoords[1], this.Slider_Texcoords[3]);
         }
 
         private void DrawSliderIDShape()

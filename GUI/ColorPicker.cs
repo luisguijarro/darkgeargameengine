@@ -259,14 +259,14 @@ namespace dge.GUI
 
                 // Pintar Fondo para alfa:
                 this.gui.Drawer.Draw(this.gui.GuiTheme.ThemeTBO.ID, Color4.White,
-                this.i_x+this.MarginLeft, this.i_y+this.Height - 20,
+                this.i_x+this.MarginLeft, this.i_y+this.Height - 20, 0,
                 (this.LightSaturation_Width/2)-this.MarginLeft, 20, 0f,
                 this.gui.GuiTheme.TransparentBackground_TexCoords[0], this.gui.GuiTheme.TransparentBackground_TexCoords[1],
                 this.gui.GuiTheme.TransparentBackground_TexCoords[2], this.gui.GuiTheme.TransparentBackground_TexCoords[3]);
                 
                 // Pintar Color Final:
                 this.gui.Drawer.Draw(this.c4_FinalColorSelected,
-                this.i_x+this.MarginLeft, this.i_y+this.Height - 20,
+                this.i_x+this.MarginLeft, this.i_y+this.Height - 20, 0,
                 (this.LightSaturation_Width/2)-this.MarginLeft, 20, 0f);
                 
                 //Pintar Marco Color Final:

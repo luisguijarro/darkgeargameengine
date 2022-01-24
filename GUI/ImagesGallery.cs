@@ -178,7 +178,7 @@ namespace dge.GUI
         {
             if (this.b_ShowMe)
             {
-                this.gui.Drawer.Draw(this.c4_BackgroundColor, this.i_x, this.i_y, this.i_width, this.i_height, 0f);
+                this.gui.Drawer.Draw(this.c4_BackgroundColor, this.i_x, this.i_y, 0,this.i_width, this.i_height, 0f);
                 this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, this.i_x, this.i_y, this.i_width, this.i_height, 0, this.MarginsFromTheEdge, Texcoords, new float[]{0f, 0f}, 0);
             }
             this.DrawScrollBars();
@@ -258,7 +258,7 @@ namespace dge.GUI
                 
                 ypos-=this.sbVer.Value;
                 ypos2-=this.sbVer.Value;
-                this.gui.Drawer.Draw(val.ID, xpos, ypos, twidth, theight, 0f);
+                this.gui.Drawer.Draw(val.ID, xpos, ypos, 0, twidth, theight, 0f);
                 this.gui.gd_GuiDrawer.DrawGL(this.gui.GuiTheme.ThemeTBO.ID, Color4.White, xpos2, ypos2, imageSize, imageSize, 0, this.ImageBorderMargins, this.ImageBorderTexCoords, (val.ID == this.SelectedTBO.ID) ? this.tcFrameOffset : new float[]{0f, 0f}, 0);
                 XCont++;
                 if (XCont >= this.i_ImagesForRow)

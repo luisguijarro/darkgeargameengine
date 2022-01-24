@@ -105,7 +105,7 @@ namespace dge.GUI
         {
             base.pDraw();
             //Dibujamos separador.
-            this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, this.X+this.Width-this.ListViewer_Dibider_Width, this.Y, this.ListViewer_Dibider_Width, this.Height, 0f, this.ListViewer_Dibider_Texcoords[0], this.ListViewer_Dibider_Texcoords[1], this.ListViewer_Dibider_Texcoords[2], this.ListViewer_Dibider_Texcoords[3], false, false);
+            this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, this.X+this.Width-this.ListViewer_Dibider_Width, this.Y, 0, this.ListViewer_Dibider_Width, this.Height, 0f, this.ListViewer_Dibider_Texcoords[0], this.ListViewer_Dibider_Texcoords[1], this.ListViewer_Dibider_Texcoords[2], this.ListViewer_Dibider_Texcoords[3], false, false);
         }
 
         protected override void DrawContent()
@@ -116,11 +116,11 @@ namespace dge.GUI
             {
                 if (b_Ascending)
                 {
-                    this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, this.Width-((this.ListViewer_Dibider_Width*2) + ListViewer_Arrow_Size[0]), (this.i_height/2) - (this.ListViewer_Arrow_Size[1]/2), this.ListViewer_Arrow_Size[0], this.ListViewer_Arrow_Size[1], 0f, this.ListViewer_ArrowUp_Texcoords[0], this.ListViewer_ArrowUp_Texcoords[1], this.ListViewer_ArrowUp_Texcoords[2], this.ListViewer_ArrowUp_Texcoords[3], false, false);
+                    this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, this.Width-((this.ListViewer_Dibider_Width*2) + ListViewer_Arrow_Size[0]), (this.i_height/2) - (this.ListViewer_Arrow_Size[1]/2), 0, this.ListViewer_Arrow_Size[0], this.ListViewer_Arrow_Size[1], 0f, this.ListViewer_ArrowUp_Texcoords[0], this.ListViewer_ArrowUp_Texcoords[1], this.ListViewer_ArrowUp_Texcoords[2], this.ListViewer_ArrowUp_Texcoords[3], false, false);
                 }
                 else
                 {
-                    this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, this.Width-((this.ListViewer_Dibider_Width*2) + ListViewer_Arrow_Size[0]), (this.i_height/2) - (this.ListViewer_Arrow_Size[1]/2), this.ListViewer_Arrow_Size[0], this.ListViewer_Arrow_Size[1], 0f, this.ListViewer_ArrowDown_Texcoords[0], this.ListViewer_ArrowDown_Texcoords[1], this.ListViewer_ArrowDown_Texcoords[2], this.ListViewer_ArrowDown_Texcoords[3], false, false);
+                    this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, this.Width-((this.ListViewer_Dibider_Width*2) + ListViewer_Arrow_Size[0]), (this.i_height/2) - (this.ListViewer_Arrow_Size[1]/2), 0, this.ListViewer_Arrow_Size[0], this.ListViewer_Arrow_Size[1], 0f, this.ListViewer_ArrowDown_Texcoords[0], this.ListViewer_ArrowDown_Texcoords[1], this.ListViewer_ArrowDown_Texcoords[2], this.ListViewer_ArrowDown_Texcoords[3], false, false);
                 }
             }
         }

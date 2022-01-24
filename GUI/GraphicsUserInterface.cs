@@ -265,7 +265,7 @@ namespace dge.GUI
         internal void Draw()
         {
             this.Writer.AA_OnOff(this.b_SmoothText);
-            this.Drawer.Draw(this.c4_BackgroundColor, 0, 0, this.Width, this.i_height, 0f);
+            this.Drawer.Draw(this.c4_BackgroundColor, 0, 0, 0, this.Width, this.i_height, 0f);
             GL.glViewport(0, 0, (int)this.i_width, (this.m_menu.Count>0) ? (int)(this.i_height-mheight) : (int)this.i_height);
             this.UpdatePerspective(0, (this.m_menu.Count>0) ? (int)this.mheight : 0, this.i_width, (this.m_menu.Count>0) ? this.i_height-this.mheight : this.i_height);
             

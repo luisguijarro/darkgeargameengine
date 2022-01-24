@@ -419,7 +419,7 @@ namespace dge.GUI
                                             FileTexCoord = this.FileIcon_TexCoords;
                                             break;
                                     }
-                                    this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, px, posy, elmHeight, elmHeight, 0f,
+                                    this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, px, posy, 0, elmHeight, elmHeight, 0f,
                                     FileTexCoord[0],
                                     FileTexCoord[1],
                                     FileTexCoord[2],
@@ -428,7 +428,7 @@ namespace dge.GUI
                                 }
                                 if ((val.Value.GetType() == typeof(System.IO.DirectoryInfo)) && head.FieldToShow == "Name")
                                 {
-                                    this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, px, posy, elmHeight, elmHeight, 0f,
+                                    this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO, px, posy, 0, elmHeight, elmHeight, 0f,
                                     this.FolderIcon_TexCoords[0],
                                     this.FolderIcon_TexCoords[1],
                                     this.FolderIcon_TexCoords[2],

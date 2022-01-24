@@ -70,7 +70,7 @@ namespace dge.GUI
                 {
                     if (tbo_image.ID>0)
                     {
-                        this.gui.Drawer.Draw(this.tbo_image.ui_ID, this.X+this.MarginLeft, this.Y+this.MarginTop, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom), 0f, 0f, 0f, 1f, 1f);
+                        this.gui.Drawer.Draw(this.tbo_image.ui_ID, this.X+this.MarginLeft, this.Y+this.MarginTop, 0, this.i_width-(this.MarginLeft+this.MarginRight), this.i_height-(this.MarginTop+this.MarginBottom), 0f, 0f, 0f, 1f, 1f);
                     }
                 }
             }

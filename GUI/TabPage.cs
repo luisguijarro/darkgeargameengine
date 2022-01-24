@@ -75,7 +75,7 @@ namespace dge.GUI
         {
             if (this.X_Pressed)
             {
-                this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO.ID, this.b_MouseOnX ? this.c4_MouseOnX_Color : Color4.White, x-gui.GuiTheme.TabPage_X_Size[0], y, this.gui.GuiTheme.TabPage_X_Size[0], this.gui.GuiTheme.TabPage_X_Size[1], 0f, 
+                this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO.ID, this.b_MouseOnX ? this.c4_MouseOnX_Color : Color4.White, x-gui.GuiTheme.TabPage_X_Size[0], y, 0,this.gui.GuiTheme.TabPage_X_Size[0], this.gui.GuiTheme.TabPage_X_Size[1], 0f, 
                 this.gui.GuiTheme.TabPage_X_FrameOffset[0]+this.gui.GuiTheme.TabPage_X_Texcoords[0], 
                 this.gui.GuiTheme.TabPage_X_FrameOffset[1]+this.gui.GuiTheme.TabPage_X_Texcoords[1], 
                 this.gui.GuiTheme.TabPage_X_FrameOffset[0]+this.gui.GuiTheme.TabPage_X_Texcoords[2], 
@@ -83,7 +83,7 @@ namespace dge.GUI
             }
             else
             {
-                this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO.ID, (this.b_MouseOnX) ? this.c4_MouseOnX_Color : Color4.White, x-gui.GuiTheme.TabPage_X_Size[0], y, this.gui.GuiTheme.TabPage_X_Size[0], this.gui.GuiTheme.TabPage_X_Size[1], 0f, this.gui.GuiTheme.TabPage_X_Texcoords[0], this.gui.GuiTheme.TabPage_X_Texcoords[1], this.gui.GuiTheme.TabPage_X_Texcoords[2], this.gui.GuiTheme.TabPage_X_Texcoords[3]);
+                this.gui.Drawer.Draw(this.gui.GuiTheme.tbo_ThemeTBO.ID, (this.b_MouseOnX) ? this.c4_MouseOnX_Color : Color4.White, x-gui.GuiTheme.TabPage_X_Size[0], y, 0, this.gui.GuiTheme.TabPage_X_Size[0], this.gui.GuiTheme.TabPage_X_Size[1], 0f, this.gui.GuiTheme.TabPage_X_Texcoords[0], this.gui.GuiTheme.TabPage_X_Texcoords[1], this.gui.GuiTheme.TabPage_X_Texcoords[2], this.gui.GuiTheme.TabPage_X_Texcoords[3]);
             }
         }
 

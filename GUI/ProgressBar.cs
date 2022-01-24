@@ -82,11 +82,11 @@ namespace dge.GUI
         {
             if (this.o_Orientation == Orientation.Horizontal)
             {
-                this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.ThemeTBO.ui_ID, this.X, this.Y, this.ProgressWidthHeight, this.i_height, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
+                this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.ThemeTBO.ui_ID, this.X, this.Y, 0, this.ProgressWidthHeight, this.i_height, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
             }
             else
             {
-                this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.ThemeTBO.ui_ID, this.X, this.Y + (this.i_height-this.ProgressWidthHeight), this.i_width, this.ProgressWidthHeight, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
+                this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.ThemeTBO.ui_ID, this.X, this.Y + (this.i_height-this.ProgressWidthHeight), 0, this.i_width, this.ProgressWidthHeight, 0f, this.FillingTexCoords[0], this.FillingTexCoords[1], this.FillingTexCoords[2], this.FillingTexCoords[3]);
             }
             base.pDraw();
         }

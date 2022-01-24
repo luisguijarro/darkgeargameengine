@@ -123,19 +123,19 @@ namespace dge.GUI
                 this.gui.Writer.Write(this.gui.gt_ActualGuiTheme.Default_Font.Name, new Color4(0, 195, 255, 255), this.SoundName, 14, 5, 5, Color4.Blue);
             }
 
-            this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.InnerSize.Width-(this.AudioPlayer_ButtonsSize[0]*3), this.InnerSize.Height-this.AudioPlayer_ButtonsSize[1], this.AudioPlayer_ButtonsSize[0], this.AudioPlayer_ButtonsSize[1], 0f,
+            this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.InnerSize.Width-(this.AudioPlayer_ButtonsSize[0]*3), this.InnerSize.Height-this.AudioPlayer_ButtonsSize[1], 0, this.AudioPlayer_ButtonsSize[0], this.AudioPlayer_ButtonsSize[1], 0f,
             this.AudioPlayer_PlayButtonTexcoords[0] + (this.b_play ? this.AudioPlayer_PlayButtonOffSet[0] : 0), 
             this.AudioPlayer_PlayButtonTexcoords[1] + (this.b_play ? this.AudioPlayer_PlayButtonOffSet[1] : 0),  
             this.AudioPlayer_PlayButtonTexcoords[2] + (this.b_play ? this.AudioPlayer_PlayButtonOffSet[0] : 0),  
             this.AudioPlayer_PlayButtonTexcoords[3] + (this.b_play ? this.AudioPlayer_PlayButtonOffSet[1] : 0) );
 
-            this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.InnerSize.Width-(this.AudioPlayer_ButtonsSize[0]*2), this.InnerSize.Height-this.AudioPlayer_ButtonsSize[1], this.AudioPlayer_ButtonsSize[0], this.AudioPlayer_ButtonsSize[1], 0f,
+            this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.InnerSize.Width-(this.AudioPlayer_ButtonsSize[0]*2), this.InnerSize.Height-this.AudioPlayer_ButtonsSize[1], 0, this.AudioPlayer_ButtonsSize[0], this.AudioPlayer_ButtonsSize[1], 0f,
             this.AudioPlayer_PauseButtonTexcoords[0] + (this.b_pause ? this.AudioPlayer_PauseButtonOffSet[0] : 0),  
             this.AudioPlayer_PauseButtonTexcoords[1] + (this.b_pause ? this.AudioPlayer_PauseButtonOffSet[1] : 0),  
             this.AudioPlayer_PauseButtonTexcoords[2] + (this.b_pause ? this.AudioPlayer_PauseButtonOffSet[0] : 0),  
             this.AudioPlayer_PauseButtonTexcoords[3] + (this.b_pause ? this.AudioPlayer_PauseButtonOffSet[1] : 0) );
 
-            this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.InnerSize.Width-(this.AudioPlayer_ButtonsSize[0]*1), this.InnerSize.Height-this.AudioPlayer_ButtonsSize[1], this.AudioPlayer_ButtonsSize[0], this.AudioPlayer_ButtonsSize[1], 0f,
+            this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.InnerSize.Width-(this.AudioPlayer_ButtonsSize[0]*1), this.InnerSize.Height-this.AudioPlayer_ButtonsSize[1], 0, this.AudioPlayer_ButtonsSize[0], this.AudioPlayer_ButtonsSize[1], 0f,
             this.AudioPlayer_StopButtonTexcoords[0] + (this.b_stop ? this.AudioPlayer_StopButtonOffSet[0] : 0),  
             this.AudioPlayer_StopButtonTexcoords[1] + (this.b_stop ? this.AudioPlayer_StopButtonOffSet[1] : 0),  
             this.AudioPlayer_StopButtonTexcoords[2] + (this.b_stop ? this.AudioPlayer_StopButtonOffSet[0] : 0),  

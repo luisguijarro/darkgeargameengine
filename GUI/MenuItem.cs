@@ -214,7 +214,7 @@ namespace dge.GUI
             {
                 if (this.b_opened)
                 {
-                    this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.Width-this.Height+this.MarginRight, -this.MarginTop, this.Height, this.Height, 0f, 
+                    this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.Width-this.Height+this.MarginRight, -this.MarginTop, 0, this.Height, this.Height, 0f, 
                     this.gui.gt_ActualGuiTheme.Menu_Opened_icon_Texcoords[0],
                     this.gui.gt_ActualGuiTheme.Menu_Opened_icon_Texcoords[1],
                     this.gui.gt_ActualGuiTheme.Menu_Opened_icon_Texcoords[2],
@@ -222,7 +222,7 @@ namespace dge.GUI
                 }
                 else
                 {
-                    this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.Width-this.Height+this.MarginRight, -this.MarginTop, this.Height, this.Height, 0f, 
+                    this.gui.Drawer.Draw(this.gui.gt_ActualGuiTheme.tbo_ThemeTBO, this.Width-this.Height+this.MarginRight, -this.MarginTop, 0, this.Height, this.Height, 0f, 
                     this.gui.gt_ActualGuiTheme.Menu_Closed_icon_Texcoords[0],
                     this.gui.gt_ActualGuiTheme.Menu_Closed_icon_Texcoords[1],
                     this.gui.gt_ActualGuiTheme.Menu_Closed_icon_Texcoords[2],
