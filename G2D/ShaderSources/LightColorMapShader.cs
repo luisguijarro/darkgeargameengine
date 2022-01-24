@@ -1,3 +1,5 @@
+// Shader empleado para el selector de color del GUI.
+
 namespace dge.G2D
 {
     internal static partial class ShadersSources
