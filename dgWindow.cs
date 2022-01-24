@@ -75,7 +75,7 @@ namespace dge
             base.OnRenderFrame(sender, e);
             if (this.scn_escene != null)
             {
-                this.scn_escene.InternalDraw();
+                this.scn_escene.InternalDraw(this.drawer2D);
             }
             if (this.gui != null)
             {
