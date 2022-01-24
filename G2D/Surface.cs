@@ -57,7 +57,7 @@ namespace dge.G2D
         ///</sumary>
         internal virtual void Draw(Drawer drawer, float Texcoord0x, float Texcoord0y, float Texcoord1x, float Texcoord1y)
         {
-            drawer.Draw(this.textureBufferObject, this.i_x, this.i_y, this.i_width, this.i_height, RotAngleInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y);
+            drawer.Draw(this.textureBufferObject, this.i_x, this.i_y, 0, this.i_width, this.i_height, RotAngleInDegrees, Texcoord0x, Texcoord0y, Texcoord1x, Texcoord1y);
         }
         
         public float RotationDegrees
