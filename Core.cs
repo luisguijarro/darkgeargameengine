@@ -62,6 +62,8 @@ namespace dge
     {
         internal static uint PixelBufferObject_Select; 
         internal static uint ui_SelectedID;
+
+        #region Surface IDs
         internal static Dictionary<uint, uint> IDS;
         public static uint GetID() // Otorga un ID a objeto que lo solicita
         {
@@ -92,6 +94,43 @@ namespace dge
             }
             return false;
         }
+
+        #endregion
+
+        #region Light2D IDs
+
+        internal static Dictionary<uint, uint> LightIDS;
+        internal static uint GetLight2DID() // Otorga un ID a objeto que lo solicita
+        {
+            if (LightIDS == null)
+            {
+                LightIDS = new Dictionary<uint, uint>();
+            }
+            for (uint i=1;i<LightIDS.Count+1;i++) // El ID minimo es 1, 0 se deja para los objetos no interactivos.
+            {
+                if (!LightIDS.ContainsKey(i))
+                {
+                    LightIDS.Add(i,i);
+                    return i;
+                }
+            }
+            uint e = (uint)LightIDS.Count+1; // El ID minimo es 1, 0 se deja para los objetos no interactivos.
+            LightIDS.Add(e,e);
+            return e;
+        }
+
+        internal static bool ReleaseLight2DID(uint id) // Liberia ID de objeto y devuelve si ha tenido exito.
+        {
+            if (LightIDS == null) { return false; }
+            if (LightIDS.ContainsKey(id))
+            {
+                LightIDS.Remove(id);
+                return true;
+            }
+            return false;
+        }
+
+        #endregion
 
         public static byte[] DeUIntAByte4(uint num) // RGBA - A always must be 255
 		{
