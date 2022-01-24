@@ -50,6 +50,8 @@ namespace dge.G2D
         uniform sampler2D s2Dtexture;
         uniform vec4 Color;
         uniform vec3 tColor;
+
+        uniform vec4 GlobalLightColor;
         
 
         void main()
@@ -91,7 +93,7 @@ namespace dge.G2D
                     }
                 }
             }
-            FragColor = finalColor;
+            FragColor = finalColor * GlobalLightColor;
         }
         ";
     }
