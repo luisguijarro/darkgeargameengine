@@ -7,7 +7,6 @@
     <AssemblyName>dge</AssemblyName>
     <RootNamespace>dge</RootNamespace>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)'=='debug'">
     <OutputType>Library</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -21,7 +20,6 @@
     <DebugType>full</DebugType>
     <OutputPath>bin\Debug</OutputPath>
   </PropertyGroup>
-
   <PropertyGroup Condition="'$(Configuration)'=='release'">
     <OutputType>Library</OutputType>
     <TargetFramework>net5.0</TargetFramework>
@@ -37,8 +35,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\darkgeartoolkit\DarkGearToolKit.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
     <Content Include="G2D\ShaderSources\Basic2DShader.cs" />
     <Content Include="G2D\structs\dgFont.cs" />
@@ -158,5 +154,14 @@
     <Content Include="GUI\Events\SelectedColorEventArgs.cs" />
     <Content Include="GUI\AudioPlayer.cs" />
     <Content Include="GUI\InteractiveProgressBar.cs" />
+    <Content Include="Scene\Ligth.cs" />
+    <Content Include="Scene\Object.cs" />
+    <Content Include="Scene\2D\Ligth2D.cs" />
+    <Content Include="Scene\2D\Object2D.cs" />
+    <Content Include="Scene\2D\Scene2D.cs" />
+    <Content Include="Scene\2D\Scene2DNode.cs" />
+    <Content Include="G2D\ShaderSources\Basic2DShaderIlluminated.cs" />
+    <Content Include="G2D\DrawerWithLights.cs" />
+    <Content Include="Scene\ParentWindowSettedEventArgs.cs" />
   </ItemGroup>
 </Project>
