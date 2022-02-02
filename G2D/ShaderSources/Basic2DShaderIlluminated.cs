@@ -2,7 +2,7 @@ namespace dge.G2D
 {
     internal static partial class ShadersSources
     {
-        internal static string Basic2DIlluminatedvs = @"#version 330 core
+        internal static string Basic2DIlluminatedvs = @"#version 330
         
         layout(location = 0) in int vId;
         layout(location = 1) in vec2 vPos;
@@ -45,7 +45,7 @@ namespace dge.G2D
         ";
 
 
-        internal static string Basic2DIlluminatedfs = @"#version 330 core
+        internal static string Basic2DIlluminatedfs = @"#version 330
         in vec2 tc;
         out vec4 FragColor;
 
@@ -57,33 +57,30 @@ namespace dge.G2D
         uniform vec4 Color;
         uniform vec3 tColor;
 
+        uniform int n_luces;
+
         uniform vec4 GlobalLightColor;
-        uniform vec4[] lightsPosRange;
-        uniform vec4[] lightsColor;
-        uniform vec4[] lightRotationAngle;
+        uniform vec4 lightsPosRange[200];
+        uniform vec4 lightsColor[200];
+        uniform vec4 lightRotationAngle[200];
         
         
 
         void main()
         {
-            vec4 ColorLights = vec4(0,0,0,0);
-            for (int i=0;i<lightsPosRange.length();i++)
+            vec3 ColorLights = GlobalLightColor.xyz; //vec3(1,1,1);
+            for (int i=0;i<n_luces;i++)
             {
-                if (lightsPosRange[i].z > FragPos.z)
+                if (lightsPosRange[i].z <= FragPos.z)
                 {
-                    float LightIntensity = 0.0; // Iniciamos
-                    vec2 DistanceVec = FragPos.xy - lightsPosRange[i].xy;
-                    float Distance = sqrt(dot(DistanceVec,DistanceVec));
-
-                    //Calcular por cuanto hay que multiplicar la incidencia de luz según la distancia.
-                    if (Distance <= lightsPosRange[i].w)
-                    {
-                        LightIntensity = (1.0/lightsPosRange[i].w) * (lightsPosRange[i].w-Distance);
-                    }
-                    ColorLights += (lightsColor[i] * LightIntensity);
+                    float rango = lightsPosRange[i].w;
+                    float Distancia = distance(lightsPosRange[i].xyz,FragPos.xyz);
+                    float LightIntensity = max(min(1.0-((1.0/rango)*Distancia), 1.0), 0.0);
+                    //ColorLights *= (lightsColor[i].xyz * (LightIntensity));
+                    ColorLights = mix (ColorLights, lightsColor[i].xyz, LightIntensity);
                 }
             }
-            ColorLights /= lightsPosRange.length();
+            //ColorLights /= lightsPosRange.length();
 
             vec4 finalColor = Color;
             if (TexturePassed)
@@ -122,7 +119,7 @@ namespace dge.G2D
                     }
                 }
             }
-            FragColor = finalColor * GlobalLightColor * ColorLights;
+            FragColor = finalColor * vec4(ColorLights, 1);
         }
         ";
     }
