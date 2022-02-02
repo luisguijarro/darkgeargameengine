@@ -96,16 +96,11 @@ namespace dge
             this.parentWin = null;
         }
         
-        internal override void InternalDraw(dge.G2D.Drawer drawer)
+        protected override void Draw(dge.G2D.Drawer drawer)
         {
-            //this.UpDatePerspective();
             this.Call_glViewPort();
             this.UpDatePerspective();
             drawer.DefineGlobalLightColor(this.c4_GlobalLightColor);
-            base.InternalDraw(drawer);
-        }
-        protected override void Draw(dge.G2D.Drawer drawer)
-        {
             foreach (Object2D obj in this.SceneNode.Objects.Values)
             {
                 obj.Draw(this.parentWin.Drawer2D, this.SceneNode);
