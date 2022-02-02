@@ -83,6 +83,15 @@ namespace dge
             }
         }
 
+        protected override void OnUpdateFrame(object sender, dgtk_OnUpdateEventArgs e)
+        {
+            base.OnUpdateFrame(sender, e);
+            if (this.scn_escene != null)
+            {
+                this.scn_escene.InternalUpdate();
+            }
+        }
+
         public SndSystem SoundSystem
         {
             get { return this.sndSystem; }
