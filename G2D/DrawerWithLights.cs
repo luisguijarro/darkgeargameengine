@@ -26,6 +26,7 @@ namespace dge.G2D
         private int idUniformlightsPosRange; // ID de Uniform que contiene Posicion y alcance de las Luces
         private int idUniformlightsColor; // ID de Uniform que contiene el Color de las Luces
         private int idUniformlightRotationAngle; // ID de Uniform que contiene si es omnidireccional o no, el angulo de rotación y el angulo de apertura.
+        private int idUniformN_luces;
 
         #endregion
 
@@ -48,6 +49,7 @@ namespace dge.G2D
             idUniformlightsPosRange = GL.glGetUniformLocation(BasicShader_L.ui_id, "lightsPosRange");
             idUniformlightsColor = GL.glGetUniformLocation(BasicShader_L.ui_id, "lightsColor");
             idUniformlightRotationAngle = GL.glGetUniformLocation(BasicShader_L.ui_id, "lightRotationAngle");
+            idUniformN_luces = GL.glGetUniformLocation(BasicShader_L.ui_id, "n_luces");
         }
 
         #region Metodos Draw Publicos.
@@ -603,6 +605,7 @@ namespace dge.G2D
                     private int idUniformlightsColor; // ID de Uniform que contiene el Color de las Luces
                     private int idUniformlightRotationAngle; // ID de Uniform que contiene si es omnidireccional o no, el angulo de rotación y el angulo de apertura.
             */
+            GL.glUniform1i(idUniformN_luces, lightsPosRange.Count);
             GL.glUniform4fv(idUniformlightsPosRange, lights.Length, lightsPosRange.ToArray());
             GL.glUniform4fv(idUniformlightsColor, lights.Length, lightsColor.ToArray());
             GL.glUniform4fv(idUniformlightRotationAngle, lights.Length, lightRotationAngle.ToArray());
