@@ -2,7 +2,7 @@ namespace dge.G2D
 {
     internal static partial class ShadersSources
     {
-        internal static string Basic2Dvs = @"#version 330 core
+        internal static string Basic2Dvs = @"#version 330
         
         layout(location = 0) in int vId;
         layout(location = 1) in vec2 vPos;
@@ -41,7 +41,7 @@ namespace dge.G2D
         }
         ";
 
-        internal static string Basic2Dfs = @"#version 330 core
+        internal static string Basic2Dfs = @"#version 330
         in vec2 tc;
         out vec4 FragColor;
         
