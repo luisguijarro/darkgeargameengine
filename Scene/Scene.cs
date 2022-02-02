@@ -15,15 +15,22 @@ namespace dge
             this.ParentWindowSetted += delegate{};
             this.c4_BackGroundColor = dgtk.Graphics.Color4.Black;
         }
+
         internal virtual void InternalDraw(dge.G2D.Drawer drawer)
         {
             GL.glClearColor(this.c4_BackGroundColor);
             GL.glClear(ClearBufferMask.GL_ALL);
             this.Draw(drawer);
         }
+
         protected virtual void Draw(dge.G2D.Drawer drawer) // Dibuja la escena.
         {
 
+        }
+
+        internal override void DrawIDs() // Dibuja la escena.
+        {
+            base.DrawIDs();
         }
 
         internal void SetParentWindow(dgWindow win)
