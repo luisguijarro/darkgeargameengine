@@ -1,7 +1,8 @@
 using System;
 using System.IO;
-using System.Drawing;
-using System.Drawing.Imaging;
+//using System.Drawing;
+//using System.Drawing.Imaging;
+using SkiaSharp;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -54,13 +55,15 @@ namespace dge.G2D
             TextureBufferObject tbo_ret = new TextureBufferObject();
             if (File.Exists(filepath))
 			{
-                Bitmap bp = new Bitmap(filepath);
-                BitmapData bd = bp.LockBits(new Rectangle(0, 0, bp.Size.Width, bp.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                Stream str = File.Open(filepath, FileMode.Open);
+                SKBitmap  bp = SKBitmap.Decode(str);
+                //BitmapData bd = bp.LockBits(new Rectangle(0, 0, bp.Size.Width, bp.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 							
-				tbo_ret = p_LoadImageFromIntPTr(filepath, bd.Width, bd.Height, bd.Scan0, s_hash);
+				tbo_ret = p_LoadImageFromIntPTr(filepath, bp.Width, bp.Height, bp.GetPixels(), s_hash);
 							
-				bp.UnlockBits(bd);
+				//bp.UnlockBits(bd);
 				bp.Dispose();
+                ((FileStream)str).Close();
 				
 				return tbo_ret;
             }
@@ -75,12 +78,12 @@ namespace dge.G2D
             TextureBufferObject tbo_ret = new TextureBufferObject();
             if (stream != null)
 			{
-                Bitmap bp = (Bitmap)Image.FromStream(stream, true, false);
-                BitmapData bd = bp.LockBits(new Rectangle(0, 0, bp.Size.Width, bp.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                SKBitmap bp = SKBitmap.Decode(stream);
+                //BitmapData bd = bp.LockBits(new Rectangle(0, 0, bp.Size.Width, bp.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 							
-				tbo_ret = p_LoadImageFromIntPTr(name, bd.Width, bd.Height, bd.Scan0, s_hash);
+				tbo_ret = p_LoadImageFromIntPTr(name, bp.Width, bp.Height, bp.GetPixels(), s_hash);
 							
-				bp.UnlockBits(bd);
+				//bp.UnlockBits(bd);
 				bp.Dispose();
 				
 				return tbo_ret;
@@ -137,13 +140,19 @@ namespace dge.G2D
                 GL.glGetTexImage(TextureTarget.GL_TEXTURE_2D, 0, dgtk.OpenGL.PixelFormat.GL_RGBA, PixelType.GL_UNSIGNED_BYTE, ptr_data);
                 dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
 
-                Bitmap bp = new Bitmap(tbo.Width, tbo.Height, 4*tbo.Width, System.Drawing.Imaging.PixelFormat.Format32bppArgb, ptr_data);
-                bp.Save(filepath);
+                
+                SKImage img = SKImage.FromPixels(new SKImageInfo(tbo.Width, tbo.Height), ptr_data);
+                Stream file = File.Create(filepath);
+
+                img.Encode().SaveTo(file);
+                file.Close();
+                //Bitmap bp = new Bitmap(tbo.Width, tbo.Height, 4*tbo.Width, System.Drawing.Imaging.PixelFormat.Format32bppArgb, ptr_data);
+                //bp.Save(filepath);
             }
 			return true;			
 		}
         
-        public static byte[] GetImageBytes(TextureBufferObject tbo, ImageFormat FileImageFormat)
+        public static byte[] GetImageBytes(TextureBufferObject tbo)
         {
             byte[] bytes;
             lock(dge.Core.LockObject)
@@ -156,9 +165,13 @@ namespace dge.G2D
                 IntPtr ptr_data = Marshal.AllocHGlobal(tbo.Width * tbo.Height * 4);
                 GL.glBindTexture(TextureTarget.GL_TEXTURE_2D, tbo.ui_ID);
                 GL.glGetTexImage(TextureTarget.GL_TEXTURE_2D, 0, dgtk.OpenGL.PixelFormat.GL_BGRA, PixelType.GL_UNSIGNED_BYTE, ptr_data);
-                Bitmap bp = new Bitmap(tbo.Width, tbo.Height, 4 * tbo.Width, System.Drawing.Imaging.PixelFormat.Format32bppArgb, ptr_data);
+                //Bitmap bp = new Bitmap(tbo.Width, tbo.Height, 4 * tbo.Width, System.Drawing.Imaging.PixelFormat.Format32bppArgb, ptr_data);
                 
-                bp.Save(ms, FileImageFormat);
+                SKImage img = SKImage.FromPixels(new SKImageInfo(tbo.Width, tbo.Height), ptr_data);
+
+                img.Encode().SaveTo(ms);
+
+                //bp.Save(ms, FileImageFormat);
                 bytes = ms.ToArray();
                 ms.Close();
                 Marshal.FreeHGlobal(ptr_data);
@@ -168,9 +181,9 @@ namespace dge.G2D
             return bytes;
         }
         
-        public static string ImageToBase64String(TextureBufferObject tbo, ImageFormat FileImageFormat)
+        public static string ImageToBase64String(TextureBufferObject tbo)
         {
-            byte[] bytes = GetImageBytes(tbo, FileImageFormat);
+            byte[] bytes = GetImageBytes(tbo);
             return Convert.ToBase64String(bytes, Base64FormattingOptions.None);
         }
 		
@@ -181,19 +194,20 @@ namespace dge.G2D
                 win.MakeCurrent();
                 GL.glReadBuffer(ReadBufferMode.GL_FRONT);
 
-                //byte[] bytes = new byte[4*win.Width*win.Height];
-
-                IntPtr ptr_ret = Marshal.AllocHGlobal(3*win.Width*win.Height); //bytes.Length);
-                GL.glReadPixels(0, 0, win.Width, win.Height, dgtk.OpenGL.PixelFormat.GL_BGR, PixelType.GL_UNSIGNED_BYTE, ptr_ret);
+                IntPtr ptr_data = Marshal.AllocHGlobal(4*win.Width*win.Height); //bytes.Length);
+                GL.glReadPixels(0, 0, win.Width, win.Height, dgtk.OpenGL.PixelFormat.GL_BGRA, PixelType.GL_UNSIGNED_BYTE, ptr_data);
                 win.UnMakeCurrent();
 
-                Bitmap bmp = new Bitmap(win.Width, win.Height);
-                Color c0 = Color.Azure;
-                BitmapData bd = bmp.LockBits(new Rectangle(0, 0, win.Width, win.Height), ImageLockMode.WriteOnly, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-                bd.Scan0 = ptr_ret;
-                bmp.UnlockBits(bd);
-                //Marshal.FreeHGlobal(ptr_ret);
-                bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+                SKImage img = SKImage.FromPixels(new SKImageInfo(win.Width, win.Height), ptr_data);
+                SKBitmap bmp = SKBitmap.FromImage(img);
+                SKBitmap fliped = new SKBitmap(bmp.Width, bmp.Height);
+                using (SKCanvas canvas = new SKCanvas(fliped))
+                {
+                    canvas.Clear();
+                    canvas.Scale(1, -1, 0, bmp.Height/2f);
+                    canvas.DrawBitmap(bmp, 0, 0);
+                }
+                bmp = fliped;                
 
                 if (filepath.Length>4)
                 {
@@ -203,8 +217,15 @@ namespace dge.G2D
                     }
                 }
 
-                bmp.Save(filepath, ImageFormat.Png);
+                Stream fl = File.Create(filepath);
+
+                bmp.Encode(fl, SKEncodedImageFormat.Png, 100);
+                
+                fl.Close();
+
+                img.Dispose();
                 bmp.Dispose();
+                Marshal.FreeHGlobal(ptr_data);
             }
 
 			return true;			
