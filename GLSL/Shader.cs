@@ -7,6 +7,9 @@ namespace dge.GLSL
     public class Shader
     {
         internal uint ui_id;
+        private uint ui_vs;
+        private uint ui_fs;
+        private uint ui_gs;
         public Shader(string vs, string fs) : this(vs,fs,null)
         {
             
@@ -19,9 +22,9 @@ namespace dge.GLSL
 
         private unsafe void CompileShader(string vs, string fs, string gs)
         {
-            uint ui_vs = GL.glCreateShader(ShaderType.GL_VERTEX_SHADER);
-            uint ui_fs = GL.glCreateShader(ShaderType.GL_FRAGMENT_SHADER);
-            uint ui_gs = (gs == null) ? 0: GL.glCreateShader(ShaderType.GL_GEOMETRY_SHADER);
+            ui_vs = GL.glCreateShader(ShaderType.GL_VERTEX_SHADER);
+            ui_fs = GL.glCreateShader(ShaderType.GL_FRAGMENT_SHADER);
+            ui_gs = (gs == null) ? 0: GL.glCreateShader(ShaderType.GL_GEOMETRY_SHADER);
 
             int glResult = 0;
 
@@ -76,6 +79,25 @@ namespace dge.GLSL
             GL.glDeleteShader(ui_vs);
             GL.glDeleteShader(ui_fs);
             if (gs != null) { GL.glDeleteShader(ui_gs); }
+        }
+
+        public string GetLog()
+        {
+            this.Use();
+            string vs_log = GL.glGetShaderInfoLog(this.ui_vs);
+            Console.WriteLine("Shader Log (vs): "+vs_log);
+
+            string fs_log = GL.glGetShaderInfoLog(this.ui_fs);
+            Console.WriteLine("Shader Log (fs): "+fs_log);
+
+            string gs_log = "";
+            if (this.ui_gs > 0)
+            {
+                gs_log = GL.glGetShaderInfoLog(this.ui_gs);
+                Console.WriteLine("Shader Log (gs): "+gs_log);
+            }
+
+            return ("Shader Log (vs): "+vs_log+System.Environment.NewLine) + ("Shader Log (fs): "+fs_log+System.Environment.NewLine) + ((this.ui_gs > 0) ? ("Shader Log (gs): "+gs_log+System.Environment.NewLine) : "");
         }
 
         public void Use()
