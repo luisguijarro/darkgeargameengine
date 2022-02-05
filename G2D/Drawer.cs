@@ -83,6 +83,7 @@ namespace dge.G2D
 
             DefineTransparentColor(new Color4(0f, 0.9f, 0f, 1f));
             DefineViewMatrix(dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
+            DefineGlobalLightColor(Color4.White);
 
             GL.glEnable(EnableCap.GL_BLEND);
             GL.glBlendFunc(BlendingFactor.GL_SRC_ALPHA, BlendingFactor.GL_ONE_MINUS_SRC_ALPHA);
