@@ -194,20 +194,19 @@ namespace dge.G2D
                 win.MakeCurrent();
                 GL.glReadBuffer(ReadBufferMode.GL_FRONT);
 
-                IntPtr ptr_data = Marshal.AllocHGlobal(4*win.Width*win.Height); //bytes.Length);
+                IntPtr ptr_data = Marshal.AllocHGlobal(4*win.Width*win.Height);
                 GL.glReadPixels(0, 0, win.Width, win.Height, dgtk.OpenGL.PixelFormat.GL_BGRA, PixelType.GL_UNSIGNED_BYTE, ptr_data);
                 win.UnMakeCurrent();
 
-                SKImage img = SKImage.FromPixels(new SKImageInfo(win.Width, win.Height), ptr_data);
+                SKImage img = SKImage.FromPixels(new SKImageInfo(win.Width, win.Height, SKColorType.Bgra8888, SKAlphaType.Opaque), ptr_data, 4*win.Width);
                 SKBitmap bmp = SKBitmap.FromImage(img);
-                SKBitmap fliped = new SKBitmap(bmp.Width, bmp.Height);
+                SKBitmap fliped = new SKBitmap(bmp.Width, bmp.Height, true);
                 using (SKCanvas canvas = new SKCanvas(fliped))
                 {
-                    canvas.Clear();
                     canvas.Scale(1, -1, 0, bmp.Height/2f);
                     canvas.DrawBitmap(bmp, 0, 0);
                 }
-                bmp = fliped;                
+                bmp = fliped;               
 
                 if (filepath.Length>4)
                 {
