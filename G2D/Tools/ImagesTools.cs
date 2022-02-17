@@ -58,7 +58,15 @@ namespace dge.G2D
                 Stream str = File.Open(filepath, FileMode.Open);
                 SKImageInfo skinfo = SKBitmap.DecodeBounds(str);
                 str = File.Open(filepath, FileMode.Open);
-                SKBitmap  bp = SKBitmap.Decode(str, skinfo);
+                SKBitmap  bp;
+                if (skinfo.ColorSpace != null)
+                {
+                    bp = SKBitmap.Decode(str, skinfo);
+                }
+                else
+                {
+                    bp = SKBitmap.Decode(str);
+                }
                 //BitmapData bd = bp.LockBits(new Rectangle(0, 0, bp.Size.Width, bp.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 							
 				tbo_ret = p_LoadImageFromIntPTr(filepath, bp.Width, bp.Height, bp.GetPixels(), s_hash);
@@ -84,7 +92,15 @@ namespace dge.G2D
                 stream.CopyTo(str);
                 SKImageInfo skinfo = SKBitmap.DecodeBounds(str);
                 stream.Position = 0;
-                SKBitmap bp = SKBitmap.Decode(stream, skinfo);
+                SKBitmap bp;
+                if (skinfo.ColorSpace != null)
+                {
+                    bp = SKBitmap.Decode(stream, skinfo);
+                }
+                else
+                {
+                    bp = SKBitmap.Decode(stream);
+                }
                 //BitmapData bd = bp.LockBits(new Rectangle(0, 0, bp.Size.Width, bp.Size.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 							
 				tbo_ret = p_LoadImageFromIntPTr(name, bp.Width, bp.Height, bp.GetPixels(), s_hash);
