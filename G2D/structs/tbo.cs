@@ -18,6 +18,27 @@ namespace dge.G2D
             this.ui_ID = id;
         }
 
+        #region Operators
+
+		public static bool operator ==(TextureBufferObject izq, TextureBufferObject der)
+		{
+			return izq.ui_ID == der.ui_ID;
+		}
+		public static bool operator !=(TextureBufferObject izq, TextureBufferObject der)
+		{
+			return izq.ui_ID == der.ui_ID;
+		}
+		public override bool Equals(object v)
+		{
+			return this == (TextureBufferObject)v;
+		}
+		public bool Equals(TextureBufferObject v)
+		{
+			return this == v;
+		}
+
+        #endregion
+
         public uint ID
         {
             get { return this.ui_ID; }
