@@ -60,7 +60,7 @@ namespace dge
                 if (e.KeyStatus.KeyCode == KeyCode.F12)
                 {
                     DateTime now = DateTime.Now;
-                    string name = now.ToString("dd-MM-yyyy_" + now.ToString("T"));
+                    string name = now.ToString("dd-MM-yyyy_" + (now.ToString("T").Replace(':', '_')));
                     dge.G2D.Tools.SaveScreenShot(name+".png", this);
                 }
                 if (e.KeyStatus.KeyCode == KeyCode.F11)
