@@ -8,7 +8,7 @@ using dge.GLSL;
 
 namespace dge.G2D
 {    
-    public static class IDsDrawer
+    public static partial class IDsDrawer
     {
         private static I_IDsDrawer Instance;
         public static dgtk.Math.Mat4 m4P

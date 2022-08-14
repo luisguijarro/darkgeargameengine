@@ -9,7 +9,7 @@ using dge.GLSL;
 
 namespace dge.G2D
 {
-    public class GuiDrawer
+    public partial class GuiDrawer
     {
         private I_GuiDrawer Instance;
         private bool isGLes;

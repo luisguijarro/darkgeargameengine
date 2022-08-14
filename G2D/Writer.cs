@@ -8,7 +8,7 @@ namespace dge.G2D
 	/// It can contain different fonts with which to write the desired text.
 	/// The fonts must be in GLFont format (* .glf).
 	/// </summary>
-    public class Writer
+    public partial class Writer
     {
 		private I_Writer Instance;
 
