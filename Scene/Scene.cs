@@ -18,8 +18,17 @@ namespace dge
 
         internal virtual void InternalDraw(dge.G2D.Drawer drawer)
         {
-            GL.glClearColor(this.c4_BackGroundColor);
-            GL.glClear(ClearBufferMask.GL_ALL);
+            if (drawer.isGLES)
+            {
+                GLES.glClearColor(this.c4_BackGroundColor);
+                GLES.glClear(ClearBufferMask.GL_ALL);
+            }
+            else
+            {
+                GL.glClearColor(this.c4_BackGroundColor);
+                GL.glClear(ClearBufferMask.GL_ALL);
+            }
+            
             this.Draw(drawer);
         }
 
@@ -28,7 +37,7 @@ namespace dge
 
         }
 
-        internal override void DrawIDs() // Dibuja la escena.
+        internal override void DrawIDs() // Dibuja los Ids de la escena.
         {
             base.DrawIDs();
         }
@@ -42,7 +51,16 @@ namespace dge
 
         protected virtual void ParentWindow_Setted(dgWindow window)
         {
-
+            window.MakeCurrent();
+            if (this.parentWin.Drawer2D.isGLES)
+            {
+                dgtk.OpenGL.GLES.glEnable(dgtk.OpenGL.EnableCap.GL_DEPTH_TEST);
+            }
+            else
+            {
+                dgtk.OpenGL.GL.glEnable(dgtk.OpenGL.EnableCap.GL_DEPTH_TEST);
+            }            
+            window.UnMakeCurrent();
         }
 
         internal virtual void RemParentWindow()

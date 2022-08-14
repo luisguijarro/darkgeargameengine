@@ -43,6 +43,10 @@ namespace dge
             {
                 this.Objects.Add(obj.ID, obj);
             }
+            else
+            {
+                Console.WriteLine("Error: Ya existe un objeto con el ID " + obj.ID);
+            }
         }
 
         public void RemoveObject(Object2D obj)

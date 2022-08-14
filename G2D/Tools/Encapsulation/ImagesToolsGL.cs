@@ -1,7 +1,6 @@
 using System;
 using System.IO;
-//using System.Drawing;
-//using System.Drawing.Imaging;
+
 using SkiaSharp;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -12,110 +11,11 @@ using dgtk.OpenGL;
 
 namespace dge.G2D
 {
-    public static partial class Tools
+    internal class ImageToolsGL : I_ImageTools
     {
-        private static I_ImageTools ImageToolsInstance;
-        internal static Dictionary<string, TextureBufferObject> d_imageshash = new Dictionary<string, TextureBufferObject>();
-
-        public static void InitImageTools(bool isGLES)
-        {
-            if (isGLES)
-            {
-                ImageToolsInstance = new ImageToolsGLES();
-            }
-            else
-            {
-                ImageToolsInstance = new ImageToolsGL();
-            }
-        }
-
-        public static TextureBufferObject LoadImage(string filepath)
-        {
-            string s_hash = FileTools.MD5FromFile(filepath);
-
-            if (d_imageshash.ContainsKey(s_hash))
-            {
-                return d_imageshash[s_hash];
-            }
-            d_imageshash.Add(s_hash, p_LoadImage(filepath, s_hash));
-            return d_imageshash[s_hash];
-        }
-
-        public static TextureBufferObject LoadImage(Stream stream, string name)
-        {
-            string s_hash = name.GetHashCode().ToString();
-
-            if (d_imageshash.ContainsKey(s_hash))
-            {
-                return d_imageshash[s_hash];
-            }
-            d_imageshash.Add(s_hash, p_LoadImage(stream, s_hash, name));
-            return d_imageshash[s_hash];
-        }
-
-        public static unsafe TextureBufferObject LoadImageFromIntPTr(string name, string hash, int Width, int Height, IntPtr Scan0)
+        public unsafe TextureBufferObject p_LoadImageFromIntPTr(string name, int Width, int Height, IntPtr Scan0, string hash)
 		{
-            if (d_imageshash.ContainsKey(hash))
-            {
-                return d_imageshash[hash];
-            }
-            d_imageshash.Add(hash, ImageToolsInstance.p_LoadImageFromIntPTr(name, Width, Height, Scan0, hash));
-            return d_imageshash[hash];
-        }
-
-        private static TextureBufferObject p_LoadImage(string filepath, string s_hash)
-        {
-            TextureBufferObject tbo_ret = new TextureBufferObject();
-            if (File.Exists(filepath))
-			{
-                Stream str = File.Open(filepath, FileMode.Open);
-                SKImageInfo skinfo = SKBitmap.DecodeBounds(str);
-                str = File.Open(filepath, FileMode.Open);
-                SKBitmap  bp;
-                
-                bp = SKBitmap.Decode(str, skinfo);	
-                		
-				tbo_ret = ImageToolsInstance.p_LoadImageFromIntPTr(filepath, bp.Width, bp.Height, bp.GetPixels(), s_hash);
-							
-				//bp.UnlockBits(bd);
-				bp.Dispose();
-                ((FileStream)str).Close();
-				
-				return tbo_ret;
-            }
-            #if DEBUG
-            Console.WriteLine("Error: File "+filepath+"not exist.");
-            #endif
-            return tbo_ret;
-        }
-
-        private static TextureBufferObject p_LoadImage(Stream stream, string s_hash, string name)
-        {
-            TextureBufferObject tbo_ret = new TextureBufferObject();
-            if (stream != null)
-			{
-                MemoryStream str = new MemoryStream();
-                stream.CopyTo(str);
-                str.Position = 0;
-                SKImageInfo skinfo = SKBitmap.DecodeBounds(str);
-                stream.Position = 0;
-                SKBitmap bp;
-                bp = SKBitmap.Decode(stream, skinfo);                
-							
-				tbo_ret = ImageToolsInstance.p_LoadImageFromIntPTr(name, bp.Width, bp.Height, bp.GetPixels(), s_hash);
-							
-				bp.Dispose();
-				
-				return tbo_ret;
-            }
-            #if DEBUG
-            Console.WriteLine("Error: " + name + " Stream is Null.");
-            #endif
-            return tbo_ret;
-        }
-        /*
-        private static unsafe TextureBufferObject p_LoadImageFromIntPTr(string name, int Width, int Height, IntPtr Scan0, string hash)
-		{
+            /*bool current = */
             UInt32 idret = 0; //stackalloc uint[1];
 
             lock(dge.Core.LockObject)
@@ -149,7 +49,7 @@ namespace dge.G2D
             return new TextureBufferObject(name, Width, Height, idret, hash);
         }
 
-		public static bool SaveImage(TextureBufferObject tbo, string filepath)
+		public bool SaveImage(TextureBufferObject tbo, string filepath)
 		{
             lock(dge.Core.LockObject)
             {
@@ -171,7 +71,7 @@ namespace dge.G2D
 			return true;			
 		}
         
-        public static byte[] GetImageBytes(TextureBufferObject tbo)
+        public byte[] GetImageBytes(TextureBufferObject tbo)
         {
             byte[] bytes;
             lock(dge.Core.LockObject)
@@ -199,21 +99,8 @@ namespace dge.G2D
             }
             return bytes;
         }
-        */
 
-        internal static TextureBufferObject p_LoadImageFromIntPTr(string name, int Width, int Height, IntPtr Scan0, string hash)
-        {
-            return ImageToolsInstance.p_LoadImageFromIntPTr(name, Width, Height, Scan0, hash);
-        }
-
-        public static string ImageToBase64String(TextureBufferObject tbo)
-        {
-            byte[] bytes = ImageToolsInstance.GetImageBytes(tbo);
-            return Convert.ToBase64String(bytes, Base64FormattingOptions.None);
-        }
-		
-        /*
-		public static bool SaveScreenShot( string filepath, dgWindow win)
+		public bool SaveScreenShot( string filepath, dgWindow win)
 		{
             lock(win.LockObject)
             {
@@ -255,10 +142,5 @@ namespace dge.G2D
 
 			return true;			
 		}
-        */
-        public static bool SaveScreenShot(string filepath, dgWindow win)
-        {
-            return ImageToolsInstance.SaveScreenShot(filepath, win);
-        }
     }
 }

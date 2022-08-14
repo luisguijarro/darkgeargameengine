@@ -239,8 +239,16 @@ namespace dge.GUI
             this.gui.Drawer.m4P = this.gui.GuiDrawer.m4P;
             if (!IniciatedStatics)
             {
-                InitColorMapShader();
-                InitColorMapSurface();
+                if (this.gui.GuiDrawer.IsGLES)
+                {
+                    InitColorMapShaderGLES();
+                    InitColorMapSurfaceGLES();
+                }
+                else
+                {
+                    InitColorMapShaderGL();
+                    InitColorMapSurfaceGL();
+                }
 
                 IniciatedStatics = true;
             }
@@ -295,34 +303,34 @@ namespace dge.GUI
 
         #endregion // PROTECTED DRAW METHODS
 
-        #region PRIVATE METHODS:
+        #region PRIVATE  GL METHODS:
 
-        private static void InitColorMapShader()
+        private static void InitColorMapShaderGL()
         {
-            ColorMapShader = new Shader(dge.G2D.ShadersSources.ColorMapvs, dge.G2D.ShadersSources.ColorMapfs);
+            ColorMapShader = new Shader(dge.G2D.ShadersSources.ColorMapvs, dge.G2D.ShadersSources.ColorMapfs, false);
 
-            idUniform_v_size = GL.glGetUniformLocation(ColorMapShader.ui_id, "v_size");
-            idUniformMat_View = GL.glGetUniformLocation(ColorMapShader.ui_id, "view");
-            idUniformMat_Per = GL.glGetUniformLocation(ColorMapShader.ui_id, "perspective");
-            idUniformMat_Tra = GL.glGetUniformLocation(ColorMapShader.ui_id, "trasform");
+            idUniform_v_size = GL.glGetUniformLocation(ColorMapShader.ID, "v_size");
+            idUniformMat_View = GL.glGetUniformLocation(ColorMapShader.ID, "view");
+            idUniformMat_Per = GL.glGetUniformLocation(ColorMapShader.ID, "perspective");
+            idUniformMat_Tra = GL.glGetUniformLocation(ColorMapShader.ID, "trasform");
 
             GL.glUniformMatrix(idUniformMat_View, dgtk.OpenGL.Boolean.GL_FALSE,dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
 
-            LightMapShader = new Shader(dge.G2D.ShadersSources.ColorLightMapvs, dge.G2D.ShadersSources.ColorLightMapfs);
+            LightMapShader = new Shader(dge.G2D.ShadersSources.ColorLightMapvs, dge.G2D.ShadersSources.ColorLightMapfs, false);
 
-            idUniform_InColor = GL.glGetUniformLocation(LightMapShader.ui_id, "InColor");
-            idUniform_p_size2 = GL.glGetUniformLocation(LightMapShader.ui_id, "p_size");
-            idUniform_v_size2 = GL.glGetUniformLocation(LightMapShader.ui_id, "v_size");
-            idUniformMat_View2 = GL.glGetUniformLocation(LightMapShader.ui_id, "view");
-            idUniformMat_Per2 = GL.glGetUniformLocation(LightMapShader.ui_id, "perspective");
-            idUniformMat_Tra2 = GL.glGetUniformLocation(LightMapShader.ui_id, "trasform");
+            idUniform_InColor = GL.glGetUniformLocation(LightMapShader.ID, "InColor");
+            idUniform_p_size2 = GL.glGetUniformLocation(LightMapShader.ID, "p_size");
+            idUniform_v_size2 = GL.glGetUniformLocation(LightMapShader.ID, "v_size");
+            idUniformMat_View2 = GL.glGetUniformLocation(LightMapShader.ID, "view");
+            idUniformMat_Per2 = GL.glGetUniformLocation(LightMapShader.ID, "perspective");
+            idUniformMat_Tra2 = GL.glGetUniformLocation(LightMapShader.ID, "trasform");
 
 
             GL.glUniformMatrix(idUniformMat_View2, dgtk.OpenGL.Boolean.GL_FALSE,dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
             GL.glUniform3f(idUniform_InColor, 1f, 0f, 0f);
         }
 
-        private static void InitColorMapSurface()
+        private static void InitColorMapSurfaceGL()
         {
             TVertexColorMap[] verticesColor = new TVertexColorMap[14];
 
@@ -397,6 +405,112 @@ namespace dge.GUI
             GL.glEnableVertexAttribArray(1);
 
             GL.glBindVertexArray(0);
+        }
+
+        #endregion
+
+        #region PRIVATE  GLES METHODS:
+
+        private static void InitColorMapShaderGLES()
+        {
+            ColorMapShader = new Shader(dge.G2D.ShadersSources.ColorMapvs, dge.G2D.ShadersSources.ColorMapfs, true);
+
+            idUniform_v_size = GLES.glGetUniformLocation(ColorMapShader.ID, "v_size");
+            idUniformMat_View = GLES.glGetUniformLocation(ColorMapShader.ID, "view");
+            idUniformMat_Per = GLES.glGetUniformLocation(ColorMapShader.ID, "perspective");
+            idUniformMat_Tra = GLES.glGetUniformLocation(ColorMapShader.ID, "trasform");
+
+            GLES.glUniformMatrix(idUniformMat_View, dgtk.OpenGL.Boolean.GL_FALSE,dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
+
+            LightMapShader = new Shader(dge.G2D.ShadersSources.ColorLightMapvs, dge.G2D.ShadersSources.ColorLightMapfs, true);
+
+            idUniform_InColor = GLES.glGetUniformLocation(LightMapShader.ID, "InColor");
+            idUniform_p_size2 = GLES.glGetUniformLocation(LightMapShader.ID, "p_size");
+            idUniform_v_size2 = GLES.glGetUniformLocation(LightMapShader.ID, "v_size");
+            idUniformMat_View2 = GLES.glGetUniformLocation(LightMapShader.ID, "view");
+            idUniformMat_Per2 = GLES.glGetUniformLocation(LightMapShader.ID, "perspective");
+            idUniformMat_Tra2 = GLES.glGetUniformLocation(LightMapShader.ID, "trasform");
+
+
+            GLES.glUniformMatrix(idUniformMat_View2, dgtk.OpenGL.Boolean.GL_FALSE,dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
+            GLES.glUniform3f(idUniform_InColor, 1f, 0f, 0f);
+        }
+
+        private static void InitColorMapSurfaceGLES()
+        {
+            TVertexColorMap[] verticesColor = new TVertexColorMap[14];
+
+            verticesColor[0] = new TVertexColorMap(1, new Vector2(0, 0f));
+            verticesColor[1] = new TVertexColorMap(2, new Vector2(0, 1/6f*1));
+            verticesColor[2] = new TVertexColorMap(3, new Vector2(0, 1/6f*2));
+            verticesColor[3] = new TVertexColorMap(4, new Vector2(0, 1/6f*3));
+            verticesColor[4] = new TVertexColorMap(5, new Vector2(0, 1/6f*4));
+            verticesColor[5] = new TVertexColorMap(6, new Vector2(0, 1/6f*5));
+            verticesColor[6] = new TVertexColorMap(1, new Vector2(0, 1f));
+
+            verticesColor[7] = new TVertexColorMap(1, new Vector2(1, 0f));
+            verticesColor[8] = new TVertexColorMap(2, new Vector2(1, 1/6f*1));
+            verticesColor[9] = new TVertexColorMap(3, new Vector2(1, 1/6f*2));
+            verticesColor[10] = new TVertexColorMap(4, new Vector2(1, 1/6f*3));
+            verticesColor[11] = new TVertexColorMap(5, new Vector2(1, 1/6f*4));
+            verticesColor[12] = new TVertexColorMap(6, new Vector2(1, 1/6f*5));
+            verticesColor[13] = new TVertexColorMap(1, new Vector2(1, 1f));
+
+            uint[] indicesColor = new uint[]{7, 0, 8, 1, 9, 2, 10, 3, 11, 4, 12, 5, 13, 6};
+
+            VAO_Color = GLES.glGenVertexArray(); 
+            VBO_Color = GLES.glGenBuffer();
+            EBO_Color = GLES.glGenBuffer();
+
+            GLES.glBindVertexArray(VAO_Color);
+            GLES.glBindBuffer(BufferTargetARB.GL_ARRAY_BUFFER, VBO_Color);
+            GLES.glBufferData<TVertexColorMap>(BufferTargetARB.GL_ARRAY_BUFFER, Marshal.SizeOf(typeof(TVertexColorMap))*verticesColor.Length, verticesColor, BufferUsageARB.GL_STATIC_DRAW);
+
+            GLES.glBindBuffer(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, EBO_Color);
+            GLES.glBufferData<UInt32>(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*indicesColor.Length, indicesColor, BufferUsageARB.GL_STATIC_DRAW);
+            
+            GLES.glVertexAttribIPointer(0, 1, VertexAttribIType.GL_INT, Marshal.SizeOf(typeof(TVertexColorMap)), new IntPtr(0)); // ID
+            GLES.glEnableVertexAttribArray(0);
+
+            GLES.glVertexAttribPointer(1, 2, VertexAttribPointerType.GL_FLOAT, dgtk.OpenGL.Boolean.GL_FALSE, Marshal.SizeOf(typeof(TVertexColorMap)), new IntPtr(sizeof(int))); // Vertex Position
+            GLES.glEnableVertexAttribArray(1);
+
+            GLES.glBindVertexArray(0);
+
+            //------------------------------------------------------------------------
+
+            VAO_Light = GLES.glGenVertexArray(); 
+            VBO_Light = GLES.glGenBuffer();
+            EBO_Light = GLES.glGenBuffer();
+
+            TVertexColorMap[] verticesLuz = new TVertexColorMap[1];
+            verticesLuz[0] = new TVertexColorMap(1, new Vector2(0.5f, 0.5f));
+            /*verticesLuz[0] = new TVertexColorMap(1, new Vector2(0, 0));            
+            verticesLuz[1] = new TVertexColorMap(2, new Vector2(0, 1));
+            verticesLuz[2] = new TVertexColorMap(3, new Vector2(1, 0));            
+            verticesLuz[3] = new TVertexColorMap(4, new Vector2(1, 1));*/
+
+            uint[] indicesLuz = new uint[]{0}; //{2, 1, 0, 2, 3, 1};
+
+
+            VAO_Light = GLES.glGenVertexArray(); 
+            VBO_Light = GLES.glGenBuffer();
+            EBO_Light = GLES.glGenBuffer();
+
+            GLES.glBindVertexArray(VAO_Light);
+            GLES.glBindBuffer(BufferTargetARB.GL_ARRAY_BUFFER, VBO_Light);
+            GLES.glBufferData<TVertexColorMap>(BufferTargetARB.GL_ARRAY_BUFFER, Marshal.SizeOf(typeof(TVertexColorMap))*verticesLuz.Length, verticesLuz, BufferUsageARB.GL_STATIC_DRAW);
+
+            GLES.glBindBuffer(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, EBO_Light);
+            GLES.glBufferData<UInt32>(BufferTargetARB.GL_ELEMENT_ARRAY_BUFFER, sizeof(uint)*indicesLuz.Length, indicesLuz, BufferUsageARB.GL_STATIC_DRAW);
+            
+            GLES.glVertexAttribIPointer(0, 1, VertexAttribIType.GL_INT, Marshal.SizeOf(typeof(TVertexColorMap)), new IntPtr(0)); // ID
+            GLES.glEnableVertexAttribArray(0);
+
+            GLES.glVertexAttribPointer(1, 2, VertexAttribPointerType.GL_FLOAT, dgtk.OpenGL.Boolean.GL_FALSE, Marshal.SizeOf(typeof(TVertexColorMap)), new IntPtr(sizeof(int))); // Vertex Position
+            GLES.glEnableVertexAttribArray(1);
+
+            GLES.glBindVertexArray(0);
         }
 
         #endregion

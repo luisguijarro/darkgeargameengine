@@ -11,12 +11,16 @@ namespace dge
         private GUI.GraphicsUserInterface gui;
         private Scene scn_escene;
         private readonly SndSystem sndSystem;
-        public dgWindow(string Title) : this(1024, 600, Title) // Consuctor Básico.
+        public dgWindow(string Title) : this(1024, 600, Title, false) // Consuctor Básico.
+        {
+                        
+        }
+        public dgWindow(string Title, bool IsGLES) : this(1024, 600, Title, IsGLES) // Consuctor Básico.
         {
                         
         }
 
-        public dgWindow(int width, int height, string Title) : base(width, height, Title) // Consuctor Básico.
+        public dgWindow(int width, int height, string Title, bool IsGLES) : base(width, height, Title, IsGLES) // Consuctor Básico.
         {
             Core.LockObject = base.LockObject;
             dge.SoundSystem.SoundTools.InitStaticSoundSystem();
@@ -24,16 +28,17 @@ namespace dge
 
             //this.MakeCurrent();
             dgtk.OpenGL.OGL_SharedContext.MakeCurrent();
-            dge.G2D.IDsDrawer.Init_IDs_Drawer(); // Iniciamos Código de visualizado de Ids.
+            dge.G2D.IDsDrawer.Init_IDs_Drawer(IsGLES); // Iniciamos Código de visualizado de Ids.
             dge.G2D.IDsDrawer.DefinePerspectiveMatrix(0,0,this.Width, this.Height, true);
             dgtk.OpenGL.OGL_SharedContext.UnMakeCurrent();
 
             this.MakeCurrent();
-            this.drawer2D = new G2D.Drawer();
+            G2D.Tools.InitImageTools(IsGLES);
+            this.drawer2D = new G2D.Drawer(IsGLES);
             this.drawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height, true);
-            this.GuiDrawer2D = new G2D.GuiDrawer();
+            this.GuiDrawer2D = new G2D.GuiDrawer(IsGLES);
             this.GuiDrawer2D.DefinePerspectiveMatrix(0,0,this.Width, this.Height);
-            this.writer2D = new G2D.Writer();
+            this.writer2D = new G2D.Writer(IsGLES);
             this.UnMakeCurrent(); //No debería ser necesario.
         }
 

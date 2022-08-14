@@ -103,7 +103,7 @@ namespace dge
             drawer.DefineGlobalLightColor(this.c4_GlobalLightColor);
             foreach (Object2D obj in this.SceneNode.Objects.Values)
             {
-                obj.Draw(this.parentWin.Drawer2D, this.SceneNode);
+                obj.Draw(/*this.parentWin.Drawer2D*/drawer, this.SceneNode);
             }
         }
         #endregion
@@ -176,7 +176,14 @@ namespace dge
 
         protected void Call_glViewPort()
         {
-            dgtk.OpenGL.GL.glViewport(this.ViewPortX, this.ViewPortY, this.ViewPortWidth, this.ViewPortHeight);
+            if (this.parentWin.Drawer2D.isGLES)
+            {
+                dgtk.OpenGL.GLES.glViewport(this.ViewPortX, this.ViewPortY, this.ViewPortWidth, this.ViewPortHeight);
+            }
+            else
+            {
+                dgtk.OpenGL.GL.glViewport(this.ViewPortX, this.ViewPortY, this.ViewPortWidth, this.ViewPortHeight);
+            }            
         }
 
         public Scene2dScaleMode SceneScaleMode
