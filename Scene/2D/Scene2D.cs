@@ -22,7 +22,7 @@ namespace dge
         //private bool mustUpdatePerspective;
 
         //protected dgWindow parentWin;
-        protected dgtk.Graphics.Color4 c4_BackGroundColor;
+        //protected dgtk.Graphics.Color4 c4_BackGroundColor;
         protected Scene2DNode SceneNode;
         protected Color4 c4_GlobalLightColor;
 
