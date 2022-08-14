@@ -26,7 +26,7 @@ namespace dge.Tools
 		{
 			//DateTime initdt = DateTime.Now;
 			//FileStream file = new FileStream(fileName, FileMode.Open);
-			MD5 md5 = new MD5CryptoServiceProvider();
+			MD5 md5 = MD5.Create();//new MD5CryptoServiceProvider();
 			byte[] retVal = md5.ComputeHash(filestream);
 			filestream.Close();
 			filestream.Dispose();
