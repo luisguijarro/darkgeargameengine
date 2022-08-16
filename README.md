@@ -1,5 +1,7 @@
 # DarkGearEngine
 
+OpenGL and OpenGL|ES Engine for videogames for Windows and Linux.
+
 ## **Dependencies:**
 ### **For compile:**
 
