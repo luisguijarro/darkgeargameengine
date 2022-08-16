@@ -307,7 +307,7 @@ namespace dge.GUI
 
         private static void InitColorMapShaderGL()
         {
-            ColorMapShader = new Shader(dge.G2D.ShadersSources.ColorMapvs, dge.G2D.ShadersSources.ColorMapfs, false);
+            ColorMapShader = new Shader(dge.G2D.ShadersSourcesGL.ColorMapvs, dge.G2D.ShadersSourcesGL.ColorMapfs, false);
 
             idUniform_v_size = GL.glGetUniformLocation(ColorMapShader.ID, "v_size");
             idUniformMat_View = GL.glGetUniformLocation(ColorMapShader.ID, "view");
@@ -316,7 +316,7 @@ namespace dge.GUI
 
             GL.glUniformMatrix(idUniformMat_View, dgtk.OpenGL.Boolean.GL_FALSE,dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
 
-            LightMapShader = new Shader(dge.G2D.ShadersSources.ColorLightMapvs, dge.G2D.ShadersSources.ColorLightMapfs, false);
+            LightMapShader = new Shader(dge.G2D.ShadersSourcesGL.ColorLightMapvs, dge.G2D.ShadersSourcesGL.ColorLightMapfs, false);
 
             idUniform_InColor = GL.glGetUniformLocation(LightMapShader.ID, "InColor");
             idUniform_p_size2 = GL.glGetUniformLocation(LightMapShader.ID, "p_size");
@@ -413,7 +413,8 @@ namespace dge.GUI
 
         private static void InitColorMapShaderGLES()
         {
-            ColorMapShader = new Shader(dge.G2D.ShadersSources.ColorMapvs, dge.G2D.ShadersSources.ColorMapfs, true);
+            Console.WriteLine("ColorPicker Shader Compilation.");
+            ColorMapShader = new Shader(dge.G2D.ShadersSourcesGLES.ColorMapvs, dge.G2D.ShadersSourcesGLES.ColorMapfs, true);
 
             idUniform_v_size = GLES.glGetUniformLocation(ColorMapShader.ID, "v_size");
             idUniformMat_View = GLES.glGetUniformLocation(ColorMapShader.ID, "view");
@@ -422,7 +423,8 @@ namespace dge.GUI
 
             GLES.glUniformMatrix(idUniformMat_View, dgtk.OpenGL.Boolean.GL_FALSE,dgtk.Math.MatrixTools.MakeTraslationMatrix(new dgtk.Math.Vector3(0f,0f,0f)));
 
-            LightMapShader = new Shader(dge.G2D.ShadersSources.ColorLightMapvs, dge.G2D.ShadersSources.ColorLightMapfs, true);
+            Console.WriteLine("LightMapPicker Shader Compilation.");
+            LightMapShader = new Shader(dge.G2D.ShadersSourcesGLES.ColorLightMapvs, dge.G2D.ShadersSourcesGLES.ColorLightMapfs, true);
 
             idUniform_InColor = GLES.glGetUniformLocation(LightMapShader.ID, "InColor");
             idUniform_p_size2 = GLES.glGetUniformLocation(LightMapShader.ID, "p_size");
