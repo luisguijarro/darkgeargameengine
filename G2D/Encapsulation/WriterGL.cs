@@ -75,7 +75,7 @@ namespace dge.G2D
 
                 GL.glBindVertexArray(0);
 
-                BasicShader = new Shader(ShadersSources.BasicWritervs, ShadersSources.BasicWriterfs, false);
+                BasicShader = new Shader(ShadersSourcesGL.BasicWritervs, ShadersSourcesGL.BasicWriterfs, false);
 
                 idUniform_texcoords = GL.glGetUniformLocation(BasicShader.ID, "utexcoords");
                 idUniform_v_size = GL.glGetUniformLocation(BasicShader.ID, "v_size");

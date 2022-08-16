@@ -75,7 +75,8 @@ namespace dge.G2D
 
                 GLES.glBindVertexArray(0);
 
-                BasicShader = new Shader(ShadersSources.BasicWritervs, ShadersSources.BasicWriterfs, true);
+                Console.WriteLine("Writer Shader Compilation.");
+                BasicShader = new Shader(ShadersSourcesGLES.BasicWritervs, ShadersSourcesGLES.BasicWriterfs, true);
 
                 idUniform_texcoords = GLES.glGetUniformLocation(BasicShader.ID, "utexcoords");
                 idUniform_v_size = GLES.glGetUniformLocation(BasicShader.ID, "v_size");

@@ -85,7 +85,8 @@ namespace dge.G2D
 
                 GLES.glBindVertexArray(0);
 
-                BasicShader = new Shader(ShadersSources.BasicGUIvs, ShadersSources.BasicGUIfs, true);
+                Console.WriteLine("GUIDrawer Shader Compilation.");
+                BasicShader = new Shader(ShadersSourcesGLES.BasicGUIvs, ShadersSourcesGLES.BasicGUIfs, true);
 
                 idUniform_texcoords = GLES.glGetUniformLocation(BasicShader.ID, "utexcoords");
                 idUniform_MarginsFromTheEdge = GLES.glGetUniformLocation(BasicShader.ID, "MarginsFromTheEdge");

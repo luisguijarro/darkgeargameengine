@@ -36,7 +36,8 @@ namespace dge.G2D
 
             internal void InitLightShader()
             {
-                BasicShader_L = new Shader(ShadersSources.Basic2DIlluminatedvs, ShadersSources.Basic2DIlluminatedfs, true);
+                Console.WriteLine("DrawerWithLights Shader Compilation.");
+                BasicShader_L = new Shader(ShadersSourcesGLES.Basic2DIlluminatedvs, ShadersSourcesGLES.Basic2DIlluminatedfs, true);
 
                 idUniform_texcoords_L = GLES.glGetUniformLocation(BasicShader_L.ID, "utexcoords");
                 idUniform_v_size_L = GLES.glGetUniformLocation(BasicShader_L.ID, "v_size");

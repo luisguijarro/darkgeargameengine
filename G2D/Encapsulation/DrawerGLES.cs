@@ -70,7 +70,8 @@ namespace dge.G2D
 
                 GLES.glBindVertexArray(0);
 
-                BasicShader = new Shader(ShadersSources.Basic2Dvs, ShadersSources.Basic2Dfs, true);
+                Console.WriteLine("Drawer Shader Compilation.");
+                BasicShader = new Shader(ShadersSourcesGLES.Basic2Dvs, ShadersSourcesGLES.Basic2Dfs, true);
 
                 idUniform_texcoords = GLES.glGetUniformLocation(BasicShader.ID, "utexcoords");
                 idUniform_v_size = GLES.glGetUniformLocation(BasicShader.ID, "v_size");

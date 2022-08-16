@@ -85,7 +85,7 @@ namespace dge.G2D
 
                 GL.glBindVertexArray(0);
 
-                BasicShader = new Shader(ShadersSources.BasicGUIvs, ShadersSources.BasicGUIfs, false);
+                BasicShader = new Shader(ShadersSourcesGL.BasicGUIvs, ShadersSourcesGL.BasicGUIfs, false);
 
                 idUniform_texcoords = GL.glGetUniformLocation(BasicShader.ID, "utexcoords");
                 idUniform_MarginsFromTheEdge = GL.glGetUniformLocation(BasicShader.ID, "MarginsFromTheEdge");

@@ -149,7 +149,8 @@ namespace dge.G2D
 
                 #region BasicShader
 
-                BasicShader = new Shader(ShadersSources.Basic2Dvs, ShadersSources.Basic2Dfs, true);
+                Console.WriteLine("IDsDrawer Shader Compilation.");
+                BasicShader = new Shader(ShadersSourcesGLES.Basic2Dvs, ShadersSourcesGLES.Basic2Dfs, true);
 
                 idUniform_texcoords = GLES.glGetUniformLocation(BasicShader.ID, "utexcoords");
                 idUniform_v_size = GLES.glGetUniformLocation(BasicShader.ID, "v_size");
@@ -165,7 +166,8 @@ namespace dge.G2D
 
                 #region BasicGuiShader
 
-                BasicGuiShader = new Shader(ShadersSources.BasicGUIvs, ShadersSources.BasicGUIfs, true);
+                Console.WriteLine("IdsGUIDrawer Shader Compilation.");
+                BasicGuiShader = new Shader(ShadersSourcesGLES.BasicGUIvs, ShadersSourcesGLES.BasicGUIfs, true);
 
                 idUniform_texcoords2 = GLES.glGetUniformLocation(BasicGuiShader.ID, "utexcoords");
                 idUniform_MarginsFromTheEdge2 = GLES.glGetUniformLocation(BasicGuiShader.ID, "MarginsFromTheEdge");

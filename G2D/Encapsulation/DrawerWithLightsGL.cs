@@ -36,7 +36,7 @@ namespace dge.G2D
 
             internal void InitLightShader()
             {
-                BasicShader_L = new Shader(ShadersSources.Basic2DIlluminatedvs, ShadersSources.Basic2DIlluminatedfs, false);
+                BasicShader_L = new Shader(ShadersSourcesGL.Basic2DIlluminatedvs, ShadersSourcesGL.Basic2DIlluminatedfs, false);
 
                 idUniform_texcoords_L = GL.glGetUniformLocation(BasicShader_L.ID, "utexcoords");
                 idUniform_v_size_L = GL.glGetUniformLocation(BasicShader_L.ID, "v_size");
