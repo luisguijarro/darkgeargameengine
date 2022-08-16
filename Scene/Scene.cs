@@ -21,7 +21,7 @@ namespace dge
             if (drawer.isGLES)
             {
                 GLES.glClearColor(this.c4_BackGroundColor);
-                GLES.glClear(ClearBufferMask.GL_ALL);
+                GLES.glClear(ClearBufferMask.GL_COLOR_BUFFER_BIT | ClearBufferMask.GL_DEPTH_BUFFER_BIT);
             }
             else
             {
@@ -37,10 +37,12 @@ namespace dge
 
         }
 
+        /*
         internal override void DrawIDs() // Dibuja los Ids de la escena.
         {
             base.DrawIDs();
         }
+        */
 
         internal void SetParentWindow(dgWindow win)
         {
@@ -52,7 +54,7 @@ namespace dge
         protected virtual void ParentWindow_Setted(dgWindow window)
         {
             window.MakeCurrent();
-            if (this.parentWin.Drawer2D.isGLES)
+            if (window.Drawer2D.isGLES)
             {
                 dgtk.OpenGL.GLES.glEnable(dgtk.OpenGL.EnableCap.GL_DEPTH_TEST);
             }
