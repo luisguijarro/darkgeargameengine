@@ -37,6 +37,11 @@ namespace dge.G2D
 			return this == v;
 		}
 
+        public override int GetHashCode()
+        {
+            return (int)this.ID;
+        }
+
         #endregion
 
         public uint ID
