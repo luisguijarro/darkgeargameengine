@@ -2,7 +2,7 @@
 
 namespace dge.G2D
 {
-    internal static partial class ShadersSources
+    internal static partial class ShadersSourcesGL
     {
         internal static string ColorMapvs = @"#version 330 core
         

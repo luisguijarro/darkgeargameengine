@@ -2,9 +2,11 @@
 
 namespace dge.G2D
 {
-    internal static partial class ShadersSources
+    internal static partial class ShadersSourcesGLES
     {
-        internal static string ColorLightMapvs = @"#version 330 core
+        internal static string ColorLightMapvs = @"#version 300 es
+        
+        precision mediump float;
         
         layout(location = 0) in int vId;
         layout(location = 1) in vec2 vPos;
@@ -25,7 +27,9 @@ namespace dge.G2D
         }
         ";
 
-        internal static string ColorLightMapfs = @"#version 400 core
+        internal static string ColorLightMapfs = @"#version 300 es
+        
+        precision mediump float;
 
 in vec3 SelectedColor; // Color Inicial con el que trabajar.
 out vec4 FragColor; //Color de Salida del Shader.

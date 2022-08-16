@@ -1,8 +1,8 @@
 namespace dge.G2D
 {
-    internal static partial class ShadersSources
+    internal static partial class ShadersSourcesGL
     {
-        internal static string Basic2Dvs = @"#version 330
+        internal static string BasicWritervs = @"#version 330 core
         
         layout(location = 0) in int vId;
         layout(location = 1) in vec2 vPos;
@@ -41,59 +41,38 @@ namespace dge.G2D
         }
         ";
 
-        internal static string Basic2Dfs = @"#version 330
+        internal static string BasicWriterfs = @"#version 330 core
         in vec2 tc;
         out vec4 FragColor;
         
-        uniform bool Silhouette;
-        uniform bool TexturePassed;
         uniform sampler2D s2Dtexture;
         uniform vec4 Color;
-        uniform vec3 tColor;
-
-        uniform vec4 GlobalLightColor;
+        uniform int AA;
         
 
         void main()
         {
-            vec4 finalColor = Color;
-            if (TexturePassed)
+            vec4 finalColor = texture(s2Dtexture, tc);
+            
+            if (AA >= 1)
             {
-                finalColor = texture(s2Dtexture, tc);
-            }
-            if (Silhouette)
-            {
-                if (finalColor.xyz == tColor.xyz)
+                float varx = 1.0/(textureSize(s2Dtexture,0).s/3); // Antes 0.001
+                float vary = 1.0/(textureSize(s2Dtexture,0).t/3); // Antes 0.001
+                for (float x=-varx;x<=varx;x+=varx) //X
                 {
-                    finalColor = vec4(0.0, 0.0, 0.0, 0.0);
-                }
-                else
-                {
-                    if (finalColor.w != 0.0)
+                    for (float y=-vary;y<=vary;y+=vary) //Y
                     {
-                        finalColor = vec4(Color.xyz, 1.0);
-                    }
-                    else
-                    {
-                        finalColor = vec4(0.0, 0.0, 0.0, 0.0);
+                        vec2 ttc = tc - vec2(x,y);
+                        if (ttc != tc)
+                        {
+                            finalColor = mix(finalColor, texture(s2Dtexture, ttc), 0.1);
+                        }
                     }
                 }
             }
-            else
-            {
-                if (finalColor.xyz == tColor.xyz)
-                {
-                    finalColor = vec4(0.0, 0.0, 0.0, 0.0);
-                }
-                else
-                {
-                    if (TexturePassed)
-                    {
-                        finalColor = finalColor * Color;
-                    }
-                }
-            }
-            FragColor = finalColor * GlobalLightColor;
+            finalColor = vec4(Color.xyz, finalColor.w * Color.w);
+            
+            FragColor = finalColor;
         }
         ";
     }
