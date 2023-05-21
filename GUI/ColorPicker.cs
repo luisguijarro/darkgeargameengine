@@ -110,8 +110,8 @@ namespace dge.GUI
                 if (this.IsMouseIn(e.X, e.Y, this.MarginLeft, this.MarginTop + 1, this.MarginLeft + LightSaturation_Width, this.MarginTop + LightSaturation_Height))
                 {
                     this.c4_FinalColorSelected = this.ReadColor(e);
-                    //this.PickerCoords[0] = e.X-this.ColorPicker_PickerMargins[0];
-                    //this.PickerCoords[1] = e.Y-this.ColorPicker_PickerMargins[1];
+                    this.PickerCoords[0] = e.X - this.ColorPicker_PickerMargins[0];
+                    this.PickerCoords[1] = e.Y - this.ColorPicker_PickerMargins[1];
                     this.ColorSelected(this, new SelectedColorEventArgs(this.c4_FinalColorSelected, false));
                     this.Pulsed_Light = true;
                 }
@@ -127,6 +127,8 @@ namespace dge.GUI
                 if (this.IsMouseIn(e.X, e.Y, this.Width - (10 + this.MarginRight) - 1, this.MarginTop, this.Width - this.MarginRight, this.Height - this.MarginRight))
                 {
                     this.c4_PreColorSelected = this.ReadColor(new MouseButtonEventArgs(e.X, e.Y, MouseButtons.Left, PushRelease.Push, e.ID));
+                    // Seleccionamos color final en función d elas coordenadas de Light.
+                    this.c4_FinalColorSelected = this.ReadColor(new MouseButtonEventArgs(this.PickerCoords[0], this.PickerCoords[1], MouseButtons.Left, PushRelease.Push, e.ID));
                 }
             }
             if (this.Pulsed_Light)
@@ -136,8 +138,8 @@ namespace dge.GUI
                 {
                     this.c4_FinalColorSelected = this.ReadColor(new MouseButtonEventArgs(e.X, e.Y, MouseButtons.Left, PushRelease.Push, e.ID));
                     this.ColorSelected(this, new SelectedColorEventArgs(this.c4_FinalColorSelected, false));
-                    //this.PickerCoords[0] = e.X-this.ColorPicker_PickerMargins[0];
-                    //this.PickerCoords[1] = e.Y-this.ColorPicker_PickerMargins[1];
+                    this.PickerCoords[0] = e.X - this.ColorPicker_PickerMargins[0];
+                    this.PickerCoords[1] = e.Y - this.ColorPicker_PickerMargins[1];
                 }
             }
         }
